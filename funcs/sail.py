@@ -116,9 +116,12 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 0.2, local = False
     if plot:
         print("Saving plot ...")
 
+        # Determine output PNG file name ...
+        png = f"dur={dur:f}_nang={nang:d}_nth={nth:d}_ntot={ntot:d}_res={res}_simp={simp:f}.png"
+
         # Save figure ...
-        fg.savefig("gst.png", bbox_inches = "tight", dpi = 300, pad_inches = 0.1)
+        fg.savefig(png, bbox_inches = "tight", dpi = 300, pad_inches = 0.1)
         matplotlib.pyplot.close(fg)
 
         # Optimize PNG ...
-        pyguymer3.optimize_image("gst.png", strip = True)
+        pyguymer3.optimize_image(png, strip = True)
