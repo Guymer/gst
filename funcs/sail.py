@@ -1,4 +1,4 @@
-def sail(lon, lat, spd, debug = False, detailed = True, dur = 0.2, local = False, nang = 19, nth = 5, ntot = 30, plot = True, simp = 0.1):
+def sail(lon, lat, spd, debug = False, detailed = True, dur = 0.2, local = False, nang = 19, nth = 5, ntot = 30, plot = True, res = "110m", simp = 0.1):
     """Sail from a point
 
     This function reads in a starting coordinate (in degrees) and a sailing
@@ -25,13 +25,15 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 0.2, local = False
     local : bool, optional
             the plot has only local extent
     nang : int, optional
-            the number of angles around each point that the vessel sails in
+            the number of angles around each point that the vessel could sail in
     nth : int, optional
             plot sailing contours every nth iteration
     ntot : int, optional
             the number of iterations to perform
     plot : bool, optional
             make a plot
+    res : string, optional
+            resolution of the Natural Earth datasets
     simp : float, optional
             how much intermediary [Multi]Polygon are simplified by
     """
@@ -70,12 +72,12 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 0.2, local = False
     dist = 1852.0 * spd * dur                                                   # [m]
 
     # Find file containing all the land (and major islands) polygons ...
-    sfiles = [cartopy.io.shapereader.natural_earth(resolution = "10m", category = "physical", name = "land")]
+    sfiles = [cartopy.io.shapereader.natural_earth(resolution = res, category = "physical", name = "land")]
 
     # Check if the user wants to be detailed ...
     if detailed:
         # Find file containing all the minor islands polygons ...
-        sfiles.append(cartopy.io.shapereader.natural_earth(resolution = "10m", category = "physical", name = "minor_islands"))
+        sfiles.append(cartopy.io.shapereader.natural_earth(resolution = res, category = "physical", name = "minor_islands"))
 
     # **************************************************************************
 
