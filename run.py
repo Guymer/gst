@@ -25,11 +25,11 @@ if __name__ == "__main__":
     else:
         res = "10m"
         nang = 361
-        simp = 0.01
+        simp = 0.0001
 
     # **************************************************************************
 
     # Sail the vessel (ignoring minor islands, sailing in steps lasting 30
     # minutes and only plotting contours every 6 hours for 2 days in the local
     # vacinity) ...
-    funcs.sail(lon, lat, spd, debug = debug, detailed = False, dur = 0.5, local = True, nang = nang, nth = 12, ntot = 96, res = res, simp = simp)
+    funcs.sail(lon, lat, spd, debug = debug, detailed = False, dur = 0.5, local = True, nang = nang, nth = 2, ntot = 48, res = res, simp = simp)
