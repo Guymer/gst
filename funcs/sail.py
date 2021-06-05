@@ -1,4 +1,4 @@
-def sail(lon, lat, spd, detailed = True, dur = 0.2, local = True, nang = 19, nth = 5, ntot = 30, plot = True, debug = False):
+def sail(lon, lat, spd, debug = False, detailed = True, dur = 0.2, local = True, nang = 19, nth = 5, ntot = 30, plot = True):
     """Sail from a point
 
     This function reads in a starting coordinate (in degrees) and a sailing
@@ -13,6 +13,8 @@ def sail(lon, lat, spd, detailed = True, dur = 0.2, local = True, nang = 19, nth
             the latitude of the starting point (in degrees)
     spd : float
             the speed of the vessel (in knots)
+    debug : bool, optional
+            print debug messages
     detailed : bool, optional
             use a detailed description of land
     dur : float, optional
@@ -27,8 +29,6 @@ def sail(lon, lat, spd, detailed = True, dur = 0.2, local = True, nang = 19, nth
             the number of iterations to perform
     plot : bool, optional
             make a plot
-    debug : bool, optional
-            print debug messages
     """
 
     # Import special modules ...
