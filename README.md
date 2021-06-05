@@ -1,0 +1,1 @@
+# Global Sailing Times (GST)
