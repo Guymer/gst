@@ -25,7 +25,7 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 0.2, local = False
     local : bool, optional
             the plot has only local extent
     nang : int, optional
-            the number of angles around each point that the vessel could sail in
+            the number of directions from each point that the vessel could sail in
     nth : int, optional
             plot sailing contours every nth iteration
     ntot : int, optional
@@ -35,7 +35,7 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 0.2, local = False
     res : string, optional
             resolution of the Natural Earth datasets
     simp : float, optional
-            how much intermediary [Multi]Polygon are simplified by
+            how much intermediary [Multi]Polygon are simplified by (in degrees)
     """
 
     # Import special modules ...
@@ -71,6 +71,8 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 0.2, local = False
     # Create short-hand ...
     dist = 1852.0 * spd * dur                                                   # [m]
 
+    print(f"Iterations will be every {dist:,.1f} metres.")
+
     # Find file containing all the land (and major islands) polygons ...
     sfiles = [cartopy.io.shapereader.natural_earth(resolution = res, category = "physical", name = "land")]
 
@@ -87,8 +89,8 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 0.2, local = False
         fg = matplotlib.pyplot.figure(figsize = (9, 6), dpi = 300)
         if local:
             ax = matplotlib.pyplot.axes(projection = cartopy.crs.Orthographic(central_longitude = lon, central_latitude = lat))
-            tmp = pyguymer3.buffer(poly, ntot * dist, debug = debug, nang = nang, simp = simp)
-            ax.set_extent([tmp.bounds[0], tmp.bounds[2], tmp.bounds[1], tmp.bounds[3]])
+            ext = pyguymer3.buffer(poly, ntot * dist, debug = debug, nang = nang, simp = simp).bounds
+            ax.set_extent([ext[0], ext[2], ext[1], ext[3]])
         else:
             ax = matplotlib.pyplot.axes(projection = cartopy.crs.Robinson())
             ax.set_global()
