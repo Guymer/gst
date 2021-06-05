@@ -12,7 +12,7 @@ if __name__ == "__main__":
     lon = -1.108652                                                             # [°]
     spd = 20.0                                                                  # [kts]
 
-    # Sail the vessel (ignoring minor islands, sailing in steps lasting 12
+    # Sail the vessel (ignoring minor islands, sailing in steps lasting 30
     # minutes and only plotting contours every 6 hours for 2 days in the local
     # vacinity) ...
-    funcs.sail(lon, lat, spd, detailed = False, local = True, nth = 30, ntot = 240)
+    funcs.sail(lon, lat, spd, detailed = False, dur = 0.5, local = True, nth = 12, ntot = 96)
