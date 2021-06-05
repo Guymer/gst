@@ -1,4 +1,4 @@
-def sail(lon, lat, spd, debug = False, detailed = True, dur = 0.2, local = False, nang = 19, nth = 5, ntot = 30, plot = True):
+def sail(lon, lat, spd, debug = False, detailed = True, dur = 0.2, local = False, nang = 19, nth = 5, ntot = 30, plot = True, simp = 0.1):
     """Sail from a point
 
     This function reads in a starting coordinate (in degrees) and a sailing
@@ -32,6 +32,8 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 0.2, local = False
             the number of iterations to perform
     plot : bool, optional
             make a plot
+    simp : float, optional
+            how much intermediary [Multi]Polygon are simplified by
     """
 
     # Import special modules ...
@@ -93,7 +95,7 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 0.2, local = False
         print(f"Iteration {i + 1:,d}/{ntot:,d} ({(i + 1) * dur:,.1f} hours of sailing) ...")
 
         # Sail ...
-        poly = pyguymer3.buffer(poly, dist, nang = nang, debug = debug)
+        poly = pyguymer3.buffer(poly, dist, debug = debug, nang = nang, simp = simp)
         poly = remove_land(poly, sfiles)
 
         # Check if the user wants to make a plot and that this iteration is one
