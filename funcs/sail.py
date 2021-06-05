@@ -87,6 +87,8 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 0.2, local = False
         fg = matplotlib.pyplot.figure(figsize = (9, 6), dpi = 300)
         if local:
             ax = matplotlib.pyplot.axes(projection = cartopy.crs.Orthographic(central_longitude = lon, central_latitude = lat))
+            tmp = pyguymer3.buffer(poly, ntot * dist, debug = debug, nang = nang, simp = simp)
+            ax.set_extent([tmp.bounds[0], tmp.bounds[2], tmp.bounds[1], tmp.bounds[3]])
         else:
             ax = matplotlib.pyplot.axes(projection = cartopy.crs.Robinson())
             ax.set_global()
