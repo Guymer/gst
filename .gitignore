@@ -15,8 +15,5 @@ __pycache__
 pylint.log
 shellcheck.log
 
-# Ignore compiler generated files ...
-*.mod
-*.o
-*.so
-*.so.dSYM
+# Hide large datasets ...
+*.png
