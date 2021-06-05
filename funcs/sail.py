@@ -1,4 +1,4 @@
-def sail(lon, lat, spd, detailed = True, dur = 0.2, nang = 19, nth = 5, ntot = 30, plot = True, debug = False):
+def sail(lon, lat, spd, detailed = True, dur = 0.2, global = False, nang = 19, nth = 5, ntot = 30, plot = True, debug = False):
     """Sail from a point
 
     This function reads in a starting coordinate (in degrees) and a sailing
@@ -17,6 +17,8 @@ def sail(lon, lat, spd, detailed = True, dur = 0.2, nang = 19, nth = 5, ntot = 3
             use a detailed description of land
     dur : float, optional
             the duration between each sailing step (in hours)
+    global : bool, optional
+            the plot has global extent
     nang : int, optional
             the number of angles around each point that the vessel sails in
     nth : int, optional
@@ -76,8 +78,11 @@ def sail(lon, lat, spd, detailed = True, dur = 0.2, nang = 19, nth = 5, ntot = 3
     if plot:
         # Create figure ...
         fg = matplotlib.pyplot.figure(figsize = (9, 6), dpi = 300)
-        ax = matplotlib.pyplot.axes(projection = cartopy.crs.Robinson())
-        ax.set_global()
+        if global:
+            ax = matplotlib.pyplot.axes(projection = cartopy.crs.Robinson())
+            ax.set_global()
+        else:
+            ax = matplotlib.pyplot.axes(projection = cartopy.crs.Orthographic(central_longitude = lon, central_latitude = lat))
         pyguymer3.add_map_background(ax, resolution = "large4096px")
 
     # Loop over iterations ...
