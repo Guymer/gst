@@ -1,9 +1,12 @@
-def sail(lon, lat, spd, debug = False, detailed = True, dur = 0.2, local = True, nang = 19, nth = 5, ntot = 30, plot = True):
+def sail(lon, lat, spd, debug = False, detailed = True, dur = 0.2, local = False, nang = 19, nth = 5, ntot = 30, plot = True):
     """Sail from a point
 
     This function reads in a starting coordinate (in degrees) and a sailing
     speed (in knots) and then calculates the maximum possible sailing distance
     on the surface of the Earth that the vessel can reach in the specified time.
+
+    By default, the iteration steps are 12 minutes long and the vessel sails for
+    6 hours with contours plotted every hour.
 
     Parameters
     ----------
@@ -16,7 +19,7 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 0.2, local = True,
     debug : bool, optional
             print debug messages
     detailed : bool, optional
-            use a detailed description of land
+            take account of minor islands
     dur : float, optional
             the duration between each sailing step (in hours)
     local : bool, optional
