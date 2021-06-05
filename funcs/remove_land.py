@@ -10,7 +10,7 @@ def remove_land(poly, sfiles):
     ----------
     poly : shapely.geometry.multipolygon.MultiPolygon
             the input shape
-    sfiles : list
+    sfiles : list of strings
             the list of Shapefiles
 
     Returns
