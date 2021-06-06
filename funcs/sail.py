@@ -61,8 +61,9 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 0.2, local = False
         raise Exception("\"pyguymer3\" is not installed; you need to have the Python module from https://github.com/Guymer/PyGuymer3 located somewhere in your $PYTHONPATH") from None
 
     # Import sub-functions ...
+    from .load_lands import load_lands
     from .remove_interior_rings import remove_interior_rings
-    from .remove_land import remove_land
+    from .remove_lands import remove_lands
 
     # **************************************************************************
 
@@ -74,13 +75,24 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 0.2, local = False
 
     print(f"Iterations will be every {dist:,.1f} metres.")
 
-    # Find file containing all the land (and major islands) polygons ...
-    sfiles = [cartopy.io.shapereader.natural_earth(resolution = res, category = "physical", name = "land")]
+    # **************************************************************************
+
+    print("Surveying all the land ...")
+
+    # Initialize list ...
+    lands = []
+
+    # Find file containing all the land (and major islands) [Multi]Polygons and
+    # append simplified versions of them to the list ...
+    sfile = cartopy.io.shapereader.natural_earth(resolution = res, category = "physical", name = "land")
+    lands = load_lands(lands, sfile, simp = simp)
 
     # Check if the user wants to be detailed ...
     if detailed:
-        # Find file containing all the minor islands polygons ...
-        sfiles.append(cartopy.io.shapereader.natural_earth(resolution = res, category = "physical", name = "minor_islands"))
+        # Find file containing all the minor islands [Multi]Polygons and append
+        # simplified versions of them to the list ...
+        sfile = cartopy.io.shapereader.natural_earth(resolution = res, category = "physical", name = "minor_islands")
+        lands = load_lands(lands, sfile, simp = simp)
 
     # **************************************************************************
 
@@ -111,7 +123,7 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 0.2, local = False
         #       individual points that are on land and return a LineString
         #       instead.
         poly = pyguymer3.buffer(poly, dist, debug = debug, nang = nang, simp = simp)
-        poly = remove_land(poly, sfiles)
+        poly = remove_lands(poly, lands, simp = simp)
         poly = remove_interior_rings(poly)
 
         # Check if the user wants to make a plot and that this iteration is one
