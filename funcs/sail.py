@@ -111,7 +111,7 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 0.2, local = False
 
     # Loop over iterations ...
     for i in range(ntot):
-        print(f"Iteration {i + 1:,d}/{ntot:,d} ({(i + 1) * dur:,.1f} hours of sailing) ...")
+        print(f"Iteration {i + 1:,d}/{ntot:,d} ({(i + 1) * dur:,.2f} hours of sailing) ...")
 
         # Sail ...
         # NOTE: Can I save time by not buffering the points that lie on
