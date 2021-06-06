@@ -101,6 +101,14 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 0.2, local = False
         print(f"Iteration {i + 1:,d}/{ntot:,d} ({(i + 1) * dur:,.1f} hours of sailing) ...")
 
         # Sail ...
+        # NOTE: Can I save time by not buffering the points that lie on
+        #       coastlines? See:
+        #         * https://shapely.readthedocs.io/en/stable/manual.html#shared-paths
+        #       Alternatively, are coastline points in the land or in the sea or
+        #       in both? If they can be identified, then skip them.
+        #       Alternatively, instead of removing land via difference(), remove
+        #       individual points that are on land and return a LineString
+        #       instead.
         poly = pyguymer3.buffer(poly, dist, debug = debug, nang = nang, simp = simp)
         poly = remove_land(poly, sfiles)
 
