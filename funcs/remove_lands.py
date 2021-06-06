@@ -1,4 +1,4 @@
-def remove_land(poly, sfiles):
+def remove_lands(poly, sfiles):
     """Remove the parts of a [Multi]Polygon that lie on land
 
     This function reads in a [Multi]Polygon and a list of Shapefiles that
