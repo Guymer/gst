@@ -140,10 +140,10 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 0.2, local = False
 
     # Check if the user wants to make a plot ...
     if plot:
-        print("Saving plot ...")
-
         # Determine output PNG file name ...
         png = f"dur={dur:f}_nang={nang:d}_nth={nth:d}_ntot={ntot:d}_res={res}_simp={simp:f}.png"
+
+        print(f"Saving \"{png}\" ...")
 
         # Save figure ...
         fg.savefig(png, bbox_inches = "tight", dpi = 300, pad_inches = 0.1)
