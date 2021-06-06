@@ -84,6 +84,8 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 0.2, local = False
 
     # Find file containing all the land (and major islands) [Multi]Polygons and
     # append simplified versions of them to the list ...
+    # TODO: Think about only loading land masses that are within the maximum
+    #       possible sailing envelope.
     sfile = cartopy.io.shapereader.natural_earth(resolution = res, category = "physical", name = "land")
     lands = load_lands(lands, sfile, simp = simp)
 
@@ -91,6 +93,8 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 0.2, local = False
     if detailed:
         # Find file containing all the minor islands [Multi]Polygons and append
         # simplified versions of them to the list ...
+        # TODO: Think about only loading land masses that are within the maximum
+        #       possible sailing envelope.
         sfile = cartopy.io.shapereader.natural_earth(resolution = res, category = "physical", name = "minor_islands")
         lands = load_lands(lands, sfile, simp = simp)
 
@@ -114,14 +118,14 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 0.2, local = False
         print(f"Iteration {i + 1:,d}/{ntot:,d} ({(i + 1) * dur:,.2f} hours of sailing) ...")
 
         # Sail ...
-        # NOTE: Can I save time by not buffering the points that lie on
+        # TODO: Can I save time by not buffering the points that lie on
         #       coastlines? See:
         #         * https://shapely.readthedocs.io/en/stable/manual.html#shared-paths
         #       Alternatively, are coastline points in the land or in the sea or
         #       in both? If they can be identified, then skip them.
         #       Alternatively, instead of removing land via difference(), remove
-        #       individual points that are on land and return a LineString
-        #       instead.
+        #       individual points from the LinearRing that are on land and
+        #       use a LineString instead.
         ship = pyguymer3.buffer(ship, dist, debug = debug, nang = nang, simp = simp)
         ship = remove_lands(ship, lands, simp = simp)
         ship = remove_interior_rings(ship)
