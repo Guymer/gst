@@ -68,7 +68,7 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 0.2, local = False
     # **************************************************************************
 
     # Create initial Point ...
-    poly = shapely.geometry.point.Point(lon, lat)
+    ship = shapely.geometry.point.Point(lon, lat)
 
     # Create short-hand ...
     dist = 1852.0 * spd * dur                                                   # [m]
@@ -102,7 +102,7 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 0.2, local = False
         fg = matplotlib.pyplot.figure(figsize = (9, 6), dpi = 300)
         if local:
             ax = matplotlib.pyplot.axes(projection = cartopy.crs.Orthographic(central_longitude = lon, central_latitude = lat))
-            ext = pyguymer3.buffer(poly, ntot * dist, debug = debug, nang = nang, simp = simp).bounds
+            ext = pyguymer3.buffer(ship, ntot * dist, debug = debug, nang = nang, simp = simp).bounds
             ax.set_extent([ext[0], ext[2], ext[1], ext[3]])
         else:
             ax = matplotlib.pyplot.axes(projection = cartopy.crs.Robinson())
@@ -122,9 +122,9 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 0.2, local = False
         #       Alternatively, instead of removing land via difference(), remove
         #       individual points that are on land and return a LineString
         #       instead.
-        poly = pyguymer3.buffer(poly, dist, debug = debug, nang = nang, simp = simp)
-        poly = remove_lands(poly, lands, simp = simp)
-        poly = remove_interior_rings(poly)
+        ship = pyguymer3.buffer(ship, dist, debug = debug, nang = nang, simp = simp)
+        ship = remove_lands(ship, lands, simp = simp)
+        ship = remove_interior_rings(ship)
 
         # Check if the user wants to make a plot and that this iteration is one
         # of the ones to be plotted ...
@@ -132,7 +132,7 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 0.2, local = False
             print("  Plotting ...")
 
             # Plot [Multi]Polygon ...
-            ax.add_geometries([poly], cartopy.crs.PlateCarree(), alpha = 1.0, edgecolor = f"C{((i + 1) // nth) - 1:d}", facecolor = "none", linewidth = 1.0)
+            ax.add_geometries([ship], cartopy.crs.PlateCarree(), alpha = 1.0, edgecolor = f"C{((i + 1) // nth) - 1:d}", facecolor = "none", linewidth = 1.0)
 
     # Check if the user wants to make a plot ...
     if plot:
