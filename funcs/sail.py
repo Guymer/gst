@@ -61,6 +61,7 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 0.2, local = False
         raise Exception("\"pyguymer3\" is not installed; you need to have the Python module from https://github.com/Guymer/PyGuymer3 located somewhere in your $PYTHONPATH") from None
 
     # Import sub-functions ...
+    from .remove_interior_rings import remove_interior_rings
     from .remove_land import remove_land
 
     # **************************************************************************
@@ -111,6 +112,7 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 0.2, local = False
         #       instead.
         poly = pyguymer3.buffer(poly, dist, debug = debug, nang = nang, simp = simp)
         poly = remove_land(poly, sfiles)
+        poly = remove_interior_rings(poly)
 
         # Check if the user wants to make a plot and that this iteration is one
         # of the ones to be plotted ...
