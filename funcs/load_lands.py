@@ -11,7 +11,7 @@ def load_lands(lands, sfile, simp = 0.1):
     sfile : string
             the Shapefile to load land from
     simp : float, optional
-            how much intermediary [Multi]Polygon are simplified by (in degrees)
+            how much intermediary [Multi]Polygons are simplified by (in degrees)
 
     Returns
     -------
