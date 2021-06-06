@@ -15,5 +15,8 @@ __pycache__
 pylint.log
 shellcheck.log
 
+# Hide output of cProfile ...
+results.out
+
 # Hide large datasets ...
 *.png
