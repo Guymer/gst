@@ -1,4 +1,4 @@
-def load_lands(lands, sfile, simp = 0.1):
+def load_lands(lands, sfile, dist, nang = 19, simp = 0.1, debug = False):
     """Load land from a Shapefile
 
     This function reads in a Shapefile and loops over all [Multi]Polygons,
@@ -10,8 +10,14 @@ def load_lands(lands, sfile, simp = 0.1):
             the input list of Polygons
     sfile : string
             the Shapefile to load land from
+    dist : float
+            the distance to buffer the land by (in metres)
+    nang : int, optional
+            the number of angles around each point that are calculated when buffering
     simp : float, optional
             how much intermediary [Multi]Polygons are simplified by (in degrees)
+    debug : bool, optional
+            print debug messages
 
     Returns
     -------
@@ -29,19 +35,25 @@ def load_lands(lands, sfile, simp = 0.1):
     except:
         raise Exception("\"shapely\" is not installed; run \"pip install --user Shapely\"") from None
 
+    # Import my modules ...
+    try:
+        import pyguymer3
+    except:
+        raise Exception("\"pyguymer3\" is not installed; you need to have the Python module from https://github.com/Guymer/PyGuymer3 located somewhere in your $PYTHONPATH") from None
+
     # Loop over records ...
     for record in cartopy.io.shapereader.Reader(sfile).records():
         # Check the type of this geometry ...
         if isinstance(record.geometry, shapely.geometry.polygon.Polygon):
             # Append simplified Polygon to list ...
-            lands.append(record.geometry.simplify(simp))
+            lands.append(pyguymer3.buffer(record.geometry, dist, nang = nang, simp = simp, debug = debug))
         elif isinstance(record.geometry, shapely.geometry.multipolygon.MultiPolygon):
             # Loop over geometries ...
             for geom in record.geometry.geoms:
                 # Check the type of this geometry ...
                 if isinstance(geom, shapely.geometry.polygon.Polygon):
                     # Append simplified Polygon to list ...
-                    lands.append(geom.simplify(simp))
+                    lands.append(pyguymer3.buffer(geom, dist, nang = nang, simp = simp, debug = debug))
                 else:
                     raise Exception(f"\"geom\" is a \"{repr(type(geom))}\"")
         else:
