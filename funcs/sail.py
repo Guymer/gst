@@ -87,7 +87,7 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 0.2, local = False
     # TODO: Think about only loading land masses that are within the maximum
     #       possible sailing envelope.
     sfile = cartopy.io.shapereader.natural_earth(resolution = res, category = "physical", name = "land")
-    lands = load_lands(lands, sfile, simp = simp)
+    lands = load_lands(lands, sfile, dist, nang = nang, simp = simp, debug = debug)
 
     # Check if the user wants to be detailed ...
     if detailed:
@@ -96,7 +96,7 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 0.2, local = False
         # TODO: Think about only loading land masses that are within the maximum
         #       possible sailing envelope.
         sfile = cartopy.io.shapereader.natural_earth(resolution = res, category = "physical", name = "minor_islands")
-        lands = load_lands(lands, sfile, simp = simp)
+        lands = load_lands(lands, sfile, dist, nang = nang, simp = simp, debug = debug)
 
     # **************************************************************************
 
