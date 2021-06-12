@@ -77,6 +77,9 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 1.0, local = False
     resoluOfEarth = circumOfEarth / 360.0                                       # [m/°]
     simp = prec / resoluOfEarth                                                 # [°]
 
+    # Add conservatism ...
+    simp *= 0.1                                                                 # [°]
+
     # Create the initial starting Point ...
     ship = shapely.geometry.point.Point(lon, lat)
 
@@ -90,7 +93,7 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 1.0, local = False
     # **************************************************************************
 
     # Determine first output folder name and make it if it is missing ...
-    output1 = f"detailed={repr(detailed)}_nang={repr(nang)}_res={res}_simp={repr(simp)}"
+    output1 = f"detailed={repr(detailed)}_nang={repr(nang)}_res={res}_prec={repr(prec)}_simp={repr(simp)}"
     if not os.path.exists(output1):
         os.mkdir(output1)
 
