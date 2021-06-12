@@ -6,14 +6,15 @@ if __name__ == "__main__":
     # Import my modules ...
     import funcs
 
-    # Define starting location (just outside Portsmouth Harbour) and sailing
-    # speed (of an average vessel) ...
+    # Define starting location (just outside Portsmouth Harbour), sailing
+    # speed (of an average vessel) and sailing duration ...
     lat = 50.774438                                                             # [°]
     lon = -1.108652                                                             # [°]
     spd = 20.0                                                                  # [kts]
+    dur = 1.0                                                                   # [days]
 
     # Set run mode ...
-    debug = False
+    debug = True
 
     # **************************************************************************
 
@@ -21,15 +22,15 @@ if __name__ == "__main__":
     if debug:
         res = "110m"
         nang = 37
-        simp = 0.1
+        prec = 10000.0                                                          # [m]
     else:
         res = "10m"
         nang = 361
-        simp = 0.0001
+        prec = 1000.0                                                           # [m]
 
     # **************************************************************************
 
     # Sail the vessel (ignoring minor islands, sailing in steps lasting 1 minute
     # and 12 seconds and only plotting contours every 6 minutes for 3 hours in
     # the local vacinity) ...
-    funcs.sail(lon, lat, spd, debug = debug, detailed = False, dur = 0.02, local = True, nang = nang, nth = 5, ntot = 150, res = res, simp = simp)
+    funcs.sail(lon, lat, spd, debug = debug, detailed = False, dur = dur, local = True, nang = nang, nth = 5, prec = prec, res = res)
