@@ -42,7 +42,7 @@ def remove_interior_rings(poly):
 
         # Return a MultiPolygon made of Polygons made of just the exterior
         # LinearRings ...
-        return shapely.geometry.multipolygon.MultiPolygon(polys)
+        return shapely.ops.unary_union(polys)
 
     # Catch error ...
     raise TypeError(f"\"poly\" is a \"{repr(type(poly))}\"") from None
