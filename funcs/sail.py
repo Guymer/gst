@@ -136,6 +136,8 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 1.0, local = False
 
         # Check if this step needs the list of relevant land updating ...
         if istep % 100 == 0:
+            print(" > Re-evaluating the relevant land ...")
+
             # Initialize list ...
             relevantLands = []
 
