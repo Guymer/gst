@@ -69,7 +69,7 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 1.0, local = False
     # **************************************************************************
 
     # Determine how many degrees (of longitude) a [Multi]Polygon can be
-    # simplified by at the points where a degree (of longitude) is the largest,
+    # simplified by at the point where a degree (of longitude) is the largest,
     # i.e., the equator ...
     # NOTE: See https://en.wikipedia.org/wiki/Earth_radius#Mean_radius
     radiusOfEarth = 6371008.8                                                   # [m]
