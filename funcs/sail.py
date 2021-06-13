@@ -85,7 +85,7 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 1.0, local = False
 
     # Calculate the maximum possible sailing distance (ignoring all land) ...
     maxDist = (1852.0 * spd) * (24.0 * dur)                                     # [m]
-    maxShip = pyguymer3.buffer(ship, maxDist, debug = debug, nang = nang, simp = simp)
+    maxShip = pyguymer3.geo.buffer(ship, maxDist, debug = debug, nang = nang, simp = simp)
 
     # Figure out how many steps are going to be required ...
     nstep = round(maxDist / prec)                                               # [#]
@@ -129,7 +129,7 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 1.0, local = False
         else:
             ax = matplotlib.pyplot.axes(projection = cartopy.crs.Robinson())
             ax.set_global()
-        pyguymer3.add_map_background(ax, resolution = "large4096px")
+        pyguymer3.geo.add_map_background(ax, resolution = "large4096px")
 
     # Loop over iterations ...
     for istep in range(nstep):
@@ -170,7 +170,7 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 1.0, local = False
         #       Alternatively, instead of removing land via difference(), remove
         #       individual points from the LinearRing that are on land and
         #       use a LineString instead.
-        ship = pyguymer3.buffer(ship, prec, debug = debug, nang = nang, simp = simp)
+        ship = pyguymer3.geo.buffer(ship, prec, debug = debug, nang = nang, simp = simp)
         ship = remove_lands(ship, relevantLands, simp = simp)
         ship = remove_interior_rings(ship)
 
