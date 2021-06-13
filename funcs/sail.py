@@ -98,7 +98,7 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 1.0, local = False
         os.mkdir(output1)
 
     # Determine second output folder name and make it if it is missing ...
-    output2 = f"{output1}/lon={lon:.6f}_lat={lat:.6f}_spd={spd:.1f}_dur={dur:.1f}"
+    output2 = f"{output1}/lon={lon:.6f}_lat={lat:.6f}_spd={spd:.1f}_dur={dur:.2f}"
     if not os.path.exists(output2):
         os.mkdir(output2)
 
