@@ -78,7 +78,7 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 1.0, local = False
     simp = prec / resoluOfEarth                                                 # [°]
 
     # Add conservatism ...
-    simp *= 0.1                                                                 # [°]
+    simp *= 0.01                                                                # [°]
 
     # Create the initial starting Point ...
     ship = shapely.geometry.point.Point(lon, lat)
