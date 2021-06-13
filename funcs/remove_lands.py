@@ -12,7 +12,7 @@ def remove_lands(poly, lands, simp = 0.1):
     lands : list of shapely.geometry.polygon.Polygon
             the list of land masses
     simp : float, optional
-            how much intermediary [Multi]Polygons are simplified by (in degrees)
+            how much intermediary [Multi]Polygons are simplified by; negative values disable simplification (in degrees)
 
     Returns
     -------
@@ -25,5 +25,15 @@ def remove_lands(poly, lands, simp = 0.1):
         # Subtract this Polygon from the [Multi]Polygon ...
         poly = poly.difference(land)
 
-    # Return a simplified [Multi]Polygon ...
-    return poly.simplify(simp)
+    # Check if the user wants to simplify the [Multi]Polygon ...
+    if simp > 0.0:
+        # Simplify [Multi]Polygon ...
+        polySimp = poly.simplify(simp)
+
+        # Check simplified [Multi]Polygon ...
+        if polySimp.is_valid:
+            # Return simplified answer ...
+            return polySimp
+
+    # Return answer ...
+    return poly
