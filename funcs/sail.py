@@ -94,7 +94,7 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 1.0, local = False
     # **************************************************************************
 
     # Determine first output folder name and make it if it is missing ...
-    output1 = f"detailed={repr(detailed)}_nang={nang:d}_res={res}_prec={prec:.2e}_simp={simp:.2e}"
+    output1 = f"detailed={repr(detailed)[0]}_nang={nang:d}_res={res}_prec={prec:.2e}_simp={simp:.2e}"
     if not os.path.exists(output1):
         os.mkdir(output1)
 
@@ -186,7 +186,7 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 1.0, local = False
     # Check if the user wants to make a plot ...
     if plot:
         # Determine output PNG file name ...
-        png = f"{output2}/local={repr(local)}_nth={nth:d}.png"
+        png = f"{output2}/local={repr(local)[0]}_nth={nth:d}.png"
 
         print(f"Making \"{png}\" ...")
 
