@@ -16,7 +16,7 @@ def save_allLands(fname, dist, debug = False, detailed = False, nang = 19, res =
     res : string, optional
             the resolution of the Natural Earth datasets
     simp : float, optional
-            how much intermediary [Multi]Polygons are simplified by (in degrees)
+            how much intermediary [Multi]Polygons are simplified by; negative values disable simplification (in degrees)
     """
 
     # Import standard modules ...
