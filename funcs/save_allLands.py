@@ -68,7 +68,7 @@ def save_allLands(fname, dist, debug = False, detailed = False, nang = 19, res =
                 continue
 
             # Buffer [Multi]Polygon ...
-            buff = pyguymer3.geo.buffer(record.geometry, dist, nang = nang, simp = simp, debug = debug)
+            buff = pyguymer3.geo.buffer(record.geometry, dist, debug = debug, nang = nang, simp = simp)
 
             # Check the type of the buffered [Multi]Polygon ...
             if isinstance(buff, shapely.geometry.multipolygon.MultiPolygon):
