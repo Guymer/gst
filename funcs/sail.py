@@ -59,6 +59,7 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 1.0, local = False
     try:
         import pyguymer3
         import pyguymer3.geo
+        import pyguymer3.image
     except:
         raise Exception("\"pyguymer3\" is not installed; you need to have the Python module from https://github.com/Guymer/PyGuymer3 located somewhere in your $PYTHONPATH") from None
 
@@ -195,4 +196,4 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 1.0, local = False
         matplotlib.pyplot.close(fg)
 
         # Optimize PNG ...
-        pyguymer3.optimize_image(png, strip = True)
+        pyguymer3.image.optimize_image(png, strip = True)
