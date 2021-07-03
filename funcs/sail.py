@@ -120,7 +120,7 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 1.0, fill = -1.0, 
         print(f"Making \"{allLandsName}\" ...")
 
         # Make the compressed WKB file of all of the land ...
-        save_allLands(allLandsName, prec, debug = debug, detailed = detailed, fill = fill, nang = nang, res = res, simp = simp)
+        save_allLands(allLandsName, prec, debug = False, detailed = detailed, fill = fill, nang = nang, res = res, simp = simp)
 
     # Load all the land ...
     allLands = shapely.wkb.loads(gzip.open(allLandsName, "rb").read())
@@ -178,7 +178,7 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 1.0, fill = -1.0, 
         #       Alternatively, instead of removing land via difference(), remove
         #       individual points from the LinearRing that are on land and
         #       use a LineString instead.
-        ship = pyguymer3.geo.buffer(ship, prec, debug = debug, fill = fill, nang = nang, simp = simp)
+        ship = pyguymer3.geo.buffer(ship, prec, debug = False, fill = fill, nang = nang, simp = simp)
         ship = remove_lands(ship, relevantLands, simp = simp)
         ship = remove_interior_rings(ship)
 
