@@ -22,7 +22,7 @@ if __name__ == "__main__":
     if debug:
         res = "110m"
         nang = 37
-        prec = 10000.0                                                          # [m]
+        prec = 1000.0                                                           # [m]
     else:
         res = "10m"
         nang = 361
