@@ -66,6 +66,9 @@ def save_allLands(fname, dist, debug = False, detailed = False, nang = 19, res =
             if not record.geometry.is_valid:
                 print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is not valid.")
                 continue
+            if record.geometry.is_empty:
+                print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is empty.")
+                continue
 
             # Buffer [Multi]Polygon ...
             buff = pyguymer3.geo.buffer(record.geometry, dist, debug = debug, nang = nang, simp = simp)
@@ -77,6 +80,8 @@ def save_allLands(fname, dist, debug = False, detailed = False, nang = 19, res =
                     # Catch bad Polygons ...
                     if not geom.is_valid:
                         raise Exception("\"geom\" is not a valid Polygon ({0:s})".format(shapely.validation.explain_validity(geom))) from None
+                    if geom.is_empty:
+                        raise Exception("\"geom\" is an empty Polygon") from None
 
                     # Append a Polygon made of only the exterior of this Polygon
                     # to the list ...
@@ -85,6 +90,8 @@ def save_allLands(fname, dist, debug = False, detailed = False, nang = 19, res =
                 # Catch bad Polygons ...
                 if not buff.is_valid:
                     raise Exception("\"buff\" is not a valid Polygon ({0:s})".format(shapely.validation.explain_validity(buff))) from None
+                if buff.is_empty:
+                    raise Exception("\"buff\" is an empty Polygon") from None
 
                 # Append a Polygon made of only the exterior of this Polygon to
                 # the list ...

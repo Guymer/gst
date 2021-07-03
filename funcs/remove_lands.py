@@ -20,10 +20,25 @@ def remove_lands(poly, lands, simp = 0.1):
             the output shape
     """
 
+    # Import special modules ...
+    try:
+        import shapely
+        import shapely.validation
+    except:
+        raise Exception("\"shapely\" is not installed; run \"pip install --user Shapely\"") from None
+
     # Loop over land ...
     for land in lands:
         # Subtract this Polygon from the [Multi]Polygon ...
         poly = poly.difference(land)
+
+    # Check [Multi]Polygon ...
+    if not poly.is_valid:
+        raise Exception(f"\"poly\" is not a valid [Multi]Polygon ({shapely.validation.explain_validity(poly)})") from None
+
+    # Check [Multi]Polygon ...
+    if poly.is_empty:
+        raise Exception("\"poly\" is an empty [Multi]Polygon") from None
 
     # Check if the user wants to simplify the [Multi]Polygon ...
     if simp > 0.0:
@@ -31,7 +46,7 @@ def remove_lands(poly, lands, simp = 0.1):
         polySimp = poly.simplify(simp)
 
         # Check simplified [Multi]Polygon ...
-        if polySimp.is_valid:
+        if polySimp.is_valid and not polySimp.is_empty:
             # Return simplified answer ...
             return polySimp
 
