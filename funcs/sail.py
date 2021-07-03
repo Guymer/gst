@@ -1,4 +1,4 @@
-def sail(lon, lat, spd, debug = False, detailed = True, dur = 1.0, local = False, nang = 19, nth = 5, plot = True, prec = 10000.0, res = "110m"):
+def sail(lon, lat, spd, debug = False, detailed = True, dur = 1.0, fill = -1.0, local = False, nang = 19, nth = 5, plot = True, prec = 10000.0, res = "110m"):
     """Sail from a point
 
     This function reads in a starting coordinate (in degrees) and a sailing
@@ -19,6 +19,8 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 1.0, local = False
             take account of minor islands
     dur : float, optional
             the duration of the voyage (in days)
+    fill : float, optional
+            how many intermediary points are added to fill in the straight lines which connect the points; negative values disable filling
     local : bool, optional
             the plot has only local extent
     nang : int, optional
@@ -87,7 +89,7 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 1.0, local = False
 
     # Calculate the maximum possible sailing distance (ignoring all land) ...
     maxDist = (1852.0 * spd) * (24.0 * dur)                                     # [m]
-    maxShip = pyguymer3.geo.buffer(ship, maxDist, debug = debug, nang = nang, simp = simp)
+    maxShip = pyguymer3.geo.buffer(ship, maxDist, debug = debug, fill = fill, nang = nang, simp = simp)
 
     # Check if the user is being far too coarse ...
     if prec > maxDist:
@@ -99,7 +101,7 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 1.0, local = False
     # **************************************************************************
 
     # Determine first output folder name and make it if it is missing ...
-    output1 = f"detailed={repr(detailed)[0]}_nang={nang:d}_res={res}_prec={prec:.2e}_simp={simp:.2e}"
+    output1 = f"detailed={repr(detailed)[0]}_fill={fill:.2e}_nang={nang:d}_res={res}_prec={prec:.2e}_simp={simp:.2e}"
     if not os.path.exists(output1):
         os.mkdir(output1)
 
@@ -118,7 +120,7 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 1.0, local = False
         print(f"Making \"{allLandsName}\" ...")
 
         # Make the compressed WKB file of all of the land ...
-        save_allLands(allLandsName, prec, debug = debug, detailed = detailed, nang = nang, res = res, simp = simp)
+        save_allLands(allLandsName, prec, debug = debug, detailed = detailed, fill = fill, nang = nang, res = res, simp = simp)
 
     # Load all the land ...
     allLands = shapely.wkb.loads(gzip.open(allLandsName, "rb").read())
@@ -176,7 +178,7 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 1.0, local = False
         #       Alternatively, instead of removing land via difference(), remove
         #       individual points from the LinearRing that are on land and
         #       use a LineString instead.
-        ship = pyguymer3.geo.buffer(ship, prec, debug = debug, nang = nang, simp = simp)
+        ship = pyguymer3.geo.buffer(ship, prec, debug = debug, fill = fill, nang = nang, simp = simp)
         ship = remove_lands(ship, relevantLands, simp = simp)
         ship = remove_interior_rings(ship)
 
