@@ -30,7 +30,17 @@ if __name__ == "__main__":
 
     # **************************************************************************
 
-    # Sail the vessel (ignoring minor islands, sailing in steps lasting 1 minute
-    # and 12 seconds and only plotting contours every 6 minutes for 3 hours in
-    # the local vacinity) ...
-    funcs.sail(lon, lat, spd, debug = debug, detailed = False, dur = dur, local = True, nang = nang, nth = 5, prec = prec, res = res)
+    # Sail the vessel (ignoring minor islands) ...
+    funcs.sail(
+        lon,
+        lat,
+        spd,
+        debug = debug,
+        detailed = False,
+        dur = dur,
+        local = True,
+        nang = nang,
+        nth = 5,
+        prec = prec,
+        res = res
+    )
