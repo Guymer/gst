@@ -89,6 +89,10 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 1.0, local = False
     maxDist = (1852.0 * spd) * (24.0 * dur)                                     # [m]
     maxShip = pyguymer3.geo.buffer(ship, maxDist, debug = debug, nang = nang, simp = simp)
 
+    # Check if the user is being far too coarse ...
+    if prec > maxDist:
+        raise Exception(f"the maximum possible sailing distance is {maxDist:,.1f}m but the precision is {prec:,.1f}m") from None
+
     # Figure out how many steps are going to be required ...
     nstep = round(maxDist / prec)                                               # [#]
 
