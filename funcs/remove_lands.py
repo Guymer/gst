@@ -7,7 +7,7 @@ def remove_lands(poly, lands, simp = 0.1):
 
     Parameters
     ----------
-    poly : shapely.geometry.multipolygon.MultiPolygon
+    poly : shapely.geometry.polygon.Polygon, shapely.geometry.multipolygon.MultiPolygon
             the input shape
     lands : list of shapely.geometry.polygon.Polygon
             the list of land masses
@@ -16,7 +16,7 @@ def remove_lands(poly, lands, simp = 0.1):
 
     Returns
     -------
-    poly : shapely.geometry.multipolygon.MultiPolygon
+    poly : shapely.geometry.polygon.Polygon, shapely.geometry.multipolygon.MultiPolygon
             the output shape
     """
 

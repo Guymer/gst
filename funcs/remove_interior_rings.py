@@ -6,12 +6,12 @@ def remove_interior_rings(poly):
 
     Parameters
     ----------
-    poly : shapely.geometry.multipolygon.MultiPolygon
+    poly : shapely.geometry.polygon.Polygon, shapely.geometry.multipolygon.MultiPolygon
             the input shape
 
     Returns
     -------
-    poly : shapely.geometry.multipolygon.MultiPolygon
+    poly : shapely.geometry.polygon.Polygon, shapely.geometry.multipolygon.MultiPolygon
             the output shape
     """
 
