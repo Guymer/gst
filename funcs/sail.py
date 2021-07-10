@@ -185,7 +185,7 @@ def sail(lon, lat, spd, kwArgCheck = None, debug = False, detailed = True, dur =
         #       Alternatively, instead of removing land via difference(), remove
         #       individual points from the LinearRing that are on land and
         #       use a LineString instead.
-        ship = pyguymer3.geo.buffer(ship, prec, debug = False, fill = fill, nang = nang, simp = simp)
+        ship = pyguymer3.geo.buffer(ship, prec, debug = False, fill = fill, nang = nang, simp = simp, tol = tol)
         ship = remove_lands(ship, relevantLands, simp = simp)
         ship = remove_interior_rings(ship, tol = tol)
 
