@@ -1,4 +1,4 @@
-def sail(lon, lat, spd, debug = False, detailed = True, dur = 1.0, fill = -1.0, local = False, nang = 19, nth = 5, plot = True, prec = 10000.0, res = "110m"):
+def sail(lon, lat, spd, kwArgCheck = None, debug = False, detailed = True, dur = 1.0, local = False, nang = 19, nth = 5, plot = True, prec = 10000.0, res = "110m", tol = 1.0e-10):
     """Sail from a point
 
     This function reads in a starting coordinate (in degrees) and a sailing
@@ -19,8 +19,6 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 1.0, fill = -1.0, 
             take account of minor islands
     dur : float, optional
             the duration of the voyage (in days)
-    fill : float, optional
-            how many intermediary points are added to fill in the straight lines which connect the points; negative values disable filling
     local : bool, optional
             the plot has only local extent
     nang : int, optional
@@ -33,6 +31,8 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 1.0, fill = -1.0, 
             the precision of the calculation (in metres)
     res : string, optional
             the resolution of the Natural Earth datasets
+    tol : float, optional
+            the Euclidean distance that defines two points as being the same (in degrees)
     """
 
     # Improt standard modules ...
@@ -70,6 +70,10 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 1.0, fill = -1.0, 
     from .remove_lands import remove_lands
     from .save_allLands import save_allLands
 
+    # Check keyword arguments ...
+    if kwArgCheck is not None:
+        print(f"WARNING: \"{__name__}\" has been called with an extra positional argument")
+
     # **************************************************************************
 
     # Determine how many degrees (of longitude) a [Multi]Polygon can be
@@ -84,12 +88,15 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 1.0, fill = -1.0, 
     # Add conservatism ...
     simp *= 0.01                                                                # [°]
 
+    # Deduce fill spacing ...
+    fill = 10.0 * simp                                                          # [°]
+
     # Create the initial starting Point ...
     ship = shapely.geometry.point.Point(lon, lat)
 
     # Calculate the maximum possible sailing distance (ignoring all land) ...
     maxDist = (1852.0 * spd) * (24.0 * dur)                                     # [m]
-    maxShip = pyguymer3.geo.buffer(ship, maxDist, debug = debug, fill = fill, nang = nang, simp = simp)
+    maxShip = pyguymer3.geo.buffer(ship, maxDist, debug = debug, fill = fill, nang = nang, simp = simp, tol = tol)
 
     # Check if the user is being far too coarse ...
     if prec > maxDist:
@@ -101,7 +108,7 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 1.0, fill = -1.0, 
     # **************************************************************************
 
     # Determine first output folder name and make it if it is missing ...
-    output1 = f"detailed={repr(detailed)[0]}_fill={fill:.2e}_nang={nang:d}_res={res}_prec={prec:.2e}_simp={simp:.2e}"
+    output1 = f"detailed={repr(detailed)[0]}_fill={fill:.2e}_nang={nang:d}_res={res}_prec={prec:.2e}_simp={simp:.2e}_tol={tol:.2e}"
     if not os.path.exists(output1):
         os.mkdir(output1)
 
@@ -120,7 +127,7 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 1.0, fill = -1.0, 
         print(f"Making \"{allLandsName}\" ...")
 
         # Make the compressed WKB file of all of the land ...
-        save_allLands(allLandsName, prec, debug = False, detailed = detailed, fill = fill, nang = nang, res = res, simp = simp)
+        save_allLands(allLandsName, prec, debug = False, detailed = detailed, fill = fill, nang = nang, res = res, simp = simp, tol = tol)
 
     # Load all the land ...
     allLands = shapely.wkb.loads(gzip.open(allLandsName, "rb").read())
@@ -180,7 +187,7 @@ def sail(lon, lat, spd, debug = False, detailed = True, dur = 1.0, fill = -1.0, 
         #       use a LineString instead.
         ship = pyguymer3.geo.buffer(ship, prec, debug = False, fill = fill, nang = nang, simp = simp)
         ship = remove_lands(ship, relevantLands, simp = simp)
-        ship = remove_interior_rings(ship)
+        ship = remove_interior_rings(ship, tol = tol)
 
         # Check if the user wants to make a plot and that this iteration is one
         # of the ones to be plotted ...
