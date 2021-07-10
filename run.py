@@ -8,24 +8,22 @@ if __name__ == "__main__":
 
     # Define starting location (just outside Portsmouth Harbour), sailing
     # speed (of an average vessel) and sailing duration ...
-    lat = 50.774438                                                             # [°]
-    lon = -1.108652                                                             # [°]
+    lat = 50.7                                                                  # [°]
+    lon = -1.1                                                                  # [°]
     spd = 20.0                                                                  # [kts]
     dur = 0.01                                                                  # [days]
 
     # Set run mode ...
-    debug = True
+    debug = False
 
     # **************************************************************************
 
     # Configure calculation based off run mode ...
     if debug:
         nang = 37
-        prec = 1000.0                                                           # [m]
         res = "110m"
     else:
         nang = 361
-        prec = 100.0                                                            # [m]
         res = "10m"
 
     # **************************************************************************
@@ -40,7 +38,6 @@ if __name__ == "__main__":
         dur = dur,
         local = True,
         nang = nang,
-        nth = 5,
-        prec = prec,
+        nth = 10,
         res = res
     )
