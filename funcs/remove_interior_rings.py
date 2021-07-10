@@ -1,4 +1,4 @@
-def remove_interior_rings(poly):
+def remove_interior_rings(poly, kwArgCheck = None, tol = 1.0e-10):
     """Remove all interior rings from a [Multi]Polygon
 
     This function reads in a [Multi]Polygon and returns a [Multi]Polygon which
@@ -8,6 +8,8 @@ def remove_interior_rings(poly):
     ----------
     poly : shapely.geometry.polygon.Polygon, shapely.geometry.multipolygon.MultiPolygon
             the input shape
+    tol : float, optional
+            the Euclidean distance that defines two points as being the same (in degrees)
 
     Returns
     -------
@@ -20,6 +22,12 @@ def remove_interior_rings(poly):
         import shapely
     except:
         raise Exception("\"shapely\" is not installed; run \"pip install --user Shapely\"") from None
+
+    # Check keyword arguments ...
+    if kwArgCheck is not None:
+        print(f"WARNING: \"{__name__}\" has been called with an extra positional argument")
+
+    # **************************************************************************
 
     # Check the input type ...
     if isinstance(poly, shapely.geometry.polygon.Polygon):
@@ -42,7 +50,7 @@ def remove_interior_rings(poly):
 
         # Return a MultiPolygon made of Polygons made of just the exterior
         # LinearRings ...
-        return shapely.ops.unary_union(polys)
+        return shapely.ops.unary_union(polys).simplify(tol)
 
     # Catch error ...
     raise TypeError(f"\"poly\" is a \"{repr(type(poly))}\"") from None
