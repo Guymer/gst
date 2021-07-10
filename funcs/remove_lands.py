@@ -1,4 +1,4 @@
-def remove_lands(poly, lands, simp = 0.1):
+def remove_lands(poly, lands, kwArgCheck = None, simp = 0.1):
     """Remove the parts of a [Multi]Polygon that lie on land
 
     This function reads in a [Multi]Polygon and a list of Polygons of land
@@ -26,6 +26,12 @@ def remove_lands(poly, lands, simp = 0.1):
         import shapely.validation
     except:
         raise Exception("\"shapely\" is not installed; run \"pip install --user Shapely\"") from None
+
+    # Check keyword arguments ...
+    if kwArgCheck is not None:
+        print(f"WARNING: \"{__name__}\" has been called with an extra positional argument")
+
+    # **************************************************************************
 
     # Loop over land ...
     for land in lands:
