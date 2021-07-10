@@ -79,34 +79,16 @@ def save_allLands(fname, dist, kwArgCheck = None, debug = False, detailed = Fals
                 print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is empty.")
                 continue
 
-            # Buffer [Multi]Polygon ...
-            buff = pyguymer3.geo.buffer(record.geometry, dist, debug = debug, fill = fill, nang = nang, simp = simp, tol = tol)
-
-            # Check the type of the buffered [Multi]Polygon ...
-            if isinstance(buff, shapely.geometry.multipolygon.MultiPolygon):
-                # Loop over Polygons ...
-                for geom in buff.geoms:
-                    # Catch bad Polygons ...
-                    if not geom.is_valid:
-                        raise Exception("\"geom\" is not a valid Polygon ({0:s})".format(shapely.validation.explain_validity(geom))) from None
-                    if geom.is_empty:
-                        raise Exception("\"geom\" is an empty Polygon") from None
-
-                    # Append a Polygon made of only the exterior of this Polygon
-                    # to the list ...
-                    buffs.append(shapely.geometry.polygon.Polygon(geom.exterior))
-            elif isinstance(buff, shapely.geometry.polygon.Polygon):
-                # Catch bad Polygons ...
-                if not buff.is_valid:
-                    raise Exception("\"buff\" is not a valid Polygon ({0:s})".format(shapely.validation.explain_validity(buff))) from None
-                if buff.is_empty:
-                    raise Exception("\"buff\" is an empty Polygon") from None
-
-                # Append a Polygon made of only the exterior of this Polygon to
-                # the list ...
-                buffs.append(shapely.geometry.polygon.Polygon(buff.exterior))
-            else:
-                raise TypeError("\"buff\" is an unexpected type") from None
+            # Loop over all the bad Natural Earth Polygons in this geometry ...
+            for badPoly in pyguymer3.geo.extract_polys(record.geometry):
+                # Loop over all the individual good Polygons that make up this
+                # bad Natural Earth Polygon ...
+                for goodPoly in pyguymer3.geo.extract_polys(pyguymer3.geo.remap(badPoly)):
+                    # Loop over all the individual Polygons that make up the
+                    # buffer of this good Polygon ...
+                    for buff in pyguymer3.geo.extract_polys(pyguymer3.geo.buffer(goodPoly, dist, debug = debug, fill = fill, nang = nang, simp = simp, tol = tol)):
+                        # Append individual Polygon to list ...
+                        buffs.append(buff)
 
     # Convert list of Polygons to (unified) MultiPolygon ...
     buffs = shapely.ops.unary_union(buffs).simplify(tol)
