@@ -1,4 +1,4 @@
-def save_allLands(fname, dist, debug = False, detailed = False, fill = -1.0, nang = 19, res = "110m", simp = 0.1):
+def save_allLands(fname, dist, kwArgCheck = None, debug = False, detailed = False, fill = 1.0, nang = 19, res = "110m", simp = 0.1, tol = 1.0e-10):
     """Save buffered (and optionally simplified) land to a compressed WKB file.
 
     Parameters
@@ -19,6 +19,8 @@ def save_allLands(fname, dist, debug = False, detailed = False, fill = -1.0, nan
             the resolution of the Natural Earth datasets
     simp : float, optional
             how much intermediary [Multi]Polygons are simplified by; negative values disable simplification (in degrees)
+    tol : float, optional
+            the Euclidean distance that defines two points as being the same (in degrees)
     """
 
     # Import standard modules ...
@@ -42,6 +44,10 @@ def save_allLands(fname, dist, debug = False, detailed = False, fill = -1.0, nan
         import pyguymer3.geo
     except:
         raise Exception("\"pyguymer3\" is not installed; you need to have the Python module from https://github.com/Guymer/PyGuymer3 located somewhere in your $PYTHONPATH") from None
+
+    # Check keyword arguments ...
+    if kwArgCheck is not None:
+        print(f"WARNING: \"{__name__}\" has been called with an extra positional argument")
 
     # **************************************************************************
 
@@ -74,7 +80,7 @@ def save_allLands(fname, dist, debug = False, detailed = False, fill = -1.0, nan
                 continue
 
             # Buffer [Multi]Polygon ...
-            buff = pyguymer3.geo.buffer(record.geometry, dist, debug = debug, fill = fill, nang = nang, simp = simp)
+            buff = pyguymer3.geo.buffer(record.geometry, dist, debug = debug, fill = fill, nang = nang, simp = simp, tol = tol)
 
             # Check the type of the buffered [Multi]Polygon ...
             if isinstance(buff, shapely.geometry.multipolygon.MultiPolygon):
@@ -103,13 +109,9 @@ def save_allLands(fname, dist, debug = False, detailed = False, fill = -1.0, nan
                 raise TypeError("\"buff\" is an unexpected type") from None
 
     # Convert list of Polygons to (unified) MultiPolygon ...
-    buffs = shapely.ops.unary_union(buffs)
-
-    # Check MultiPolygon ...
+    buffs = shapely.ops.unary_union(buffs).simplify(tol)
     if not buffs.is_valid:
         raise Exception(f"\"buffs\" is not a valid MultiPolygon ({shapely.validation.explain_validity(buffs)})") from None
-
-    # Check MultiPolygon ...
     if buffs.is_empty:
         raise Exception("\"buffs\" is an empty MultiPolygon") from None
 
