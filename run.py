@@ -20,12 +20,10 @@ if __name__ == "__main__":
 
     # Configure calculation based off run mode ...
     if debug:
-        fill = 1.0
         nang = 37
         prec = 1000.0                                                           # [m]
         res = "110m"
     else:
-        fill = 100.0
         nang = 361
         prec = 100.0                                                            # [m]
         res = "10m"
@@ -40,7 +38,6 @@ if __name__ == "__main__":
         debug = debug,
         detailed = False,
         dur = dur,
-        fill = fill,
         local = True,
         nang = nang,
         nth = 5,
