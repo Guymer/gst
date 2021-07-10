@@ -41,8 +41,6 @@ def remove_lands(poly, lands, kwArgCheck = None, simp = 0.1):
     # Check [Multi]Polygon ...
     if not poly.is_valid:
         raise Exception(f"\"poly\" is not a valid [Multi]Polygon ({shapely.validation.explain_validity(poly)})") from None
-
-    # Check [Multi]Polygon ...
     if poly.is_empty:
         raise Exception("\"poly\" is an empty [Multi]Polygon") from None
 
