@@ -19,6 +19,6 @@ shellcheck.log
 results.out
 
 # Hide large datasets ...
-detailed=*_nang=*_res=*_simp=*
+detailed=*
 *.png
 *.wkb.gz
