@@ -92,17 +92,28 @@ def save_allLands(fname, dname, dist, kwArgCheck = None, debug = False, detailed
             # Initialize list ...
             buffs = []
 
+            # Extract the bad Natural Earth Polygons in this geometry ...
+            badPolys = pyguymer3.geo.extract_polys(record.geometry)
+
             # Loop over all the bad Natural Earth Polygons in this geometry ...
-            for badPoly in pyguymer3.geo.extract_polys(record.geometry):
+            for badPoly in badPolys:
+                # Extract the individual good Polygons that make up this bad
+                # Natural Earth Polygon ...
+                goodPolys = pyguymer3.geo.extract_polys(pyguymer3.geo.remap(badPoly, tol = tol))
+
                 # Loop over all the individual good Polygons that make up this
                 # bad Natural Earth Polygon ...
-                for goodPoly in pyguymer3.geo.extract_polys(pyguymer3.geo.remap(badPoly, tol = tol)):
+                for goodPoly in goodPolys:
+                    # Extract he individual Polygons that make up the buffer of
+                    # this good Polygon ...
+                    # NOTE: Don't allow the user to specify the debug mode.
+                    buffPolys = pyguymer3.geo.extract_polys(pyguymer3.geo.buffer(goodPoly, dist, fill = fill, nang = nang, simp = simp, tol = tol))
+
                     # Loop over all the individual Polygons that make up the
                     # buffer of this good Polygon ...
-                    # NOTE: Don't allow the user to specify the debug mode.
-                    for buff in pyguymer3.geo.extract_polys(pyguymer3.geo.buffer(goodPoly, dist, fill = fill, nang = nang, simp = simp, tol = tol)):
+                    for buffPoly in buffPolys:
                         # Append individual Polygon to list ...
-                        buffs.append(buff)
+                        buffs.append(buffPoly)
 
             # Convert list of Polygons to (unified) [Multi]Polygon ...
             buffs = shapely.ops.unary_union(buffs).simplify(tol)
