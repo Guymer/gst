@@ -100,6 +100,8 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = True, dur = 1.0, local = F
     if prec > maxDist:
         raise Exception(f"the maximum possible sailing distance is {maxDist:,.1f}m but the precision is {prec:,.1f}m") from None
 
+    print(f"The maximum possible sailing distance is {maxDist:,.1f}m (ignoring all land).")
+
     # Figure out how many steps are going to be required ...
     nstep = round(maxDist / prec)                                               # [#]
 
@@ -111,9 +113,16 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = True, dur = 1.0, local = F
         os.mkdir(output1)
 
     # Determine second output folder name and make it if it is missing ...
-    output2 = f"{output1}/lon={lon:.6f}_lat={lat:.6f}_spd={spd:.1f}_dur={dur:.2f}"
+    output2 = f"{output1}/allLands"
     if not os.path.exists(output2):
         os.mkdir(output2)
+
+    # Determine third output folder name and make it if it is missing ...
+    output3 = f"{output1}/lon={lon:.6f}_lat={lat:.6f}_spd={spd:.1f}_dur={dur:.2f}"
+    if not os.path.exists(output3):
+        os.mkdir(output3)
+
+    print("TODO: Do I need to fill in the land?")
 
     # **************************************************************************
 
@@ -125,7 +134,7 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = True, dur = 1.0, local = F
         print(f"Making \"{allLandsName}\" ...")
 
         # Make the compressed WKB file of all of the land ...
-        save_allLands(allLandsName, prec, debug = False, detailed = detailed, fill = fill, nang = nang, res = res, simp = simp, tol = tol)
+        save_allLands(allLandsName, output2, prec, debug = True, detailed = detailed, fill = fill, nang = nang, res = res, simp = simp, tol = tol)
 
     # Load all the land ...
     allLands = shapely.wkb.loads(gzip.open(allLandsName, "rb").read())
@@ -213,7 +222,7 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = True, dur = 1.0, local = F
     # Check if the user wants to make a plot ...
     if plot:
         # Determine output PNG file name ...
-        png = f"{output2}/local={repr(local)[0]}_nth={nth:d}.png"
+        png = f"{output3}/local={repr(local)[0]}_nth={nth:d}.png"
 
         print(f"Making \"{png}\" ...")
 

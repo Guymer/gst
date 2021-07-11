@@ -1,10 +1,12 @@
-def save_allLands(fname, dist, kwArgCheck = None, debug = False, detailed = False, fill = 1.0, nang = 19, res = "110m", simp = 0.1, tol = 1.0e-10):
+def save_allLands(fname, dname, dist, kwArgCheck = None, debug = False, detailed = False, fill = 1.0, nang = 19, res = "110m", simp = 0.1, tol = 1.0e-10):
     """Save buffered (and optionally simplified) land to a compressed WKB file.
 
     Parameters
     ----------
     fname : string
-            the filename of the compressed WKB file
+            the file name of the compressed WKB file
+    dname : string
+            the directory name where temporary compressed WKB files can be stored
     dist : float
             the distance to buffer the land by (in metres)
     debug : bool, optional
@@ -24,7 +26,9 @@ def save_allLands(fname, dist, kwArgCheck = None, debug = False, detailed = Fals
     """
 
     # Import standard modules ...
+    import glob
     import gzip
+    import os
 
     # Import special modules ...
     try:
@@ -64,9 +68,6 @@ def save_allLands(fname, dist, kwArgCheck = None, debug = False, detailed = Fals
 
     # **************************************************************************
 
-    # Initialize list ...
-    buffs = []
-
     # Loop over Shapefiles ...
     for sfile in sfiles:
         print(f" > Loading \"{sfile}\" ...")
@@ -81,7 +82,15 @@ def save_allLands(fname, dist, kwArgCheck = None, debug = False, detailed = Fals
                 print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is empty.")
                 continue
 
-            print(f"   > Buffering shape at ({record.geometry.centroid.x:+014.9f}°,{record.geometry.centroid.y:+013.9f}°) ...")
+            # Deduce temporary file name and skip if it exists already ...
+            tname = f"{dname}/{record.geometry.centroid.x:+014.9f},{record.geometry.centroid.y:+013.9f}.wkb.gz"
+            if os.path.exists(tname):
+                continue
+
+            print(f"   > Making \"{tname}\" ...")
+
+            # Initialize list ...
+            buffs = []
 
             # Loop over all the bad Natural Earth Polygons in this geometry ...
             for badPoly in pyguymer3.geo.extract_polys(record.geometry):
@@ -90,9 +99,32 @@ def save_allLands(fname, dist, kwArgCheck = None, debug = False, detailed = Fals
                 for goodPoly in pyguymer3.geo.extract_polys(pyguymer3.geo.remap(badPoly)):
                     # Loop over all the individual Polygons that make up the
                     # buffer of this good Polygon ...
-                    for buff in pyguymer3.geo.extract_polys(pyguymer3.geo.buffer(goodPoly, dist, debug = debug, fill = fill, nang = nang, simp = simp, tol = tol)):
+                    # NOTE: Don't allow the user to specify the debug mode.
+                    for buff in pyguymer3.geo.extract_polys(pyguymer3.geo.buffer(goodPoly, dist, debug = False, fill = fill, nang = nang, simp = simp, tol = tol)):
                         # Append individual Polygon to list ...
                         buffs.append(buff)
+
+            # Convert list of Polygons to (unified) [Multi]Polygon ...
+            buffs = shapely.ops.unary_union(buffs).simplify(tol)
+            if not buffs.is_valid:
+                raise Exception(f"\"buffs\" is not a valid [Multi]Polygon ({shapely.validation.explain_validity(buffs)})") from None
+            if buffs.is_empty:
+                raise Exception("\"buffs\" is an empty [Multi]Polygon") from None
+
+            # Save [Multi]Polygon ...
+            gzip.open(tname, "wb", compresslevel = 9).write(shapely.wkb.dumps(buffs))
+
+    # **************************************************************************
+
+    # Initialize list ...
+    buffs = []
+
+    # Loop over temporary compressed WKB files ...
+    for tname in sorted(glob.glob(f"{dname}/????.?????????,???.?????????.wkb.gz")):
+        print(f"   > Loading \"{tname}\" ...")
+
+        # Append the individual Polygons to the list ...
+        buffs += pyguymer3.geo.extract_polys(shapely.wkb.loads(gzip.open(tname, "rb").read()))
 
     # Convert list of Polygons to (unified) MultiPolygon ...
     buffs = shapely.ops.unary_union(buffs).simplify(tol)
@@ -110,9 +142,11 @@ def save_allLands(fname, dist, kwArgCheck = None, debug = False, detailed = Fals
         if buffsSimp.is_valid and not buffsSimp.is_empty:
             # Save MultiPolygon ...
             gzip.open(fname, "wb", compresslevel = 9).write(shapely.wkb.dumps(buffsSimp))
+            return
 
         if debug:
             print(f"WARNING: \"buffsSimp\" is not a valid MultiPolygon ({shapely.validation.explain_validity(buffsSimp)}), will return \"buffs\" instead")
 
     # Save MultiPolygon ...
     gzip.open(fname, "wb", compresslevel = 9).write(shapely.wkb.dumps(buffs))
+    return
