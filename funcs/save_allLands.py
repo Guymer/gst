@@ -96,7 +96,7 @@ def save_allLands(fname, dname, dist, kwArgCheck = None, debug = False, detailed
             for badPoly in pyguymer3.geo.extract_polys(record.geometry):
                 # Loop over all the individual good Polygons that make up this
                 # bad Natural Earth Polygon ...
-                for goodPoly in pyguymer3.geo.extract_polys(pyguymer3.geo.remap(badPoly)):
+                for goodPoly in pyguymer3.geo.extract_polys(pyguymer3.geo.remap(badPoly, tol = tol)):
                     # Loop over all the individual Polygons that make up the
                     # buffer of this good Polygon ...
                     # NOTE: Don't allow the user to specify the debug mode.
