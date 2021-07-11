@@ -96,24 +96,22 @@ def save_allLands(fname, dname, dist, kwArgCheck = None, debug = False, detailed
             badPolys = pyguymer3.geo.extract_polys(record.geometry)
 
             # Loop over all the bad Natural Earth Polygons in this geometry ...
-            for badPoly in badPolys:
+            for ibad, badPoly in enumerate(badPolys):
+                print(f"     > Bad Polygon {ibad + 1:,d}/{len(badPolys):,d} has {len(badPoly.exterior.coords):,d} Points ...")
+
                 # Extract the individual good Polygons that make up this bad
                 # Natural Earth Polygon ...
                 goodPolys = pyguymer3.geo.extract_polys(pyguymer3.geo.remap(badPoly, tol = tol))
 
                 # Loop over all the individual good Polygons that make up this
                 # bad Natural Earth Polygon ...
-                for goodPoly in goodPolys:
-                    # Extract he individual Polygons that make up the buffer of
-                    # this good Polygon ...
-                    # NOTE: Don't allow the user to specify the debug mode.
-                    buffPolys = pyguymer3.geo.extract_polys(pyguymer3.geo.buffer(goodPoly, dist, fill = fill, nang = nang, simp = simp, tol = tol))
+                for igood, goodPoly in enumerate(goodPolys):
+                    print(f"       > Good Polygon {igood + 1:,d}/{len(goodPolys):,d} has {len(goodPoly.exterior.coords):,d} Points ...")
 
-                    # Loop over all the individual Polygons that make up the
-                    # buffer of this good Polygon ...
-                    for buffPoly in buffPolys:
-                        # Append individual Polygon to list ...
-                        buffs.append(buffPoly)
+                    # Add the individual Polygons that make up the buffer of
+                    # this good Polygon to the list ...
+                    # NOTE: Don't allow the user to specify the debug mode.
+                    buffs += pyguymer3.geo.extract_polys(pyguymer3.geo.buffer(goodPoly, dist, fill = fill, nang = nang, simp = simp, tol = tol))
 
             # Convert list of Polygons to (unified) [Multi]Polygon ...
             buffs = shapely.ops.unary_union(buffs).simplify(tol)
