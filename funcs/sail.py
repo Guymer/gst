@@ -1,4 +1,4 @@
-def sail(lon, lat, spd, kwArgCheck = None, debug = False, detailed = True, dur = 1.0, local = False, nang = 19, nth = 5, plot = True, prec = 100.0, res = "110m", tol = 1.0e-10):
+def sail(lon, lat, spd, kwArgCheck = None, detailed = True, dur = 1.0, local = False, nang = 19, nth = 5, plot = True, prec = 100.0, res = "110m", tol = 1.0e-10):
     """Sail from a point
 
     This function reads in a starting coordinate (in degrees) and a sailing
@@ -13,8 +13,6 @@ def sail(lon, lat, spd, kwArgCheck = None, debug = False, detailed = True, dur =
             the latitude of the starting point (in degrees)
     spd : float
             the speed of the vessel (in knots)
-    debug : bool, optional
-            print debug messages
     detailed : bool, optional
             take account of minor islands
     dur : float, optional
@@ -95,9 +93,8 @@ def sail(lon, lat, spd, kwArgCheck = None, debug = False, detailed = True, dur =
     ship = shapely.geometry.point.Point(lon, lat)
 
     # Calculate the maximum possible sailing distance (ignoring all land) ...
-    # NOTE: Allow the user to specify the debug mode.
     maxDist = (1852.0 * spd) * (24.0 * dur)                                     # [m]
-    maxShip = pyguymer3.geo.buffer(ship, maxDist, debug = debug, fill = fill, nang = nang, simp = simp, tol = tol)
+    maxShip = pyguymer3.geo.buffer(ship, maxDist, debug = True, fill = fill, nang = nang, simp = simp, tol = tol)
 
     # Check if the user is being far too coarse ...
     if prec > maxDist:
@@ -187,7 +184,6 @@ def sail(lon, lat, spd, kwArgCheck = None, debug = False, detailed = True, dur =
         # **********************************************************************
 
         # Sail ...
-        # NOTE: Don't allow the user to specify the debug mode.
         # TODO: Can I save time by not buffering the points that lie on
         #       coastlines? See:
         #         * https://shapely.readthedocs.io/en/stable/manual.html#shared-paths

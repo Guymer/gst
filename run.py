@@ -33,7 +33,6 @@ if __name__ == "__main__":
         lon,
         lat,
         spd,
-        debug = debug,
         detailed = False,
         dur = dur,
         local = True,
