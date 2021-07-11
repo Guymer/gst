@@ -8,8 +8,8 @@ if __name__ == "__main__":
 
     # Define starting location (just outside Portsmouth Harbour), sailing
     # speed (of an average vessel) and sailing duration ...
+    lon = -1.0                                                                  # [°]
     lat = 50.7                                                                  # [°]
-    lon = -1.1                                                                  # [°]
     spd = 20.0                                                                  # [kts]
     dur = 1.0                                                                   # [days]
 
