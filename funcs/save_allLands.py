@@ -69,6 +69,8 @@ def save_allLands(fname, dist, kwArgCheck = None, debug = False, detailed = Fals
 
     # Loop over Shapefiles ...
     for sfile in sfiles:
+        print(f" > Loading \"{sfile}\" ...")
+
         # Loop over records ...
         for record in cartopy.io.shapereader.Reader(sfile).records():
             # Skip bad records ...
@@ -78,6 +80,8 @@ def save_allLands(fname, dist, kwArgCheck = None, debug = False, detailed = Fals
             if record.geometry.is_empty:
                 print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is empty.")
                 continue
+
+            print(f"   > Buffering shape at ({record.geometry.centroid.x:+011.6f}°,{record.geometry.centroid.y:+010.6f}°) ...")
 
             # Loop over all the bad Natural Earth Polygons in this geometry ...
             for badPoly in pyguymer3.geo.extract_polys(record.geometry):
