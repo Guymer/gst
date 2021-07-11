@@ -119,6 +119,11 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = True, dur = 1.0, local = F
     if not os.path.exists(output3):
         os.mkdir(output3)
 
+    # Determine fourth output folder name and make it if it is missing ...
+    output4 = f"{output3}/contours"
+    if not os.path.exists(output4):
+        os.mkdir(output4)
+
     # **************************************************************************
 
     # Deduce input filename ...
@@ -193,18 +198,27 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = True, dur = 1.0, local = F
 
         # **********************************************************************
 
-        # Sail ...
-        # TODO: Can I save time by not buffering the points that lie on
-        #       coastlines? See:
-        #         * https://shapely.readthedocs.io/en/stable/manual.html#shared-paths
-        #       Alternatively, are coastline points in the land or in the sea or
-        #       in both? If they can be identified, then skip them.
-        #       Alternatively, instead of removing land via difference(), remove
-        #       individual points from the LinearRing that are on land and
-        #       use a LineString instead.
-        ship = pyguymer3.geo.buffer(ship, prec, fill = 10.0 * simp, nang = nang, simp = simp, tol = tol)
-        ship = remove_lands(ship, relevantLands, simp = simp)
-        ship = remove_interior_rings(ship, tol = tol)
+        # Deduce temporary file name and skip if it exists already ...
+        tname = f"{output4}/istep={istep:06d}.wkb.gz"
+        if os.path.exists(tname):
+            # Load [Multi]Polygon ...
+            ship = shapely.wkb.loads(gzip.open(tname, "rb").read())
+        else:
+            # Sail ...
+            # TODO: Can I save time by not buffering the points that lie on
+            #       coastlines? See:
+            #         * https://shapely.readthedocs.io/en/stable/manual.html#shared-paths
+            #       Alternatively, are coastline points in the land or in the
+            #       sea or in both? If they can be identified, then skip them.
+            #       Alternatively, instead of removing land via difference(),
+            #       remove individual points from the LinearRing that are on
+            #       land and use a LineString instead.
+            ship = pyguymer3.geo.buffer(ship, prec, fill = 10.0 * simp, nang = nang, simp = simp, tol = tol)
+            ship = remove_lands(ship, relevantLands, simp = simp)
+            ship = remove_interior_rings(ship, tol = tol)
+
+            # Save [Multi]Polygon ...
+            gzip.open(tname, "wb", compresslevel = 9).write(shapely.wkb.dumps(ship))
 
         # Check if the user wants to make a plot and that this iteration is one
         # of the ones to be plotted ...
