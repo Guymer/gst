@@ -166,9 +166,9 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = True, dur = 1.0, local = F
     for istep in range(nstep):
         # Check type ...
         if isinstance(ship, shapely.geometry.point.Point):
-            print(f"Iteration {istep + 1:,d}/{nstep:,d} ({0.001 * (istep + 1) * prec:,.2f} km of sailing; 1 point) ...")
+            print(f"Iteration {istep + 1:,d}/{nstep:,d} ({0.001 * (istep + 1) * prec:,.2f} km of sailing; 1 Point) ...")
         elif isinstance(ship, shapely.geometry.polygon.Polygon):
-            print(f"Iteration {istep + 1:,d}/{nstep:,d} ({0.001 * (istep + 1) * prec:,.2f} km of sailing; {len(ship.exterior.coords):d} points) ...")
+            print(f"Iteration {istep + 1:,d}/{nstep:,d} ({0.001 * (istep + 1) * prec:,.2f} km of sailing; {len(ship.exterior.coords):d} Points) ...")
         else:
             raise TypeError(f"\"ship\" is an unexpected type ({repr(type(ship))})") from None
 
