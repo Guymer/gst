@@ -6,8 +6,8 @@ if __name__ == "__main__":
     # Import my modules ...
     import funcs
 
-    # Define starting location (just outside Portsmouth Harbour), sailing
-    # speed (of an average vessel) and sailing duration ...
+    # Define starting location (just outside Portsmouth Harbour), sailing speed
+    # (of an average vessel) and sailing duration ...
     lon = -1.0                                                                  # [°]
     lat = 50.7                                                                  # [°]
     spd = 20.0                                                                  # [kts]
