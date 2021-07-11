@@ -1,6 +1,6 @@
 # Global Sailing Times (GST)
 
-This project aims to show have a vessel sails around the globe.
+This project aims to show how a vessel sails around the globe.
 
 If you want to run the example script using a profiler and print out the top 25 most time-consuming functions then run:
 
