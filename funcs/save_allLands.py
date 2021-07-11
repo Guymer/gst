@@ -100,7 +100,7 @@ def save_allLands(fname, dname, dist, kwArgCheck = None, debug = False, detailed
                     # Loop over all the individual Polygons that make up the
                     # buffer of this good Polygon ...
                     # NOTE: Don't allow the user to specify the debug mode.
-                    for buff in pyguymer3.geo.extract_polys(pyguymer3.geo.buffer(goodPoly, dist, debug = False, fill = fill, nang = nang, simp = simp, tol = tol)):
+                    for buff in pyguymer3.geo.extract_polys(pyguymer3.geo.buffer(goodPoly, dist, fill = fill, nang = nang, simp = simp, tol = tol)):
                         # Append individual Polygon to list ...
                         buffs.append(buff)
 
