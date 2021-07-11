@@ -119,8 +119,6 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = True, dur = 1.0, local = F
     if not os.path.exists(output3):
         os.mkdir(output3)
 
-    print("TODO: Do I need to fill in the land?")
-
     # **************************************************************************
 
     # Deduce input filename ...
