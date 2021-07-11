@@ -105,7 +105,7 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = True, dur = 1.0, local = F
     # **************************************************************************
 
     # Determine first output folder name and make it if it is missing ...
-    output1 = f"detailed={repr(detailed)[0]}_nang={nang:d}_res={res}_prec={prec:.2e}_simp={simp:.2e}_tol={tol:.2e}"
+    output1 = f"detailed={repr(detailed)[0]}_nang={nang:d}_prec={prec:.2e}_res={res}_simp={simp:.2e}_tol={tol:.2e}"
     if not os.path.exists(output1):
         os.mkdir(output1)
 
@@ -115,7 +115,7 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = True, dur = 1.0, local = F
         os.mkdir(output2)
 
     # Determine third output folder name and make it if it is missing ...
-    output3 = f"{output1}/lon={lon:.6f}_lat={lat:.6f}"
+    output3 = f"{output1}/lat={lat:.6f}_lon={lon:.6f}"
     if not os.path.exists(output3):
         os.mkdir(output3)
 
