@@ -81,7 +81,7 @@ def save_allLands(fname, dist, kwArgCheck = None, debug = False, detailed = Fals
                 print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is empty.")
                 continue
 
-            print(f"   > Buffering shape at ({record.geometry.centroid.x:+011.6f}°,{record.geometry.centroid.y:+010.6f}°) ...")
+            print(f"   > Buffering shape at ({record.geometry.centroid.x:+014.9f}°,{record.geometry.centroid.y:+013.9f}°) ...")
 
             # Loop over all the bad Natural Earth Polygons in this geometry ...
             for badPoly in pyguymer3.geo.extract_polys(record.geometry):
