@@ -97,7 +97,7 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = True, dur = 1.0, local = F
     if prec > maxDist:
         raise Exception(f"the maximum possible sailing distance is {maxDist:,.1f}m but the precision is {prec:,.1f}m") from None
 
-    print(f"The maximum possible sailing distance is {maxDist:,.1f}m (ignoring all land).")
+    print(f"The maximum possible sailing distance is {0.001 * maxDist:,.2f}km (ignoring all land).")
 
     # Figure out how many steps are going to be required ...
     nstep = round(maxDist / prec)                                               # [#]
@@ -115,7 +115,7 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = True, dur = 1.0, local = F
         os.mkdir(output2)
 
     # Determine third output folder name and make it if it is missing ...
-    output3 = f"{output1}/lat={lat:.6f}_lon={lon:.6f}"
+    output3 = f"{output1}/lat={lat:+010.6f}_lon={lon:+011.6f}"
     if not os.path.exists(output3):
         os.mkdir(output3)
 
@@ -159,7 +159,13 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = True, dur = 1.0, local = F
 
     # Loop over iterations ...
     for istep in range(nstep):
-        print(f"Iteration {istep + 1:,d}/{nstep:,d} ({0.001 * (istep + 1) * prec:,.2f} km of sailing) ...")
+        # Check type ...
+        if isinstance(ship, shapely.geometry.point.Point):
+            print(f"Iteration {istep + 1:,d}/{nstep:,d} ({0.001 * (istep + 1) * prec:,.2f} km of sailing; 1 point) ...")
+        elif isinstance(ship, shapely.geometry.polygon.Polygon):
+            print(f"Iteration {istep + 1:,d}/{nstep:,d} ({0.001 * (istep + 1) * prec:,.2f} km of sailing; {len(ship.exterior.coords):d} points) ...")
+        else:
+            raise TypeError(f"\"ship\" is an unexpected type ({repr(type(ship))})") from None
 
         # **********************************************************************
 
