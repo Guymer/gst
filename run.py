@@ -11,7 +11,7 @@ if __name__ == "__main__":
     lon = -1.0                                                                  # [°]
     lat = 50.7                                                                  # [°]
     spd = 20.0                                                                  # [kts]
-    dur = 1.0                                                                   # [days]
+    dur = 0.5                                                                   # [days]
 
     # Set run mode ...
     debug = True
@@ -37,6 +37,6 @@ if __name__ == "__main__":
         dur = dur,
         local = True,
         nang = nang,
-        nth = 10,
+        nth = 50,
         res = res
     )
