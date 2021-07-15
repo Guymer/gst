@@ -138,7 +138,7 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = True, dur = 1.0, freqFillS
         print(f"Making \"{allLandsName}\" ...")
 
         # Make the compressed WKB file of all of the land ...
-        save_allLands(allLandsName, output2, prec, debug = True, detailed = detailed, nang = nang, res = res, simp = simp, tol = tol)
+        save_allLands(allLandsName, output2, prec, debug = True, detailed = detailed, fill = -1.0, nang = nang, res = res, simp = simp, tol = tol)
 
     # Load all the land ...
     allLands = shapely.wkb.loads(gzip.open(allLandsName, "rb").read())
