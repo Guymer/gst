@@ -85,6 +85,9 @@ for i, (resolution, colour) in enumerate(pairs):
         linewidth = 1.0
     )
 
+    # Clean up ...
+    del polys
+
 # Save figure ...
 fg.savefig("compareResolutions.png", bbox_inches = "tight", dpi = 300, pad_inches = 0.1)
 matplotlib.pyplot.close(fg)
