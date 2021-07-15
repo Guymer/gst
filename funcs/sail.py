@@ -1,4 +1,4 @@
-def sail(lon, lat, spd, kwArgCheck = None, detailed = True, dur = 1.0, local = False, nang = 19, nth = 5, plot = True, prec = 100.0, res = "110m", tol = 1.0e-10):
+def sail(lon, lat, spd, kwArgCheck = None, detailed = True, dur = 1.0, freqFillSimp = 5, freqLand = 5, freqPlot = 5, local = False, nang = 19, plot = True, prec = 100.0, res = "110m", tol = 1.0e-10):
     """Sail from a point
 
     This function reads in a starting coordinate (in degrees) and a sailing
@@ -19,10 +19,14 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = True, dur = 1.0, local = F
             the duration of the voyage (in days)
     local : bool, optional
             the plot has only local extent
+    freqFillSimp : int, optional
+            fill in and simplify the sailing contour every freqFillSimp iteration
+    freqLand : int, optional
+            re-evaluate the relevant land every freqLand iteration
+    freqPlot : int, optional
+            plot sailing contours every freqPlot iteration
     nang : int, optional
             the number of directions from each point that the vessel could sail in
-    nth : int, optional
-            plot sailing contours every nth iteration
     plot : bool, optional
             make a plot
     prec : float, optional
@@ -115,7 +119,7 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = True, dur = 1.0, local = F
         os.mkdir(output2)
 
     # Determine third output folder name and make it if it is missing ...
-    output3 = f"{output1}/lat={lat:+010.6f}_lon={lon:+011.6f}"
+    output3 = f"{output1}/freqFillSimp={freqFillSimp:d}_freqLand={freqLand:d}_lat={lat:+010.6f}_lon={lon:+011.6f}"
     if not os.path.exists(output3):
         os.mkdir(output3)
 
@@ -175,7 +179,7 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = True, dur = 1.0, local = F
         # **********************************************************************
 
         # Check if this step needs the list of relevant land updating ...
-        if istep % 100 == 0:
+        if istep % freqLand == 0:
             print(" > Re-evaluating the relevant land ...")
 
             # Initialize list ...
@@ -204,32 +208,51 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = True, dur = 1.0, local = F
             # Load [Multi]Polygon ...
             ship = shapely.wkb.loads(gzip.open(tname, "rb").read())
         else:
-            # Sail ...
-            # TODO: Can I save time by not buffering the points that lie on
-            #       coastlines? See:
-            #         * https://shapely.readthedocs.io/en/stable/manual.html#shared-paths
-            #       Alternatively, are coastline points in the land or in the
-            #       sea or in both? If they can be identified, then skip them.
-            #       Alternatively, instead of removing land via difference(),
-            #       remove individual points from the LinearRing that are on
-            #       land and use a LineString instead.
-            ship = pyguymer3.geo.buffer(ship, prec, fill = 10.0 * simp, nang = nang, simp = simp, tol = tol)
-            ship = remove_lands(ship, relevantLands, simp = simp)
-            ship = remove_interior_rings(ship, tol = tol)
+            # Check if this step filling/simplifying ...
+            if (istep + 1) % freqFillSimp == 0:
+                print(" > Filling in and simplifying ...")
+
+                # Sail ...
+                # TODO: Can I save time by not buffering the points that lie on
+                #       coastlines? See:
+                #         * https://shapely.readthedocs.io/en/stable/manual.html#shared-paths
+                #       Alternatively, are coastline points in the land or in
+                #       the sea or in both? If they can be identified, then skip
+                #       them. Alternatively, instead of removing land via
+                #       difference(), remove individual points from the
+                #       LinearRing that are on land and use a LineString
+                #       instead.
+                ship = pyguymer3.geo.buffer(ship, prec, fill = 10.0 * simp, nang = nang, simp = simp, tol = tol)
+                ship = remove_lands(ship, relevantLands, simp = simp)
+                ship = remove_interior_rings(ship, tol = tol)
+            else:
+                # Sail ...
+                # TODO: Can I save time by not buffering the points that lie on
+                #       coastlines? See:
+                #         * https://shapely.readthedocs.io/en/stable/manual.html#shared-paths
+                #       Alternatively, are coastline points in the land or in
+                #       the sea or in both? If they can be identified, then skip
+                #       them. Alternatively, instead of removing land via
+                #       difference(), remove individual points from the
+                #       LinearRing that are on land and use a LineString
+                #       instead.
+                ship = pyguymer3.geo.buffer(ship, prec, fill = -1.0, nang = nang, simp = -1.0, tol = tol)
+                ship = remove_lands(ship, relevantLands, simp = -1.0)
+                ship = remove_interior_rings(ship, tol = tol)
 
             # Save [Multi]Polygon ...
             gzip.open(tname, "wb", compresslevel = 9).write(shapely.wkb.dumps(ship))
 
         # Check if the user wants to make a plot and that this iteration is one
         # of the ones to be plotted ...
-        if plot and (istep + 1) % nth == 0:
-            print("  Plotting ...")
+        if plot and (istep + 1) % freqPlot == 0:
+            print(" > Plotting ...")
 
             # Plot Polygons ...
             ax.add_geometries(
                 pyguymer3.geo.extract_polys(ship),
                 cartopy.crs.PlateCarree(),
-                edgecolor = f"C{((istep + 1) // nth) - 1:d}",
+                edgecolor = f"C{((istep + 1) // freqPlot) - 1:d}",
                 facecolor = "none",
                 linewidth = 1.0
             )
@@ -237,7 +260,7 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = True, dur = 1.0, local = F
     # Check if the user wants to make a plot ...
     if plot:
         # Determine output PNG file name ...
-        png = f"{output3}/dur={dur:.2f}_local={repr(local)[0]}_nth={nth:d}_spd={spd:.1f}.png"
+        png = f"{output3}/dur={dur:.2f}_local={repr(local)[0]}_freqPlot={freqPlot:d}_spd={spd:.1f}.png"
 
         print(f"Making \"{png}\" ...")
 
