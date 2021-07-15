@@ -113,6 +113,12 @@ def save_allLands(fname, dname, dist, kwArgCheck = None, debug = False, detailed
                     # NOTE: Don't allow the user to specify the debug mode.
                     buffs += pyguymer3.geo.extract_polys(pyguymer3.geo.buffer(goodPoly, dist, fill = fill, nang = nang, simp = simp, tol = tol))
 
+                # Clean up ...
+                del goodPolys
+
+            # Clean up ...
+            del badPolys
+
             # Convert list of Polygons to (unified) [Multi]Polygon ...
             buffs = shapely.ops.unary_union(buffs).simplify(tol)
             if not buffs.is_valid:
@@ -149,13 +155,27 @@ def save_allLands(fname, dname, dist, kwArgCheck = None, debug = False, detailed
 
         # Check simplified MultiPolygon ...
         if buffsSimp.is_valid and not buffsSimp.is_empty:
+            # Clean up ...
+            del buffs
+
             # Save MultiPolygon ...
             gzip.open(fname, "wb", compresslevel = 9).write(shapely.wkb.dumps(buffsSimp))
+
+            # Clean up ...
+            del buffsSimp
+
             return
+
+        # Clean up ...
+        del buffsSimp
 
         if debug:
             print(f"WARNING: \"buffsSimp\" is not a valid MultiPolygon ({shapely.validation.explain_validity(buffsSimp)}), will return \"buffs\" instead")
 
     # Save MultiPolygon ...
     gzip.open(fname, "wb", compresslevel = 9).write(shapely.wkb.dumps(buffs))
+
+    # Clean up ...
+    del buffs
+
     return
