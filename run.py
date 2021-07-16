@@ -11,20 +11,13 @@ if __name__ == "__main__":
     lon = -1.0                                                                  # [°]
     lat = 50.7                                                                  # [°]
     spd = 20.0                                                                  # [kts]
-    dur = 0.2                                                                   # [days]
-
-    # Set run mode ...
-    debug = True
+    dur = 0.1                                                                   # [days]
 
     # **************************************************************************
 
-    # Configure calculation based off run mode ...
-    if debug:
-        nang = 37
-        res = "110m"
-    else:
-        nang = 361
-        res = "50m"
+    # Configure calculation ...
+    nang = 37
+    res = "110m"
 
     # **************************************************************************
 
