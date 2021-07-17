@@ -16,7 +16,9 @@ if __name__ == "__main__":
     # **************************************************************************
 
     # Loop over number of angles ...
-    for nang in [19, 37, 91, 181, 361]:
+    for nang in [10, 19, 37, 91, 181, 361]:
+        print(f"Running with {360 // (nang - 1):d}° wedges ...")
+
         # Loop over Natural Earth resolutions ...
         for res in ["110m", "50m", "10m"]:
             # Sail the vessel (ignoring minor islands) ...
