@@ -89,8 +89,8 @@ for i, (resolution, colour) in enumerate(pairs):
     del polys
 
 # Save figure ...
-fg.savefig("compareResolutions.png", bbox_inches = "tight", dpi = 300, pad_inches = 0.1)
+fg.savefig("compareMapResolutions.png", bbox_inches = "tight", dpi = 300, pad_inches = 0.1)
 matplotlib.pyplot.close(fg)
 
 # Optimize PNG ...
-pyguymer3.image.optimize_image("compareResolutions.png", strip = True)
+pyguymer3.image.optimize_image("compareMapResolutions.png", strip = True)
