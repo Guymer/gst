@@ -12,5 +12,4 @@ python3.9 -c 'import pstats; p = pstats.Stats("results.out"); p.sort_stats(pstat
 ## To Do
 
 * make sure that vessels can sail through both the Panama and Suez canals
-* use `multiprocessing` in `pyguymer3.geo`
 * only buffer (and fill in) the exterior LinearRing of the Polygon that is on water
