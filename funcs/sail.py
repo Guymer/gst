@@ -170,9 +170,9 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = True, dur = 1.0, freqFillS
     for istep in range(nstep):
         # Check type ...
         if isinstance(ship, shapely.geometry.point.Point):
-            print(f"Iteration {istep + 1:,d}/{nstep:,d} ({0.001 * (istep + 1) * prec:,.2f} km of sailing; 1 Point) ...")
+            print(f"Iteration {istep + 1:,d}/{nstep:,d} ({0.001 * (istep + 1) * prec:,.2f} km of sailing) ...")
         elif isinstance(ship, shapely.geometry.polygon.Polygon):
-            print(f"Iteration {istep + 1:,d}/{nstep:,d} ({0.001 * (istep + 1) * prec:,.2f} km of sailing; {len(ship.exterior.coords):d} Points) ...")
+            print(f"Iteration {istep + 1:,d}/{nstep:,d} ({0.001 * (istep + 1) * prec:,.2f} km of sailing) ...")
         else:
             raise TypeError(f"\"ship\" is an unexpected type ({repr(type(ship))})") from None
 
@@ -208,37 +208,27 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = True, dur = 1.0, freqFillS
             # Load [Multi]Polygon ...
             ship = shapely.wkb.loads(gzip.open(tname, "rb").read())
         else:
+            # Extract the current limit of sailing (on water) ...
+            limit = remove_lands(ship.exterior, relevantLands, simp = simp)
+
             # Check if this step filling/simplifying ...
             if (istep + 1) % freqFillSimp == 0:
                 print(" > Filling in and simplifying ...")
 
                 # Sail ...
-                # TODO: Can I save time by not buffering the points that lie on
-                #       coastlines? See:
-                #         * https://shapely.readthedocs.io/en/stable/manual.html#shared-paths
-                #       Alternatively, are coastline points in the land or in
-                #       the sea or in both? If they can be identified, then skip
-                #       them. Alternatively, instead of removing land via
-                #       difference(), remove individual points from the
-                #       LinearRing that are on land and use a LineString
-                #       instead.
-                ship = pyguymer3.geo.buffer(ship, prec, fill = 10.0 * simp, nang = nang, simp = simp, tol = tol)
+                limit = pyguymer3.geo.buffer(limit, prec, fill = 10.0 * simp, nang = nang, simp = simp, tol = tol)
+                ship = shapely.ops.unary_union([limit, ship])
                 ship = remove_lands(ship, relevantLands, simp = simp)
                 ship = remove_interior_rings(ship, tol = tol)
             else:
                 # Sail ...
-                # TODO: Can I save time by not buffering the points that lie on
-                #       coastlines? See:
-                #         * https://shapely.readthedocs.io/en/stable/manual.html#shared-paths
-                #       Alternatively, are coastline points in the land or in
-                #       the sea or in both? If they can be identified, then skip
-                #       them. Alternatively, instead of removing land via
-                #       difference(), remove individual points from the
-                #       LinearRing that are on land and use a LineString
-                #       instead.
-                ship = pyguymer3.geo.buffer(ship, prec, fill = -1.0, nang = nang, simp = -1.0, tol = tol)
+                limit = pyguymer3.geo.buffer(limit, prec, fill = -1.0, nang = nang, simp = -1.0, tol = tol)
+                ship = shapely.ops.unary_union([limit, ship])
                 ship = remove_lands(ship, relevantLands, simp = -1.0)
                 ship = remove_interior_rings(ship, tol = tol)
+
+            # Clean up ...
+            del limit
 
             # Save [Multi]Polygon ...
             gzip.open(tname, "wb", compresslevel = 9).write(shapely.wkb.dumps(ship))
