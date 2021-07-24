@@ -58,4 +58,3 @@ After sailing for 0.09 days at 20.0 knots a vessel will have gone 80,006.4 metre
 ## To Do
 
 * make sure that vessels can sail through both the Panama and Suez canals
-* only buffer (and fill in) the exterior LinearRing of the Polygon that is on water
