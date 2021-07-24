@@ -22,6 +22,10 @@ python3.9 run.py -1.0 50.7 20.0 --dur 0.09 --nang 181 --res 10m
 python3.9 run.py -1.0 50.7 20.0 --dur 0.09 --nang 361 --res 10m
 ```
 
+After sailing for 0.09 days at 20.0 knots a vessel will have gone 80,006.4 metres, which I'll round to 80km.
+
+`run.py` is very slow for large values of `nang`. Try running only the first three lines and then run `compareBufferResolutions.py` to see what the benefit is. You can then run the remaining lines one-by-one and re-run `compareBufferResolutions.py` to see what the improvements are. You may come to the conclusion that it is not worth running `--nang 361`.
+
 ## `resolutionConvergence.py`
 
 To generate the data needed by `resolutionConvergence.py` run:
@@ -46,6 +50,10 @@ python3.9 run.py -1.0 50.7 20.0 --dur 0.09 --nang 361 --res 110m
 python3.9 run.py -1.0 50.7 20.0 --dur 0.09 --nang 361 --res 50m
 python3.9 run.py -1.0 50.7 20.0 --dur 0.09 --nang 361 --res 10m
 ```
+
+After sailing for 0.09 days at 20.0 knots a vessel will have gone 80,006.4 metres, which I'll round to 80km.
+
+`run.py` is very slow for large values of `nang`.
 
 ## To Do
 
