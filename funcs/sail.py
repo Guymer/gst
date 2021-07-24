@@ -215,7 +215,7 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = True, dur = 1.0, freqFillS
                 limit = copy.copy(ship)
             else:
                 # Extract the current limit of sailing (on water) ...
-                limit = remove_lands(ship.exterior, relevantLands, simp = simp)
+                limit = remove_lands(ship.exterior, relevantLands, simp = -1.0)
 
             # Check if this step filling/simplifying ...
             if (istep + 1) % freqFillSimp == 0:
