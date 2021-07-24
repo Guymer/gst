@@ -1,22 +1,22 @@
-def remove_lands(poly, lands, kwArgCheck = None, simp = 0.1):
-    """Remove the parts of a [Multi]Polygon that lie on land
+def remove_lands(shape, lands, kwArgCheck = None, simp = 0.1):
+    """Remove the parts of a shape that lie on land
 
-    This function reads in a [Multi]Polygon and a list of Polygons of land
-    masses. Each Polygon of land is subtracted from the [Multi]Polygon so as to
-    leave only the parts of the [Multi]Polygon that lie on water.
+    This function reads in a shape and a list of Polygons of land masses. Each
+    Polygon of land is subtracted from the shape so as to leave only the parts
+    of the shape that lie on water.
 
     Parameters
     ----------
-    poly : shapely.geometry.polygon.Polygon, shapely.geometry.multipolygon.MultiPolygon
+    shape : shapely.geometry.linestring.LineString, shapely.geometry.polygon.LinearRing, shapely.geometry.polygon.Polygon, shapely.geometry.multilinestring.MultiLineString, shapely.geometry.multipolygon.MultiPolygon
             the input shape
     lands : list of shapely.geometry.polygon.Polygon
             the list of land masses
     simp : float, optional
-            how much intermediary [Multi]Polygons are simplified by; negative values disable simplification (in degrees)
+            how much intermediary shapes are simplified by; negative values disable simplification (in degrees)
 
     Returns
     -------
-    poly : shapely.geometry.polygon.Polygon, shapely.geometry.multipolygon.MultiPolygon
+    shape : shapely.geometry.linestring.LineString, shapely.geometry.polygon.LinearRing, shapely.geometry.polygon.Polygon, shapely.geometry.multilinestring.MultiLineString, shapely.geometry.multipolygon.MultiPolygon
             the output shape
     """
 
@@ -35,27 +35,27 @@ def remove_lands(poly, lands, kwArgCheck = None, simp = 0.1):
 
     # Loop over land ...
     for land in lands:
-        # Subtract this Polygon from the [Multi]Polygon ...
-        poly = poly.difference(land)
+        # Subtract this Polygon from the shape ...
+        shape = shape.difference(land)
 
-    # Check [Multi]Polygon ...
-    if not poly.is_valid:
-        raise Exception(f"\"poly\" is not a valid [Multi]Polygon ({shapely.validation.explain_validity(poly)})") from None
-    if poly.is_empty:
-        raise Exception("\"poly\" is an empty [Multi]Polygon") from None
+    # Check shape ...
+    if not shape.is_valid:
+        raise Exception(f"\"shape\" is not a valid shape ({shapely.validation.explain_validity(shape)})") from None
+    if shape.is_empty:
+        raise Exception("\"shape\" is an empty shape") from None
 
-    # Check if the user wants to simplify the [Multi]Polygon ...
+    # Check if the user wants to simplify the shape ...
     if simp > 0.0:
-        # Simplify [Multi]Polygon ...
-        polySimp = poly.simplify(simp)
+        # Simplify shape ...
+        shapeSimp = shape.simplify(simp)
 
-        # Check simplified [Multi]Polygon ...
-        if polySimp.is_valid and not polySimp.is_empty:
+        # Check simplified shape ...
+        if shapeSimp.is_valid and not shapeSimp.is_empty:
             # Return simplified answer ...
-            return polySimp
+            return shapeSimp
 
         # Clean up ...
-        del polySimp
+        del shapeSimp
 
     # Return answer ...
-    return poly
+    return shape
