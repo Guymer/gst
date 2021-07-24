@@ -47,8 +47,8 @@ fg = matplotlib.pyplot.figure(figsize = (9, 6), dpi = 300)
 ax = fg.add_subplot(projection = cartopy.crs.Orthographic(central_longitude = lon, central_latitude = lat))
 ax.set_extent(ext)
 pyguymer3.geo.add_map_background(ax, name = "shaded-relief", resolution = "large4096px")
-pyguymer3.geo.add_horizontal_gridlines(ax, ext, ny = 21)
-pyguymer3.geo.add_vertical_gridlines(ax, ext, nx = 21)
+pyguymer3.geo.add_horizontal_gridlines(ax, ext, ngrid = 21)
+pyguymer3.geo.add_vertical_gridlines(ax, ext, ngrid = 21)
 
 # Loop over resolutions ...
 for i, (resolution, colour) in enumerate(pairs):

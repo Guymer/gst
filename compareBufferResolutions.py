@@ -74,6 +74,8 @@ ax = fg.add_subplot(projection = cartopy.crs.Orthographic(central_longitude = lo
 # Configure axis ...
 ax.set_extent(ext)
 pyguymer3.geo.add_map_background(ax, resolution = "large4096px")
+pyguymer3.geo.add_horizontal_gridlines(ax, ext, locs = [50.0, 50.5, 51.0])
+pyguymer3.geo.add_vertical_gridlines(ax, ext, locs = [-2.0, -1.5, -1.0, -0.5, 0.0])
 
 # Initialize lists ...
 labels = []
