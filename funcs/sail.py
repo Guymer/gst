@@ -17,14 +17,14 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = True, dur = 1.0, freqFillS
             take account of minor islands
     dur : float, optional
             the duration of the voyage (in days)
-    local : bool, optional
-            the plot has only local extent
     freqFillSimp : int, optional
             fill in and simplify the sailing contour every freqFillSimp iteration
     freqLand : int, optional
             re-evaluate the relevant land every freqLand iteration
     freqPlot : int, optional
             plot sailing contours every freqPlot iteration
+    local : bool, optional
+            the plot has only local extent
     nang : int, optional
             the number of directions from each point that the vessel could sail in
     plot : bool, optional
