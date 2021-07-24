@@ -107,6 +107,8 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = True, dur = 1.0, freqFillS
     # Figure out how many steps are going to be required ...
     nstep = round(maxDist / prec)                                               # [#]
 
+    print(f"Each sailing iteration is {60.0 * 60.0 * prec / (1852.0 * spd):,.1f}s for the vessel.")
+
     # **************************************************************************
 
     # Determine first output folder name and make it if it is missing ...
