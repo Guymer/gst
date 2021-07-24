@@ -38,6 +38,7 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = True, dur = 1.0, freqFillS
     """
 
     # Improt standard modules ...
+    import copy
     import gzip
     import math
     import os
@@ -208,8 +209,13 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = True, dur = 1.0, freqFillS
             # Load [Multi]Polygon ...
             ship = shapely.wkb.loads(gzip.open(tname, "rb").read())
         else:
-            # Extract the current limit of sailing (on water) ...
-            limit = remove_lands(ship.exterior, relevantLands, simp = simp)
+            # Check what type the ship is currently ...
+            if isinstance(ship, shapely.geometry.point.Point):
+                # Create dummy variable ...
+                limit = copy.copy(ship)
+            else:
+                # Extract the current limit of sailing (on water) ...
+                limit = remove_lands(ship.exterior, relevantLands, simp = simp)
 
             # Check if this step filling/simplifying ...
             if (istep + 1) % freqFillSimp == 0:
