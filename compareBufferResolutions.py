@@ -44,11 +44,13 @@ ymax =  -90.0                                                                   
 # Loop over number of angles ...
 for nang in [10, 19, 37, 91, 181, 361]:
     # Loop over distances ...
-    for dist in range(1, 9):
+    for dist in range(8):
         # Deduce file name and skip if it is missing ...
-        fname = f"detailed=F_nang={nang:d}_prec=1.00e+02_res=10m_simp=8.99e-05_tol=1.00e-10/freqFillSimp=25_freqLand=100_lat=+50.700000_lon=-001.000000/contours/istep=00{dist:02d}00.wkb.gz"
+        fname = f"detailed=F_nang={nang:d}_prec=1.00e+02_res=10m_simp=8.99e-05_tol=1.00e-10/freqFillSimp=25_freqLand=100_lat=+50.700000_lon=-001.000000/contours/istep=00{dist:02d}99.wkb.gz"
         if not os.path.exists(fname):
             continue
+
+        print(f"Plotting \"{fname}\" ...")
 
         # Load Polygon ...
         ship = shapely.wkb.loads(gzip.open(fname, "rb").read())
