@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 # Import standard modules ...
-import glob
 import gzip
+import os
 
 # Import special modules ...
 try:
@@ -36,13 +36,18 @@ for nang, color in [(10, "C0"), (19, "C1"), (37, "C2"), (91, "C3"), (181, "C4"),
         steps = []
         points = []
 
-        # Loop over compressed WKB files ...
-        for fname in sorted(glob.glob(f"detailed=F_nang={nang:d}_prec=1.00e+02_res={res}_simp=8.99e-05_tol=1.00e-10/freqFillSimp=25_freqLand=100_lat=+50.700000_lon=-001.000000/contours/istep=??????.wkb.gz")):
+        # Loop over distances ...
+        for dist in range(801):
+            # Deduce file name and skip if it is missing ...
+            fname = f"detailed=F_nang={nang:d}_prec=1.00e+02_res={res}_simp=8.99e-05_tol=1.00e-10/freqFillSimp=25_freqLand=100_lat=+50.700000_lon=-001.000000/contours/istep=000{dist:03d}.wkb.gz"
+            if not os.path.exists(fname):
+                continue
+
             # Load Polygon ...
             ship = shapely.wkb.loads(gzip.open(fname, "rb").read())
 
             # Append values to lists ...
-            steps.append(int(fname.split("/")[-1].split(".")[0].split("=")[1]))
+            steps.append(dist)
             points.append(len(ship.exterior.coords))
 
             # Clean up ...
@@ -60,9 +65,9 @@ for nang, color in [(10, "C0"), (19, "C1"), (37, "C2"), (91, "C3"), (181, "C4"),
 ax.grid()
 ax.legend(fontsize = "small", loc = "lower right")
 ax.set_xlabel("Step Number")
-ax.set_xlim(0.0)
+ax.set_xlim(0, 800)
 ax.set_ylabel("Number Of Points In Polygon")
-ax.set_ylim(0.0)
+ax.set_ylim(0)
 
 # Save figure ...
 fg.savefig("resolutionConvergence.png", bbox_inches = "tight", dpi = 300, pad_inches = 0.1)
