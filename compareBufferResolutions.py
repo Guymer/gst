@@ -77,6 +77,25 @@ pyguymer3.geo.add_map_background(ax, resolution = "large4096px")
 pyguymer3.geo.add_horizontal_gridlines(ax, ext, locs = [50.0, 50.5, 51.0])
 pyguymer3.geo.add_vertical_gridlines(ax, ext, locs = [-2.0, -1.5, -1.0, -0.5, 0.0])
 
+# ******************************************************************************
+
+# Load MultiPolygon ...
+allLands = shapely.wkb.loads(gzip.open("detailed=F_nang=10_prec=1.00e+02_res=10m_simp=8.99e-05_tol=1.00e-10/allLands.wkb.gz", "rb").read())
+
+# Plot MultiPolygon ...
+ax.add_geometries(
+    allLands,
+    cartopy.crs.PlateCarree(),
+    edgecolor = (1.0, 0.0, 0.0, 1.0),
+    facecolor = (1.0, 0.0, 0.0, 0.5),
+    linewidth = 1.0
+)
+
+# Clean up ...
+del allLands
+
+# ******************************************************************************
+
 # Initialize lists ...
 labels = []
 lines = []
@@ -110,6 +129,8 @@ for nang, color in [(10, "C0"), (19, "C1"), (37, "C2"), (91, "C3"), (181, "C4"),
 
         # Clean up ...
         del ship
+
+# ******************************************************************************
 
 # Configure axis ...
 ax.legend(
