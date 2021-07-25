@@ -16,6 +16,10 @@ try:
 except:
     raise Exception("\"matplotlib\" is not installed; run \"pip install --user matplotlib\"") from None
 try:
+    import numpy
+except:
+    raise Exception("\"numpy\" is not installed; run \"pip install --user numpy\"") from None
+try:
     import shapely
     import shapely.wkb
 except:
@@ -44,13 +48,13 @@ ymax =  -90.0                                                                   
 # Loop over number of angles ...
 for nang in [10, 19, 37, 91, 181, 361]:
     # Loop over distances ...
-    for dist in range(8):
+    for dist in range(99, 899, 100):
         # Deduce file name and skip if it is missing ...
-        fname = f"detailed=F_nang={nang:d}_prec=1.00e+02_res=10m_simp=8.99e-05_tol=1.00e-10/freqFillSimp=25_freqLand=100_lat=+50.700000_lon=-001.000000/contours/istep=00{dist:02d}99.wkb.gz"
+        fname = f"detailed=F_nang={nang:d}_prec=1.00e+02_res=10m_simp=8.99e-05_tol=1.00e-10/freqFillSimp=25_freqLand=100_lat=+50.700000_lon=-001.000000/contours/istep={dist:06d}.wkb.gz"
         if not os.path.exists(fname):
             continue
 
-        print(f"Plotting \"{fname}\" ...")
+        print(f"Surveying \"{fname}\" ...")
 
         # Load Polygon ...
         ship = shapely.wkb.loads(gzip.open(fname, "rb").read())
@@ -70,14 +74,20 @@ ext = [xmin - 0.05, xmax + 0.05, ymin - 0.05, ymax + 0.05]                      
 # ******************************************************************************
 
 # Create figure ...
-fg = matplotlib.pyplot.figure(figsize = (9, 6), dpi = 300)
-ax = fg.add_subplot(projection = cartopy.crs.Orthographic(central_longitude = lon, central_latitude = lat))
+fg = matplotlib.pyplot.figure(figsize = (9, 12), dpi = 300)
+ax1 = fg.add_subplot(2, 1, 1, projection = cartopy.crs.Orthographic(central_longitude = lon, central_latitude = lat))
+ax2 = fg.add_subplot(2, 1, 2)
 
 # Configure axis ...
-ax.set_extent(ext)
-pyguymer3.geo.add_map_background(ax, resolution = "large4096px")
-pyguymer3.geo.add_horizontal_gridlines(ax, ext, locs = [50.0, 50.5, 51.0])
-pyguymer3.geo.add_vertical_gridlines(ax, ext, locs = [-2.0, -1.5, -1.0, -0.5, 0.0])
+ax1.set_extent(ext)
+pyguymer3.geo.add_map_background(ax1, resolution = "large4096px")
+pyguymer3.geo.add_horizontal_gridlines(ax1, ext, locs = [50.0, 50.5, 51.0])
+pyguymer3.geo.add_vertical_gridlines(ax1, ext, locs = [-2.0, -1.5, -1.0, -0.5, 0.0])
+
+# Configure axis ...
+ax2.grid()
+ax2.set_xlabel("Number Of Angles")
+ax2.set_ylabel("Area [%]")
 
 # ******************************************************************************
 
@@ -85,7 +95,7 @@ pyguymer3.geo.add_vertical_gridlines(ax, ext, locs = [-2.0, -1.5, -1.0, -0.5, 0.
 allLands = shapely.wkb.loads(gzip.open("detailed=F_nang=10_prec=1.00e+02_res=10m_simp=8.99e-05_tol=1.00e-10/allLands.wkb.gz", "rb").read())
 
 # Plot MultiPolygon ...
-ax.add_geometries(
+ax1.add_geometries(
     allLands,
     cartopy.crs.PlateCarree(),
     edgecolor = (1.0, 0.0, 0.0, 1.0),
@@ -98,24 +108,37 @@ del allLands
 
 # ******************************************************************************
 
-# Initialize lists ...
+# Initialize dictionary and list ...
+data = {}
 labels = []
 lines = []
 
 # Loop over number of angles (and their colours) ...
 for nang, color in [(10, "C0"), (19, "C1"), (37, "C2"), (91, "C3"), (181, "C4"), (361, "C5")]:
     # Loop over distances ...
-    for dist in range(1, 9):
+    for dist in range(99, 899, 100):
         # Deduce file name and skip if it is missing ...
-        fname = f"detailed=F_nang={nang:d}_prec=1.00e+02_res=10m_simp=8.99e-05_tol=1.00e-10/freqFillSimp=25_freqLand=100_lat=+50.700000_lon=-001.000000/contours/istep=00{dist:02d}00.wkb.gz"
+        fname = f"detailed=F_nang={nang:d}_prec=1.00e+02_res=10m_simp=8.99e-05_tol=1.00e-10/freqFillSimp=25_freqLand=100_lat=+50.700000_lon=-001.000000/contours/istep={dist:06d}.wkb.gz"
         if not os.path.exists(fname):
             continue
+
+        print(f"Plotting \"{fname}\" ...")
 
         # Load Polygon ...
         ship = shapely.wkb.loads(gzip.open(fname, "rb").read())
 
+        # Populate dictionary ...
+        key = f"{(100 * (dist + 1)) // 1000:,d}km"
+        if key not in data:
+            data[key] = {
+                "x" : [],                                                       # [#]
+                "y" : []                                                        # [°2]
+            }
+        data[key]["x"].append(nang)                                             # [#]
+        data[key]["y"].append(ship.area)                                        # [°2]
+
         # Plot Polygon ...
-        ax.add_geometries(
+        ax1.add_geometries(
             [ship],
             cartopy.crs.PlateCarree(),
             edgecolor = color,
@@ -124,7 +147,7 @@ for nang, color in [(10, "C0"), (19, "C1"), (37, "C2"), (91, "C3"), (181, "C4"),
         )
 
         # Check if it is the first distance for this number of angles ...
-        if dist == 1:
+        if f"{nang:d} Angles" not in labels:
             # Add an entry to the legend ...
             labels.append(f"{nang:d} Angles")
             lines.append(matplotlib.lines.Line2D([], [], color = color))
@@ -134,13 +157,33 @@ for nang, color in [(10, "C0"), (19, "C1"), (37, "C2"), (91, "C3"), (181, "C4"),
 
 # ******************************************************************************
 
+# Loop over distances ...
+for key in sorted(list(data.keys())):
+    # Create short-hands ...
+    x = numpy.array(data[key]["x"])                                             # [#]
+    y = numpy.array(data[key]["y"])                                             # [°2]
+
+    # Convert to ratio ...
+    y /= y[-1]
+
+    # Plot data ...
+    ax2.plot(x, 100.0 * y, label = key, marker = "d")
+
+# ******************************************************************************
+
 # Configure axis ...
-ax.legend(
+ax1.legend(
     lines,
     labels,
     fontsize = "small",
     loc = "upper center",
     ncol = 3
+)
+
+# Configure axis ...
+ax2.legend(
+    fontsize = "small",
+    loc = "lower right"
 )
 
 # Save figure ...
