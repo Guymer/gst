@@ -62,7 +62,7 @@ After sailing for 0.09 days at 20.0 knots a vessel will have gone 80,006.4 metre
 To very quickly find out how far a vessel can sail, try running:
 
 ```
-python3.9 run.py -1.0 50.7 20.0 --dur 10.0
+python3.9 run.py -1.0 50.7 20.0 --dur 2.0
 ```
 
 ## To Do
