@@ -97,7 +97,13 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqFill
     # Calculate the maximum possible sailing distance (ignoring all land) ...
     maxDist = (1852.0 * spd) * (24.0 * dur)                                     # [m]
     maxShip = pyguymer3.geo.buffer(ship, maxDist, debug = True, nang = nang, simp = simp, tol = tol)
-    ext = [maxShip.bounds[0], maxShip.bounds[2], maxShip.bounds[1], maxShip.bounds[3]]  # [°], [°], [°], [°]
+    maxShipExt = [maxShip.bounds[0], maxShip.bounds[2], maxShip.bounds[1], maxShip.bounds[3]]   # [°], [°], [°], [°]
+
+    # Determine the maximum symmetric sailing distance ...
+    maxShipLon = max(abs(maxShipExt[0] - lon), abs(maxShipExt[1] - lon))        # [°]
+    maxShipLat = max(abs(maxShipExt[2] - lat), abs(maxShipExt[3] - lat))        # [°]
+    maxShipHyp = max(maxShipLon, maxShipLat)                                    # [°]
+    maxShipExtSym = [lon - maxShipHyp, lon + maxShipHyp, lat - maxShipHyp, lat + maxShipHyp]    # [°], [°], [°], [°]
 
     # Check if the user is being far too coarse ...
     if prec > maxDist:
@@ -155,13 +161,13 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqFill
         fg = matplotlib.pyplot.figure(figsize = (9, 6), dpi = 300)
         if local:
             ax = matplotlib.pyplot.axes(projection = cartopy.crs.Orthographic(central_longitude = lon, central_latitude = lat))
-            ax.set_extent(ext)
+            ax.set_extent(maxShipExtSym)
         else:
             ax = matplotlib.pyplot.axes(projection = cartopy.crs.Robinson())
             ax.set_global()
         pyguymer3.geo.add_map_background(ax, resolution = "large4096px")
-        pyguymer3.geo.add_horizontal_gridlines(ax, ext, ngrid = 5)
-        pyguymer3.geo.add_vertical_gridlines(ax, ext, ngrid = 5)
+        pyguymer3.geo.add_horizontal_gridlines(ax, maxShipExtSym, ngrid = 5)
+        pyguymer3.geo.add_vertical_gridlines(ax, maxShipExtSym, ngrid = 5)
 
         # Plot Polygons ...
         ax.add_geometries(
