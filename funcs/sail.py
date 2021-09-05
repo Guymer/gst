@@ -1,4 +1,4 @@
-def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqFillSimp = 25, freqLand = 100, freqPlot = 50, local = False, nang = 10, plot = False, prec = 100.0, res = "110m", tol = 1.0e-10):
+def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqFillSimp = 25, freqLand = 100, freqPlot = 50, local = False, nang = 10, plot = False, prec = 1000.0, res = "110m", tol = 1.0e-10):
     """Sail from a point
 
     This function reads in a starting coordinate (in degrees) and a sailing

@@ -22,7 +22,7 @@ if __name__ == "__main__":
     parser.add_argument("--local", action = "store_true", help = "the plot has only local extent")
     parser.add_argument("--nang", default = 10, help = "the number of directions from each point that the vessel could sail in", type = int)
     parser.add_argument("--plot", action = "store_true", help = "make a plot")
-    parser.add_argument("--prec", default = 100.0, help = "the precision of the calculation (in metres)", type = float)
+    parser.add_argument("--prec", default = 1000.0, help = "the precision of the calculation (in metres)", type = float)
     parser.add_argument("--res", default = "110m", help = "the resolution of the Natural Earth datasets", type = str)
     parser.add_argument("--tol", default = 1.0e-10, help = "the Euclidean distance that defines two points as being the same (in degrees)", type = float)
     args = parser.parse_args()
