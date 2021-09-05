@@ -173,8 +173,17 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqFill
         ax.add_geometries(
             allLands,
             cartopy.crs.PlateCarree(),
-            edgecolor = (0.0, 0.0, 0.0, 0.1),
-            facecolor = (1.0, 0.0, 0.0, 0.1),
+            edgecolor = (1.0, 0.0, 0.0, 0.2),
+            facecolor = (1.0, 0.0, 0.0, 0.2),
+            linewidth = 1.0
+        )
+
+        # Plot Polygons ...
+        ax.add_geometries(
+            [maxShip],
+            cartopy.crs.PlateCarree(),
+            edgecolor = (0.0, 0.0, 0.0, 0.2),
+            facecolor = (0.0, 0.0, 0.0, 0.2),
             linewidth = 1.0
         )
 
