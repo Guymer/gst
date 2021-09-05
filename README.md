@@ -67,6 +67,7 @@ python3.9 run.py -1.0 50.7 20.0 --dur 2.0
 
 ## Bugs
 
+* Determining the maximum sailing Polygon breaks between `python3.9 run.py -1.0 50.7 20.0 --dur 4.93 --nang 37 --plot --freqPlot 200` and `python3.9 run.py -1.0 50.7 20.0 --dur 4.94 --nang 37 --plot --freqPlot 200` (which is between 4,382.57km and 4,391.46km)
 * `python3.9 run.py -1.0 50.7 20.0 --dur 5.0 --nang 37 --plot --freqPlot 200` and Svalbard
 * `python3.9 run.py -1.0 50.7 20.0 --dur 6.0 --nang 37 --plot --freqPlot 200` and Greenland
 
