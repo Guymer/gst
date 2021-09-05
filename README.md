@@ -65,6 +65,11 @@ To very quickly find out how far a vessel can sail, try running:
 python3.9 run.py -1.0 50.7 20.0 --dur 2.0
 ```
 
+## Bugs
+
+* `python3.9 run.py -1.0 50.7 20.0 --dur 5.0 --nang 37 --plot --freqPlot 200` and Svalbard
+* `python3.9 run.py -1.0 50.7 20.0 --dur 6.0 --nang 37 --plot --freqPlot 200` and Greenland
+
 ## To Do
 
 * make sure that vessels can sail through both the Panama and Suez canals
