@@ -15,8 +15,25 @@ if __name__ == "__main__":
     import pyguymer3.geo
     import pyguymer3.image
 
+    lon = 1.0
+    lat = 50.7
+    maxDists = [4382, 4383, 4384, 4385]
+
+    lon = -1.0
+    lat = 50.7
+    maxDists = [4382, 4383, 4384, 4385]
+
+    lon = 1.0
+    lat = -50.7
+    maxDists = [4382, 4383, 4384, 4385]
+
     lon = -1.0
     lat = -50.7
+    maxDists = [4382, 4383, 4384, 4385]
+
+    lon = 170.0
+    lat = 10.0
+    maxDists = [2000, 3000, 4000, 5000]
 
     debug = True
     nang = 21
@@ -33,7 +50,7 @@ if __name__ == "__main__":
     fg, ax = matplotlib.pyplot.subplots(2, 2, figsize = (12, 8), dpi = 300)
     ax = ax.flatten()
 
-    for i, maxDist in enumerate(range(4382, 4386)):
+    for i, maxDist in enumerate(maxDists):
         print(i, maxDist)
 
         maxShip = pyguymer3.geo.buffer(ship, float(maxDist) * 1000.0, debug = debug, fill = fill, nang = nang, simp = simp, tol = tol)
