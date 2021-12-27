@@ -65,6 +65,18 @@ To very quickly find out how far a vessel can sail, try running:
 python3.9 run.py -1.0 50.7 20.0 --dur 2.0
 ```
 
+## Dependencies
+
+GST requires the following Python modules to be installed and available in your `PYTHONPATH`.
+
+* [cartopy](https://pypi.org/project/Cartopy/)
+* [matplotlib](https://pypi.org/project/matplotlib/)
+* [numpy](https://pypi.org/project/numpy/)
+* [pyguymer3](https://github.com/Guymer/PyGuymer3)
+* [shapely](https://pypi.org/project/Shapely/)
+
+GST uses some [Natural Earth](https://www.naturalearthdata.com/) resources via the [Cartopy](https://scitools.org.uk/cartopy/docs/latest/) module. If they do not exist on your system then Cartopy will download them for you in the background. Consequently, a working internet connection may be required the first time you run GST.
+
 ## Bugs
 
 * Determining the maximum sailing Polygon breaks between `python3.9 run.py -1.0 50.7 20.0 --dur 4.93 --nang 37 --plot --freqPlot 200` and `python3.9 run.py -1.0 50.7 20.0 --dur 4.94 --nang 37 --plot --freqPlot 200` (which is between 4,382.57km and 4,391.46km)
