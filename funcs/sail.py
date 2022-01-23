@@ -165,7 +165,7 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqFill
         else:
             ax = matplotlib.pyplot.axes(projection = cartopy.crs.Robinson())
             ax.set_global()
-        pyguymer3.geo.add_map_background(ax, resolution = "large4096px")
+        pyguymer3.geo.add_map_background(ax, resolution = "large8192px")
         pyguymer3.geo.add_horizontal_gridlines(ax, maxShipExtSym, ngrid = 5)
         pyguymer3.geo.add_vertical_gridlines(ax, maxShipExtSym, ngrid = 5)
 

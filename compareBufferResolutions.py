@@ -80,7 +80,7 @@ ax2 = fg.add_subplot(2, 1, 2)
 
 # Configure axis ...
 ax1.set_extent(ext)
-pyguymer3.geo.add_map_background(ax1, resolution = "large4096px")
+pyguymer3.geo.add_map_background(ax1, resolution = "large8192px")
 pyguymer3.geo.add_horizontal_gridlines(ax1, ext, locs = [50.0, 50.5, 51.0])
 pyguymer3.geo.add_vertical_gridlines(ax1, ext, locs = [-2.0, -1.5, -1.0, -0.5, 0.0])
 
