@@ -7,8 +7,8 @@ This project aims to show how a vessel sails around the globe.
 If you want to run the example script using a profiler and print out the top 25 most time-consuming functions then run:
 
 ```
-python3.9 -m cProfile -o results.out run.py -1.0 50.7 20.0 --dur 0.09
-python3.9 -c 'import pstats; p = pstats.Stats("results.out"); p.sort_stats(pstats.SortKey.CUMULATIVE).print_stats(25)'
+python3.10 -m cProfile -o results.out run.py -1.0 50.7 20.0 --dur 0.09
+python3.10 -c 'import pstats; p = pstats.Stats("results.out"); p.sort_stats(pstats.SortKey.CUMULATIVE).print_stats(25)'
 ```
 
 ## Running `compareBufferResolutions.py`
@@ -16,12 +16,12 @@ python3.9 -c 'import pstats; p = pstats.Stats("results.out"); p.sort_stats(pstat
 To generate the data needed by `compareBufferResolutions.py` run:
 
 ```
-python3.9 run.py -1.0 50.7 20.0 --dur 0.09 --nang 10 --res 10m
-python3.9 run.py -1.0 50.7 20.0 --dur 0.09 --nang 19 --res 10m
-python3.9 run.py -1.0 50.7 20.0 --dur 0.09 --nang 37 --res 10m
-python3.9 run.py -1.0 50.7 20.0 --dur 0.09 --nang 91 --res 10m
-python3.9 run.py -1.0 50.7 20.0 --dur 0.09 --nang 181 --res 10m
-python3.9 run.py -1.0 50.7 20.0 --dur 0.09 --nang 361 --res 10m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 10 --res 10m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 19 --res 10m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 37 --res 10m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 91 --res 10m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 181 --res 10m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 361 --res 10m
 ```
 
 After sailing for 0.09 days at 20.0 knots a vessel will have gone 80,006.4 metres, which I'll round to 80km.
@@ -33,24 +33,24 @@ After sailing for 0.09 days at 20.0 knots a vessel will have gone 80,006.4 metre
 To generate the data needed by `resolutionConvergence.py` run:
 
 ```
-python3.9 run.py -1.0 50.7 20.0 --dur 0.09 --nang 10 --res 110m
-python3.9 run.py -1.0 50.7 20.0 --dur 0.09 --nang 10 --res 50m
-python3.9 run.py -1.0 50.7 20.0 --dur 0.09 --nang 10 --res 10m
-python3.9 run.py -1.0 50.7 20.0 --dur 0.09 --nang 19 --res 110m
-python3.9 run.py -1.0 50.7 20.0 --dur 0.09 --nang 19 --res 50m
-python3.9 run.py -1.0 50.7 20.0 --dur 0.09 --nang 19 --res 10m
-python3.9 run.py -1.0 50.7 20.0 --dur 0.09 --nang 37 --res 110m
-python3.9 run.py -1.0 50.7 20.0 --dur 0.09 --nang 37 --res 50m
-python3.9 run.py -1.0 50.7 20.0 --dur 0.09 --nang 37 --res 10m
-python3.9 run.py -1.0 50.7 20.0 --dur 0.09 --nang 91 --res 110m
-python3.9 run.py -1.0 50.7 20.0 --dur 0.09 --nang 91 --res 50m
-python3.9 run.py -1.0 50.7 20.0 --dur 0.09 --nang 91 --res 10m
-python3.9 run.py -1.0 50.7 20.0 --dur 0.09 --nang 181 --res 110m
-python3.9 run.py -1.0 50.7 20.0 --dur 0.09 --nang 181 --res 50m
-python3.9 run.py -1.0 50.7 20.0 --dur 0.09 --nang 181 --res 10m
-python3.9 run.py -1.0 50.7 20.0 --dur 0.09 --nang 361 --res 110m
-python3.9 run.py -1.0 50.7 20.0 --dur 0.09 --nang 361 --res 50m
-python3.9 run.py -1.0 50.7 20.0 --dur 0.09 --nang 361 --res 10m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 10 --res 110m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 10 --res 50m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 10 --res 10m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 19 --res 110m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 19 --res 50m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 19 --res 10m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 37 --res 110m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 37 --res 50m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 37 --res 10m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 91 --res 110m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 91 --res 50m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 91 --res 10m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 181 --res 110m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 181 --res 50m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 181 --res 10m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 361 --res 110m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 361 --res 50m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 361 --res 10m
 ```
 
 After sailing for 0.09 days at 20.0 knots a vessel will have gone 80,006.4 metres, which I'll round to 80km.
@@ -62,7 +62,7 @@ After sailing for 0.09 days at 20.0 knots a vessel will have gone 80,006.4 metre
 To very quickly find out how far a vessel can sail, try running:
 
 ```
-python3.9 run.py -1.0 50.7 20.0 --dur 2.0
+python3.10 run.py -1.0 50.7 20.0 --dur 2.0
 ```
 
 ## Dependencies
@@ -79,9 +79,9 @@ GST uses some [Natural Earth](https://www.naturalearthdata.com/) resources via t
 
 ## Bugs
 
-* Determining the maximum sailing Polygon breaks between `python3.9 run.py -1.0 50.7 20.0 --dur 4.93 --nang 37 --plot --freqPlot 200` and `python3.9 run.py -1.0 50.7 20.0 --dur 4.94 --nang 37 --plot --freqPlot 200` (which is between 4,382.57km and 4,391.46km)
-* `python3.9 run.py -1.0 50.7 20.0 --dur 5.0 --nang 37 --plot --freqPlot 200` and Svalbard
-* `python3.9 run.py -1.0 50.7 20.0 --dur 6.0 --nang 37 --plot --freqPlot 200` and Greenland
+* Determining the maximum sailing Polygon breaks between `python3.10 run.py -1.0 50.7 20.0 --dur 4.93 --nang 37 --plot --freqPlot 200` and `python3.10 run.py -1.0 50.7 20.0 --dur 4.94 --nang 37 --plot --freqPlot 200` (which is between 4,382.57km and 4,391.46km)
+* `python3.10 run.py -1.0 50.7 20.0 --dur 5.0 --nang 37 --plot --freqPlot 200` and Svalbard
+* `python3.10 run.py -1.0 50.7 20.0 --dur 6.0 --nang 37 --plot --freqPlot 200` and Greenland
 
 ## To Do
 
