@@ -15,35 +15,35 @@ if __name__ == "__main__":
     import pyguymer3.geo
     import pyguymer3.image
 
-    lon = 1.0
-    lat = 50.7
-    maxDists = [4382, 4383, 4384, 4385]
+    lon = 1.0                                                                   # [°]
+    lat = 50.7                                                                  # [°]
+    maxDists = [4382, 4383, 4384, 4385]                                         # [m]
 
-    lon = -1.0
-    lat = 50.7
-    maxDists = [4382, 4383, 4384, 4385]
+    lon = -1.0                                                                  # [°]
+    lat = 50.7                                                                  # [°]
+    maxDists = [4382, 4383, 4384, 4385]                                         # [m]
 
-    lon = 1.0
-    lat = -50.7
-    maxDists = [4382, 4383, 4384, 4385]
+    lon = 1.0                                                                   # [°]
+    lat = -50.7                                                                 # [°]
+    maxDists = [4382, 4383, 4384, 4385]                                         # [m]
 
-    lon = -1.0
-    lat = -50.7
-    maxDists = [4382, 4383, 4384, 4385]
+    lon = -1.0                                                                  # [°]
+    lat = -50.7                                                                 # [°]
+    maxDists = [4382, 4383, 4384, 4385]                                         # [m]
 
-    lon = 170.0
-    lat = 10.0
-    maxDists = [2000, 3000, 4000, 5000]
+    lon = 170.0                                                                 # [°]
+    lat = 10.0                                                                  # [°]
+    maxDists = [2000, 3000, 4000, 5000]                                         # [m]
 
     debug = True
-    nang = 21
-    tol = 1.0e-9
+    nang = 21                                                                   # [#]
+    tol = 1.0e-9                                                                # [°]
 
-    # fill = 1.0
-    fill = -1.0
+    # fill = 1.0                                                                  # [°]
+    fill = -1.0                                                                 # [°]
 
-    # simp = 9.0e-4
-    simp = -1.0
+    # simp = 9.0e-4                                                               # [°]
+    simp = -1.0                                                                 # [°]
 
     ship = shapely.geometry.point.Point(lon, lat)
 
@@ -55,14 +55,14 @@ if __name__ == "__main__":
 
         maxShip = pyguymer3.geo.buffer(ship, float(maxDist) * 1000.0, debug = debug, fill = fill, nang = nang, simp = simp, tol = tol)
         if isinstance(maxShip, shapely.geometry.polygon.Polygon):
-            coords = numpy.array(maxShip.exterior.coords)
+            coords = numpy.array(maxShip.exterior.coords)                       # [°]
             ax[i].plot(coords[:, 0], coords[:, 1], color = "C0", marker = ".")
         elif isinstance(maxShip, shapely.geometry.multipolygon.MultiPolygon):
-            j = 0
+            j = 0                                                               # [#]
             for poly in maxShip:
-                coords = numpy.array(poly.exterior.coords)
+                coords = numpy.array(poly.exterior.coords)                      # [°]
                 ax[i].plot(coords[:, 0], coords[:, 1], color = f"C{j:d}", marker = ".")
-                j += 1
+                j += 1                                                          # [#]
         else:
             raise Exception("unexpected type") from None
 
@@ -77,14 +77,14 @@ if __name__ == "__main__":
         #     0.25 * float(maxDist) * 1000.0, debug = debug, fill = fill, nang = nang, simp = simp, tol = tol
         # )
         # if isinstance(maxShip2, shapely.geometry.polygon.Polygon):
-        #     coords = numpy.array(maxShip2.exterior.coords)
+        #     coords = numpy.array(maxShip2.exterior.coords)                      # [°]
         #     ax[i].plot(coords[:, 0], coords[:, 1], color = "C0", linestyle = "--", marker = ".")
         # elif isinstance(maxShip2, shapely.geometry.multipolygon.MultiPolygon):
-        #     j = 0
+        #     j = 0                                                               # [#]
         #     for poly in maxShip2:
-        #         coords = numpy.array(poly.exterior.coords)
+        #         coords = numpy.array(poly.exterior.coords)                      # [°]
         #         ax[i].plot(coords[:, 0], coords[:, 1], color = f"C{j:d}", linestyle = "--", marker = ".")
-        #         j += 1
+        #         j += 1                                                          # [#]
         # else:
         #     raise Exception("unexpected type") from None
 
