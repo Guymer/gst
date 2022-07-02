@@ -46,7 +46,7 @@ def remove_interior_rings(poly, kwArgCheck = None, tol = 1.0e-10):
                 # Append a Polygon made of just the exterior LinearRing ...
                 polys.append(shapely.geometry.polygon.Polygon(geom.exterior))
             else:
-                raise Exception(f"\"geom\" is a \"{repr(type(geom))}\"")
+                raise Exception(f"\"geom\" is a \"{repr(type(geom))}\"") from None
 
         # Return a MultiPolygon made of Polygons made of just the exterior
         # LinearRings ...
