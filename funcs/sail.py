@@ -160,10 +160,10 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqFill
         # Create figure ...
         fg = matplotlib.pyplot.figure(figsize = (9, 6), dpi = 300)
         if local:
-            ax = matplotlib.pyplot.axes(projection = cartopy.crs.Orthographic(central_longitude = lon, central_latitude = lat))
+            ax = fg.add_subplot(projection = cartopy.crs.Orthographic(central_longitude = lon, central_latitude = lat))
             ax.set_extent(maxShipExt)
         else:
-            ax = matplotlib.pyplot.axes(projection = cartopy.crs.Robinson())
+            ax = fg.add_subplot(projection = cartopy.crs.Robinson())
             ax.set_global()
         pyguymer3.geo.add_map_background(ax, resolution = "large8192px")
         pyguymer3.geo.add_horizontal_gridlines(ax, maxShipExtSym, ngrid = 5)
