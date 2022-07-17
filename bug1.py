@@ -47,7 +47,8 @@ if __name__ == "__main__":
 
     ship = shapely.geometry.point.Point(lon, lat)
 
-    fg, ax = matplotlib.pyplot.subplots(2, 2, figsize = (12, 8), dpi = 300)
+    fg = matplotlib.pyplot.figure(figsize = (12, 8), dpi = 300)
+    ax = fg.subplots(2, 2)
     ax = ax.flatten()
 
     for i, maxDist in enumerate(maxDists):
