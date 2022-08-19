@@ -3,6 +3,8 @@
 # https://github.com/Guymer/PyGuymer3/commit/503264acd541a577dd43fc7f5a6740b16f0f6fa2
 # https://github.com/Guymer/fortranlib/commit/63b7d6ca290790e0340a050b4c31ac3106f8747e
 
+# Use the proper idiom in the main module ...
+# NOTE: See https://docs.python.org/3.10/library/multiprocessing.html#the-spawn-and-forkserver-start-methods
 if __name__ == "__main__":
     import matplotlib
     matplotlib.use("Agg")                                                       # NOTE: See https://matplotlib.org/stable/gallery/user_interfaces/canvasagg.html
