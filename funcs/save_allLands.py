@@ -4,25 +4,25 @@ def save_allLands(fname, dname, dist, kwArgCheck = None, debug = False, detailed
     Parameters
     ----------
     fname : string
-            the file name of the compressed WKB file
+        the file name of the compressed WKB file
     dname : string
-            the directory name where temporary compressed WKB files can be stored
+        the directory name where temporary compressed WKB files can be stored
     dist : float
-            the distance to buffer the land by (in metres)
+        the distance to buffer the land by (in metres)
     debug : bool, optional
-            print debug messages
+        print debug messages
     detailed : bool, optional
-            take account of minor islands
+        take account of minor islands
     fill : float, optional
-            how many intermediary points are added to fill in the straight lines which connect the points; negative values disable filling
+        how many intermediary points are added to fill in the straight lines which connect the points; negative values disable filling
     nang : int, optional
-            the number of angles around each point that are calculated when buffering
+        the number of angles around each point that are calculated when buffering
     res : string, optional
-            the resolution of the Natural Earth datasets
+        the resolution of the Natural Earth datasets
     simp : float, optional
-            how much intermediary [Multi]Polygons are simplified by; negative values disable simplification (in degrees)
+        how much intermediary [Multi]Polygons are simplified by; negative values disable simplification (in degrees)
     tol : float, optional
-            the Euclidean distance that defines two points as being the same (in degrees)
+        the Euclidean distance that defines two points as being the same (in degrees)
     """
 
     # Import standard modules ...

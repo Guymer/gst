@@ -8,16 +8,16 @@ def remove_lands(shape, lands, kwArgCheck = None, simp = 0.1):
     Parameters
     ----------
     shape : shapely.geometry.linestring.LineString, shapely.geometry.polygon.LinearRing, shapely.geometry.polygon.Polygon, shapely.geometry.multilinestring.MultiLineString, shapely.geometry.multipolygon.MultiPolygon
-            the input shape
+        the input shape
     lands : list of shapely.geometry.polygon.Polygon
-            the list of land masses
+        the list of land masses
     simp : float, optional
-            how much intermediary shapes are simplified by; negative values disable simplification (in degrees)
+        how much intermediary shapes are simplified by; negative values disable simplification (in degrees)
 
     Returns
     -------
     shape : shapely.geometry.linestring.LineString, shapely.geometry.polygon.LinearRing, shapely.geometry.polygon.Polygon, shapely.geometry.multilinestring.MultiLineString, shapely.geometry.multipolygon.MultiPolygon
-            the output shape
+        the output shape
     """
 
     # Import special modules ...

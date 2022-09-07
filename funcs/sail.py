@@ -8,33 +8,33 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqFill
     Parameters
     ----------
     lon : float
-            the longitude of the starting point (in degrees)
+        the longitude of the starting point (in degrees)
     lat : float
-            the latitude of the starting point (in degrees)
+        the latitude of the starting point (in degrees)
     spd : float
-            the speed of the vessel (in knots)
+        the speed of the vessel (in knots)
     detailed : bool, optional
-            take account of minor islands
+        take account of minor islands
     dur : float, optional
-            the duration of the voyage (in days)
+        the duration of the voyage (in days)
     freqFillSimp : int, optional
-            fill in and simplify the sailing contour every freqFillSimp iteration
+        fill in and simplify the sailing contour every freqFillSimp iteration
     freqLand : int, optional
-            re-evaluate the relevant land every freqLand iteration
+        re-evaluate the relevant land every freqLand iteration
     freqPlot : int, optional
-            plot sailing contours every freqPlot iteration
+        plot sailing contours every freqPlot iteration
     local : bool, optional
-            the plot has only local extent
+        the plot has only local extent
     nang : int, optional
-            the number of directions from each point that the vessel could sail in
+        the number of directions from each point that the vessel could sail in
     plot : bool, optional
-            make a plot
+        make a plot
     prec : float, optional
-            the precision of the calculation (in metres)
+        the precision of the calculation (in metres)
     res : string, optional
-            the resolution of the Natural Earth datasets
+        the resolution of the Natural Earth datasets
     tol : float, optional
-            the Euclidean distance that defines two points as being the same (in degrees)
+        the Euclidean distance that defines two points as being the same (in degrees)
     """
 
     # Improt standard modules ...
