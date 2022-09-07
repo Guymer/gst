@@ -1,4 +1,4 @@
-def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqFillSimp = 25, freqLand = 100, freqPlot = 50, local = False, nang = 10, plot = False, prec = 1000.0, res = "110m", tol = 1.0e-10):
+def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqFillSimp = 25, freqLand = 100, freqPlot = 50, local = False, nang = 9, plot = False, prec = 1000.0, res = "110m", tol = 1.0e-10):
     """Sail from a point
 
     This function reads in a starting coordinate (in degrees) and a sailing
@@ -80,41 +80,61 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqFill
     # **************************************************************************
 
     # Determine how many degrees (of longitude) a [Multi]Polygon can be
-    # simplified by at the point where a degree (of longitude) is the largest,
-    # i.e., the equator ...
+    # filled by at the point where a degree (of longitude) is the largest, i.e.,
+    # the equator ...
     # NOTE: See https://en.wikipedia.org/wiki/Earth_radius#Mean_radius
     radiusOfEarth = 6371008.8                                                   # [m]
     circumOfEarth = 2.0 * math.pi * radiusOfEarth                               # [m]
     resoluOfEarth = circumOfEarth / 360.0                                       # [m/°]
-    simp = prec / resoluOfEarth                                                 # [°]
+    fill = prec / resoluOfEarth                                                 # [°]
 
-    # Add conservatism ...
-    simp *= 0.1                                                                 # [°]
+    # Add conservatism and use it to set the simplification level ...
+    fill *= 0.1                                                                 # [°]
+    simp = 0.1 * fill                                                           # [°]
 
     # Create the initial starting Point ...
     ship = shapely.geometry.point.Point(lon, lat)
 
     # Calculate the maximum possible sailing distance (ignoring all land) ...
     maxDist = (1852.0 * spd) * (24.0 * dur)                                     # [m]
-    maxShip = pyguymer3.geo.buffer(ship, maxDist, debug = True, nang = nang, simp = simp, tol = tol)
-    maxShipExt = [maxShip.bounds[0], maxShip.bounds[2], maxShip.bounds[1], maxShip.bounds[3]]   # [°], [°], [°], [°]
+    maxShip = pyguymer3.geo.buffer(
+        ship,
+        maxDist,
+            debug = False,
+             fill = fill,
+        fillSpace = "EuclideanSpace",
+             nang = nang,
+             simp = simp,
+              tol = tol,
+    )
+    maxShipExt = [
+        maxShip.bounds[0],
+        maxShip.bounds[2],
+        maxShip.bounds[1],
+        maxShip.bounds[3],
+    ]                                                                           # [°], [°], [°], [°]
 
     # Determine the maximum symmetric sailing distance ...
     maxShipLon = max(abs(maxShipExt[0] - lon), abs(maxShipExt[1] - lon))        # [°]
     maxShipLat = max(abs(maxShipExt[2] - lat), abs(maxShipExt[3] - lat))        # [°]
     maxShipHyp = max(maxShipLon, maxShipLat)                                    # [°]
-    maxShipExtSym = [lon - maxShipHyp, lon + maxShipHyp, lat - maxShipHyp, lat + maxShipHyp]    # [°], [°], [°], [°]
+    maxShipExtSym = [
+        lon - maxShipHyp,
+        lon + maxShipHyp,
+        lat - maxShipHyp,
+        lat + maxShipHyp,
+    ]                                                                           # [°], [°], [°], [°]
 
     # Check if the user is being far too coarse ...
     if prec > maxDist:
-        raise Exception(f"the maximum possible sailing distance is {maxDist:,.1f}m but the precision is {prec:,.1f}m") from None
+        raise Exception(f"the maximum possible sailing distance is {maxDist:,.1f} metres but the precision is {prec:,.1f} metres") from None
 
-    print(f"The maximum possible sailing distance is {0.001 * maxDist:,.2f}km (ignoring all land).")
+    print(f"The maximum possible sailing distance is {0.001 * maxDist:,.2f} kilometres (ignoring all land).")
 
     # Figure out how many steps are going to be required ...
     nstep = round(maxDist / prec)                                               # [#]
 
-    print(f"Each sailing iteration is {60.0 * 60.0 * prec / (1852.0 * spd):,.1f}s for the vessel.")
+    print(f"Each sailing iteration is {3600.0 * prec / (1852.0 * spd):,.1f} seconds for the vessel.")
 
     # **************************************************************************
 
@@ -153,7 +173,7 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqFill
             output2,
             prec,
              detailed = detailed,
-                 fill = -1.0,
+                 fill = fill,
             fillSpace = "EuclideanSpace",
                  nang = nang,
                   res = res,
@@ -162,7 +182,8 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqFill
         )
 
     # Load all the land ...
-    allLands = shapely.wkb.loads(gzip.open(allLandsName, "rb").read())
+    with gzip.open(allLandsName, "rb") as fobj:
+        allLands = shapely.wkb.loads(fobj.read())
 
     # **************************************************************************
 
@@ -170,23 +191,32 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqFill
     if plot:
         # Create figure ...
         fg = matplotlib.pyplot.figure(figsize = (9, 6), dpi = 300)
+
+        # Create axis ...
         if local:
-            ax = fg.add_subplot(projection = cartopy.crs.Orthographic(central_longitude = lon, central_latitude = lat))
+            ax = fg.add_subplot(
+                projection = cartopy.crs.Orthographic(
+                    central_longitude = lon,
+                     central_latitude = lat,
+                ),
+            )
             ax.set_extent(maxShipExt)
         else:
             ax = fg.add_subplot(projection = cartopy.crs.Robinson())
             ax.set_global()
+
+        # Configure axis ...
         pyguymer3.geo.add_map_background(ax, resolution = "large8192px")
         pyguymer3.geo.add_horizontal_gridlines(ax, maxShipExtSym, ngrid = 5)
         pyguymer3.geo.add_vertical_gridlines(ax, maxShipExtSym, ngrid = 5)
 
         # Plot Polygons ...
         ax.add_geometries(
-            allLands,
+            pyguymer3.geo.extract_polys(allLands),
             cartopy.crs.PlateCarree(),
             edgecolor = (1.0, 0.0, 0.0, 0.2),
             facecolor = (1.0, 0.0, 0.0, 0.2),
-            linewidth = 1.0
+            linewidth = 1.0,
         )
 
         # Plot Polygons ...
@@ -195,18 +225,12 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqFill
             cartopy.crs.PlateCarree(),
             edgecolor = (0.0, 0.0, 0.0, 0.2),
             facecolor = (0.0, 0.0, 0.0, 0.2),
-            linewidth = 1.0
+            linewidth = 1.0,
         )
 
     # Loop over iterations ...
     for istep in range(nstep):
-        # Check type ...
-        if isinstance(ship, shapely.geometry.point.Point):
-            print(f"Iteration {istep + 1:,d}/{nstep:,d} ({0.001 * (istep + 1) * prec:,.2f} km of sailing) ...")
-        elif isinstance(ship, shapely.geometry.polygon.Polygon):
-            print(f"Iteration {istep + 1:,d}/{nstep:,d} ({0.001 * (istep + 1) * prec:,.2f} km of sailing) ...")
-        else:
-            raise TypeError(f"\"ship\" is an unexpected type ({repr(type(ship))})") from None
+        print(f"Iteration {istep + 1:,d}/{nstep:,d} ({0.001 * (istep + 1) * prec:,.2f} kilometres/{(istep + 1) * prec / (24.0 * 1852.0 * spd):,.4f} days of sailing) ...")
 
         # **********************************************************************
 
@@ -218,7 +242,7 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqFill
             relevantLands = []
 
             # Loop over Polygons in the MultiPolygon of all of the land ...
-            for allLand in allLands:
+            for allLand in pyguymer3.geo.extract_polys(allLands):
                 # Skip land which is outside of the maximum possible sailing
                 # distance of the ship ...
                 if maxShip.disjoint(allLand):
@@ -238,7 +262,8 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqFill
         tname = f"{output4}/istep={istep:06d}.wkb.gz"
         if os.path.exists(tname):
             # Load [Multi]Polygon ...
-            ship = shapely.wkb.loads(gzip.open(tname, "rb").read())
+            with gzip.open(tname, "rb") as fobj:
+                ship = shapely.wkb.loads(fobj.read())
         else:
             # Check what type the ship is currently ...
             if isinstance(ship, shapely.geometry.point.Point):
@@ -253,13 +278,29 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqFill
                 print(" > Filling in and simplifying ...")
 
                 # Sail ...
-                limit = pyguymer3.geo.buffer(limit, prec, fill = 10.0 * simp, nang = nang, simp = simp, tol = tol)
+                limit = pyguymer3.geo.buffer(
+                    limit,
+                    prec,
+                         fill = fill,
+                    fillSpace = "EuclideanSpace",
+                         nang = nang,
+                         simp = simp,
+                          tol = tol,
+                )
                 ship = shapely.ops.unary_union([limit, ship])
                 ship = remove_lands(ship, relevantLands, simp = simp)
                 ship = remove_interior_rings(ship, tol = tol)
             else:
                 # Sail ...
-                limit = pyguymer3.geo.buffer(limit, prec, fill = -1.0, nang = nang, simp = -1.0, tol = tol)
+                limit = pyguymer3.geo.buffer(
+                    limit,
+                    prec,
+                         fill = -1.0,
+                    fillSpace = "EuclideanSpace",
+                         nang = nang,
+                         simp = -1.0,
+                          tol = tol,
+                )
                 ship = shapely.ops.unary_union([limit, ship])
                 ship = remove_lands(ship, relevantLands, simp = -1.0)
                 ship = remove_interior_rings(ship, tol = tol)
@@ -268,7 +309,8 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqFill
             del limit
 
             # Save [Multi]Polygon ...
-            gzip.open(tname, "wb", compresslevel = 9).write(shapely.wkb.dumps(ship))
+            with gzip.open(tname, "wb", compresslevel = 9) as fobj:
+                fobj.write(shapely.wkb.dumps(ship))
 
         # Check if the user wants to make a plot and that this iteration is one
         # of the ones to be plotted ...
@@ -281,7 +323,7 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqFill
                 cartopy.crs.PlateCarree(),
                 edgecolor = f"C{((istep + 1) // freqPlot) - 1:d}",
                 facecolor = "none",
-                linewidth = 1.0
+                linewidth = 1.0,
             )
 
     # Check if the user wants to make a plot ...
@@ -291,8 +333,15 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqFill
 
         print(f"Making \"{png}\" ...")
 
+        # Configure figure ...
+        fg.tight_layout()
+
         # Save figure ...
-        fg.savefig(png, bbox_inches = "tight", dpi = 300, pad_inches = 0.1)
+        fg.savefig(
+            png,
+                   dpi = 300,
+            pad_inches = 0.1,
+        )
         matplotlib.pyplot.close(fg)
 
         # Optimize PNG ...
