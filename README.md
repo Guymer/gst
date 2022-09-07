@@ -24,9 +24,9 @@ python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 181 --res 10m
 python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 361 --res 10m
 ```
 
-After sailing for 0.09 days at 20.0 knots a vessel will have gone 80,006.4 metres, which I'll round to 80km.
+After sailing for 0.09 days at 20.0 knots a vessel will have gone 80,006.4 metres, which I'll round to 80 kilometres.
 
-`run.py` is very slow for large values of `nang`. Try running only the first couple of lines and then run `compareBufferResolutions.py` to see what the benefit is. You can then run the remaining lines one-by-one and re-run `compareBufferResolutions.py` to see what the improvements are. You may come to the conclusion that it is not worth running `--nang 181` or `--nang 361`.
+`run.py` is very slow for large values of `nang`. Try running only the first couple of the above lines and then run `compareBufferResolutions.py` to see what the benefit is. You can then run the remaining lines one-by-one and re-run `compareBufferResolutions.py` to see what the improvements are. You may come to the conclusion that it is not worth running `--nang 181` or `--nang 361`.
 
 ## Running `resolutionConvergence.py`
 
@@ -53,7 +53,7 @@ python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 361 --res 50m
 python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 361 --res 10m
 ```
 
-After sailing for 0.09 days at 20.0 knots a vessel will have gone 80,006.4 metres, which I'll round to 80km.
+After sailing for 0.09 days at 20.0 knots a vessel will have gone 80,006.4 metres, which I'll round to 80 kilometres.
 
 `run.py` is very slow for large values of `nang`.
 
@@ -76,12 +76,6 @@ GST requires the following Python modules to be installed and available in your 
 * [shapely](https://pypi.org/project/Shapely/)
 
 GST uses some [Natural Earth](https://www.naturalearthdata.com/) resources via the [Cartopy](https://scitools.org.uk/cartopy/docs/latest/) module. If they do not exist on your system then Cartopy will download them for you in the background. Consequently, a working internet connection may be required the first time you run GST.
-
-## Bugs
-
-* Determining the maximum sailing Polygon breaks between `python3.10 run.py -1.0 50.7 20.0 --dur 4.93 --nang 37 --plot --freqPlot 200` and `python3.10 run.py -1.0 50.7 20.0 --dur 4.94 --nang 37 --plot --freqPlot 200` (which is between 4,382.57km and 4,391.46km)
-* `python3.10 run.py -1.0 50.7 20.0 --dur 5.0 --nang 37 --plot --freqPlot 200` and Svalbard
-* `python3.10 run.py -1.0 50.7 20.0 --dur 6.0 --nang 37 --plot --freqPlot 200` and Greenland
 
 ## To Do
 
