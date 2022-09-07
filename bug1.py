@@ -1,103 +1,158 @@
 #!/usr/bin/env python3
 
-# https://github.com/Guymer/PyGuymer3/commit/503264acd541a577dd43fc7f5a6740b16f0f6fa2
-# https://github.com/Guymer/fortranlib/commit/63b7d6ca290790e0340a050b4c31ac3106f8747e
-
 # Use the proper idiom in the main module ...
 # NOTE: See https://docs.python.org/3.10/library/multiprocessing.html#the-spawn-and-forkserver-start-methods
 if __name__ == "__main__":
-    import matplotlib
-    matplotlib.use("Agg")                                                       # NOTE: See https://matplotlib.org/stable/gallery/user_interfaces/canvasagg.html
-    import matplotlib.pyplot
-    import numpy
-    import shapely
-    import shapely.geometry
+    # Import special modules ...
+    try:
+        import matplotlib
+        matplotlib.use("Agg")                                                   # NOTE: See https://matplotlib.org/stable/gallery/user_interfaces/canvasagg.html
+        import matplotlib.pyplot
+    except:
+        raise Exception("\"matplotlib\" is not installed; run \"pip install --user matplotlib\"") from None
+    try:
+        import numpy
+    except:
+        raise Exception("\"numpy\" is not installed; run \"pip install --user numpy\"") from None
+    try:
+        import shapely
+        import shapely.geometry
+    except:
+        raise Exception("\"shapely\" is not installed; run \"pip install --user Shapely\"") from None
 
-    import pyguymer3
-    import pyguymer3.geo
-    import pyguymer3.image
+    # Import my modules ...
+    try:
+        import pyguymer3
+        import pyguymer3.geo
+        import pyguymer3.image
+    except:
+        raise Exception("\"pyguymer3\" is not installed; you need to have the Python module from https://github.com/Guymer/PyGuymer3 located somewhere in your $PYTHONPATH") from None
 
-    lon = 1.0                                                                   # [°]
-    lat = 50.7                                                                  # [°]
-    maxDists = [4382, 4383, 4384, 4385]                                         # [m]
+    # **************************************************************************
 
-    lon = -1.0                                                                  # [°]
-    lat = 50.7                                                                  # [°]
-    maxDists = [4382, 4383, 4384, 4385]                                         # [m]
+    # Configure functions ...
+    nang = 361                                                                  # [#]
+    simp = 0.001                                                                # [°]
 
-    lon = 1.0                                                                   # [°]
-    lat = -50.7                                                                 # [°]
-    maxDists = [4382, 4383, 4384, 4385]                                         # [m]
+    # Define starting location and the four buffering distances ...
+    # lon = 1.0                                                                   # [°]
+    # lat = 50.7                                                                  # [°]
+    # maxDists = [4382, 4383, 4384, 4385]                                         # [km]
 
-    lon = -1.0                                                                  # [°]
-    lat = -50.7                                                                 # [°]
-    maxDists = [4382, 4383, 4384, 4385]                                         # [m]
+    # Define starting location and the four buffering distances ...
+    # lon = -1.0                                                                  # [°]
+    # lat = 50.7                                                                  # [°]
+    # maxDists = [4382, 4383, 4384, 4385]                                         # [km]
 
+    # Define starting location and the four buffering distances ...
+    # lon = 1.0                                                                   # [°]
+    # lat = -50.7                                                                 # [°]
+    # maxDists = [4382, 4383, 4384, 4385]                                         # [km]
+
+    # Define starting location and the four buffering distances ...
+    # lon = -1.0                                                                  # [°]
+    # lat = -50.7                                                                 # [°]
+    # maxDists = [4382, 4383, 4384, 4385]                                         # [km]
+
+    # Define starting location and the four buffering distances ...
     lon = 170.0                                                                 # [°]
     lat = 10.0                                                                  # [°]
-    maxDists = [2000, 3000, 4000, 5000]                                         # [m]
+    maxDists = [2000, 3000, 4000, 5000]                                         # [km]
 
-    debug = True
-    nang = 21                                                                   # [#]
-    tol = 1.0e-9                                                                # [°]
-
-    # fill = 1.0                                                                  # [°]
-    fill = -1.0                                                                 # [°]
-
-    # simp = 9.0e-4                                                               # [°]
-    simp = -1.0                                                                 # [°]
-
+    # Create the ship ...
     ship = shapely.geometry.point.Point(lon, lat)
 
-    fg = matplotlib.pyplot.figure(figsize = (12, 8), dpi = 300)
-    ax = fg.subplots(2, 2)
-    ax = ax.flatten()
+    # Create figure ...
+    fg = matplotlib.pyplot.figure(
+            dpi = 300,
+        figsize = (12, 8),
+    )
 
+    # Create axes ...
+    ax = fg.subplots(2, 2).flatten()
+
+    # Loop over distances ...
     for i, maxDist in enumerate(maxDists):
-        print(i, maxDist)
+        print(f"Distance {i + 1:d} is {maxDist:,d} km ...")
 
-        maxShip = pyguymer3.geo.buffer(ship, float(maxDist) * 1000.0, debug = debug, fill = fill, nang = nang, simp = simp, tol = tol)
-        if isinstance(maxShip, shapely.geometry.polygon.Polygon):
-            coords = numpy.array(maxShip.exterior.coords)                       # [°]
-            ax[i].plot(coords[:, 0], coords[:, 1], color = "C0", marker = ".")
-        elif isinstance(maxShip, shapely.geometry.multipolygon.MultiPolygon):
-            j = 0                                                               # [#]
-            for poly in maxShip:
-                coords = numpy.array(poly.exterior.coords)                      # [°]
-                ax[i].plot(coords[:, 0], coords[:, 1], color = f"C{j:d}", marker = ".")
-                j += 1                                                          # [#]
-        else:
-            raise Exception("unexpected type") from None
+        # Sail the ship in one go ...
+        maxShip1 = pyguymer3.geo.buffer(
+            ship,
+            float(maxDist) * 1000.0,
+            nang = nang,
+            simp = simp,
+        )
 
-        # maxShip2 = pyguymer3.geo.buffer(
-        #     pyguymer3.geo.buffer(
-        #         pyguymer3.geo.buffer(
-        #             pyguymer3.geo.buffer(ship, 0.25 * float(maxDist) * 1000.0, debug = debug, fill = fill, nang = nang, simp = simp, tol = tol),
-        #             0.25 * float(maxDist) * 1000.0, debug = debug, fill = fill, nang = nang, simp = simp, tol = tol
-        #         ),
-        #         0.25 * float(maxDist) * 1000.0, debug = debug, fill = fill, nang = nang, simp = simp, tol = tol
-        #     ),
-        #     0.25 * float(maxDist) * 1000.0, debug = debug, fill = fill, nang = nang, simp = simp, tol = tol
-        # )
-        # if isinstance(maxShip2, shapely.geometry.polygon.Polygon):
-        #     coords = numpy.array(maxShip2.exterior.coords)                      # [°]
-        #     ax[i].plot(coords[:, 0], coords[:, 1], color = "C0", linestyle = "--", marker = ".")
-        # elif isinstance(maxShip2, shapely.geometry.multipolygon.MultiPolygon):
-        #     j = 0                                                               # [#]
-        #     for poly in maxShip2:
-        #         coords = numpy.array(poly.exterior.coords)                      # [°]
-        #         ax[i].plot(coords[:, 0], coords[:, 1], color = f"C{j:d}", linestyle = "--", marker = ".")
-        #         j += 1                                                          # [#]
-        # else:
-        #     raise Exception("unexpected type") from None
+        # Manually plot the exterior rings of all of the Polygons ...
+        for j, poly in enumerate(pyguymer3.geo.extract_polys(maxShip1)):
+            coords = numpy.array(poly.exterior.coords)                          # [°]
+            ax[i].plot(
+                coords[:, 0],
+                coords[:, 1],
+                color = f"C{j:d}",
+            )
 
-        ax[i].scatter([lon], [lat], color = "gold", marker = "*")
+        # Sail the ship in four goes ...
+        maxShip2 = pyguymer3.geo.buffer(
+            pyguymer3.geo.buffer(
+                pyguymer3.geo.buffer(
+                    pyguymer3.geo.buffer(
+                        ship,
+                        0.25 * float(maxDist) * 1000.0,
+                        nang = nang,
+                        simp = simp,
+                    ),
+                    0.25 * float(maxDist) * 1000.0,
+                    nang = nang,
+                    simp = simp,
+                ),
+                0.25 * float(maxDist) * 1000.0,
+                nang = nang,
+                simp = simp,
+            ),
+            0.25 * float(maxDist) * 1000.0,
+            nang = nang,
+            simp = simp,
+        )
 
+        # Manually plot the exterior rings of all of the Polygons ...
+        for j, poly in enumerate(pyguymer3.geo.extract_polys(maxShip2)):
+            coords = numpy.array(poly.exterior.coords)                          # [°]
+            ax[i].plot(
+                coords[:, 0],
+                coords[:, 1],
+                    color = f"C{j:d}",
+                linestyle = "--",
+            )
+
+        # Plot the starting location ...
+        ax[i].scatter(
+            [lon],
+            [lat],
+             color = "gold",
+            marker = "*",
+        )
+
+        # Configure axis ...
         ax[i].grid()
+        ax[i].set_aspect("equal")
+        ax[i].set_xlabel("Longitude [°]")
         ax[i].set_xlim(-180.5, +180.5)
-        ax[i].set_ylim( -90.5,  +90.5)
+        ax[i].set_xticks(range(-180, 225, 45))
+        ax[i].set_ylabel("Latitude [°]")
+        ax[i].set_ylim(-90.5, +90.5)
+        ax[i].set_yticks(range(-90, 135, 45))
 
-    fg.savefig("bug1.png", bbox_inches = "tight", dpi = 300, pad_inches = 0.1)
+    # Configure figure ...
+    fg.tight_layout()
+
+    # Save figure ...
+    fg.savefig(
+        "bug1.png",
+               dpi = 300,
+        pad_inches = 0.1,
+    )
     matplotlib.pyplot.close(fg)
 
+    # Optimize PNG ...
     pyguymer3.image.optimize_image("bug1.png", strip = True)
