@@ -46,7 +46,7 @@ xmax = -180.0                                                                   
 ymax =  -90.0                                                                   # [°]
 
 # Loop over number of angles ...
-for nang in [10, 19, 37, 91, 181, 361]:
+for nang in [9, 13, 17, 37, 91, 181, 361]:
     # Loop over distances ...
     for dist in range(99, 899, 100):
         # Deduce file name and skip if it is missing ...
@@ -57,7 +57,8 @@ for nang in [10, 19, 37, 91, 181, 361]:
         print(f"Surveying \"{fname}\" ...")
 
         # Load Polygon ...
-        ship = shapely.wkb.loads(gzip.open(fname, "rb").read())
+        with gzip.open(fname, "rb") as fobj:
+            ship = shapely.wkb.loads(fobj.read())
 
         # Update global bounding box ...
         xmin = min(xmin, ship.bounds[0])                                        # [°]
@@ -69,14 +70,38 @@ for nang in [10, 19, 37, 91, 181, 361]:
         del ship
 
 # Define extent ...
-ext = [xmin - 0.05, xmax + 0.05, ymin - 0.05, ymax + 0.05]                      # [°], [°], [°], [°]
+ext = [
+    xmin - 0.05,
+    xmax + 0.05,
+    ymin - 0.05,
+    ymax + 0.05,
+]                                                                               # [°], [°], [°], [°]
 
 # ******************************************************************************
 
 # Create figure ...
-fg = matplotlib.pyplot.figure(figsize = (9, 12), dpi = 300)
-ax1 = fg.add_subplot(2, 1, 1, projection = cartopy.crs.Orthographic(central_longitude = lon, central_latitude = lat))
-ax2 = fg.add_subplot(2, 1, 2)
+fg = matplotlib.pyplot.figure(
+        dpi = 300,
+    figsize = (9, 12),
+)
+
+# Create axis ...
+ax1 = fg.add_subplot(
+    2,
+    1,
+    1,
+    projection = cartopy.crs.Orthographic(
+        central_longitude = lon,
+         central_latitude = lat,
+    ),
+)
+
+# Create axis ...
+ax2 = fg.add_subplot(
+    2,
+    1,
+    2,
+)
 
 # Configure axis ...
 ax1.set_extent(ext)
@@ -92,15 +117,16 @@ ax2.set_ylabel("Area [%]")
 # ******************************************************************************
 
 # Load MultiPolygon ...
-allLands = shapely.wkb.loads(gzip.open("detailed=F_nang=10_prec=1.00e+02_res=10m_simp=8.99e-05_tol=1.00e-10/allLands.wkb.gz", "rb").read())
+with gzip.open("detailed=F_nang=10_prec=1.00e+02_res=10m_simp=8.99e-05_tol=1.00e-10/allLands.wkb.gz", "rb") as fobj:
+    allLands = shapely.wkb.loads(fobj.read())
 
 # Plot MultiPolygon ...
 ax1.add_geometries(
-    allLands,
+    pyguymer3.geo.extract_polys(allLands),
     cartopy.crs.PlateCarree(),
     edgecolor = (1.0, 0.0, 0.0, 1.0),
     facecolor = (1.0, 0.0, 0.0, 0.5),
-    linewidth = 1.0
+    linewidth = 1.0,
 )
 
 # Clean up ...
@@ -114,7 +140,7 @@ labels = []
 lines = []
 
 # Loop over number of angles (and their colours) ...
-for nang, color in [(10, "C0"), (19, "C1"), (37, "C2"), (91, "C3"), (181, "C4"), (361, "C5")]:
+for nang, color in [(9, "C0"), (13, "C1"), (17, "C2"), (37, "C3"), (91, "C4"), (181, "C5"), (361, "C6")]:
     # Loop over distances ...
     for dist in range(99, 899, 100):
         # Deduce file name and skip if it is missing ...
@@ -125,14 +151,15 @@ for nang, color in [(10, "C0"), (19, "C1"), (37, "C2"), (91, "C3"), (181, "C4"),
         print(f"Plotting \"{fname}\" ...")
 
         # Load Polygon ...
-        ship = shapely.wkb.loads(gzip.open(fname, "rb").read())
+        with gzip.open(fname, "rb") as fobj:
+            ship = shapely.wkb.loads(fobj.read())
 
         # Populate dictionary ...
         key = f"{(100 * (dist + 1)) // 1000:,d}km"
         if key not in data:
             data[key] = {
                 "x" : [],                                                       # [#]
-                "y" : []                                                        # [°2]
+                "y" : [],                                                       # [°2]
             }
         data[key]["x"].append(nang)                                             # [#]
         data[key]["y"].append(ship.area)                                        # [°2]
@@ -143,7 +170,7 @@ for nang, color in [(10, "C0"), (19, "C1"), (37, "C2"), (91, "C3"), (181, "C4"),
             cartopy.crs.PlateCarree(),
             edgecolor = color,
             facecolor = "none",
-            linewidth = 1.0
+            linewidth = 1.0,
         )
 
         # Check if it is the first distance for this number of angles ...
@@ -167,7 +194,12 @@ for key in sorted(list(data.keys())):
     y /= y[-1]
 
     # Plot data ...
-    ax2.plot(x, 100.0 * y, label = key, marker = "d")
+    ax2.plot(
+        x,
+        100.0 * y,
+         label = key,
+        marker = "d",
+    )
 
 # ******************************************************************************
 
@@ -176,18 +208,25 @@ ax1.legend(
     lines,
     labels,
     fontsize = "small",
-    loc = "upper center",
-    ncol = 3
+         loc = "upper center",
+        ncol = 3,
 )
 
 # Configure axis ...
 ax2.legend(
     fontsize = "small",
-    loc = "lower right"
+         loc = "lower right",
 )
 
+# Configure figure ...
+fg.tight_layout()
+
 # Save figure ...
-fg.savefig("compareBufferResolutions.png", bbox_inches = "tight", dpi = 300, pad_inches = 0.1)
+fg.savefig(
+    "compareBufferResolutions.png",
+           dpi = 300,
+    pad_inches = 0.1,
+)
 matplotlib.pyplot.close(fg)
 
 # Optimize PNG ...
