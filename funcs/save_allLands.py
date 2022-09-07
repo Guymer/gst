@@ -1,4 +1,4 @@
-def save_allLands(fname, dname, dist, kwArgCheck = None, debug = False, detailed = False, fill = 1.0, nang = 19, res = "110m", simp = 0.1, tol = 1.0e-10):
+def save_allLands(fname, dname, dist, kwArgCheck = None, detailed = False, fill = 1.0, fillSpace = "EuclideanSpace", nang = 19, res = "110m", simp = 0.1, tol = 1.0e-10):
     """Save buffered (and optionally simplified) land to a compressed WKB file.
 
     Parameters
@@ -9,18 +9,22 @@ def save_allLands(fname, dname, dist, kwArgCheck = None, debug = False, detailed
         the directory name where temporary compressed WKB files can be stored
     dist : float
         the distance to buffer the land by (in metres)
-    debug : bool, optional
-        print debug messages
     detailed : bool, optional
         take account of minor islands
     fill : float, optional
-        how many intermediary points are added to fill in the straight lines which connect the points; negative values disable filling
+        how many intermediary points are added to fill in the straight lines
+        which connect the points; negative values disable filling
+    fillSpace : str, optional
+        the geometric space to perform the filling in (either "EuclideanSpace"
+        or "GeodesicSpace")
     nang : int, optional
-        the number of angles around each point that are calculated when buffering
+        the number of angles around each point that are calculated when
+        buffering
     res : string, optional
         the resolution of the Natural Earth datasets
     simp : float, optional
-        how much intermediary [Multi]Polygons are simplified by; negative values disable simplification (in degrees)
+        how much intermediary [Multi]Polygons are simplified by; negative values
+        disable simplification (in degrees)
     tol : float, optional
         the Euclidean distance that defines two points as being the same (in degrees)
     """
@@ -59,12 +63,24 @@ def save_allLands(fname, dname, dist, kwArgCheck = None, debug = False, detailed
     sfiles = []
 
     # Find file containing all the land (and major islands) as [Multi]Polygons ...
-    sfiles.append(cartopy.io.shapereader.natural_earth(resolution = res, category = "physical", name = "land"))
+    sfiles.append(
+        cartopy.io.shapereader.natural_earth(
+              category = "physical",
+                  name = "land",
+            resolution = res,
+        )
+    )
 
     # Check if the user wants to be detailed ...
     if detailed:
         # Find file containing all the minor islands as [Multi]Polygons ...
-        sfiles.append(cartopy.io.shapereader.natural_earth(resolution = res, category = "physical", name = "minor_islands"))
+        sfiles.append(
+            cartopy.io.shapereader.natural_earth(
+                  category = "physical",
+                      name = "minor_islands",
+                resolution = res,
+            )
+        )
 
     # **************************************************************************
 
@@ -76,10 +92,10 @@ def save_allLands(fname, dname, dist, kwArgCheck = None, debug = False, detailed
         for record in cartopy.io.shapereader.Reader(sfile).records():
             # Skip bad records ...
             if not record.geometry.is_valid:
-                print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is not valid.")
+                print(f"WARNING: Skipping a collection of land in \"{sfile}\" as it is not valid.")
                 continue
             if record.geometry.is_empty:
-                print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is empty.")
+                print(f"WARNING: Skipping a collection of land in \"{sfile}\" as it is empty.")
                 continue
 
             # Deduce temporary file name and skip if it exists already ...
@@ -92,42 +108,38 @@ def save_allLands(fname, dname, dist, kwArgCheck = None, debug = False, detailed
             # Initialize list ...
             buffs = []
 
-            # Extract the bad Natural Earth Polygons in this geometry ...
-            badPolys = pyguymer3.geo.extract_polys(record.geometry)
+            # Loop over Polygons ...
+            for poly in pyguymer3.geo.extract_polys(record.geometry):
+                # Skip bad Polygons ...
+                if not poly.is_valid:
+                    print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is not valid.")
+                    continue
+                if poly.is_empty:
+                    print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is empty.")
+                    continue
 
-            # Loop over all the bad Natural Earth Polygons in this geometry ...
-            for ibad, badPoly in enumerate(badPolys):
-                print(f"     > Bad Polygon {ibad + 1:,d}/{len(badPolys):,d} has {len(badPoly.exterior.coords):,d} Points ...")
-
-                # Extract the individual good Polygons that make up this bad
-                # Natural Earth Polygon ...
-                goodPolys = pyguymer3.geo.extract_polys(pyguymer3.geo.remap(badPoly, tol = tol))
-
-                # Loop over all the individual good Polygons that make up this
-                # bad Natural Earth Polygon ...
-                for igood, goodPoly in enumerate(goodPolys):
-                    print(f"       > Good Polygon {igood + 1:,d}/{len(goodPolys):,d} has {len(goodPoly.exterior.coords):,d} Points ...")
-
-                    # Add the individual Polygons that make up the buffer of
-                    # this good Polygon to the list ...
-                    # NOTE: Don't allow the user to specify the debug mode.
-                    buffs += pyguymer3.geo.extract_polys(pyguymer3.geo.buffer(goodPoly, dist, fill = fill, nang = nang, simp = simp, tol = tol))
-
-                # Clean up ...
-                del goodPolys
-
-            # Clean up ...
-            del badPolys
+                # Add the individual Polygons that make up the buffer of this
+                # Polygon to the list ...
+                # NOTE: Don't allow the user to specify the debug mode.
+                buffs += pyguymer3.geo.extract_polys(
+                    pyguymer3.geo.buffer(
+                        poly,
+                        dist,
+                             fill = fill,
+                        fillSpace = fillSpace,
+                             nang = nang,
+                             simp = simp,
+                              tol = tol,
+                    )
+                )
 
             # Convert list of Polygons to (unified) [Multi]Polygon ...
             buffs = shapely.ops.unary_union(buffs).simplify(tol)
-            if not buffs.is_valid:
-                raise Exception(f"\"buffs\" is not a valid [Multi]Polygon ({shapely.validation.explain_validity(buffs)})") from None
-            if buffs.is_empty:
-                raise Exception("\"buffs\" is an empty [Multi]Polygon") from None
+            pyguymer3.geo.check(buffs)
 
             # Save [Multi]Polygon ...
-            gzip.open(tname, "wb", compresslevel = 9).write(shapely.wkb.dumps(buffs))
+            with gzip.open(tname, "wb", compresslevel = 9) as fobj:
+                fobj.write(shapely.wkb.dumps(buffs))
 
     # **************************************************************************
 
@@ -139,43 +151,23 @@ def save_allLands(fname, dname, dist, kwArgCheck = None, debug = False, detailed
         print(f"   > Loading \"{tname}\" ...")
 
         # Append the individual Polygons to the list ...
-        buffs += pyguymer3.geo.extract_polys(shapely.wkb.loads(gzip.open(tname, "rb").read()))
+        with gzip.open(tname, "rb") as fobj:
+            buffs += pyguymer3.geo.extract_polys(shapely.wkb.loads(fobj.read()))
 
     # Convert list of Polygons to (unified) MultiPolygon ...
     buffs = shapely.ops.unary_union(buffs).simplify(tol)
-    if not buffs.is_valid:
-        raise Exception(f"\"buffs\" is not a valid MultiPolygon ({shapely.validation.explain_validity(buffs)})") from None
-    if buffs.is_empty:
-        raise Exception("\"buffs\" is an empty MultiPolygon") from None
+    pyguymer3.geo.check(buffs)
 
     # Check if the user wants to simplify the MultiPolygon ...
     if simp > 0.0:
         # Simplify MultiPolygon ...
         buffsSimp = buffs.simplify(simp)
+        pyguymer3.geo.check(buffsSimp)
 
-        # Check simplified MultiPolygon ...
-        if buffsSimp.is_valid and not buffsSimp.is_empty:
-            # Clean up ...
-            del buffs
-
-            # Save MultiPolygon ...
-            gzip.open(fname, "wb", compresslevel = 9).write(shapely.wkb.dumps(buffsSimp))
-
-            # Clean up ...
-            del buffsSimp
-
-            return
-
-        # Clean up ...
-        del buffsSimp
-
-        if debug:
-            print(f"WARNING: \"buffsSimp\" is not a valid MultiPolygon ({shapely.validation.explain_validity(buffsSimp)}), will return \"buffs\" instead")
+        # Save simplified MultiPolygon ...
+        with gzip.open(fname, "wb", compresslevel = 9) as fobj:
+            fobj.write(shapely.wkb.dumps(buffsSimp))
 
     # Save MultiPolygon ...
-    gzip.open(fname, "wb", compresslevel = 9).write(shapely.wkb.dumps(buffs))
-
-    # Clean up ...
-    del buffs
-
-    return
+    with gzip.open(fname, "wb", compresslevel = 9) as fobj:
+        fobj.write(shapely.wkb.dumps(buffs))
