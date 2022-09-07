@@ -16,8 +16,9 @@ python3.10 -c 'import pstats; p = pstats.Stats("results.out"); p.sort_stats(psta
 To generate the data needed by `compareBufferResolutions.py` run:
 
 ```
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 10 --res 10m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 19 --res 10m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 9 --res 10m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 13 --res 10m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 17 --res 10m
 python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 37 --res 10m
 python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 91 --res 10m
 python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 181 --res 10m
@@ -33,12 +34,15 @@ After sailing for 0.09 days at 20.0 knots a vessel will have gone 80,006.4 metre
 To generate the data needed by `resolutionConvergence.py` run:
 
 ```
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 10 --res 110m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 10 --res 50m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 10 --res 10m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 19 --res 110m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 19 --res 50m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 19 --res 10m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 9 --res 110m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 9 --res 50m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 9 --res 10m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 13 --res 110m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 13 --res 50m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 13 --res 10m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 17 --res 110m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 17 --res 50m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 17 --res 10m
 python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 37 --res 110m
 python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 37 --res 50m
 python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 37 --res 10m
