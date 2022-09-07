@@ -20,7 +20,7 @@ if __name__ == "__main__":
     parser.add_argument("--freqLand", default = 100, help = "re-evaluate the relevant land every freqLand iteration", type = int)
     parser.add_argument("--freqPlot", default = 50, help = "plot sailing contours every freqPlot iteration", type = int)
     parser.add_argument("--local", action = "store_true", help = "the plot has only local extent")
-    parser.add_argument("--nang", default = 10, help = "the number of directions from each point that the vessel could sail in", type = int)
+    parser.add_argument("--nang", default = 9, help = "the number of directions from each point that the vessel could sail in", type = int)
     parser.add_argument("--plot", action = "store_true", help = "make a plot")
     parser.add_argument("--prec", default = 1000.0, help = "the precision of the calculation (in metres)", type = float)
     parser.add_argument("--res", default = "110m", help = "the resolution of the Natural Earth datasets", type = str)
@@ -32,15 +32,15 @@ if __name__ == "__main__":
         args.lon,
         args.lat,
         args.spd,
-        detailed = args.detailed,
-        dur = args.dur,
+            detailed = args.detailed,
+                 dur = args.dur,
         freqFillSimp = args.freqFillSimp,
-        freqLand = args.freqLand,
-        freqPlot = args.freqPlot,
-        local = args.local,
-        nang = args.nang,
-        plot = args.plot,
-        prec = args.prec,
-        res = args.res,
-        tol = args.tol
+            freqLand = args.freqLand,
+            freqPlot = args.freqPlot,
+               local = args.local,
+                nang = args.nang,
+                plot = args.plot,
+                prec = args.prec,
+                 res = args.res,
+                 tol = args.tol,
     )
