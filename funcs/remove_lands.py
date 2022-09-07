@@ -7,7 +7,7 @@ def remove_lands(shape, lands, kwArgCheck = None, simp = 0.1):
 
     Parameters
     ----------
-    shape : shapely.geometry.linestring.LineString, shapely.geometry.polygon.LinearRing, shapely.geometry.polygon.Polygon, shapely.geometry.multilinestring.MultiLineString, shapely.geometry.multipolygon.MultiPolygon
+    shape : shapely.geometry.polygon.LinearRing, shapely.geometry.linestring.LineString, shapely.geometry.multilinestring.MultiLineString, shapely.geometry.polygon.Polygon, shapely.geometry.multipolygon.MultiPolygon
         the input shape
     lands : list of shapely.geometry.polygon.Polygon
         the list of land masses
@@ -20,12 +20,12 @@ def remove_lands(shape, lands, kwArgCheck = None, simp = 0.1):
         the output shape
     """
 
-    # Import special modules ...
+    # Import my modules ...
     try:
-        import shapely
-        import shapely.validation
+        import pyguymer3
+        import pyguymer3.geo
     except:
-        raise Exception("\"shapely\" is not installed; run \"pip install --user Shapely\"") from None
+        raise Exception("\"pyguymer3\" is not installed; you need to have the Python module from https://github.com/Guymer/PyGuymer3 located somewhere in your $PYTHONPATH") from None
 
     # Check keyword arguments ...
     if kwArgCheck is not None:
@@ -39,10 +39,7 @@ def remove_lands(shape, lands, kwArgCheck = None, simp = 0.1):
         shape = shape.difference(land)
 
     # Check shape ...
-    if not shape.is_valid:
-        raise Exception(f"\"shape\" is not a valid shape ({shapely.validation.explain_validity(shape)})") from None
-    if shape.is_empty:
-        raise Exception("\"shape\" is an empty shape") from None
+    pyguymer3.geo.check(shape)
 
     # Check if the user wants to simplify the shape ...
     if simp > 0.0:
@@ -50,12 +47,10 @@ def remove_lands(shape, lands, kwArgCheck = None, simp = 0.1):
         shapeSimp = shape.simplify(simp)
 
         # Check simplified shape ...
-        if shapeSimp.is_valid and not shapeSimp.is_empty:
-            # Return simplified answer ...
-            return shapeSimp
+        pyguymer3.geo.check(shapeSimp)
 
-        # Clean up ...
-        del shapeSimp
+        # Return simplified answer ...
+        return shapeSimp
 
     # Return answer ...
     return shape
