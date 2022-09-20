@@ -33,13 +33,23 @@ lon = -1.0                                                                      
 lat = 50.7                                                                      # [°]
 
 # Define extent ...
-ext = [lon - 5.0, lon + 5.0, lat - 5.0, lat + 5.0]                              # [°], [°], [°], [°]
+ext = [lon - 5.0, lon + 5.0, lat - 5.0, lat + 5.0]                              # [°]
 
 # ******************************************************************************
 
 # Create figure ...
-fg = matplotlib.pyplot.figure(figsize = (9, 6), dpi = 300)
-ax = fg.add_subplot(projection = cartopy.crs.Orthographic(central_longitude = lon, central_latitude = lat))
+fg = matplotlib.pyplot.figure(
+        dpi = 300,
+    figsize = (9, 6),
+)
+
+# Create axis ...
+ax = fg.add_subplot(
+    projection = cartopy.crs.Orthographic(
+        central_longitude = lon,
+         central_latitude = lat,
+    )
+)
 
 # Configure axis ...
 ax.set_extent(ext)
@@ -116,9 +126,9 @@ coords = numpy.array(limit.coords)                                              
 ax.plot(
     coords[:, 0],
     coords[:, 1],
-    color = "C0",
+        color = "C0",
     linewidth = 1.0,
-    marker = "d",
+       marker = "d",
     transform = cartopy.crs.PlateCarree()
 )
 
@@ -130,9 +140,9 @@ coords = numpy.array(limit.coords)                                              
 ax.plot(
     coords[:, 0],
     coords[:, 1],
-    color = "C1",
+        color = "C1",
     linewidth = 1.0,
-    marker = "d",
+       marker = "d",
     transform = cartopy.crs.PlateCarree()
 )
 
@@ -141,21 +151,28 @@ ax.plot(
 # it ...
 limit = limit.difference(land2)
 print(type(limit))
-for thing in limit:
-    coords = numpy.array(thing.coords)                                          # [°]
+for line in pyguymer3.geo.extract_lines(limit):
+    coords = numpy.array(line.coords)                                           # [°]
     ax.plot(
         coords[:, 0],
         coords[:, 1],
-        color = "C2",
+            color = "C2",
         linewidth = 1.0,
-        marker = "d",
+           marker = "d",
         transform = cartopy.crs.PlateCarree()
     )
 
 # ******************************************************************************
 
+# Configure figure ...
+fg.tight_layout()
+
 # Save figure ...
-fg.savefig("shapelyOperations.png", bbox_inches = "tight", dpi = 300, pad_inches = 0.1)
+fg.savefig(
+    "shapelyOperations.png",
+           dpi = 300,
+    pad_inches = 0.1,
+)
 matplotlib.pyplot.close(fg)
 
 # Optimize PNG ...
