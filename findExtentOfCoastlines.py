@@ -19,8 +19,16 @@ globalMinY = 0.0                                                                
 
 # Define Shapefiles ...
 sfiles = [
-    cartopy.io.shapereader.natural_earth(resolution = "10m", category = "physical", name = "land"),
-    cartopy.io.shapereader.natural_earth(resolution = "10m", category = "physical", name = "minor_islands"),
+    cartopy.io.shapereader.natural_earth(
+          category = "physical",
+              name = "land",
+        resolution = "10m",
+    ),
+    cartopy.io.shapereader.natural_earth(
+          category = "physical",
+              name = "minor_islands",
+        resolution = "10m",
+    ),
 ]
 
 # Loop over Shapefiles ...
@@ -29,26 +37,31 @@ for sfile in sfiles:
     for record in cartopy.io.shapereader.Reader(sfile).records():
         # Skip bad records ...
         if not record.geometry.is_valid:
-            print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is not valid.")
+            print(f"WARNING: Skipping a collection of land in \"{sfile}\" as it is not valid.")
             continue
         if record.geometry.is_empty:
-            print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is empty.")
+            print(f"WARNING: Skipping a collection of land in \"{sfile}\" as it is empty.")
             continue
 
-        # Loop over all the bad Natural Earth Polygons in this geometry ...
-        for badPoly in pyguymer3.geo.extract_polys(record.geometry):
-            # Loop over all the individual good Polygons that make up this bad
-            # Natural Earth Polygon ...
-            for goodPoly in pyguymer3.geo.extract_polys(pyguymer3.geo.remap(badPoly)):
-                # Loop over coordinates in the exterior of the good Polygon ...
-                for coord in goodPoly.exterior.coords:
-                    # Skip un-real points (that only exist to make the
-                    # [Multi]Polygon valid in Shapely) ...
-                    if abs(coord[0]) > 179.9 or abs(coord[1]) > 89.9:
-                        continue
+        # Loop over Polygons ...
+        for poly in pyguymer3.geo.extract_polys(record.geometry):
+            # Skip bad Polygons ...
+            if not poly.is_valid:
+                print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is not valid.")
+                continue
+            if poly.is_empty:
+                print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is empty.")
+                continue
 
-                    # Update variables ...
-                    globalMaxY = max(globalMaxY, coord[1])                      # [°]
-                    globalMinY = min(globalMinY, coord[1])                      # [°]
+            # Loop over coordinates in the exterior of the Polygon ...
+            for coord in poly.exterior.coords:
+                # Skip un-real points (that only exist to make the
+                # [Multi]Polygon valid in Shapely) ...
+                if abs(coord[0]) > 179.9 or abs(coord[1]) > 89.9:
+                    continue
+
+                # Update variables ...
+                globalMaxY = max(globalMaxY, coord[1])                          # [°]
+                globalMinY = min(globalMinY, coord[1])                          # [°]
 
 print(f"Latitude goes from {globalMinY:.2f}° to {globalMaxY:.2f}°")
