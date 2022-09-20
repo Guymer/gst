@@ -25,11 +25,19 @@ except:
     raise Exception("\"pyguymer3\" is not installed; you need to have the Python module from https://github.com/Guymer/PyGuymer3 located somewhere in your $PYTHONPATH") from None
 
 # Create figure ...
-fg = matplotlib.pyplot.figure(figsize = (9, 6), dpi = 300)
+fg = matplotlib.pyplot.figure(
+        dpi = 300,
+    figsize = (9, 6),
+)
+
+# Create axis ...
 ax = fg.add_subplot()
 
-# Loop over number of angles (and their colours) ...
-for nang, color in [(10, "C0"), (19, "C1"), (37, "C2"), (91, "C3"), (181, "C4"), (361, "C5")]:
+# Loop over number of angles ...
+for iang, nang in enumerate([9, 13, 17, 37, 89, 181, 361]):
+    # Create short-hand ...
+    color = f"C{iang:d}"
+
     # Loop over Natural Earth resolutions (and their linestyles) ...
     for res, linestyle in [("110m", "-"), ("50m", "--"), ("10m", "-.")]:
         # Initialize lists ...
@@ -37,14 +45,17 @@ for nang, color in [(10, "C0"), (19, "C1"), (37, "C2"), (91, "C3"), (181, "C4"),
         points = []
 
         # Loop over distances ...
-        for dist in range(801):
+        for dist in range(8):
             # Deduce file name and skip if it is missing ...
-            fname = f"detailed=F_nang={nang:d}_prec=1.00e+02_res={res}_simp=8.99e-05_tol=1.00e-10/freqLand=100_freqSimp=25_lat=+50.700000_lon=-001.000000/contours/istep=000{dist:03d}.wkb.gz"
+            fname = f"detailed=F_nang={nang:d}_prec=1.00e+04_res={res}_simp=8.99e-04_tol=1.00e-10/freqLand=100_freqSimp=25_lat=+50.700000_lon=-001.000000/contours/istep={dist:06d}.wkb.gz"
             if not os.path.exists(fname):
                 continue
 
+            print(f"Surveying \"{fname}\" ...")
+
             # Load Polygon ...
-            ship = shapely.wkb.loads(gzip.open(fname, "rb").read())
+            with gzip.open(fname, "rb") as fobj:
+                ship = shapely.wkb.loads(fobj.read())
 
             # Append values to lists ...
             steps.append(dist)
@@ -56,7 +67,13 @@ for nang, color in [(10, "C0"), (19, "C1"), (37, "C2"), (91, "C3"), (181, "C4"),
         # Check that there are files for this combination ...
         if len(steps) > 0 and len(points) > 0:
             # Plot lists ...
-            ax.plot(steps, points, color = color, label = f"nang={nang:d}, res={res}", linestyle = linestyle)
+            ax.plot(
+                steps,
+                points,
+                    color = color,
+                    label = f"nang={nang:d}, res={res}",
+                linestyle = linestyle,
+            )
 
         # Clean up ...
         del steps, points
@@ -65,12 +82,19 @@ for nang, color in [(10, "C0"), (19, "C1"), (37, "C2"), (91, "C3"), (181, "C4"),
 ax.grid()
 ax.legend(fontsize = "small", loc = "lower right")
 ax.set_xlabel("Step Number")
-ax.set_xlim(0, 800)
+ax.set_xlim(0, 7)
 ax.set_ylabel("Number Of Points In Polygon")
 ax.set_ylim(0)
 
+# Configure figure ...
+fg.tight_layout()
+
 # Save figure ...
-fg.savefig("resolutionConvergence.png", bbox_inches = "tight", dpi = 300, pad_inches = 0.1)
+fg.savefig(
+    "resolutionConvergence.png",
+           dpi = 300,
+    pad_inches = 0.1,
+)
 matplotlib.pyplot.close(fg)
 
 # Optimize PNG ...

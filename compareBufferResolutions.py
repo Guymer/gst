@@ -46,11 +46,11 @@ xmax = -180.0                                                                   
 ymax =  -90.0                                                                   # [°]
 
 # Loop over number of angles ...
-for nang in [9, 13, 17, 37, 91, 181, 361]:
+for nang in [9, 13, 17, 37, 89, 181, 361]:
     # Loop over distances ...
-    for dist in range(99, 899, 100):
+    for dist in range(8):
         # Deduce file name and skip if it is missing ...
-        fname = f"detailed=F_nang={nang:d}_prec=1.00e+02_res=10m_simp=8.99e-05_tol=1.00e-10/freqLand=100_freqSimp=25_lat=+50.700000_lon=-001.000000/contours/istep={dist:06d}.wkb.gz"
+        fname = f"detailed=F_nang={nang:d}_prec=1.00e+04_res=10m_simp=8.99e-04_tol=1.00e-10/freqLand=100_freqSimp=25_lat=+50.700000_lon=-001.000000/contours/istep={dist:06d}.wkb.gz"
         if not os.path.exists(fname):
             continue
 
@@ -117,7 +117,7 @@ ax2.set_ylabel("Area [%]")
 # ******************************************************************************
 
 # Load MultiPolygon ...
-with gzip.open("detailed=F_nang=10_prec=1.00e+02_res=10m_simp=8.99e-05_tol=1.00e-10/allLands.wkb.gz", "rb") as fobj:
+with gzip.open("detailed=F_nang=9_prec=1.00e+04_res=10m_simp=8.99e-04_tol=1.00e-10/allLands.wkb.gz", "rb") as fobj:
     allLands = shapely.wkb.loads(fobj.read())
 
 # Plot MultiPolygon ...
@@ -140,11 +140,11 @@ labels = []
 lines = []
 
 # Loop over number of angles (and their colours) ...
-for nang, color in [(9, "C0"), (13, "C1"), (17, "C2"), (37, "C3"), (91, "C4"), (181, "C5"), (361, "C6")]:
+for nang, color in [(9, "C0"), (13, "C1"), (17, "C2"), (37, "C3"), (89, "C4"), (181, "C5"), (361, "C6")]:
     # Loop over distances ...
-    for dist in range(99, 899, 100):
+    for dist in range(8):
         # Deduce file name and skip if it is missing ...
-        fname = f"detailed=F_nang={nang:d}_prec=1.00e+02_res=10m_simp=8.99e-05_tol=1.00e-10/freqLand=100_freqSimp=25_lat=+50.700000_lon=-001.000000/contours/istep={dist:06d}.wkb.gz"
+        fname = f"detailed=F_nang={nang:d}_prec=1.00e+04_res=10m_simp=8.99e-04_tol=1.00e-10/freqLand=100_freqSimp=25_lat=+50.700000_lon=-001.000000/contours/istep={dist:06d}.wkb.gz"
         if not os.path.exists(fname):
             continue
 
@@ -155,7 +155,7 @@ for nang, color in [(9, "C0"), (13, "C1"), (17, "C2"), (37, "C3"), (91, "C4"), (
             ship = shapely.wkb.loads(fobj.read())
 
         # Populate dictionary ...
-        key = f"{(100 * (dist + 1)) // 1000:,d}km"
+        key = f"{10 * (dist + 1):,d}km"
         if key not in data:
             data[key] = {
                 "x" : [],                                                       # [#]
