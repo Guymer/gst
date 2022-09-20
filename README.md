@@ -7,7 +7,7 @@ This project aims to show how a vessel sails around the globe.
 If you want to run the example script using a profiler and print out the top 25 most time-consuming functions then run:
 
 ```
-python3.10 -m cProfile -o results.out run.py -1.0 50.7 20.0 --dur 0.09
+python3.10 -m cProfile -o results.out run.py -1.0 50.7 20.0 --dur 0.09 --nang 9 --res 110m
 python3.10 -c 'import pstats; p = pstats.Stats("results.out"); p.sort_stats(pstats.SortKey.CUMULATIVE).print_stats(25)'
 ```
 
@@ -66,7 +66,7 @@ After sailing for 0.09 days at 20.0 knots a vessel will have gone 80,006.4 metre
 To very quickly find out how far a vessel can sail, try running:
 
 ```
-python3.10 run.py -1.0 50.7 20.0 --dur 2.0
+python3.10 run.py -1.0 50.7 20.0 --dur 2.0 --nang 9 --res 110m
 ```
 
 ## Dependencies
