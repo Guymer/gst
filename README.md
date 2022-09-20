@@ -20,7 +20,7 @@ python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 9 --res 10m
 python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 13 --res 10m
 python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 17 --res 10m
 python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 37 --res 10m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 91 --res 10m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 89 --res 10m
 python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 181 --res 10m
 python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 361 --res 10m
 ```
@@ -46,9 +46,9 @@ python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 17 --res 10m
 python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 37 --res 110m
 python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 37 --res 50m
 python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 37 --res 10m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 91 --res 110m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 91 --res 50m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 91 --res 10m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 89 --res 110m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 89 --res 50m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 89 --res 10m
 python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 181 --res 110m
 python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 181 --res 50m
 python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 181 --res 10m
