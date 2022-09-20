@@ -12,7 +12,8 @@ def remove_lands(shape, lands, kwArgCheck = None, simp = 0.1):
     lands : list of shapely.geometry.polygon.Polygon
         the list of land masses
     simp : float, optional
-        how much intermediary shapes are simplified by; negative values disable simplification (in degrees)
+        how much intermediary shapes are simplified by; negative values disable
+        simplification (in degrees)
 
     Returns
     -------

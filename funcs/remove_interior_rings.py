@@ -9,7 +9,8 @@ def remove_interior_rings(shape, kwArgCheck = None, tol = 1.0e-10):
     shape : shapely.geometry.polygon.Polygon, shapely.geometry.multipolygon.MultiPolygon
         the input shape
     tol : float, optional
-        the Euclidean distance that defines two points as being the same (in degrees)
+        the Euclidean distance that defines two points as being the same (in
+        degrees)
 
     Returns
     -------

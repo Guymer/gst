@@ -34,7 +34,8 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqLand
     res : string, optional
         the resolution of the Natural Earth datasets
     tol : float, optional
-        the Euclidean distance that defines two points as being the same (in degrees)
+        the Euclidean distance that defines two points as being the same (in
+        degrees)
     """
 
     # Improt standard modules ...
@@ -100,7 +101,6 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqLand
     maxShip = pyguymer3.geo.buffer(
         ship,
         maxDist,
-            debug = False,
              fill = fill,
         fillSpace = "EuclideanSpace",
              nang = nang,
@@ -112,7 +112,7 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqLand
         maxShip.bounds[2],
         maxShip.bounds[1],
         maxShip.bounds[3],
-    ]                                                                           # [°], [°], [°], [°]
+    ]                                                                           # [°]
 
     # Determine the maximum symmetric sailing distance ...
     maxShipLon = max(abs(maxShipExt[0] - lon), abs(maxShipExt[1] - lon))        # [°]
@@ -123,7 +123,7 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqLand
         lon + maxShipHyp,
         lat - maxShipHyp,
         lat + maxShipHyp,
-    ]                                                                           # [°], [°], [°], [°]
+    ]                                                                           # [°]
 
     # Check if the user is being far too coarse ...
     if prec > maxDist:

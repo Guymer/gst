@@ -26,7 +26,8 @@ def save_allLands(fname, dname, dist, kwArgCheck = None, detailed = False, fill 
         how much intermediary [Multi]Polygons are simplified by; negative values
         disable simplification (in degrees)
     tol : float, optional
-        the Euclidean distance that defines two points as being the same (in degrees)
+        the Euclidean distance that defines two points as being the same (in
+        degrees)
     """
 
     # Import standard modules ...
