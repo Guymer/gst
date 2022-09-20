@@ -27,7 +27,7 @@ lon = -1.0                                                                      
 lat = 50.7                                                                      # [°]
 
 # Define extent ...
-ext = [lon - 1.0, lon + 1.0, lat - 1.0, lat + 1.0]                              # [°], [°], [°], [°]
+ext = [lon - 1.0, lon + 1.0, lat - 1.0, lat + 1.0]                              # [°]
 
 # ******************************************************************************
 
@@ -41,10 +41,20 @@ pairs = [
 # ******************************************************************************
 
 # Create figure ...
-fg = matplotlib.pyplot.figure(figsize = (9, 6), dpi = 300)
+fg = matplotlib.pyplot.figure(
+        dpi = 300,
+    figsize = (9, 6),
+)
 
-# Create axis and make it pretty ...
-ax = fg.add_subplot(projection = cartopy.crs.Orthographic(central_longitude = lon, central_latitude = lat))
+# Create axis ...
+ax = fg.add_subplot(
+    projection = cartopy.crs.Orthographic(
+        central_longitude = lon,
+         central_latitude = lat,
+    )
+)
+
+# Configure axis ...
 ax.set_extent(ext)
 pyguymer3.geo.add_map_background(ax, name = "shaded-relief", resolution = "large8192px")
 pyguymer3.geo.add_horizontal_gridlines(ax, ext, ngrid = 21)
@@ -53,7 +63,11 @@ pyguymer3.geo.add_vertical_gridlines(ax, ext, ngrid = 21)
 # Loop over resolutions ...
 for i, (resolution, colour) in enumerate(pairs):
     # Deduce Shapefile name ...
-    sfile = cartopy.io.shapereader.natural_earth(resolution = resolution, category = "physical", name = "land")
+    sfile = cartopy.io.shapereader.natural_earth(
+          category = "physical",
+              name = "land",
+        resolution = resolution,
+    )
 
     print(f"Loading \"{sfile}\" ...")
 
@@ -64,17 +78,24 @@ for i, (resolution, colour) in enumerate(pairs):
     for record in cartopy.io.shapereader.Reader(sfile).records():
         # Skip bad records ...
         if not record.geometry.is_valid:
-            print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is not valid.")
+            print(f"WARNING: Skipping a collection of land in \"{sfile}\" as it is not valid.")
             continue
         if record.geometry.is_empty:
-            print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is empty.")
+            print(f"WARNING: Skipping a collection of land in \"{sfile}\" as it is empty.")
             continue
 
-        # Loop over all the bad Natural Earth Polygons in this geometry ...
-        for badPoly in pyguymer3.geo.extract_polys(record.geometry):
-            # Add the individual good Polygons that make up this bad Natural
-            # Earth Polygon to the list ...
-            polys += pyguymer3.geo.extract_polys(pyguymer3.geo.remap(badPoly))
+        # Loop over Polygons ...
+        for poly in pyguymer3.geo.extract_polys(record.geometry):
+            # Skip bad Polygons ...
+            if not poly.is_valid:
+                print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is not valid.")
+                continue
+            if poly.is_empty:
+                print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is empty.")
+                continue
+
+            # Append the Polygon to the list ...
+            polys.append(poly)
 
     # Plot Polygons ...
     ax.add_geometries(
@@ -88,8 +109,15 @@ for i, (resolution, colour) in enumerate(pairs):
     # Clean up ...
     del polys
 
+# Configure figure ...
+fg.tight_layout()
+
 # Save figure ...
-fg.savefig("compareMapResolutions.png", bbox_inches = "tight", dpi = 300, pad_inches = 0.1)
+fg.savefig(
+    "compareMapResolutions.png",
+           dpi = 300,
+    pad_inches = 0.1,
+)
 matplotlib.pyplot.close(fg)
 
 # Optimize PNG ...
