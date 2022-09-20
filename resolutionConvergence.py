@@ -39,7 +39,7 @@ for nang, color in [(10, "C0"), (19, "C1"), (37, "C2"), (91, "C3"), (181, "C4"),
         # Loop over distances ...
         for dist in range(801):
             # Deduce file name and skip if it is missing ...
-            fname = f"detailed=F_nang={nang:d}_prec=1.00e+02_res={res}_simp=8.99e-05_tol=1.00e-10/freqFillSimp=25_freqLand=100_lat=+50.700000_lon=-001.000000/contours/istep=000{dist:03d}.wkb.gz"
+            fname = f"detailed=F_nang={nang:d}_prec=1.00e+02_res={res}_simp=8.99e-05_tol=1.00e-10/freqLand=100_freqSimp=25_lat=+50.700000_lon=-001.000000/contours/istep=000{dist:03d}.wkb.gz"
             if not os.path.exists(fname):
                 continue
 

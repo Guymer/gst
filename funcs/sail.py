@@ -1,4 +1,4 @@
-def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqFillSimp = 25, freqLand = 100, freqPlot = 50, local = False, nang = 9, plot = False, prec = 1000.0, res = "110m", tol = 1.0e-10):
+def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqLand = 100, freqPlot = 50, freqSimp = 25, local = False, nang = 9, plot = False, prec = 1000.0, res = "110m", tol = 1.0e-10):
     """Sail from a point
 
     This function reads in a starting coordinate (in degrees) and a sailing
@@ -17,12 +17,12 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqFill
         take account of minor islands
     dur : float, optional
         the duration of the voyage (in days)
-    freqFillSimp : int, optional
-        fill in and simplify the sailing contour every freqFillSimp iteration
     freqLand : int, optional
         re-evaluate the relevant land every freqLand iteration
     freqPlot : int, optional
         plot sailing contours every freqPlot iteration
+    freqSimp : int, optional
+        simplify the sailing contour every freqSimp iteration
     local : bool, optional
         the plot has only local extent
     nang : int, optional
@@ -149,7 +149,7 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqFill
         os.mkdir(output2)
 
     # Determine third output folder name and make it if it is missing ...
-    output3 = f"{output1}/freqFillSimp={freqFillSimp:d}_freqLand={freqLand:d}_lat={lat:+010.6f}_lon={lon:+011.6f}"
+    output3 = f"{output1}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lat={lat:+010.6f}_lon={lon:+011.6f}"
     if not os.path.exists(output3):
         os.mkdir(output3)
 
@@ -273,9 +273,9 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqFill
                 # Extract the current limit of sailing (on water) ...
                 limit = remove_lands(ship.exterior, relevantLands, simp = -1.0)
 
-            # Check if this step filling/simplifying ...
-            if (istep + 1) % freqFillSimp == 0:
-                print(" > Filling in and simplifying ...")
+            # Check if this step is simplifying ...
+            if (istep + 1) % freqSimp == 0:
+                print(" > Simplifying ...")
 
                 # Sail ...
                 limit = pyguymer3.geo.buffer(
@@ -295,7 +295,7 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqFill
                 limit = pyguymer3.geo.buffer(
                     limit,
                     prec,
-                         fill = -1.0,
+                         fill = fill,
                     fillSpace = "EuclideanSpace",
                          nang = nang,
                          simp = -1.0,

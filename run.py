@@ -16,9 +16,9 @@ if __name__ == "__main__":
     parser.add_argument("spd", help = "the speed of the vessel (in knots)", type = float)
     parser.add_argument("--detailed", action = "store_true", help = "take account of minor islands")
     parser.add_argument("--dur", default = 1.0, help = "the duration of the voyage (in days)", type = float)
-    parser.add_argument("--freqFillSimp", default = 25, help = "fill in and simplify the sailing contour every freqFillSimp iteration", type = int)
     parser.add_argument("--freqLand", default = 100, help = "re-evaluate the relevant land every freqLand iteration", type = int)
     parser.add_argument("--freqPlot", default = 50, help = "plot sailing contours every freqPlot iteration", type = int)
+    parser.add_argument("--freqSimp", default = 25, help = "simplify the sailing contour every freqSimp iteration", type = int)
     parser.add_argument("--local", action = "store_true", help = "the plot has only local extent")
     parser.add_argument("--nang", default = 9, help = "the number of directions from each point that the vessel could sail in", type = int)
     parser.add_argument("--plot", action = "store_true", help = "make a plot")
@@ -32,15 +32,15 @@ if __name__ == "__main__":
         args.lon,
         args.lat,
         args.spd,
-            detailed = args.detailed,
-                 dur = args.dur,
-        freqFillSimp = args.freqFillSimp,
-            freqLand = args.freqLand,
-            freqPlot = args.freqPlot,
-               local = args.local,
-                nang = args.nang,
-                plot = args.plot,
-                prec = args.prec,
-                 res = args.res,
-                 tol = args.tol,
+        detailed = args.detailed,
+             dur = args.dur,
+        freqLand = args.freqLand,
+        freqPlot = args.freqPlot,
+        freqSimp = args.freqSimp,
+           local = args.local,
+            nang = args.nang,
+            plot = args.plot,
+            prec = args.prec,
+             res = args.res,
+             tol = args.tol,
     )
