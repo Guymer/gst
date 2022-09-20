@@ -138,6 +138,9 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqLand
 
     # **************************************************************************
 
+    # TODO: Now that the land is not buffered, "output1" can be much shorter and
+    #       variables can be prepended to "output3" instead.
+
     # Determine first output folder name and make it if it is missing ...
     output1 = f"detailed={repr(detailed)[0]}_nang={nang:d}_prec={prec:.2e}_res={res}_simp={simp:.2e}_tol={tol:.2e}"
     if not os.path.exists(output1):
@@ -186,25 +189,36 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqLand
     # Check if the user wants to make a plot ...
     if plot:
         # Create figure ...
-        fg = matplotlib.pyplot.figure(figsize = (9, 6), dpi = 300)
+        fg = matplotlib.pyplot.figure(
+                dpi = 300,
+            figsize = (9, 6),
+        )
 
-        # Create axis ...
+        # Check if the user wants a local plot (for local people) ...
         if local:
+            # Create axis ...
             ax = fg.add_subplot(
                 projection = cartopy.crs.Orthographic(
                     central_longitude = lon,
                      central_latitude = lat,
                 ),
             )
+
+            # Configure axis ...
             ax.set_extent(maxShipExt)
+            pyguymer3.geo.add_horizontal_gridlines(ax, maxShipExtSym, locs = range(-90, 100, 10))
+            pyguymer3.geo.add_vertical_gridlines(ax, maxShipExtSym, locs = range(-180, 190, 10))
         else:
+            # Create axis ...
             ax = fg.add_subplot(projection = cartopy.crs.Robinson())
+
+            # Configure axis ...
             ax.set_global()
+            pyguymer3.geo.add_horizontal_gridlines(ax, [-180.0, +180.0, -90.0, +90.0], locs = range(-90, 135, 45))
+            pyguymer3.geo.add_vertical_gridlines(ax, [-180.0, +180.0, -90.0, +90.0], locs = range(-180, 225, 45))
 
         # Configure axis ...
         pyguymer3.geo.add_map_background(ax, resolution = "large8192px")
-        pyguymer3.geo.add_horizontal_gridlines(ax, maxShipExtSym, ngrid = 5)
-        pyguymer3.geo.add_vertical_gridlines(ax, maxShipExtSym, ngrid = 5)
 
         # Plot Polygons ...
         ax.add_geometries(
@@ -217,7 +231,7 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqLand
 
         # Plot Polygons ...
         ax.add_geometries(
-            [maxShip],
+            pyguymer3.geo.extract_polys(maxShip),
             cartopy.crs.PlateCarree(),
             edgecolor = (0.0, 0.0, 0.0, 0.2),
             facecolor = (0.0, 0.0, 0.0, 0.2),
