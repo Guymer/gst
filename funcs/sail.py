@@ -171,14 +171,10 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqLand
         save_allLands(
             allLandsName,
             output2,
-            prec,
-             detailed = detailed,
-                 fill = fill,
-            fillSpace = "EuclideanSpace",
-                 nang = nang,
-                  res = res,
-                 simp = simp,
-                  tol = tol,
+            detailed = detailed,
+                 res = res,
+                simp = simp,
+                 tol = tol,
         )
 
     # Load all the land ...
@@ -271,7 +267,12 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqLand
                 limit = copy.copy(ship)
             else:
                 # Extract the current limit of sailing (on water) ...
-                limit = remove_lands(ship.exterior, relevantLands, simp = -1.0)
+                limit = []
+                for poly in pyguymer3.geo.extract_polys(ship):
+                    limit += pyguymer3.geo.extract_lines(
+                        remove_lands(poly.exterior, relevantLands, simp = -1.0)
+                    )
+                limit = shapely.ops.unary_union(limit)
 
             # Check if this step is simplifying ...
             if (istep + 1) % freqSimp == 0:

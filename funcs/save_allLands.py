@@ -1,5 +1,5 @@
-def save_allLands(fname, dname, dist, kwArgCheck = None, detailed = False, fill = 1.0, fillSpace = "EuclideanSpace", nang = 19, res = "110m", simp = 0.1, tol = 1.0e-10):
-    """Save buffered (and optionally simplified) land to a compressed WKB file.
+def save_allLands(fname, dname, kwArgCheck = None, detailed = False, dist = -1.0, fill = 1.0, fillSpace = "EuclideanSpace", nang = 9, res = "110m", simp = 0.1, tol = 1.0e-10):
+    """Save (optionally buffered and optionally simplified) land to a compressed WKB file.
 
     Parameters
     ----------
@@ -7,10 +7,13 @@ def save_allLands(fname, dname, dist, kwArgCheck = None, detailed = False, fill 
         the file name of the compressed WKB file
     dname : string
         the directory name where temporary compressed WKB files can be stored
-    dist : float
-        the distance to buffer the land by (in metres)
+    bufferLand : bool, optional
+        buffer the land
     detailed : bool, optional
         take account of minor islands
+    dist : float, optional
+        the distance to buffer the land by; negative values disable buffering
+        (in metres)
     fill : float, optional
         how many intermediary points are added to fill in the straight lines
         which connect the points; negative values disable filling
@@ -119,20 +122,25 @@ def save_allLands(fname, dname, dist, kwArgCheck = None, detailed = False, fill 
                     print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is empty.")
                     continue
 
-                # Add the individual Polygons that make up the buffer of this
-                # Polygon to the list ...
-                # NOTE: Don't allow the user to specify the debug mode.
-                buffs += pyguymer3.geo.extract_polys(
-                    pyguymer3.geo.buffer(
-                        poly,
-                        dist,
-                             fill = fill,
-                        fillSpace = fillSpace,
-                             nang = nang,
-                             simp = simp,
-                              tol = tol,
+                # Check if the user wants to buffer the land before saving it ...
+                if dist > 0.0:
+                    # Add the individual Polygons that make up the buffer of
+                    # this Polygon to the list ...
+                    # NOTE: Don't allow the user to specify the debug mode.
+                    buffs += pyguymer3.geo.extract_polys(
+                        pyguymer3.geo.buffer(
+                            poly,
+                            dist,
+                                 fill = fill,
+                            fillSpace = fillSpace,
+                                 nang = nang,
+                                 simp = simp,
+                                  tol = tol,
+                        )
                     )
-                )
+                else:
+                    # Append the Polygon ...
+                    buffs.append(poly)
 
             # Convert list of Polygons to (unified) [Multi]Polygon ...
             buffs = shapely.ops.unary_union(buffs).simplify(tol)
