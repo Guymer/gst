@@ -50,7 +50,7 @@ for nang in [9, 13, 17, 37, 89, 181, 361]:
     # Loop over distances ...
     for dist in range(8):
         # Deduce file name and skip if it is missing ...
-        fname = f"detailed=F_nang={nang:d}_prec=1.00e+04_res=10m_simp=8.99e-04_tol=1.00e-10/freqLand=100_freqSimp=25_lat=+50.700000_lon=-001.000000/contours/istep={dist:06d}.wkb.gz"
+        fname = f"detailed=F_nang={nang:d}_prec=1.00e+04_res=10m_simp=8.99e-04_tol=1.00e-10/freqLand=100_freqSimp=25_lon=-001.000000_lat=+50.700000/contours/istep={dist:06d}.wkb.gz"
         if not os.path.exists(fname):
             continue
 
@@ -144,7 +144,7 @@ for nang, color in [(9, "C0"), (13, "C1"), (17, "C2"), (37, "C3"), (89, "C4"), (
     # Loop over distances ...
     for dist in range(8):
         # Deduce file name and skip if it is missing ...
-        fname = f"detailed=F_nang={nang:d}_prec=1.00e+04_res=10m_simp=8.99e-04_tol=1.00e-10/freqLand=100_freqSimp=25_lat=+50.700000_lon=-001.000000/contours/istep={dist:06d}.wkb.gz"
+        fname = f"detailed=F_nang={nang:d}_prec=1.00e+04_res=10m_simp=8.99e-04_tol=1.00e-10/freqLand=100_freqSimp=25_lon=-001.000000_lat=+50.700000/contours/istep={dist:06d}.wkb.gz"
         if not os.path.exists(fname):
             continue
 
