@@ -47,7 +47,7 @@ for iang, nang in enumerate([9, 13, 17, 37, 89, 181, 361]):
         # Loop over distances ...
         for dist in range(8):
             # Deduce file name and skip if it is missing ...
-            fname = f"detailed=F_nang={nang:d}_prec=1.00e+04_res={res}_simp=8.99e-04_tol=1.00e-10/freqLand=100_freqSimp=25_lon=-001.000000_lat=+50.700000/contours/istep={dist:06d}.wkb.gz"
+            fname = f"detailed=F_res={res}_simp=8.99e-04_tol=1.00e-10/nang={nang:d}_prec=1.00e+04_freqLand=100_freqSimp=25_lon=-001.000000_lat=+50.700000/contours/istep={dist:06d}.wkb.gz"
             if not os.path.exists(fname):
                 continue
 
