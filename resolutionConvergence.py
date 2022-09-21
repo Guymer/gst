@@ -34,7 +34,7 @@ fg = matplotlib.pyplot.figure(
 ax = fg.add_subplot()
 
 # Loop over number of angles ...
-for iang, nang in enumerate([9, 13, 17, 37, 89, 181, 361]):
+for iang, nang in enumerate([9, 17, 33, 65, 129, 257, 513]):
     # Create short-hand ...
     color = f"C{iang:d}"
 

@@ -16,13 +16,14 @@ python3.10 -c 'import pstats; p = pstats.Stats("results.out"); p.sort_stats(psta
 To generate the data needed by `compareBufferResolutions.py` run:
 
 ```
+# powers of 2 are 8, 16, 32, 64, 128, 256, 512
 python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 9 --res 10m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 13 --res 10m
 python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 17 --res 10m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 37 --res 10m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 89 --res 10m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 181 --res 10m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 361 --res 10m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 33 --res 10m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 65 --res 10m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 129 --res 10m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 257 --res 10m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 513 --res 10m
 ```
 
 After sailing for 0.09 days at 20.0 knots a vessel will have gone 80,006.4 metres, which I'll round to 80 kilometres.
