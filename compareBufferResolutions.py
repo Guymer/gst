@@ -161,11 +161,11 @@ for iang, nang in enumerate([9, 17, 33, 65, 129, 257, 513]):
         key = f"{10 * (dist + 1):,d}km"
         if key not in data:
             data[key] = {
-                "x" : [],                                                       # [#]
-                "y" : [],                                                       # [°2]
+                "nang" : [],                                                    # [#]
+                "area" : [],                                                    # [°2]
             }
-        data[key]["x"].append(nang)                                             # [#]
-        data[key]["y"].append(ship.area)                                        # [°2]
+        data[key]["nang"].append(nang)                                          # [#]
+        data[key]["area"].append(ship.area)                                     # [°2]
 
         # Plot Polygon ...
         ax1.add_geometries(
@@ -190,16 +190,16 @@ for iang, nang in enumerate([9, 17, 33, 65, 129, 257, 513]):
 # Loop over distances ...
 for key in sorted(list(data.keys())):
     # Create short-hands ...
-    x = numpy.array(data[key]["x"])                                             # [#]
-    y = numpy.array(data[key]["y"])                                             # [°2]
+    nang = numpy.array(data[key]["nang"])                                       # [#]
+    area = numpy.array(data[key]["area"])                                       # [°2]
 
     # Convert to ratio ...
-    y /= y[-1]
+    area /= area[-1]
 
     # Plot data ...
     ax2.plot(
-        x,
-        100.0 * y,
+        nang,
+        100.0 * area,
          label = key,
         marker = "d",
     )
@@ -220,6 +220,15 @@ ax2.legend(
     fontsize = "small",
          loc = "lower right",
 )
+ax2.semilogx()
+# ax2.set_xticks(                                                                 # MatPlotLib ≥ 3.5.0
+#     [8, 16, 32, 64, 128, 256, 512],                                             # MatPlotLib ≥ 3.5.0
+#     labels = [8, 16, 32, 64, 128, 256, 512],                                    # MatPlotLib ≥ 3.5.0
+# )                                                                               # MatPlotLib ≥ 3.5.0
+ax2.set_xticks([8, 16, 32, 64, 128, 256, 512])                                  # MatPlotLib < 3.5.0
+ax2.set_xticklabels([8, 16, 32, 64, 128, 256, 512])                             # MatPlotLib < 3.5.0
+ax2.set_ylim(90, 100)
+ax2.set_yticks(range(90, 101))
 
 # Configure figure ...
 fg.tight_layout()
