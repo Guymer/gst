@@ -141,6 +141,12 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqLand
     # TODO: Now that the land is not buffered, "output1" can be much shorter and
     #       variables can be prepended to "output3" instead.
 
+    # TODO: Switch lon/lat order in the folder names.
+
+    # TODO: Something needs doing, the following command was using ~50 GiB of
+    #       RAM after the ship had sailed ~5.1 days:
+    #         * python3.10 run.py -1.0 50.7 20.0 --dur 10.0 --nang 89 --res 110m --plot
+
     # Determine first output folder name and make it if it is missing ...
     output1 = f"detailed={repr(detailed)[0]}_nang={nang:d}_prec={prec:.2e}_res={res}_simp={simp:.2e}_tol={tol:.2e}"
     if not os.path.exists(output1):
