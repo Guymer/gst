@@ -4,11 +4,16 @@ This project aims to show how a vessel sails around the globe.
 
 ## Profiling
 
-If you want to run the example script using a profiler and print out the top 25 most time-consuming functions then run:
+If you want to run the example script using a profiler and print out the top 10 most time-consuming functions then run:
 
 ```
-python3.10 -m cProfile -o results.out run.py -1.0 50.7 20.0 --dur 0.09 --nang 9 --res 110m
-python3.10 -c 'import pstats; p = pstats.Stats("results.out"); p.sort_stats(pstats.SortKey.CUMULATIVE).print_stats(25)'
+# for the first time a command is run ...
+python3.10 -m cProfile -o first.out run.py -1.0 50.7 20.0 --dur 4.0 --nang 33 --res 110m
+python3.10 -c 'import pstats; p = pstats.Stats("first.out"); p.sort_stats(pstats.SortKey.CUMULATIVE).print_stats(10)'
+
+# for the second time a command is run ...
+python3.10 -m cProfile -o second.out run.py -1.0 50.7 20.0 --dur 4.0 --nang 33 --res 110m
+python3.10 -c 'import pstats; p = pstats.Stats("second.out"); p.sort_stats(pstats.SortKey.CUMULATIVE).print_stats(10)'
 ```
 
 ## Running `compareBufferResolutions.py`
@@ -28,7 +33,7 @@ python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 513 --res 10m
 
 After sailing for 0.09 days at 20.0 knots a vessel will have gone 80,006.4 metres, which I'll round to 80 kilometres.
 
-`run.py` is very slow for large values of `nang`. Try running only the first couple of the above lines and then run `compareBufferResolutions.py` to see what the benefit is. You can then run the remaining lines one-by-one and re-run `compareBufferResolutions.py` to see what the improvements are. You may come to the conclusion that it is not worth running `--nang 181` or `--nang 361`.
+`run.py` is very slow for large values of `nang`. Try running only the first couple of the above lines and then run `compareBufferResolutions.py` to see what the benefit is. You can then run the remaining lines one-by-one and re-run `compareBufferResolutions.py` to see what the improvements are. You may come to the conclusion that it is not worth running `--nang 257` or `--nang 513`.
 
 ## Running `resolutionConvergence.py`
 
