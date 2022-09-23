@@ -1,4 +1,4 @@
-def remove_lands(shape, lands, kwArgCheck = None, simp = 0.1):
+def remove_lands(shape, lands, kwArgCheck = None, debug = False, simp = 0.1):
     """Remove the parts of a shape that lie on land
 
     This function reads in a shape and a list of Polygons of land masses. Each
@@ -11,6 +11,8 @@ def remove_lands(shape, lands, kwArgCheck = None, simp = 0.1):
         the input shape
     lands : list of shapely.geometry.polygon.Polygon
         the list of land masses
+    debug : bool, optional
+        print debug messages
     simp : float, optional
         how much intermediary shapes are simplified by; negative values disable
         simplification (in degrees)
@@ -40,7 +42,8 @@ def remove_lands(shape, lands, kwArgCheck = None, simp = 0.1):
         shape = shape.difference(land)
 
     # Check shape ...
-    pyguymer3.geo.check(shape)
+    if debug:
+        pyguymer3.geo.check(shape)
 
     # Check if the user wants to simplify the shape ...
     if simp > 0.0:
@@ -48,7 +51,8 @@ def remove_lands(shape, lands, kwArgCheck = None, simp = 0.1):
         shapeSimp = shape.simplify(simp)
 
         # Check simplified shape ...
-        pyguymer3.geo.check(shapeSimp)
+        if debug:
+            pyguymer3.geo.check(shapeSimp)
 
         # Return simplified answer ...
         return shapeSimp

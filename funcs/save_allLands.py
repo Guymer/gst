@@ -1,4 +1,4 @@
-def save_allLands(fname, dname, kwArgCheck = None, detailed = False, dist = -1.0, fill = 1.0, fillSpace = "EuclideanSpace", nang = 9, res = "110m", simp = 0.1, tol = 1.0e-10):
+def save_allLands(fname, dname, kwArgCheck = None, debug = False, detailed = False, dist = -1.0, fill = 1.0, fillSpace = "EuclideanSpace", nang = 9, res = "110m", simp = 0.1, tol = 1.0e-10):
     """Save (optionally buffered and optionally simplified) land to a compressed WKB file.
 
     Parameters
@@ -9,6 +9,8 @@ def save_allLands(fname, dname, kwArgCheck = None, detailed = False, dist = -1.0
         the directory name where temporary compressed WKB files can be stored
     bufferLand : bool, optional
         buffer the land
+    debug : bool, optional
+        print debug messages
     detailed : bool, optional
         take account of minor islands
     dist : float, optional
@@ -144,7 +146,8 @@ def save_allLands(fname, dname, kwArgCheck = None, detailed = False, dist = -1.0
 
             # Convert list of Polygons to (unified) [Multi]Polygon ...
             buffs = shapely.ops.unary_union(buffs).simplify(tol)
-            pyguymer3.geo.check(buffs)
+            if debug:
+                pyguymer3.geo.check(buffs)
 
             # Save [Multi]Polygon ...
             with gzip.open(tname, "wb", compresslevel = 9) as fobj:
@@ -165,13 +168,15 @@ def save_allLands(fname, dname, kwArgCheck = None, detailed = False, dist = -1.0
 
     # Convert list of Polygons to (unified) MultiPolygon ...
     buffs = shapely.ops.unary_union(buffs).simplify(tol)
-    pyguymer3.geo.check(buffs)
+    if debug:
+        pyguymer3.geo.check(buffs)
 
     # Check if the user wants to simplify the MultiPolygon ...
     if simp > 0.0:
         # Simplify MultiPolygon ...
         buffsSimp = buffs.simplify(simp)
-        pyguymer3.geo.check(buffsSimp)
+        if debug:
+            pyguymer3.geo.check(buffsSimp)
 
         # Save simplified MultiPolygon ...
         with gzip.open(fname, "wb", compresslevel = 9) as fobj:
