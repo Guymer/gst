@@ -2,6 +2,9 @@
 
 This project aims to show how a vessel sails around the globe.
 
+The `buffer()` function in [PyGuymer3](https://github.com/Guymer/PyGuymer3) has a maximum buffer distance (in one go) of 10,001.5 kilometres. At a speed of 20.0 knots, you will have gone
+9,778.56 kilometres in 11 days and 10,667.52 kilometres in 12 days.
+
 ## Profiling
 
 If you want to run the example script using a profiler and print out the top 10 most time-consuming functions then run:
