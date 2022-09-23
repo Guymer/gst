@@ -8,12 +8,12 @@ If you want to run the example script using a profiler and print out the top 10 
 
 ```
 # for the first time a command is run ...
-python3.10 -m cProfile -o first.out run.py -1.0 50.7 20.0 --dur 4.0 --nang 33 --res 110m
-python3.10 -c 'import pstats; p = pstats.Stats("first.out"); p.sort_stats(pstats.SortKey.CUMULATIVE).print_stats(10)'
+python3.10 -m cProfile -o first.log run.py -1.0 50.7 20.0 --dur 4.0 --nang 33 --res 110m > first.out 2> first.err
+python3.10 -c 'import pstats; p = pstats.Stats("first.log"); p.sort_stats(pstats.SortKey.CUMULATIVE).print_stats(10)'
 
 # for the second time a command is run ...
-python3.10 -m cProfile -o second.out run.py -1.0 50.7 20.0 --dur 4.0 --nang 33 --res 110m
-python3.10 -c 'import pstats; p = pstats.Stats("second.out"); p.sort_stats(pstats.SortKey.CUMULATIVE).print_stats(10)'
+python3.10 -m cProfile -o second.log run.py -1.0 50.7 20.0 --dur 4.0 --nang 33 --res 110m > second.out 2> second.err
+python3.10 -c 'import pstats; p = pstats.Stats("second.log"); p.sort_stats(pstats.SortKey.CUMULATIVE).print_stats(10)'
 ```
 
 ## Running `compareBufferResolutions.py`
