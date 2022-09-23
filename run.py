@@ -14,6 +14,7 @@ if __name__ == "__main__":
     parser.add_argument("lon", help = "the longitude of the starting point (in degrees)", type = float)
     parser.add_argument("lat", help = "the latitude of the starting point (in degrees)", type = float)
     parser.add_argument("spd", help = "the speed of the vessel (in knots)", type = float)
+    parser.add_argument("--conservatism", default = 2.0, help = "the amount of conservatism to add to the calculation", type = float)
     parser.add_argument("--detailed", action = "store_true", help = "take account of minor islands")
     parser.add_argument("--dur", default = 1.0, help = "the duration of the voyage (in days)", type = float)
     parser.add_argument("--freqLand", default = 100, help = "re-evaluate the relevant land every freqLand iteration", type = int)
@@ -32,15 +33,16 @@ if __name__ == "__main__":
         args.lon,
         args.lat,
         args.spd,
-        detailed = args.detailed,
-             dur = args.dur,
-        freqLand = args.freqLand,
-        freqPlot = args.freqPlot,
-        freqSimp = args.freqSimp,
-           local = args.local,
-            nang = args.nang,
-            plot = args.plot,
-            prec = args.prec,
-             res = args.res,
-             tol = args.tol,
+        conservatism = args.conservatism,
+            detailed = args.detailed,
+                 dur = args.dur,
+            freqLand = args.freqLand,
+            freqPlot = args.freqPlot,
+            freqSimp = args.freqSimp,
+               local = args.local,
+                nang = args.nang,
+                plot = args.plot,
+                prec = args.prec,
+                 res = args.res,
+                 tol = args.tol,
     )

@@ -1,4 +1,4 @@
-def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqLand = 100, freqPlot = 25, freqSimp = 25, local = False, nang = 9, plot = False, prec = 10000.0, res = "110m", tol = 1.0e-10):
+def sail(lon, lat, spd, kwArgCheck = None, conservatism = 2.0, detailed = False, dur = 1.0, freqLand = 100, freqPlot = 25, freqSimp = 25, local = False, nang = 9, plot = False, prec = 10000.0, res = "110m", tol = 1.0e-10):
     """Sail from a point
 
     This function reads in a starting coordinate (in degrees) and a sailing
@@ -13,6 +13,8 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqLand
         the latitude of the starting point (in degrees)
     spd : float
         the speed of the vessel (in knots)
+    conservatism : float, optional
+        the amount of conservatism to add to the calculation
     detailed : bool, optional
         take account of minor islands
     dur : float, optional
@@ -90,8 +92,8 @@ def sail(lon, lat, spd, kwArgCheck = None, detailed = False, dur = 1.0, freqLand
     fill = prec / resoluOfEarth                                                 # [°]
 
     # Add conservatism and use it to set the simplification level ...
-    fill *= 0.1                                                                 # [°]
-    simp = 0.1 * fill                                                           # [°]
+    fill /= conservatism                                                        # [°]
+    simp = fill / conservatism                                                  # [°]
 
     # Create the initial starting Point ...
     ship = shapely.geometry.point.Point(lon, lat)
