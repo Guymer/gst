@@ -15,8 +15,13 @@ __pycache__
 pylint.log
 shellcheck.log
 
-# Hide output of cProfile ...
-results.out
+# Hide output of cProfile examples ...
+first.err
+first.log
+first.out
+second.err
+second.log
+second.out
 
 # Hide large datasets ...
 detailed=*
