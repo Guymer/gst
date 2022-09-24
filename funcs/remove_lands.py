@@ -50,7 +50,7 @@ def remove_lands(shape, lands, kwArgCheck = None, debug = False, simp = 0.1):
     # Create a LineString which is the perimeter of longitude/latitude space and
     # remove it from the shape so that the boundaries of the Earth are not
     # repeatedly filled in, buffered and wrapped ...
-    # NOTE: We don't have to do the Southern bounary as Antarctica is doing thatr
+    # NOTE: We don't have to do the Southern bounary as Antarctica is doing that
     #       for us already.
     edge = shapely.geometry.linestring.LineString(
         [
