@@ -92,6 +92,10 @@ def sail(lon, lat, spd, kwArgCheck = None, conservatism = 2.0, detailed = False,
     resoluOfEarth = circumOfEarth / 360.0                                       # [m/°]
     fill = prec / resoluOfEarth                                                 # [°]
 
+    # TODO: Conservatism needs adding to all paths.
+
+    # TODO: Simplification needs removing from all paths.
+
     # Add conservatism ...
     fill /= conservatism                                                        # [°]
 
