@@ -25,5 +25,6 @@ second.out
 
 # Hide large datasets ...
 detailed=*
+*.geojson
 *.png
 *.wkb.gz
