@@ -69,9 +69,13 @@ for nang in [9, 17, 33, 65, 129, 257, 513]:
     )
 
     # Loop over distances ...
-    for dist in range(8):
+    for dist in range(10, 90, 10):
+        # Determine the step count ...
+        istep = ((1000 * dist) // 10000) - 1
+
         # Deduce file name and skip if it is missing ...
-        fname = f"detailed=F_res=10m_simp=2.25e-02_tol=1.00e-10/nang={nang:d}_prec=1.00e+04_freqLand=100_freqSimp=25_lon=-001.000000_lat=+50.700000/contours/istep={dist:06d}.wkb.gz"
+        dname = f"detailed=F_res=10m_cons=2.00e+00_tol=1.00e-10/nang={nang:d}_prec=1.00e+04_freqLand=100_freqSimp=25_lon=-001.000000_lat=+50.700000/contours"
+        fname = f"{dname}/istep={istep:06d}.wkb.gz"
         if not os.path.exists(fname):
             continue
 
@@ -138,7 +142,7 @@ ax2.set_ylabel("Area [%]")
 # ******************************************************************************
 
 # Load MultiPolygon ...
-with gzip.open("detailed=F_res=10m_simp=2.25e-02_tol=1.00e-10/allLands.wkb.gz", "rb") as fobj:
+with gzip.open("detailed=F_res=10m_cons=2.00e+00_tol=1.00e-10/allLands.wkb.gz", "rb") as fobj:
     allLands = shapely.wkb.loads(fobj.read())
 
 # Plot MultiPolygon ...
@@ -166,9 +170,13 @@ for iang, nang in enumerate([9, 17, 33, 65, 129, 257, 513]):
     color = f"C{iang:d}"
 
     # Loop over distances ...
-    for dist in range(8):
+    for dist in range(10, 90, 10):
+        # Determine the step count ...
+        istep = ((1000 * dist) // 10000) - 1
+
         # Deduce file name and skip if it is missing ...
-        fname = f"detailed=F_res=10m_simp=2.25e-02_tol=1.00e-10/nang={nang:d}_prec=1.00e+04_freqLand=100_freqSimp=25_lon=-001.000000_lat=+50.700000/contours/istep={dist:06d}.wkb.gz"
+        dname = f"detailed=F_res=10m_cons=2.00e+00_tol=1.00e-10/nang={nang:d}_prec=1.00e+04_freqLand=100_freqSimp=25_lon=-001.000000_lat=+50.700000/contours"
+        fname = f"{dname}/istep={istep:06d}.wkb.gz"
         if not os.path.exists(fname):
             continue
 
@@ -179,7 +187,7 @@ for iang, nang in enumerate([9, 17, 33, 65, 129, 257, 513]):
             ship = shapely.wkb.loads(fobj.read())
 
         # Populate dictionary ...
-        key = f"{10 * (dist + 1):,d}km"
+        key = f"{dist:,d}km"
         if key not in data:
             data[key] = {
                 "nang" : [],                                                    # [#]
@@ -248,8 +256,8 @@ ax2.semilogx()
 # )                                                                               # MatPlotLib ≥ 3.5.0
 ax2.set_xticks([8, 16, 32, 64, 128, 256, 512])                                  # MatPlotLib < 3.5.0
 ax2.set_xticklabels([8, 16, 32, 64, 128, 256, 512])                             # MatPlotLib < 3.5.0
-ax2.set_ylim(90, 100)
-ax2.set_yticks(range(90, 101))
+ax2.set_ylim(90, 101)
+ax2.set_yticks(range(90, 102))
 
 # Configure figure ...
 fg.tight_layout()
