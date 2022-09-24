@@ -125,7 +125,6 @@ def save_allLands(fname, dname, kwArgCheck = None, debug = False, detailed = Fal
                 if dist > 0.0:
                     # Add the individual Polygons that make up the buffer of
                     # this Polygon to the list ...
-                    # NOTE: Don't allow the user to specify the debug mode.
                     buffs += pyguymer3.geo.extract_polys(
                         pyguymer3.geo.buffer(
                             poly,
