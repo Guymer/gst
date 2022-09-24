@@ -245,6 +245,11 @@ ax1.legend(
 )
 
 # Configure axis ...
+ax2.axhspan(
+    99,
+    101,
+    color = (0.0, 1.0, 0.0, 0.25),
+)
 ax2.legend(
     fontsize = "small",
          loc = "lower right",
