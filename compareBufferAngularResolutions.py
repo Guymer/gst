@@ -3,6 +3,7 @@
 # Import standard modules ...
 import gzip
 import os
+import subprocess
 
 # Import special modules ...
 try:
@@ -47,10 +48,28 @@ ymax =  -90.0                                                                   
 
 # Loop over number of angles ...
 for nang in [9, 17, 33, 65, 129, 257, 513]:
+    # Run GST ...
+    subprocess.run(
+        [
+            "python3.10", "run.py",
+            "-1.0",
+            "50.7",
+            "20.0",
+            "--dur", "0.09",
+            "--nang", f"{nang:d}",
+            "--prec", "10000.0",
+            "--res", "10m",
+        ],
+           check = True,
+        encoding = "utf-8",
+          stderr = subprocess.DEVNULL,
+          stdout = subprocess.DEVNULL,
+    )
+
     # Loop over distances ...
     for dist in range(8):
         # Deduce file name and skip if it is missing ...
-        fname = f"detailed=F_res=10m_simp=8.99e-04_tol=1.00e-10/nang={nang:d}_prec=1.00e+04_freqLand=100_freqSimp=25_lon=-001.000000_lat=+50.700000/contours/istep={dist:06d}.wkb.gz"
+        fname = f"detailed=F_res=10m_simp=2.25e-02_tol=1.00e-10/nang={nang:d}_prec=1.00e+04_freqLand=100_freqSimp=25_lon=-001.000000_lat=+50.700000/contours/istep={dist:06d}.wkb.gz"
         if not os.path.exists(fname):
             continue
 
@@ -117,7 +136,7 @@ ax2.set_ylabel("Area [%]")
 # ******************************************************************************
 
 # Load MultiPolygon ...
-with gzip.open("detailed=F_res=10m_simp=8.99e-04_tol=1.00e-10/allLands.wkb.gz", "rb") as fobj:
+with gzip.open("detailed=F_res=10m_simp=2.25e-02_tol=1.00e-10/allLands.wkb.gz", "rb") as fobj:
     allLands = shapely.wkb.loads(fobj.read())
 
 # Plot MultiPolygon ...
@@ -147,7 +166,7 @@ for iang, nang in enumerate([9, 17, 33, 65, 129, 257, 513]):
     # Loop over distances ...
     for dist in range(8):
         # Deduce file name and skip if it is missing ...
-        fname = f"detailed=F_res=10m_simp=8.99e-04_tol=1.00e-10/nang={nang:d}_prec=1.00e+04_freqLand=100_freqSimp=25_lon=-001.000000_lat=+50.700000/contours/istep={dist:06d}.wkb.gz"
+        fname = f"detailed=F_res=10m_simp=2.25e-02_tol=1.00e-10/nang={nang:d}_prec=1.00e+04_freqLand=100_freqSimp=25_lon=-001.000000_lat=+50.700000/contours/istep={dist:06d}.wkb.gz"
         if not os.path.exists(fname):
             continue
 
@@ -235,11 +254,11 @@ fg.tight_layout()
 
 # Save figure ...
 fg.savefig(
-    "compareBufferResolutions.png",
+    "compareBufferAngularResolutions.png",
            dpi = 300,
     pad_inches = 0.1,
 )
 matplotlib.pyplot.close(fg)
 
 # Optimize PNG ...
-pyguymer3.image.optimize_image("compareBufferResolutions.png", strip = True)
+pyguymer3.image.optimize_image("compareBufferAngularResolutions.png", strip = True)
