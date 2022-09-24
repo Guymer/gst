@@ -24,56 +24,35 @@ python3.10 -c 'import pstats; p = pstats.Stats("second.log"); p.sort_stats(pstat
 To generate the data needed by `compareBufferAngularResolutions.py`, it will run commands like:
 
 ```
-# powers of 2 are 8, 16, 32, 64, 128, 256, 512
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang   9 --prec 10000.0 --res 10m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang  17 --prec 10000.0 --res 10m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang  33 --prec 10000.0 --res 10m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang  65 --prec 10000.0 --res 10m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 129 --prec 10000.0 --res 10m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 257 --prec 10000.0 --res 10m
+# powers of 2 are 8, 16, 32, ...
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang  9 --prec 10000.0 --res 10m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 17 --prec 10000.0 --res 10m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 33 --prec 10000.0 --res 10m
+...
+```
+
+After sailing for 0.09 days at 20.0 knots a vessel will have gone 80,006.4 metres, which I'll round to 80 kilometres.
+
+## Running `compareBufferRadialResolutions.py`
+
+To generate the data needed by `compareBufferRadialResolutions.py`, it will run commands like:
+
+```
+# powers of 2 are 8, 16, 32, ...
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 513 --prec  5000.0 --res 10m
 python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 513 --prec 10000.0 --res 10m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 513 --prec 20000.0 --res 10m
+...
 ```
 
 After sailing for 0.09 days at 20.0 knots a vessel will have gone 80,006.4 metres, which I'll round to 80 kilometres.
-
-## Running `resolutionConvergence.py`
-
-To generate the data needed by `resolutionConvergence.py` run:
-
-```
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 9 --res 110m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 9 --res 50m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 9 --res 10m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 13 --res 110m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 13 --res 50m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 13 --res 10m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 17 --res 110m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 17 --res 50m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 17 --res 10m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 37 --res 110m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 37 --res 50m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 37 --res 10m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 89 --res 110m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 89 --res 50m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 89 --res 10m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 181 --res 110m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 181 --res 50m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 181 --res 10m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 361 --res 110m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 361 --res 50m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 361 --res 10m
-```
-
-After sailing for 0.09 days at 20.0 knots a vessel will have gone 80,006.4 metres, which I'll round to 80 kilometres.
-
-`run.py` is very slow for large values of `nang`.
 
 ## Maximum Sailing Distance
 
-To very quickly find out how far a vessel can sail, try running:
+To very quickly find out how far a vessel can sail, try running something like:
 
 ```
-python3.10 run.py -1.0 50.7 20.0 --dur 2.0 --nang 9 --res 110m
+python3.10 run.py -1.0 50.7 20.0 --dur 2.0 --nang 9 --prec 40000.0 --res 110m
 ```
 
 ## Dependencies
