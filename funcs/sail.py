@@ -322,7 +322,8 @@ def sail(lon, lat, spd, kwArgCheck = None, conservatism = 2.0, detailed = False,
                 npoint += len(line.coords)                                      # [#]
 
             print(f" > \"limit\" is described by {npoint:,d} Points in {nline:,d} LineStrings.")
-            print(f"   The bounds are {limit.bounds[0]:+011.6f}° ≤ longitude ≤ {limit.bounds[2]:+011.6f}° and {limit.bounds[1]:+010.6f}° ≤ latitude ≤ {limit.bounds[3]:+010.6f}°.")
+            print(f"   The x-bound is {limit.bounds[0]:+011.6f}° ≤ longitude ≤ {limit.bounds[2]:+011.6f}°.")
+            print(f"   The y-bound is {limit.bounds[1]:+010.6f}° ≤ latitude ≤ {limit.bounds[3]:+010.6f}°.")
 
             # ******************************************************************
 
@@ -380,7 +381,8 @@ def sail(lon, lat, spd, kwArgCheck = None, conservatism = 2.0, detailed = False,
                 npoint += len(interior.coords)                                  # [#]
 
         print(f" > \"ship\" is described by {npoint:,d} Points in {npoly:,d} Polygons.")
-        print(f"   The bounds are {ship.bounds[0]:+011.6f}° ≤ longitude ≤ {ship.bounds[2]:+011.6f}° and {ship.bounds[1]:+010.6f}° ≤ latitude ≤ {ship.bounds[3]:+010.6f}°.")
+        print(f"   The x-bound is {ship.bounds[0]:+011.6f}° ≤ longitude ≤ {ship.bounds[2]:+011.6f}°.")
+        print(f"   The y-bound is {ship.bounds[1]:+010.6f}° ≤ latitude ≤ {ship.bounds[3]:+010.6f}°.")
 
         # **********************************************************************
 
