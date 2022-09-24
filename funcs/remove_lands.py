@@ -23,6 +23,12 @@ def remove_lands(shape, lands, kwArgCheck = None, debug = False, simp = 0.1):
         the output shape
     """
 
+    # Import special modules ...
+    try:
+        import shapely
+    except:
+        raise Exception("\"shapely\" is not installed; run \"pip install --user Shapely\"") from None
+
     # Import my modules ...
     try:
         import pyguymer3
@@ -40,6 +46,21 @@ def remove_lands(shape, lands, kwArgCheck = None, debug = False, simp = 0.1):
     for land in lands:
         # Subtract this Polygon from the shape ...
         shape = shape.difference(land)
+
+    # Create a LineString which is the perimeter of longitude/latitude space and
+    # remove it from the shape so that the boundaries of the Earth are not
+    # repeatedly filled in, buffered and wrapped ...
+    # NOTE: We don't have to do the Southern bounary as Antarctica is doing thatr
+    #       for us already.
+    edge = shapely.geometry.linestring.LineString(
+        [
+            (-180.0, -90.0),
+            (-180.0, +90.0),
+            (+180.0, +90.0),
+            (+180.0, -90.0),
+        ]
+    )
+    shape = shape.difference(edge)
 
     # Check shape ...
     if debug:
