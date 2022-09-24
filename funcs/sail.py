@@ -83,6 +83,9 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, detailed = False, dur = 1
 
     # **************************************************************************
 
+    print(f"{spd:,.1f} knots is {1852.0 * spd:,.1f} metres/hour.")
+    print(f"{spd:,.1f} knots is {24.0 * 1852.0 * spd:,.1f} metres/day.")
+
     # Determine how many degrees (of longitude) a [Multi]Polygon can be
     # filled by at the point where a degree (of longitude) is the largest, i.e.,
     # the equator ...
