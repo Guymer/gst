@@ -1,4 +1,4 @@
-def save_allLands(fname, dname, kwArgCheck = None, debug = False, detailed = False, dist = -1.0, fill = 1.0, fillSpace = "EuclideanSpace", nang = 9, res = "110m", simp = 0.1, tol = 1.0e-10):
+def save_allLands(fname, dname, kwArgCheck = None, debug = False, detailed = False, dist = -1.0, fill = 1.0, nang = 9, res = "110m", simp = 0.1, tol = 1.0e-10):
     """Save (optionally buffered and optionally simplified) land to a compressed WKB file.
 
     Parameters
@@ -19,9 +19,6 @@ def save_allLands(fname, dname, kwArgCheck = None, debug = False, detailed = Fal
     fill : float, optional
         how many intermediary points are added to fill in the straight lines
         which connect the points; negative values disable filling
-    fillSpace : str, optional
-        the geometric space to perform the filling in (either "EuclideanSpace"
-        or "GeodesicSpace")
     nang : int, optional
         the number of angles around each point that are calculated when
         buffering
@@ -133,11 +130,10 @@ def save_allLands(fname, dname, kwArgCheck = None, debug = False, detailed = Fal
                         pyguymer3.geo.buffer(
                             poly,
                             dist,
-                                 fill = fill,
-                            fillSpace = fillSpace,
-                                 nang = nang,
-                                 simp = simp,
-                                  tol = tol,
+                            fill = fill,
+                            nang = nang,
+                            simp = simp,
+                             tol = tol,
                         )
                     )
                 else:
