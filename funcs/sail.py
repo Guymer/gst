@@ -45,6 +45,7 @@ def sail(lon, lat, spd, kwArgCheck = None, conservatism = 2.0, detailed = False,
     import gzip
     import math
     import os
+    import time
 
     # Import special modules ...
     try:
@@ -91,9 +92,28 @@ def sail(lon, lat, spd, kwArgCheck = None, conservatism = 2.0, detailed = False,
     resoluOfEarth = circumOfEarth / 360.0                                       # [m/°]
     fill = prec / resoluOfEarth                                                 # [°]
 
-    # Add conservatism and use it to set the simplification level ...
+    # Add conservatism ...
     fill /= conservatism                                                        # [°]
+
+    # Use fill level to set the simplification level ...
     simp = fill / conservatism                                                  # [°]
+
+    # Find the distance straight up and down to the North and South Poles ...
+    toNorthPole, _, _ = pyguymer3.geo.calc_dist_between_two_locs(
+        lon,
+        lat,
+        lon,
+        +90.0,
+    )                                                                           # [m], [°], [°]
+    toSouthPole, _, _ = pyguymer3.geo.calc_dist_between_two_locs(
+        lon,
+        lat,
+        lon,
+        -90.0,
+    )                                                                           # [m], [°], [°]
+
+    print(f"The North Pole is {0.001 * toNorthPole:,.2f} kilometres up (ignoring all land).")
+    print(f"The South Pole is {0.001 * toSouthPole:,.2f} kilometres down (ignoring all land).")
 
     # Create the initial starting Point ...
     ship = shapely.geometry.point.Point(lon, lat)
@@ -103,17 +123,16 @@ def sail(lon, lat, spd, kwArgCheck = None, conservatism = 2.0, detailed = False,
     maxShip = pyguymer3.geo.buffer(
         ship,
         maxDist,
-             fill = fill,
-        fillSpace = "EuclideanSpace",
-             nang = nang,
-             simp = simp,
-              tol = tol,
+        fill = fill,
+        nang = nang,
+        simp = simp,
+         tol = tol,
     )
     maxShipExt = [
-        maxShip.bounds[0],
-        maxShip.bounds[2],
-        maxShip.bounds[1],
-        maxShip.bounds[3],
+        maxShip.bounds[0],              # minx
+        maxShip.bounds[2],              # maxx
+        maxShip.bounds[1],              # miny
+        maxShip.bounds[3],              # maxy
     ]                                                                           # [°]
 
     # Determine the maximum symmetric sailing distance ...
@@ -139,10 +158,6 @@ def sail(lon, lat, spd, kwArgCheck = None, conservatism = 2.0, detailed = False,
     print(f"Each sailing iteration is {3600.0 * prec / (1852.0 * spd):,.1f} seconds for the vessel.")
 
     # **************************************************************************
-
-    # TODO: Something needs doing, the following command was using ~50 GiB of
-    #       RAM after the ship had sailed ~5.1 days:
-    #         * python3.10 run.py -1.0 50.7 20.0 --dur 10.0 --nang 89 --res 110m --plot
 
     # Determine first output folder name and make it if it is missing ...
     output1 = f"detailed={repr(detailed)[0]}_res={res}_simp={simp:.2e}_tol={tol:.2e}"
@@ -241,6 +256,8 @@ def sail(lon, lat, spd, kwArgCheck = None, conservatism = 2.0, detailed = False,
             linewidth = 1.0,
         )
 
+    # **************************************************************************
+
     # Loop over iterations ...
     for istep in range(nstep):
         print(f"Iteration {istep + 1:,d}/{nstep:,d} ({0.001 * (istep + 1) * prec:,.2f} kilometres/{(istep + 1) * prec / (24.0 * 1852.0 * spd):,.4f} days of sailing) ...")
@@ -291,37 +308,54 @@ def sail(lon, lat, spd, kwArgCheck = None, conservatism = 2.0, detailed = False,
                     )
                 limit = shapely.ops.unary_union(limit)
 
+            # ******************************************************************
+
+            # Find out how many points describe this [Multi]LineString ...
+            nline = 0                                                           # [#]
+            npoint = 0                                                          # [#]
+            for line in pyguymer3.geo.extract_lines(limit):
+                nline += 1                                                      # [#]
+                npoint += len(line.coords)                                      # [#]
+
+            print(f" > \"limit\" is described by {npoint:,d} Points in {nline:,d} LineStrings.")
+            print(f"   The bounds are {limit.bounds[0]:+011.6f}° ≤ longitude ≤ {limit.bounds[2]:+011.6f}° and {limit.bounds[1]:+010.6f}° ≤ latitude ≤ {limit.bounds[3]:+010.6f}°.")
+
+            # ******************************************************************
+
+            # Start timer ...
+            start = time.time()                                                 # [s]
+
             # Check if this step is simplifying ...
             if (istep + 1) % freqSimp == 0:
-                print(" > Simplifying ...")
-
                 # Sail ...
                 limit = pyguymer3.geo.buffer(
                     limit,
                     prec,
-                         fill = fill,
-                    fillSpace = "EuclideanSpace",
-                         nang = nang,
-                         simp = simp,
-                          tol = tol,
+                    fill = fill,
+                    nang = nang,
+                    simp = simp,
+                     tol = tol,
                 )
                 ship = shapely.ops.unary_union([limit, ship])
                 ship = remove_lands(ship, relevantLands, simp = simp)
                 ship = remove_interior_rings(ship, tol = tol)
+
+                print(f" > filled/buffered/simplified/unioned/removed in {time.time() - start:,.2f} seconds.")
             else:
                 # Sail ...
                 limit = pyguymer3.geo.buffer(
                     limit,
                     prec,
-                         fill = fill,
-                    fillSpace = "EuclideanSpace",
-                         nang = nang,
-                         simp = -1.0,
-                          tol = tol,
+                    fill = fill,
+                    nang = nang,
+                    simp = -1.0,
+                     tol = tol,
                 )
                 ship = shapely.ops.unary_union([limit, ship])
                 ship = remove_lands(ship, relevantLands, simp = -1.0)
                 ship = remove_interior_rings(ship, tol = tol)
+
+                print(f" > filled/buffered/filled/unioned/removed in {time.time() - start:,.2f} seconds.")
 
             # Clean up ...
             del limit
@@ -329,6 +363,22 @@ def sail(lon, lat, spd, kwArgCheck = None, conservatism = 2.0, detailed = False,
             # Save [Multi]Polygon ...
             with gzip.open(tname, "wb", compresslevel = 9) as fobj:
                 fobj.write(shapely.wkb.dumps(ship))
+
+        # **********************************************************************
+
+        # Find out how many points describe this [Multi]Polygon ...
+        npoint = 0                                                              # [#]
+        npoly = 0                                                               # [#]
+        for poly in pyguymer3.geo.extract_polys(ship):
+            npoint += len(poly.exterior.coords)                                 # [#]
+            npoly += 1                                                          # [#]
+            for interior in poly.interiors:
+                npoint += len(interior.coords)                                  # [#]
+
+        print(f" > \"ship\" is described by {npoint:,d} Points in {npoly:,d} Polygons.")
+        print(f"   The bounds are {ship.bounds[0]:+011.6f}° ≤ longitude ≤ {ship.bounds[2]:+011.6f}° and {ship.bounds[1]:+010.6f}° ≤ latitude ≤ {ship.bounds[3]:+010.6f}°.")
+
+        # **********************************************************************
 
         # Check if the user wants to make a plot and that this iteration is one
         # of the ones to be plotted ...
@@ -343,6 +393,8 @@ def sail(lon, lat, spd, kwArgCheck = None, conservatism = 2.0, detailed = False,
                 facecolor = "none",
                 linewidth = 1.0,
             )
+
+    # **************************************************************************
 
     # Check if the user wants to make a plot ...
     if plot:
