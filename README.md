@@ -19,24 +19,22 @@ python3.10 -m cProfile -o second.log run.py -1.0 50.7 20.0 --dur 4.0 --nang 33 -
 python3.10 -c 'import pstats; p = pstats.Stats("second.log"); p.sort_stats(pstats.SortKey.CUMULATIVE).print_stats(10)'
 ```
 
-## Running `compareBufferResolutions.py`
+## Running `compareBufferAngularResolutions.py`
 
-To generate the data needed by `compareBufferResolutions.py` run:
+To generate the data needed by `compareBufferAngularResolutions.py`, it will run commands like:
 
 ```
 # powers of 2 are 8, 16, 32, 64, 128, 256, 512
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 9 --res 10m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 17 --res 10m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 33 --res 10m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 65 --res 10m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 129 --res 10m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 257 --res 10m
-python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 513 --res 10m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang   9 --prec 10000.0 --res 10m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang  17 --prec 10000.0 --res 10m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang  33 --prec 10000.0 --res 10m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang  65 --prec 10000.0 --res 10m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 129 --prec 10000.0 --res 10m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 257 --prec 10000.0 --res 10m
+python3.10 run.py -1.0 50.7 20.0 --dur 0.09 --nang 513 --prec 10000.0 --res 10m
 ```
 
 After sailing for 0.09 days at 20.0 knots a vessel will have gone 80,006.4 metres, which I'll round to 80 kilometres.
-
-`run.py` is very slow for large values of `nang`. Try running only the first couple of the above lines and then run `compareBufferResolutions.py` to see what the benefit is. You can then run the remaining lines one-by-one and re-run `compareBufferResolutions.py` to see what the improvements are. You may come to the conclusion that it is not worth running `--nang 257` or `--nang 513`.
 
 ## Running `resolutionConvergence.py`
 
