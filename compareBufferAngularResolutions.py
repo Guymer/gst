@@ -48,6 +48,8 @@ ymax =  -90.0                                                                   
 
 # Loop over number of angles ...
 for nang in [9, 17, 33, 65, 129, 257, 513]:
+    print(f"Running \"--nang {nang:d}\" ...")
+
     # Run GST ...
     subprocess.run(
         [
