@@ -1,4 +1,4 @@
-def sail(lon, lat, spd, kwArgCheck = None, conservatism = 2.0, detailed = False, dur = 1.0, freqLand = 100, freqPlot = 25, freqSimp = 25, local = False, nang = 9, plot = False, prec = 10000.0, res = "110m", tol = 1.0e-10):
+def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, detailed = False, dur = 1.0, freqLand = 100, freqPlot = 25, freqSimp = 25, local = False, nang = 9, plot = False, prec = 10000.0, res = "110m", tol = 1.0e-10):
     """Sail from a point
 
     This function reads in a starting coordinate (in degrees) and a sailing
@@ -13,7 +13,7 @@ def sail(lon, lat, spd, kwArgCheck = None, conservatism = 2.0, detailed = False,
         the latitude of the starting point (in degrees)
     spd : float
         the speed of the vessel (in knots)
-    conservatism : float, optional
+    cons : float, optional
         the amount of conservatism to add to the calculation
     detailed : bool, optional
         take account of minor islands
@@ -92,15 +92,11 @@ def sail(lon, lat, spd, kwArgCheck = None, conservatism = 2.0, detailed = False,
     resoluOfEarth = circumOfEarth / 360.0                                       # [m/°]
     fill = prec / resoluOfEarth                                                 # [°]
 
-    # TODO: Conservatism needs adding to all paths.
-
-    # TODO: Simplification needs removing from all paths.
-
     # Add conservatism ...
-    fill /= conservatism                                                        # [°]
+    fill /= cons                                                                # [°]
 
     # Use fill level to set the simplification level ...
-    simp = fill / conservatism                                                  # [°]
+    simp = fill / cons                                                          # [°]
 
     # Find the distance straight up and down to the North and South Poles ...
     toNorthPole, _, _ = pyguymer3.geo.calc_dist_between_two_locs(
@@ -164,7 +160,7 @@ def sail(lon, lat, spd, kwArgCheck = None, conservatism = 2.0, detailed = False,
     # **************************************************************************
 
     # Determine first output folder name and make it if it is missing ...
-    output1 = f"detailed={repr(detailed)[0]}_res={res}_simp={simp:.2e}_tol={tol:.2e}"
+    output1 = f"detailed={repr(detailed)[0]}_res={res}_cons={cons:.2e}_tol={tol:.2e}"
     if not os.path.exists(output1):
         os.mkdir(output1)
 
