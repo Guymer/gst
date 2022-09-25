@@ -7,8 +7,6 @@ def saveAllLands(fname, dname, kwArgCheck = None, debug = False, detailed = Fals
         the file name of the compressed WKB file
     dname : string
         the directory name where temporary compressed WKB files can be stored
-    bufferLand : bool, optional
-        buffer the land
     debug : bool, optional
         print debug messages
     detailed : bool, optional
