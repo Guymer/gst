@@ -1,4 +1,4 @@
-def remove_lands(shape, lands, kwArgCheck = None, debug = False, simp = 0.1):
+def removeLands(shape, lands, kwArgCheck = None, debug = False, simp = 0.1):
     """Remove the parts of a shape that lie on land
 
     This function reads in a shape and a list of Polygons of land masses. Each

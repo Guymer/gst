@@ -73,9 +73,9 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, detailed = False, dur = 1
         raise Exception("\"pyguymer3\" is not installed; you need to have the Python module from https://github.com/Guymer/PyGuymer3 located somewhere in your $PYTHONPATH") from None
 
     # Import sub-functions ...
-    from .remove_interior_rings import remove_interior_rings
-    from .remove_lands import remove_lands
-    from .save_allLands import save_allLands
+    from .removeInteriorRings import removeInteriorRings
+    from .removeLands import removeLands
+    from .saveAllLands import saveAllLands
 
     # Check keyword arguments ...
     if kwArgCheck is not None:
@@ -192,7 +192,7 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, detailed = False, dur = 1
         print(f"Making \"{allLandsName}\" ...")
 
         # Make the compressed WKB file of all of the land ...
-        save_allLands(
+        saveAllLands(
             allLandsName,
             output2,
             detailed = detailed,
@@ -307,7 +307,7 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, detailed = False, dur = 1
                 limit = []
                 for poly in pyguymer3.geo.extract_polys(ship):
                     limit += pyguymer3.geo.extract_lines(
-                        remove_lands(poly.exterior, relevantLands, simp = -1.0)
+                        removeLands(poly.exterior, relevantLands, simp = -1.0)
                     )
                 limit = shapely.ops.unary_union(limit)
 
@@ -341,8 +341,8 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, detailed = False, dur = 1
                      tol = tol,
                 )
                 ship = shapely.ops.unary_union([limit, ship])
-                ship = remove_lands(ship, relevantLands, simp = simp)
-                ship = remove_interior_rings(ship, tol = tol)
+                ship = removeLands(ship, relevantLands, simp = simp)
+                ship = removeInteriorRings(ship, tol = tol)
 
                 print(f" > filled/buffered/simplified/unioned/removed in {time.time() - start:,.2f} seconds.")
             else:
@@ -356,8 +356,8 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, detailed = False, dur = 1
                      tol = tol,
                 )
                 ship = shapely.ops.unary_union([limit, ship])
-                ship = remove_lands(ship, relevantLands, simp = -1.0)
-                ship = remove_interior_rings(ship, tol = tol)
+                ship = removeLands(ship, relevantLands, simp = -1.0)
+                ship = removeInteriorRings(ship, tol = tol)
 
                 print(f" > filled/buffered/filled/unioned/removed in {time.time() - start:,.2f} seconds.")
 

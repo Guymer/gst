@@ -1,4 +1,4 @@
-def remove_interior_rings(shape, kwArgCheck = None, tol = 1.0e-10):
+def removeInteriorRings(shape, kwArgCheck = None, tol = 1.0e-10):
     """Remove all interior rings from a [Multi]Polygon
 
     This function reads in a [Multi]Polygon and returns a [Multi]Polygon which

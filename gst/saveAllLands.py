@@ -1,4 +1,4 @@
-def save_allLands(fname, dname, kwArgCheck = None, debug = False, detailed = False, dist = -1.0, fill = 1.0, nang = 9, res = "110m", simp = 0.1, tol = 1.0e-10):
+def saveAllLands(fname, dname, kwArgCheck = None, debug = False, detailed = False, dist = -1.0, fill = 1.0, nang = 9, res = "110m", simp = 0.1, tol = 1.0e-10):
     """Save (optionally buffered and optionally simplified) land to a compressed WKB file.
 
     Parameters
