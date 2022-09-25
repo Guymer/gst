@@ -48,19 +48,24 @@ ymax =  -90.0                                                                   
 
 # Loop over precisions ...
 for prec in [1250, 2500, 5000, 10000, 20000, 40000, 80000]:
-    print(f"Running \"--prec {prec:d}.0\" ...")
+    print(f"Running \"--precision {prec:.1f}\" ...")
+
+    # Create short-hand ...
+    # NOTE: Say that 40,000 metres takes 1 hour at 20 knots.
+    freq = 24 * 40000 // prec                                                   # [#]
 
     # Run GST ...
     subprocess.run(
         [
             "python3.10", "run.py",
-            "-1.0",
-            "50.7",
-            "20.0",
-            "--dur", "0.09",
-            "--nang", "513",
-            "--prec", f"{prec:d}.0",
-            "--res", "10m",
+            "-1.0", "50.7", "20.0",
+            "--duration", "0.09",           # some sailing (20 knots * 0.09 days = 80.01 kilometres)
+            "--precision", f"{prec:.1f}",   # LOOP VARIABLE
+            "--conservatism", "2.0",        # some conservatism
+            "--freqLand", f"{freq:d}",      # ~daily land re-evaluation
+            "--freqSimp", f"{freq:d}",      # ~daily simplification
+            "--nang", "513",                # converged number of angles
+            "--resolution", "10m",          # finest land resolution
         ],
            check = True,
         encoding = "utf-8",
@@ -77,7 +82,7 @@ for prec in [1250, 2500, 5000, 10000, 20000, 40000, 80000]:
         istep = ((1000 * dist) // prec) - 1
 
         # Deduce file name and skip if it is missing ...
-        dname = f"detailed=F_res=10m_cons=2.00e+00_tol=1.00e-10/nang=513_prec={prec:.2e}_freqLand=100_freqSimp=25_lon=-001.000000_lat=+50.700000/contours"
+        dname = f"detailed=F_res=10m_cons=2.00e+00_tol=1.00e-10/nang=513_prec={prec:.2e}_freqLand={freq:d}_freqSimp={freq:d}_lon=-001.000000_lat=+50.700000/contours"
         fname = f"{dname}/istep={istep:06d}.wkb.gz"
         if not os.path.exists(fname):
             continue
@@ -169,8 +174,10 @@ lines = []
 
 # Loop over precisions ...
 for iprec, prec in enumerate([1250, 2500, 5000, 10000, 20000, 40000, 80000]):
-    # Create short-hand ...
+    # Create short-hands ...
+    # NOTE: Say that 40,000 metres takes 1 hour at 20 knots.
     color = f"C{iprec:d}"
+    freq = 24 * 40000 // prec                                                   # [#]
 
     # Loop over distances ...
     for dist in range(10, 90, 10):
@@ -181,7 +188,7 @@ for iprec, prec in enumerate([1250, 2500, 5000, 10000, 20000, 40000, 80000]):
         istep = ((1000 * dist) // prec) - 1
 
         # Deduce file name and skip if it is missing ...
-        dname = f"detailed=F_res=10m_cons=2.00e+00_tol=1.00e-10/nang=513_prec={prec:.2e}_freqLand=100_freqSimp=25_lon=-001.000000_lat=+50.700000/contours"
+        dname = f"detailed=F_res=10m_cons=2.00e+00_tol=1.00e-10/nang=513_prec={prec:.2e}_freqLand={freq:d}_freqSimp={freq:d}_lon=-001.000000_lat=+50.700000/contours"
         fname = f"{dname}/istep={istep:06d}.wkb.gz"
         if not os.path.exists(fname):
             continue

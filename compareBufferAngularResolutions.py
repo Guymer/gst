@@ -54,13 +54,14 @@ for nang in [9, 17, 33, 65, 129, 257, 513]:
     subprocess.run(
         [
             "python3.10", "run.py",
-            "-1.0",
-            "50.7",
-            "20.0",
-            "--dur", "0.09",
-            "--nang", f"{nang:d}",
-            "--prec", "10000.0",
-            "--res", "10m",
+            "-1.0", "50.7", "20.0",
+            "--duration", "0.09",           # some sailing (20 knots * 0.09 days = 80.01 kilometres)
+            "--precision", "10000.0",       # ~¼ hour distance steps (20 knots * 15 minutes = 9.26 kilometres)
+            "--conservatism", "2.0",        # some conservatism
+            "--freqLand", "96",             # ~daily land re-evaluation
+            "--freqSimp", "96",             # ~daily simplification
+            "--nang", f"{nang:d}",          # LOOP VARIABLE
+            "--resolution", "10m",          # finest land resolution
         ],
            check = True,
         encoding = "utf-8",
@@ -74,7 +75,7 @@ for nang in [9, 17, 33, 65, 129, 257, 513]:
         istep = ((1000 * dist) // 10000) - 1
 
         # Deduce file name and skip if it is missing ...
-        dname = f"detailed=F_res=10m_cons=2.00e+00_tol=1.00e-10/nang={nang:d}_prec=1.00e+04_freqLand=100_freqSimp=25_lon=-001.000000_lat=+50.700000/contours"
+        dname = f"detailed=F_res=10m_cons=2.00e+00_tol=1.00e-10/nang={nang:d}_prec=1.00e+04_freqLand=96_freqSimp=96_lon=-001.000000_lat=+50.700000/contours"
         fname = f"{dname}/istep={istep:06d}.wkb.gz"
         if not os.path.exists(fname):
             continue
@@ -175,7 +176,7 @@ for iang, nang in enumerate([9, 17, 33, 65, 129, 257, 513]):
         istep = ((1000 * dist) // 10000) - 1
 
         # Deduce file name and skip if it is missing ...
-        dname = f"detailed=F_res=10m_cons=2.00e+00_tol=1.00e-10/nang={nang:d}_prec=1.00e+04_freqLand=100_freqSimp=25_lon=-001.000000_lat=+50.700000/contours"
+        dname = f"detailed=F_res=10m_cons=2.00e+00_tol=1.00e-10/nang={nang:d}_prec=1.00e+04_freqLand=96_freqSimp=96_lon=-001.000000_lat=+50.700000/contours"
         fname = f"{dname}/istep={istep:06d}.wkb.gz"
         if not os.path.exists(fname):
             continue
