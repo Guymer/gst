@@ -7,7 +7,7 @@ if __name__ == "__main__":
     import argparse
 
     # Import my modules ...
-    import funcs
+    import gst
 
     # Create argument parser and parse the arguments ...
     parser = argparse.ArgumentParser(allow_abbrev = False, description = "This script reads in a starting coordinate and a sailing speed and then calculates the maximum possible sailing distance on the surface of the Earth that the vessel can reach in the specified time.")
@@ -29,7 +29,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # Sail the vessel ...
-    funcs.sail(
+    gst.sail(
         args.lon,
         args.lat,
         args.spd,
