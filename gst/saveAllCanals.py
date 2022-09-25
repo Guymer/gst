@@ -92,7 +92,7 @@ def saveAllCanals(fname, kwArgCheck = None, debug = False, res = "110m", simp = 
 
     # Return if there aren't any canals at this resolution ...
     if len(lines) == 0:
-        return
+        return False
 
     # Convert list of LineStrings to a (unified) MultiLineString ...
     lines = shapely.ops.unary_union(lines).simplify(tol)
@@ -110,6 +110,12 @@ def saveAllCanals(fname, kwArgCheck = None, debug = False, res = "110m", simp = 
         with gzip.open(fname, "wb", compresslevel = 9) as fObj:
             fObj.write(shapely.wkb.dumps(linesSimp))
 
+        # Return ...
+        return True
+
     # Save MultiLineString ...
     with gzip.open(fname, "wb", compresslevel = 9) as fObj:
         fObj.write(shapely.wkb.dumps(lines))
+
+    # Return ...
+    return True
