@@ -73,7 +73,7 @@ python3.10 run.py       \
     --freqSimp 1        \   # ~hourly simplification
     --nang 9            \   # minimum number of angles
     --plot              \   # make a plot
-    --resolution 110m       # coarsest land resolution
+    --resolution 50m        # coarsest land resolution (that has the Panama Canal and Suez Canal)
 ```
 
 ... to repeat the above studies at x2 angular resolution, x2 radial resolution and x2 conservatism then try running something like:
@@ -101,7 +101,7 @@ python3.10 run.py       \
     --freqSimp 2        \
     --nang 17           \   # x2 angular resolution
     --plot              \
-    --resolution 110m
+    --resolution 50m
 ```
 
 ... to repeat the above studies at x4 angular resolution, x4 radial resolution and x4 conservatism then try running something like:
@@ -129,7 +129,7 @@ python3.10 run.py       \
     --freqSimp 4        \
     --nang 33           \   # x4 angular resolution
     --plot              \
-    --resolution 110m
+    --resolution 50m
 ```
 
 ## Dependencies
@@ -143,7 +143,3 @@ GST requires the following Python modules to be installed and available in your 
 * [shapely](https://pypi.org/project/Shapely/)
 
 GST uses some [Natural Earth](https://www.naturalearthdata.com/) resources via the [Cartopy](https://scitools.org.uk/cartopy/docs/latest/) module. If they do not exist on your system then Cartopy will download them for you in the background. Consequently, a working internet connection may be required the first time you run GST.
-
-## To Do
-
-* make sure that vessels can sail through both the Panama and Suez canals
