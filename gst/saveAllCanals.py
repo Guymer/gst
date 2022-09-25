@@ -57,6 +57,9 @@ def saveAllCanals(fname, kwArgCheck = None, debug = False, res = "110m", simp = 
     # Loop over records ...
     for record in cartopy.io.shapereader.Reader(sfile).records():
         # Skip bad records ...
+        if record.geometry is None:
+            print(f"WARNING: Skipping a collection of rivers in \"{sfile}\" as it is None.")
+            continue
         if not record.geometry.is_valid:
             print(f"WARNING: Skipping a collection of rivers in \"{sfile}\" as it is not valid.")
             continue
@@ -74,6 +77,9 @@ def saveAllCanals(fname, kwArgCheck = None, debug = False, res = "110m", simp = 
         # Loop over LineStrings ...
         for line in pyguymer3.geo.extract_lines(record.geometry):
             # Skip bad LineStrings ...
+            if line is None:
+                print(f"WARNING: Skipping a river in \"{sfile}\" as it is None.")
+                continue
             if not line.is_valid:
                 print(f"WARNING: Skipping a river in \"{sfile}\" as it is not valid.")
                 continue
@@ -83,6 +89,10 @@ def saveAllCanals(fname, kwArgCheck = None, debug = False, res = "110m", simp = 
 
             # Append LineString to list ...
             lines.append(line)
+
+    # Return if there aren't any canals at this resolution ...
+    if len(lines) == 0:
+        return
 
     # Convert list of LineStrings to a (unified) MultiLineString ...
     lines = shapely.ops.unary_union(lines).simplify(tol)
