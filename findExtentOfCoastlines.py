@@ -36,6 +36,9 @@ for sfile in sfiles:
     # Loop over records ...
     for record in cartopy.io.shapereader.Reader(sfile).records():
         # Skip bad records ...
+        if record.geometry is None:
+            print(f"WARNING: Skipping a collection of land in \"{sfile}\" as it is None.")
+            continue
         if not record.geometry.is_valid:
             print(f"WARNING: Skipping a collection of land in \"{sfile}\" as it is not valid.")
             continue
@@ -46,6 +49,9 @@ for sfile in sfiles:
         # Loop over Polygons ...
         for poly in pyguymer3.geo.extract_polys(record.geometry):
             # Skip bad Polygons ...
+            if poly is None:
+                print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is None.")
+                continue
             if not poly.is_valid:
                 print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is not valid.")
                 continue
