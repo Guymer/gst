@@ -83,8 +83,8 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, detailed = False, dur = 1
 
     # **************************************************************************
 
-    print(f"{spd:,.1f} knots is {1852.0 * spd:,.1f} metres/hour.")
-    print(f"{spd:,.1f} knots is {24.0 * 1852.0 * spd:,.1f} metres/day.")
+    print(f"{spd:,.1f} knots is {0.001 * 1852.0 * spd:,.2f} kilometres/hour.")
+    print(f"{spd:,.1f} knots is {0.001 * 24.0 * 1852.0 * spd:,.2f} kilometres/day.")
 
     # Determine how many degrees (of longitude) a [Multi]Polygon can be
     # filled by at the point where a degree (of longitude) is the largest, i.e.,
@@ -151,14 +151,14 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, detailed = False, dur = 1
 
     # Check if the user is being far too coarse ...
     if prec > maxDist:
-        raise Exception(f"the maximum possible sailing distance is {maxDist:,.1f} metres but the precision is {prec:,.1f} metres") from None
+        raise Exception(f"the maximum possible sailing distance is {0.001 * maxDist:,.2f} kilometres but the precision is {0.001 * prec:,.2f} kilometres") from None
 
     print(f"The maximum possible sailing distance is {0.001 * maxDist:,.2f} kilometres (ignoring all land).")
 
     # Figure out how many steps are going to be required ...
     nstep = round(maxDist / prec)                                               # [#]
 
-    print(f"Each sailing iteration is {3600.0 * prec / (1852.0 * spd):,.1f} seconds for the vessel.")
+    print(f"Each sailing iteration is {prec / (24.0 * 1852.0 * spd):,.4f} days for the vessel.")
 
     # **************************************************************************
 
