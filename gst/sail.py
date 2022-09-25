@@ -202,8 +202,8 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, detailed = False, dur = 1
         )
 
     # Load all the land ...
-    with gzip.open(allLandsName, "rb") as fobj:
-        allLands = shapely.wkb.loads(fobj.read())
+    with gzip.open(allLandsName, "rb") as fObj:
+        allLands = shapely.wkb.loads(fObj.read())
 
     # **************************************************************************
 
@@ -295,8 +295,8 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, detailed = False, dur = 1
         tname = f"{output4}/istep={istep:06d}.wkb.gz"
         if os.path.exists(tname):
             # Load [Multi]Polygon ...
-            with gzip.open(tname, "rb") as fobj:
-                ship = shapely.wkb.loads(fobj.read())
+            with gzip.open(tname, "rb") as fObj:
+                ship = shapely.wkb.loads(fObj.read())
         else:
             # Check what type the ship is currently ...
             if isinstance(ship, shapely.geometry.point.Point):
@@ -365,8 +365,8 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, detailed = False, dur = 1
             del limit
 
             # Save [Multi]Polygon ...
-            with gzip.open(tname, "wb", compresslevel = 9) as fobj:
-                fobj.write(shapely.wkb.dumps(ship))
+            with gzip.open(tname, "wb", compresslevel = 9) as fObj:
+                fObj.write(shapely.wkb.dumps(ship))
 
         # **********************************************************************
 

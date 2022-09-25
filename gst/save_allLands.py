@@ -145,8 +145,8 @@ def save_allLands(fname, dname, kwArgCheck = None, debug = False, detailed = Fal
                 pyguymer3.geo.check(buffs)
 
             # Save [Multi]Polygon ...
-            with gzip.open(tname, "wb", compresslevel = 9) as fobj:
-                fobj.write(shapely.wkb.dumps(buffs))
+            with gzip.open(tname, "wb", compresslevel = 9) as fObj:
+                fObj.write(shapely.wkb.dumps(buffs))
 
     # **************************************************************************
 
@@ -158,8 +158,8 @@ def save_allLands(fname, dname, kwArgCheck = None, debug = False, detailed = Fal
         print(f"   > Loading \"{tname}\" ...")
 
         # Append the individual Polygons to the list ...
-        with gzip.open(tname, "rb") as fobj:
-            buffs += pyguymer3.geo.extract_polys(shapely.wkb.loads(fobj.read()))
+        with gzip.open(tname, "rb") as fObj:
+            buffs += pyguymer3.geo.extract_polys(shapely.wkb.loads(fObj.read()))
 
     # Convert list of Polygons to (unified) MultiPolygon ...
     buffs = shapely.ops.unary_union(buffs).simplify(tol)
@@ -174,9 +174,9 @@ def save_allLands(fname, dname, kwArgCheck = None, debug = False, detailed = Fal
             pyguymer3.geo.check(buffsSimp)
 
         # Save simplified MultiPolygon ...
-        with gzip.open(fname, "wb", compresslevel = 9) as fobj:
-            fobj.write(shapely.wkb.dumps(buffsSimp))
+        with gzip.open(fname, "wb", compresslevel = 9) as fObj:
+            fObj.write(shapely.wkb.dumps(buffsSimp))
 
     # Save MultiPolygon ...
-    with gzip.open(fname, "wb", compresslevel = 9) as fobj:
-        fobj.write(shapely.wkb.dumps(buffs))
+    with gzip.open(fname, "wb", compresslevel = 9) as fObj:
+        fObj.write(shapely.wkb.dumps(buffs))

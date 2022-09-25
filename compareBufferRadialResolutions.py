@@ -90,8 +90,8 @@ for prec in [1250, 2500, 5000, 10000, 20000, 40000, 80000]:
         print(f"Surveying \"{fname}\" ...")
 
         # Load Polygon ...
-        with gzip.open(fname, "rb") as fobj:
-            ship = shapely.wkb.loads(fobj.read())
+        with gzip.open(fname, "rb") as fObj:
+            ship = shapely.wkb.loads(fObj.read())
 
         # Update global bounding box ...
         xmin = min(xmin, ship.bounds[0])                                        # [°]
@@ -150,8 +150,8 @@ ax2.set_ylabel("Area [%]")
 # ******************************************************************************
 
 # Load MultiPolygon ...
-with gzip.open("detailed=F_res=10m_cons=2.00e+00_tol=1.00e-10/allLands.wkb.gz", "rb") as fobj:
-    allLands = shapely.wkb.loads(fobj.read())
+with gzip.open("detailed=F_res=10m_cons=2.00e+00_tol=1.00e-10/allLands.wkb.gz", "rb") as fObj:
+    allLands = shapely.wkb.loads(fObj.read())
 
 # Plot MultiPolygon ...
 ax1.add_geometries(
@@ -196,8 +196,8 @@ for iprec, prec in enumerate([1250, 2500, 5000, 10000, 20000, 40000, 80000]):
         print(f"Plotting \"{fname}\" ...")
 
         # Load Polygon ...
-        with gzip.open(fname, "rb") as fobj:
-            ship = shapely.wkb.loads(fobj.read())
+        with gzip.open(fname, "rb") as fObj:
+            ship = shapely.wkb.loads(fObj.read())
 
         # Populate dictionary ...
         key = f"{dist:,d}km"
