@@ -1,4 +1,4 @@
-def saveAllLands(fname, dname, kwArgCheck = None, debug = False, detailed = False, dist = -1.0, fill = 1.0, nang = 9, res = "110m", simp = 0.1, tol = 1.0e-10):
+def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = False, detailed = False, dist = -1.0, fill = 1.0, nang = 9, res = "110m", simp = 0.1, tol = 1.0e-10):
     """Save (optionally buffered and optionally simplified) land to a compressed WKB file.
 
     Parameters
@@ -7,12 +7,15 @@ def saveAllLands(fname, dname, kwArgCheck = None, debug = False, detailed = Fals
         the file name of the compressed WKB file
     dname : string
         the directory name where temporary compressed WKB files can be stored
+    allCanals : shapely.geometry.multilinestring.MultiLineString, optional
+        a MultiLineString of canals to use to cut up pieces of land to allow
+        ships through
     debug : bool, optional
         print debug messages
     detailed : bool, optional
         take account of minor islands
     dist : float, optional
-        the distance to buffer the land by; negative values disable buffering
+        the distance to buffer the canals by; negative values disable buffering
         (in metres)
     fill : float, optional
         how many intermediary points are added to fill in the straight lines
@@ -60,6 +63,32 @@ def saveAllLands(fname, dname, kwArgCheck = None, debug = False, detailed = Fals
 
     # **************************************************************************
 
+    # Check if the user supplied canals ...
+    if isinstance(allCanals, shapely.geometry.multilinestring.MultiLineString):
+        # Check if the user wants to buffer the canals ...
+        if dist > 0.0:
+            # Add the individual Polygons that make up the buffer of the
+            # MultiLineString to the list ...
+            lines = pyguymer3.geo.extract_polys(
+                pyguymer3.geo.buffer(
+                    allCanals,
+                    dist,
+                    fill = fill,
+                    nang = nang,
+                    simp = simp,
+                     tol = tol,
+                )
+            )
+        else:
+            # Add the individual LineStrings that make up the MultiLineString to
+            # the list ...
+            lines = pyguymer3.geo.extract_lines(allCanals)
+    else:
+        # Set list ...
+        lines = []
+
+    # **************************************************************************
+
     # Initialize list ...
     sfiles = []
 
@@ -92,6 +121,9 @@ def saveAllLands(fname, dname, kwArgCheck = None, debug = False, detailed = Fals
         # Loop over records ...
         for record in cartopy.io.shapereader.Reader(sfile).records():
             # Skip bad records ...
+            if record.geometry is None:
+                print(f"WARNING: Skipping a collection of land in \"{sfile}\" as it is None.")
+                continue
             if not record.geometry.is_valid:
                 print(f"WARNING: Skipping a collection of land in \"{sfile}\" as it is not valid.")
                 continue
@@ -107,11 +139,14 @@ def saveAllLands(fname, dname, kwArgCheck = None, debug = False, detailed = Fals
             print(f"   > Making \"{tname}\" ...")
 
             # Initialize list ...
-            buffs = []
+            polys = []
 
             # Loop over Polygons ...
             for poly in pyguymer3.geo.extract_polys(record.geometry):
                 # Skip bad Polygons ...
+                if poly is None:
+                    print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is None.")
+                    continue
                 if not poly.is_valid:
                     print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is not valid.")
                     continue
@@ -119,62 +154,62 @@ def saveAllLands(fname, dname, kwArgCheck = None, debug = False, detailed = Fals
                     print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is empty.")
                     continue
 
-                # Check if the user wants to buffer the land before saving it ...
-                if dist > 0.0:
-                    # Add the individual Polygons that make up the buffer of
-                    # this Polygon to the list ...
-                    buffs += pyguymer3.geo.extract_polys(
-                        pyguymer3.geo.buffer(
-                            poly,
-                            dist,
-                            fill = fill,
-                            nang = nang,
-                            simp = simp,
-                             tol = tol,
-                        )
-                    )
-                else:
-                    # Append the Polygon ...
-                    buffs.append(poly)
+                # Loop over canals ...
+                for line in lines:
+                    # Subtract this canal from the Polygon ...
+                    poly = poly.difference(line)
 
-            # Convert list of Polygons to (unified) [Multi]Polygon ...
-            buffs = shapely.ops.unary_union(buffs).simplify(tol)
+                # Add the Polygons to the list ...
+                polys += pyguymer3.geo.extract_polys(poly)
+
+            # Convert list of Polygons to a (unified) [Multi]Polygon ...
+            polys = shapely.ops.unary_union(polys).simplify(tol)
             if debug:
-                pyguymer3.geo.check(buffs)
+                pyguymer3.geo.check(polys)
 
             # Save [Multi]Polygon ...
             with gzip.open(tname, "wb", compresslevel = 9) as fObj:
-                fObj.write(shapely.wkb.dumps(buffs))
+                fObj.write(shapely.wkb.dumps(polys))
 
     # **************************************************************************
 
     # Initialize list ...
-    buffs = []
+    polys = []
 
     # Loop over temporary compressed WKB files ...
     for tname in sorted(glob.glob(f"{dname}/????.?????????,???.?????????.wkb.gz")):
         print(f"   > Loading \"{tname}\" ...")
 
-        # Append the individual Polygons to the list ...
+        # Add the individual Polygons to the list ...
         with gzip.open(tname, "rb") as fObj:
-            buffs += pyguymer3.geo.extract_polys(shapely.wkb.loads(fObj.read()))
+            polys += pyguymer3.geo.extract_polys(shapely.wkb.loads(fObj.read()))
 
-    # Convert list of Polygons to (unified) MultiPolygon ...
-    buffs = shapely.ops.unary_union(buffs).simplify(tol)
+    # Return if there isn't any land at this resolution ...
+    if len(polys) == 0:
+        return False
+
+    # Convert list of Polygons to a (unified) [Multi]Polygon ...
+    polys = shapely.ops.unary_union(polys).simplify(tol)
     if debug:
-        pyguymer3.geo.check(buffs)
+        pyguymer3.geo.check(polys)
 
-    # Check if the user wants to simplify the MultiPolygon ...
+    # Check if the user wants to simplify the [Multi]Polygon ...
     if simp > 0.0:
-        # Simplify MultiPolygon ...
-        buffsSimp = buffs.simplify(simp)
+        # Simplify [Multi]Polygon ...
+        polysSimp = polys.simplify(simp)
         if debug:
-            pyguymer3.geo.check(buffsSimp)
+            pyguymer3.geo.check(polysSimp)
 
-        # Save simplified MultiPolygon ...
+        # Save simplified [Multi]Polygon ...
         with gzip.open(fname, "wb", compresslevel = 9) as fObj:
-            fObj.write(shapely.wkb.dumps(buffsSimp))
+            fObj.write(shapely.wkb.dumps(polysSimp))
 
-    # Save MultiPolygon ...
+        # Return ...
+        return True
+
+    # Save [Multi]Polygon ...
     with gzip.open(fname, "wb", compresslevel = 9) as fObj:
-        fObj.write(shapely.wkb.dumps(buffs))
+        fObj.write(shapely.wkb.dumps(polys))
+
+    # Return ...
+    return True
