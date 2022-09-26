@@ -343,8 +343,8 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, detailed = False, dur = 1
         else:
             # Check what type the ship is currently ...
             if isinstance(ship, shapely.geometry.point.Point):
-                # Create dummy variable ...
-                limit = copy.copy(ship)
+                # Create copy of the ship ...
+                limit = shapely.geometry.point.Point(lon, lat)
             else:
                 # Extract the current limit of sailing (on water) ...
                 limit = []
@@ -352,7 +352,7 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, detailed = False, dur = 1
                     limit += pyguymer3.geo.extract_lines(
                         removeLands(poly.exterior, relevantLands, simp = -1.0)
                     )
-                limit = shapely.ops.unary_union(limit)
+                limit = shapely.geometry.multilinestring.MultiLineString(limit)
 
             # ******************************************************************
 
