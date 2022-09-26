@@ -157,6 +157,8 @@ def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = Fals
                 # TODO: The land should probably be buffered to prohibit ships
                 #       jumping over narrow stretches that are narrower than the
                 #       iteration distance.
+                # TODO: Use the new "keepInteriors = False" keyword argument to
+                #       "buffer()".
 
                 # Loop over canals ...
                 for line in lines:
