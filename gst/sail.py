@@ -41,7 +41,6 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, detailed = False, dur = 1
     """
 
     # Improt standard modules ...
-    import copy
     import gzip
     import math
     import os
@@ -218,7 +217,7 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, detailed = False, dur = 1
     # **************************************************************************
 
     # Deduce input filename ...
-    allLandsName = f"{output1}/allLands.wkb.gz"
+    allLandsName = f"{output2}/allLands.wkb.gz"
 
     # Check if the input file is missing ...
     if not os.path.exists(allLandsName):
