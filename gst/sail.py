@@ -401,7 +401,7 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, detailed = False, dur = 1
                 )
                 ship = shapely.ops.unary_union([limit, ship])
                 ship = removeLands(ship, relevantLands, simp = simp)
-                ship = removeInteriorRings(ship, tol = tol)
+                ship = removeInteriorRings(ship)
 
                 print(f" > filled/buffered/simplified/unioned/removed in {time.time() - start:,.2f} seconds.")
             else:
@@ -416,7 +416,7 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, detailed = False, dur = 1
                 )
                 ship = shapely.ops.unary_union([limit, ship])
                 ship = removeLands(ship, relevantLands, simp = -1.0)
-                ship = removeInteriorRings(ship, tol = tol)
+                ship = removeInteriorRings(ship)
 
                 print(f" > filled/buffered/filled/unioned/removed in {time.time() - start:,.2f} seconds.")
 

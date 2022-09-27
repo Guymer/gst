@@ -1,4 +1,4 @@
-def removeInteriorRings(shape, kwArgCheck = None, tol = 1.0e-10):
+def removeInteriorRings(shape):
     """Remove all interior rings from a [Multi]Polygon
 
     This function reads in a [Multi]Polygon and returns a [Multi]Polygon which
@@ -8,9 +8,6 @@ def removeInteriorRings(shape, kwArgCheck = None, tol = 1.0e-10):
     ----------
     shape : shapely.geometry.polygon.Polygon, shapely.geometry.multipolygon.MultiPolygon
         the input shape
-    tol : float, optional
-        the Euclidean distance that defines two points as being the same (in
-        degrees)
 
     Returns
     -------
@@ -31,16 +28,13 @@ def removeInteriorRings(shape, kwArgCheck = None, tol = 1.0e-10):
     except:
         raise Exception("\"pyguymer3\" is not installed; you need to have the Python module from https://github.com/Guymer/PyGuymer3 located somewhere in your $PYTHONPATH") from None
 
-    # Check keyword arguments ...
-    if kwArgCheck is not None:
-        print(f"WARNING: \"{__name__}\" has been called with an extra positional argument")
-
     # **************************************************************************
 
     # Check the input type ...
     if isinstance(shape, shapely.geometry.polygon.Polygon):
-        # Return a Polygon made of just the exterior LinearRing ...
-        return shapely.geometry.polygon.Polygon(shape.exterior).simplify(tol)
+        # Return a correctly oriented Polygon made up of just the exterior
+        # LinearRing ...
+        return shapely.geometry.polygon.orient(shapely.geometry.polygon.Polygon(shape.exterior))
 
     # Check the input type ...
     if isinstance(shape, shapely.geometry.multipolygon.MultiPolygon):
@@ -49,12 +43,13 @@ def removeInteriorRings(shape, kwArgCheck = None, tol = 1.0e-10):
 
         # Loop over Polygons ...
         for poly in pyguymer3.geo.extract_polys(shape):
-            # Append a Polygon made of just the exterior LinearRing ...
-            polys.append(shapely.geometry.polygon.Polygon(poly.exterior))
+            # Append a correctly oriented Polygon made up of just the exterior
+            # LinearRing ...
+            polys.append(shapely.geometry.polygon.orient(shapely.geometry.polygon.Polygon(poly.exterior)))
 
         # Return a [Multi]Polygon made of Polygons made of just the exterior
         # LinearRings ...
-        return shapely.ops.unary_union(polys).simplify(tol)
+        return shapely.ops.unary_union(polys)
 
     # Catch error ...
     raise TypeError(f"\"shape\" is a \"{repr(type(shape))}\"") from None
