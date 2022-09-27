@@ -171,21 +171,15 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, detailed = False, dur = 1
     output2 = f"{output1}/nang={nang:d}_prec={prec:.2e}"
     if not os.path.exists(output2):
         os.mkdir(output2)
+    if not os.path.exists(f"{output2}/allLands"):
+        os.mkdir(f"{output2}/allLands")
 
     # Determine third output folder name and make it if it is missing ...
-    output3 = f"{output2}/allLands"
+    output3 = f"{output2}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}"
     if not os.path.exists(output3):
         os.mkdir(output3)
-
-    # Determine fourth output folder name and make it if it is missing ...
-    output4 = f"{output2}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}"
-    if not os.path.exists(output4):
-        os.mkdir(output4)
-
-    # Determine fifth output folder name and make it if it is missing ...
-    output5 = f"{output4}/contours"
-    if not os.path.exists(output5):
-        os.mkdir(output5)
+    if not os.path.exists(f"{output3}/contours"):
+        os.mkdir(f"{output3}/contours")
 
     # **************************************************************************
 
@@ -226,7 +220,7 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, detailed = False, dur = 1
         # Make the compressed WKB file of all of the land ...
         savedAllLands = saveAllLands(
             allLandsName,
-            output3,
+            f"{output2}/allLands",
             allCanals = allCanals,
              detailed = detailed,
                  dist = prec,
@@ -334,7 +328,7 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, detailed = False, dur = 1
         # **********************************************************************
 
         # Deduce temporary file name and skip if it exists already ...
-        tname = f"{output5}/istep={istep:06d}.wkb.gz"
+        tname = f"{output3}/contours/istep={istep:06d}.wkb.gz"
         if os.path.exists(tname):
             # Load [Multi]Polygon ...
             with gzip.open(tname, "rb") as fObj:
@@ -446,7 +440,7 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, detailed = False, dur = 1
     # Check if the user wants to make a plot ...
     if plot:
         # Determine output PNG file name ...
-        png = f"{output4}/dur={dur:.2f}_local={repr(local)[0]}_freqPlot={freqPlot:d}_spd={spd:.1f}.png"
+        png = f"{output3}/dur={dur:.2f}_local={repr(local)[0]}_freqPlot={freqPlot:d}_spd={spd:.1f}.png"
 
         print(f"Making \"{png}\" ...")
 
