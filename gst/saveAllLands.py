@@ -154,15 +154,25 @@ def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = Fals
                     print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is empty.")
                     continue
 
-                # TODO: The land should probably be buffered to prohibit ships
-                #       jumping over narrow stretches that are narrower than the
-                #       iteration distance.
-                # TODO: Use the new "keepInteriors = False" keyword argument to
-                #       "buffer()".
+                # Check if the user wants to buffer the land ...
+                if dist > 0.0:
+                    # Find the buffer of the land ...
+                    # NOTE: The land should probably be buffered to prohibit
+                    #       ships jumping over narrow stretches that are
+                    #       narrower than the iteration distance.
+                    poly = pyguymer3.geo.buffer(
+                        poly,
+                        dist,
+                                 fill = fill,
+                        keepInteriors = False,
+                                 nang = nang,
+                                 simp = simp,
+                                  tol = tol,
+                    )
 
                 # Loop over canals ...
                 for line in lines:
-                    # Subtract this canal from the Polygon ...
+                    # Subtract this canal from the [Multi]Polygon ...
                     poly = poly.difference(line)
 
                 # Add the Polygons to the list ...
