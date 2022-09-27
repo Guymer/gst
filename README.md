@@ -61,7 +61,7 @@ python3.10 run.py       \
     --freqSimp 1        \   # ~hourly simplification
     --nang 9            \   # minimum number of angles
     --plot              \   # make a plot
-    --resolution 110m       # coarsest land resolution
+    --resolution 110m       # coarsest land resolution (does not have the Panama Canal and Suez Canal)
 
 python3.10 run.py       \
     -1.0 50.7 20.0      \   # depart Portsmouth Harbour at 20 knots
