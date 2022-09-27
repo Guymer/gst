@@ -266,6 +266,12 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, detailed = False, dur = 1
 
     # **************************************************************************
 
+    # Check that the ship is not starting on any land ...
+    if allLands.contains(ship):
+        raise Exception("the ship is starting on land") from None
+
+    # **************************************************************************
+
     # Check if the user wants to make a plot ...
     if plot:
         # Create figure ...
