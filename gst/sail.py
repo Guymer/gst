@@ -166,6 +166,8 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, detailed = False, dur = 1
     output1 = f"detailed={repr(detailed)[0]}_res={res}_cons={cons:.2e}_tol={tol:.2e}"
     if not os.path.exists(output1):
         os.mkdir(output1)
+    if not os.path.exists(f"{output1}/allLands"):
+        os.mkdir(f"{output1}/allLands")
 
     # Determine second output folder name and make it if it is missing ...
     output2 = f"{output1}/nang={nang:d}_prec={prec:.2e}"
@@ -180,6 +182,27 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, detailed = False, dur = 1
         os.mkdir(output3)
     if not os.path.exists(f"{output3}/contours"):
         os.mkdir(f"{output3}/contours")
+
+    # **************************************************************************
+
+    # Deduce input filename ...
+    allLandsName = f"{output1}/allLands.wkb.gz"
+
+    # Check if the input file is missing ...
+    if not os.path.exists(allLandsName):
+        print(f"Making \"{allLandsName}\" ...")
+
+        # Make the compressed WKB file of all of the land ...
+        # NOTE: This is an un-buffered dataset without canals that is used
+        #       purely for visualisation by other scripts.
+        savedAllLands = saveAllLands(
+            allLandsName,
+            f"{output1}/allLands",
+            detailed = detailed,
+                 res = res,
+                simp = simp,
+                 tol = tol,
+        )
 
     # **************************************************************************
 
