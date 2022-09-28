@@ -36,7 +36,7 @@ except:
 
 # Define starting location ...
 lon = -1.0                                                                      # [°]
-lat = 50.7                                                                      # [°]
+lat = 50.5                                                                      # [°]
 
 # ******************************************************************************
 
@@ -54,16 +54,16 @@ for nang in [9, 17, 33, 65, 129, 257, 513]:
     subprocess.run(
         [
             "python3.10", "run.py",
-            "-1.0", "50.7", "20.0",
+            f"{lon:+.1f}", f"{lat:+.1f}", "20.0",
             "--duration", "0.09",           # some sailing (20 knots * 0.09 days = 80.01 kilometres)
-            "--precision", "10000.0",       # ~¼ hour distance steps (20 knots * 15 minutes = 9.26 kilometres)
+            "--precision", "1250.0",        # converged precision (from "compareBufferRadialResolutions.py")
             "--conservatism", "2.0",        # some conservatism
-            "--freqLand", "96",             # ~daily land re-evaluation
-            "--freqSimp", "96",             # ~daily simplification
+            "--freqLand", "768",            # ~daily land re-evaluation
+            "--freqSimp", "768",            # ~daily simplification
             "--nang", f"{nang:d}",          # LOOP VARIABLE
             "--resolution", "10m",          # finest land resolution
         ],
-           check = True,
+           check = False,
         encoding = "utf-8",
           stderr = subprocess.DEVNULL,
           stdout = subprocess.DEVNULL,
@@ -72,10 +72,10 @@ for nang in [9, 17, 33, 65, 129, 257, 513]:
     # Loop over distances ...
     for dist in range(10, 90, 10):
         # Determine the step count ...
-        istep = ((1000 * dist) // 10000) - 1
+        istep = ((1000 * dist) // 1250) - 1
 
         # Deduce file name and skip if it is missing ...
-        dname = f"detailed=F_res=10m_cons=2.00e+00_tol=1.00e-10/nang={nang:d}_prec=1.00e+04_freqLand=96_freqSimp=96_lon=-001.000000_lat=+50.700000/contours"
+        dname = f"detailed=F_res=10m_cons=2.00e+00_tol=1.00e-10/nang={nang:d}_prec=1.25e+03/freqLand=768_freqSimp=768_lon={lon:+011.6f}_lat={lat:+010.6f}/contours"
         fname = f"{dname}/istep={istep:06d}.wkb.gz"
         if not os.path.exists(fname):
             continue
@@ -173,10 +173,10 @@ for iang, nang in enumerate([9, 17, 33, 65, 129, 257, 513]):
     # Loop over distances ...
     for dist in range(10, 90, 10):
         # Determine the step count ...
-        istep = ((1000 * dist) // 10000) - 1
+        istep = ((1000 * dist) // 1250) - 1
 
         # Deduce file name and skip if it is missing ...
-        dname = f"detailed=F_res=10m_cons=2.00e+00_tol=1.00e-10/nang={nang:d}_prec=1.00e+04_freqLand=96_freqSimp=96_lon=-001.000000_lat=+50.700000/contours"
+        dname = f"detailed=F_res=10m_cons=2.00e+00_tol=1.00e-10/nang={nang:d}_prec=1.25e+03/freqLand=768_freqSimp=768_lon={lon:+011.6f}_lat={lat:+010.6f}/contours"
         fname = f"{dname}/istep={istep:06d}.wkb.gz"
         if not os.path.exists(fname):
             continue
@@ -226,10 +226,13 @@ for key in sorted(list(data.keys())):
     # Convert to ratio ...
     area /= area[-1]
 
+    # Convert to percentage ...
+    area *= 100.0                                                               # [%]
+
     # Plot data ...
     ax2.plot(
         nang,
-        100.0 * area,
+        area,
          label = key,
         marker = "d",
     )
@@ -262,8 +265,8 @@ ax2.semilogx()
 # )                                                                               # MatPlotLib ≥ 3.5.0
 ax2.set_xticks([8, 16, 32, 64, 128, 256, 512])                                  # MatPlotLib < 3.5.0
 ax2.set_xticklabels([8, 16, 32, 64, 128, 256, 512])                             # MatPlotLib < 3.5.0
-ax2.set_ylim(90, 101)
-ax2.set_yticks(range(90, 102))
+ax2.set_ylim(85, 102)
+ax2.set_yticks(range(85, 103))
 
 # Configure figure ...
 fg.tight_layout()

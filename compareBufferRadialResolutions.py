@@ -36,7 +36,7 @@ except:
 
 # Define starting location ...
 lon = -1.0                                                                      # [°]
-lat = 50.7                                                                      # [°]
+lat = 50.5                                                                      # [°]
 
 # ******************************************************************************
 
@@ -58,16 +58,16 @@ for prec in [1250, 2500, 5000, 10000, 20000, 40000, 80000]:
     subprocess.run(
         [
             "python3.10", "run.py",
-            "-1.0", "50.7", "20.0",
+            f"{lon:+.1f}", f"{lat:+.1f}", "20.0",
             "--duration", "0.09",           # some sailing (20 knots * 0.09 days = 80.01 kilometres)
             "--precision", f"{prec:.1f}",   # LOOP VARIABLE
             "--conservatism", "2.0",        # some conservatism
             "--freqLand", f"{freq:d}",      # ~daily land re-evaluation
             "--freqSimp", f"{freq:d}",      # ~daily simplification
-            "--nang", "513",                # converged number of angles
+            "--nang", "513",                # converged number of angles (from "compareBufferAngularResolutions.py")
             "--resolution", "10m",          # finest land resolution
         ],
-           check = True,
+           check = False,
         encoding = "utf-8",
           stderr = subprocess.DEVNULL,
           stdout = subprocess.DEVNULL,
@@ -82,7 +82,7 @@ for prec in [1250, 2500, 5000, 10000, 20000, 40000, 80000]:
         istep = ((1000 * dist) // prec) - 1
 
         # Deduce file name and skip if it is missing ...
-        dname = f"detailed=F_res=10m_cons=2.00e+00_tol=1.00e-10/nang=513_prec={prec:.2e}_freqLand={freq:d}_freqSimp={freq:d}_lon=-001.000000_lat=+50.700000/contours"
+        dname = f"detailed=F_res=10m_cons=2.00e+00_tol=1.00e-10/nang=513_prec={prec:.2e}/freqLand={freq:d}_freqSimp={freq:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/contours"
         fname = f"{dname}/istep={istep:06d}.wkb.gz"
         if not os.path.exists(fname):
             continue
@@ -188,7 +188,7 @@ for iprec, prec in enumerate([1250, 2500, 5000, 10000, 20000, 40000, 80000]):
         istep = ((1000 * dist) // prec) - 1
 
         # Deduce file name and skip if it is missing ...
-        dname = f"detailed=F_res=10m_cons=2.00e+00_tol=1.00e-10/nang=513_prec={prec:.2e}_freqLand={freq:d}_freqSimp={freq:d}_lon=-001.000000_lat=+50.700000/contours"
+        dname = f"detailed=F_res=10m_cons=2.00e+00_tol=1.00e-10/nang=513_prec={prec:.2e}/freqLand={freq:d}_freqSimp={freq:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/contours"
         fname = f"{dname}/istep={istep:06d}.wkb.gz"
         if not os.path.exists(fname):
             continue
@@ -238,10 +238,13 @@ for key in sorted(list(data.keys())):
     # Convert to ratio ...
     area /= area[0]
 
+    # Convert to percentage ...
+    area *= 100.0                                                               # [%]
+
     # Plot data ...
     ax2.plot(
         prec,
-        100.0 * area,
+        area,
          label = key,
         marker = "d",
     )
@@ -274,8 +277,8 @@ ax2.semilogx()
 # )                                                                               # MatPlotLib ≥ 3.5.0
 ax2.set_xticks([1250, 2500, 5000, 10000, 20000, 40000, 80000])                  # MatPlotLib < 3.5.0
 ax2.set_xticklabels([1250, 2500, 5000, 10000, 20000, 40000, 80000])             # MatPlotLib < 3.5.0
-ax2.set_ylim(99, 103)
-ax2.set_yticks(range(99, 104))
+ax2.set_ylim(77, 102)
+ax2.set_yticks(range(77, 103))
 
 # Configure figure ...
 fg.tight_layout()

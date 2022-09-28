@@ -6,27 +6,26 @@ The `buffer()` function in [PyGuymer3](https://github.com/Guymer/PyGuymer3) has 
 
 ## Profiling
 
-If you want to run the example script using a profiler and print out the top 10 most time-consuming functions then run:
+If you want to run [the example script](run.py) using a profiler and print out the top 10 most time-consuming functions then run:
 
 ```
 # for the first time a command is run ...
-python3.10 -m cProfile -o first.log run.py -1.0 50.7 20.0 --duration 5.0 > first.out 2> first.err
+python3.10 -m cProfile -o first.log run.py -1.0 +50.5 20.0 --duration 5.0 > first.out 2> first.err
 python3.10 -c 'import pstats; p = pstats.Stats("first.log"); p.sort_stats(pstats.SortKey.CUMULATIVE).print_stats(10)'
 
 # for the second time a command is run ...
-python3.10 -m cProfile -o second.log run.py -1.0 50.7 20.0 --duration 5.0 > second.out 2> second.err
+python3.10 -m cProfile -o second.log run.py -1.0 +50.5 20.0 --duration 5.0 > second.out 2> second.err
 python3.10 -c 'import pstats; p = pstats.Stats("second.log"); p.sort_stats(pstats.SortKey.CUMULATIVE).print_stats(10)'
 ```
 
 ## Running `compareBufferAngularResolutions.py`
 
-To generate the data needed, it will run commands like:
+To generate the data needed, [compareBufferAngularResolutions.py](compareBufferAngularResolutions.py) will run commands like:
 
 ```
-# powers of 2 are 8, 16, 32, ...
-python3.10 run.py -1.0 50.7 20.0 --duration 0.09 --nang  9 --precision 10000.0 --resolution 10m
-python3.10 run.py -1.0 50.7 20.0 --duration 0.09 --nang 17 --precision 10000.0 --resolution 10m
-python3.10 run.py -1.0 50.7 20.0 --duration 0.09 --nang 33 --precision 10000.0 --resolution 10m
+python3.10 run.py -1.0 +50.5 20.0 --duration 0.09 --precision 1250.0 --nang  9 --resolution 10m
+python3.10 run.py -1.0 +50.5 20.0 --duration 0.09 --precision 1250.0 --nang 17 --resolution 10m
+python3.10 run.py -1.0 +50.5 20.0 --duration 0.09 --precision 1250.0 --nang 33 --resolution 10m
 ...
 ```
 
@@ -34,13 +33,12 @@ After sailing for 0.09 days at 20.0 knots a vessel will have gone 80,006.4 metre
 
 ## Running `compareBufferRadialResolutions.py`
 
-To generate the data needed, it will run commands like:
+To generate the data needed, [compareBufferRadialResolutions.py](compareBufferRadialResolutions.py) will run commands like:
 
 ```
-# powers of 2 are 8, 16, 32, ...
-python3.10 run.py -1.0 50.7 20.0 --duration 0.09 --nang 513 --precision  5000.0 --resolution 10m
-python3.10 run.py -1.0 50.7 20.0 --duration 0.09 --nang 513 --precision 10000.0 --resolution 10m
-python3.10 run.py -1.0 50.7 20.0 --duration 0.09 --nang 513 --precision 20000.0 --resolution 10m
+python3.10 run.py -1.0 +50.5 20.0 --duration 0.09 --precision 1250.0 --nang 513 --resolution 10m
+python3.10 run.py -1.0 +50.5 20.0 --duration 0.09 --precision 2500.0 --nang 513 --resolution 10m
+python3.10 run.py -1.0 +50.5 20.0 --duration 0.09 --precision 5000.0 --nang 513 --resolution 10m
 ...
 ```
 
@@ -52,25 +50,13 @@ To very quickly find out how far a vessel can sail, try running something like:
 
 ```
 python3.10 run.py       \
-    -1.0 50.7 20.0      \   # depart Portsmouth Harbour at 20 knots
-    --duration 5.0      \   # approach, but do not cross, The North Pole (20 knots * 5.0 days = 4,444.80 kilometres)
-    --precision 40000.0 \   # ~hourly distance steps (20 knots * 1 hour = 37.04 kilometres)
-    --conservatism 2.0  \   # some conservatism
-    --freqLand 24       \   # ~daily land re-evaluation
-    --freqPlot 1        \   # ~hourly plotting
-    --freqSimp 1        \   # ~hourly simplification
-    --nang 9            \   # minimum number of angles
-    --plot              \   # make a plot
-    --resolution 110m       # coarsest land resolution (does not have the Panama Canal and Suez Canal)
-
-python3.10 run.py       \
-    -1.0 50.7 20.0      \   # depart Portsmouth Harbour at 20 knots
+    -1.0 +50.5 20.0     \   # depart Portsmouth Harbour at 20 knots
     --duration 11.2     \   # ~maximum distance (20 knots * 11.2 days = 9,956.35 kilometres)
-    --precision 40000.0 \   # ~hourly distance steps (20 knots * 1 hour = 37.04 kilometres)
+    --precision 10000.0 \   # ~¼ hour distance steps (20 knots * 15 minutes = 9.26 kilometres)
     --conservatism 2.0  \   # some conservatism
-    --freqLand 24       \   # ~daily land re-evaluation
-    --freqPlot 1        \   # ~hourly plotting
-    --freqSimp 1        \   # ~hourly simplification
+    --freqLand 96       \   # ~daily land re-evaluation (96 * 15 minutes = 1 day)
+    --freqPlot 4        \   # ~hourly plotting (4 * 15 minutes = 1 hour)
+    --freqSimp 4        \   # ~hourly simplification (4 * 15 minutes = 1 hour)
     --nang 9            \   # minimum number of angles
     --plot              \   # make a plot
     --resolution 50m        # coarsest land resolution (that has the Panama Canal and Suez Canal)
@@ -80,25 +66,13 @@ python3.10 run.py       \
 
 ```
 python3.10 run.py       \
-    -1.0 50.7 20.0      \
-    --duration 5.0      \
-    --precision 20000.0 \   # x2 radial resolution
-    --conservatism 4.0  \   # x2 conservatism
-    --freqLand 48       \
-    --freqPlot 2        \
-    --freqSimp 2        \
-    --nang 17           \   # x2 angular resolution
-    --plot              \
-    --resolution 110m
-
-python3.10 run.py       \
-    -1.0 50.7 20.0      \
+    -1.0 +50.5 20.0     \
     --duration 11.2     \
-    --precision 20000.0 \   # x2 radial resolution
+    --precision 5000.0  \   # x2 radial resolution
     --conservatism 4.0  \   # x2 conservatism
-    --freqLand 48       \
-    --freqPlot 2        \
-    --freqSimp 2        \
+    --freqLand 192      \
+    --freqPlot 8        \
+    --freqSimp 8        \
     --nang 17           \   # x2 angular resolution
     --plot              \
     --resolution 50m
@@ -108,25 +82,13 @@ python3.10 run.py       \
 
 ```
 python3.10 run.py       \
-    -1.0 50.7 20.0      \
-    --duration 5.0      \
-    --precision 10000.0 \   # x4 radial resolution
-    --conservatism 8.0  \   # x4 conservatism
-    --freqLand 96       \
-    --freqPlot 4        \
-    --freqSimp 4        \
-    --nang 33           \   # x4 angular resolution
-    --plot              \
-    --resolution 110m
-
-python3.10 run.py       \
-    -1.0 50.7 20.0      \
+    -1.0 +50.5 20.0     \
     --duration 11.2     \
-    --precision 10000.0 \   # x4 radial resolution
+    --precision 2500.0  \   # x4 radial resolution
     --conservatism 8.0  \   # x4 conservatism
-    --freqLand 96       \
-    --freqPlot 4        \
-    --freqSimp 4        \
+    --freqLand 256      \
+    --freqPlot 16       \
+    --freqSimp 16       \
     --nang 33           \   # x4 angular resolution
     --plot              \
     --resolution 50m
