@@ -215,6 +215,15 @@ for iang, nang in enumerate([9, 17, 33, 65, 129, 257, 513]):
         # Clean up ...
         del ship
 
+# Plot the starting location ...
+ax1.scatter(
+    [lon],
+    [lat],
+        color = "gold",
+       marker = "*",
+    transform = cartopy.crs.Geodetic(),
+)
+
 # ******************************************************************************
 
 # Loop over distances ...

@@ -227,6 +227,15 @@ for iprec, prec in enumerate([1250, 2500, 5000, 10000, 20000, 40000, 80000]):
         # Clean up ...
         del ship
 
+# Plot the starting location ...
+ax1.scatter(
+    [lon],
+    [lat],
+        color = "gold",
+       marker = "*",
+    transform = cartopy.crs.Geodetic(),
+)
+
 # ******************************************************************************
 
 # Loop over distances ...
