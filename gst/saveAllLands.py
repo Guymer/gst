@@ -57,6 +57,9 @@ def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = Fals
     except:
         raise Exception("\"pyguymer3\" is not installed; you need to have the Python module from https://github.com/Guymer/PyGuymer3 located somewhere in your $PYTHONPATH") from None
 
+    # Import sub-functions ...
+    from .removeInteriorRings import removeInteriorRings
+
     # Check keyword arguments ...
     if kwArgCheck is not None:
         print(f"WARNING: \"{__name__}\" has been called with an extra positional argument")
@@ -206,6 +209,7 @@ def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = Fals
 
     # Convert list of Polygons to a (unified) [Multi]Polygon ...
     polys = shapely.ops.unary_union(polys).simplify(tol)
+    polys = removeInteriorRings(polys)
     if debug:
         pyguymer3.geo.check(polys)
 
@@ -213,6 +217,7 @@ def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = Fals
     if simp > 0.0:
         # Simplify [Multi]Polygon ...
         polysSimp = polys.simplify(simp)
+        polysSimp = removeInteriorRings(polysSimp)
         if debug:
             pyguymer3.geo.check(polysSimp)
 
