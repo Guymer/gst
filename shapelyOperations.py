@@ -30,7 +30,7 @@ except:
 
 # Define starting location ...
 lon = -1.0                                                                      # [°]
-lat = 50.7                                                                      # [°]
+lat = 50.5                                                                      # [°]
 
 # Define extent ...
 ext = [lon - 5.0, lon + 5.0, lat - 5.0, lat + 5.0]                              # [°]

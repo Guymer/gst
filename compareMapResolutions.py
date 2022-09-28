@@ -24,10 +24,15 @@ except:
 
 # Define starting location ...
 lon = -1.0                                                                      # [°]
-lat = 50.7                                                                      # [°]
+lat = 50.5                                                                      # [°]
 
 # Define extent ...
-ext = [lon - 1.0, lon + 1.0, lat - 1.0, lat + 1.0]                              # [°]
+ext = [
+    lon - 1.0,
+    lon + 1.0,
+    lat - 1.0,
+    lat + 1.0,
+]                                                                               # [°]
 
 # ******************************************************************************
 
@@ -114,6 +119,15 @@ for i, (resolution, colour) in enumerate(pairs):
 
     # Clean up ...
     del polys
+
+# Plot the starting location ...
+ax.scatter(
+    [lon],
+    [lat],
+        color = "gold",
+       marker = "*",
+    transform = cartopy.crs.Geodetic(),
+)
 
 # Configure figure ...
 fg.tight_layout()

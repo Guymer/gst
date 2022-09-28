@@ -36,22 +36,22 @@ if __name__ == "__main__":
 
     # Define starting location and the four buffering distances ...
     # lon = 1.0                                                                   # [°]
-    # lat = 50.7                                                                  # [°]
+    # lat = 50.5                                                                  # [°]
     # maxDists = [4382, 4383, 4384, 4385]                                         # [km]
 
     # Define starting location and the four buffering distances ...
     # lon = -1.0                                                                  # [°]
-    # lat = 50.7                                                                  # [°]
+    # lat = 50.5                                                                  # [°]
     # maxDists = [4382, 4383, 4384, 4385]                                         # [km]
 
     # Define starting location and the four buffering distances ...
     # lon = 1.0                                                                   # [°]
-    # lat = -50.7                                                                 # [°]
+    # lat = -50.5                                                                 # [°]
     # maxDists = [4382, 4383, 4384, 4385]                                         # [km]
 
     # Define starting location and the four buffering distances ...
     # lon = -1.0                                                                  # [°]
-    # lat = -50.7                                                                 # [°]
+    # lat = -50.5                                                                 # [°]
     # maxDists = [4382, 4383, 4384, 4385]                                         # [km]
 
     # Define starting location and the four buffering distances ...
