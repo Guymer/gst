@@ -86,7 +86,7 @@ python3.10 run.py       \
     --duration 11.2     \
     --precision 2500.0  \   # x4 radial resolution
     --conservatism 8.0  \   # x4 conservatism
-    --freqLand 256      \
+    --freqLand 384      \
     --freqPlot 16       \
     --freqSimp 16       \
     --nang 33           \   # x4 angular resolution
