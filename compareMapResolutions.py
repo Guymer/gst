@@ -11,6 +11,10 @@ try:
     import matplotlib.pyplot
 except:
     raise Exception("\"matplotlib\" is not installed; run \"pip install --user matplotlib\"") from None
+try:
+    import shapely
+except:
+    raise Exception("\"shapely\" is not installed; run \"pip install --user Shapely\"") from None
 
 # Import my modules ...
 try:
@@ -90,6 +94,11 @@ for i, (resolution, colour) in enumerate(pairs):
             continue
         if record.geometry.is_empty:
             print(f"WARNING: Skipping a collection of land in \"{sfile}\" as it is empty.")
+            continue
+
+        # Check type ...
+        if not isinstance(record.geometry, shapely.geometry.polygon.Polygon) and not isinstance(record.geometry, shapely.geometry.multipolygon.MultiPolygon):
+            print(f"WARNING: Skipping a collection of land in \"{sfile}\" as it is not a [Multi]Polygon.")
             continue
 
         # Loop over Polygons ...

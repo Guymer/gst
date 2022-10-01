@@ -67,6 +67,11 @@ def saveAllCanals(fname, kwArgCheck = None, debug = False, res = "110m", simp = 
             print(f"WARNING: Skipping a collection of rivers in \"{sfile}\" as it is empty.")
             continue
 
+        # Check type ...
+        if not isinstance(record.geometry, shapely.geometry.polygon.Polygon) and not isinstance(record.geometry, shapely.geometry.multipolygon.MultiPolygon):
+            print(f"WARNING: Skipping a collection of land in \"{sfile}\" as it is not a [Multi]Polygon.")
+            continue
+
         # Create short-hand ...
         neName = pyguymer3.geo.getRecordAttribute(record, "NAME")
 
@@ -93,6 +98,10 @@ def saveAllCanals(fname, kwArgCheck = None, debug = False, res = "110m", simp = 
     # Return if there aren't any canals at this resolution ...
     if len(lines) == 0:
         return False
+
+    # TODO: Need to extend the end points further out to endsure that the bays
+    #       and lagoons around the entrances do not get buffered and block off
+    #       the canals.
 
     # Convert list of LineStrings to a (unified) MultiLineString ...
     lines = shapely.ops.unary_union(lines).simplify(tol)
