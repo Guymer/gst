@@ -143,11 +143,11 @@ fg.tight_layout()
 
 # Save figure ...
 fg.savefig(
-    "compareMapResolutions.png",
+    "compareNeMapResolutions.png",
            dpi = 300,
     pad_inches = 0.1,
 )
 matplotlib.pyplot.close(fg)
 
 # Optimize PNG ...
-pyguymer3.image.optimize_image("compareMapResolutions.png", strip = True)
+pyguymer3.image.optimize_image("compareNeMapResolutions.png", strip = True)
