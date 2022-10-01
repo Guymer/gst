@@ -68,8 +68,8 @@ def saveAllCanals(fname, kwArgCheck = None, debug = False, res = "110m", simp = 
             continue
 
         # Check type ...
-        if not isinstance(record.geometry, shapely.geometry.polygon.Polygon) and not isinstance(record.geometry, shapely.geometry.multipolygon.MultiPolygon):
-            print(f"WARNING: Skipping a collection of land in \"{sfile}\" as it is not a [Multi]Polygon.")
+        if not isinstance(record.geometry, shapely.geometry.linestring.LineString) and not isinstance(record.geometry, shapely.geometry.multilinestring.MultiLineString):
+            print(f"WARNING: Skipping a collection of land in \"{sfile}\" as it is not a [Multi]LineString.")
             continue
 
         # Create short-hand ...
