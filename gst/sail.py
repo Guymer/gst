@@ -216,9 +216,9 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, detailed = False, dur = 1
         # Make the compressed WKB file of all of the canals ...
         savedAllCanals = saveAllCanals(
             allCanalsName,
-             res = res,
-            simp = simp,
-             tol = tol,
+            debug = True,
+             simp = simp,
+              tol = tol,
         )
     else:
         # Set flag (if the file exists then canals must have been saved) ...
