@@ -44,6 +44,10 @@ def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = Fals
     except:
         raise Exception("\"cartopy\" is not installed; run \"pip install --user Cartopy\"") from None
     try:
+        import geojson
+    except:
+        raise Exception("\"geojson\" is not installed; run \"pip install --user geojson\"") from None
+    try:
         import shapely
         import shapely.wkb
     except:
@@ -69,22 +73,74 @@ def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = Fals
     if isinstance(allCanals, shapely.geometry.multilinestring.MultiLineString):
         # Check if the user wants to buffer the canals ...
         if dist > 0.0:
-            # Add the individual Polygons that make up the buffer of the
-            # MultiLineString to the list ...
-            lines = pyguymer3.geo.extract_polys(
-                pyguymer3.geo.buffer(
-                    allCanals,
-                    dist,
-                    fill = fill,
-                    nang = nang,
-                    simp = simp,
-                     tol = tol,
+            # Initialize list ...
+            lines = []
+
+            # Loop over canals ...
+            for canal in pyguymer3.geo.extract_lines(allCanals):
+                # Extract coordinates ...
+                coords = canal.coords[:]                                        # [°]
+
+                # Find the bearing from the second coordinate to the first
+                # coordinate (assuming that the CoordinateSequence goes from
+                # North-to-South) and use it to prepend a starting coordinate
+                # even further away ...
+                _, bear, _ = pyguymer3.geo.calc_dist_between_two_locs(
+                    coords[1][0],
+                    coords[1][1],
+                    coords[0][0],
+                    coords[0][1],
+                )                                                               # [°]
+                newLon, newLat, _ = pyguymer3.geo.calc_loc_from_loc_and_bearing_and_dist(
+                    coords[0][0],
+                    coords[0][1],
+                    bear,
+                    2.0 * dist,
+                )                                                               # [°], [°]
+                coords = [(newLon, newLat)] + coords                            # [°]
+
+                # Find the bearing from the penultimate coordinate to the
+                # ultimate coordinate (assuming that the CoordinateSequence goes
+                # from North-to-South) and use it to prepend a starting
+                # coordinate even further away ...
+                _, bear, _ = pyguymer3.geo.calc_dist_between_two_locs(
+                    coords[-2][0],
+                    coords[-2][1],
+                    coords[-1][0],
+                    coords[-1][1],
+                )                                                               # [°]
+                newLon, newLat, _ = pyguymer3.geo.calc_loc_from_loc_and_bearing_and_dist(
+                    coords[-1][0],
+                    coords[-1][1],
+                    bear,
+                    2.0 * dist,
+                )                                                               # [°], [°]
+                coords = coords + [(newLon, newLat)]                            # [°]
+
+                # Make LineString ...
+                line = shapely.geometry.linestring.LineString(coords)
+                if debug:
+                    pyguymer3.geo.check(line)
+
+                # Clean up ...
+                del coords
+
+                # Append the buffer of the LineString to the list ...
+                lines.append(
+                    pyguymer3.geo.buffer(
+                        line,
+                        dist,
+                        fill = fill,
+                        nang = nang,
+                        simp = simp,
+                         tol = tol,
+                    )
                 )
-            )
+
+                # Clean up ...
+                del line
         else:
-            # Add the individual LineStrings that make up the MultiLineString to
-            # the list ...
-            lines = pyguymer3.geo.extract_lines(allCanals)
+            raise Exception("you have provided canals, but no distance to buffer them by") from None
     else:
         # Set list ...
         lines = []
@@ -211,30 +267,50 @@ def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = Fals
     if len(polys) == 0:
         return False
 
-    # Convert list of Polygons to a (unified) [Multi]Polygon ...
+    # Convert list of Polygons to a (unified) MultiPolygon ...
     polys = shapely.ops.unary_union(polys).simplify(tol)
     polys = removeInteriorRings(polys)
     if debug:
         pyguymer3.geo.check(polys)
 
-    # Check if the user wants to simplify the [Multi]Polygon ...
+    # Check if the user wants to simplify the MultiPolygon ...
     if simp > 0.0:
-        # Simplify [Multi]Polygon ...
+        # Simplify MultiPolygon ...
         polysSimp = polys.simplify(simp)
         polysSimp = removeInteriorRings(polysSimp)
         if debug:
             pyguymer3.geo.check(polysSimp)
 
-        # Save simplified [Multi]Polygon ...
+        # Save simplified MultiPolygon ...
         with gzip.open(fname, "wb", compresslevel = 9) as fObj:
             fObj.write(shapely.wkb.dumps(polysSimp))
+
+        # Save MultiPolygon ...
+        with open(f"{fname[:-7]}.geojson", "wt", encoding = "utf-8") as fObj:
+            geojson.dump(
+                polysSimp,
+                fObj,
+                ensure_ascii = False,
+                      indent = 4,
+                   sort_keys = True,
+            )
 
         # Return ...
         return True
 
-    # Save [Multi]Polygon ...
+    # Save MultiPolygon ...
     with gzip.open(fname, "wb", compresslevel = 9) as fObj:
         fObj.write(shapely.wkb.dumps(polys))
+
+    # Save MultiPolygon ...
+    with open(f"{fname[:-7]}.geojson", "wt", encoding = "utf-8") as fObj:
+        geojson.dump(
+            polys,
+            fObj,
+            ensure_ascii = False,
+                  indent = 4,
+               sort_keys = True,
+        )
 
     # Return ...
     return True
