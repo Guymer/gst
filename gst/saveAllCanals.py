@@ -153,8 +153,8 @@ def saveAllCanals(fname, kwArgCheck = None, debug = False, simp = 0.1, tol = 1.0
 
     # **************************************************************************
 
-    # Convert list of LineStrings to a (unified) MultiLineString ...
-    lines = shapely.ops.unary_union(lines).simplify(tol)
+    # Convert list of LineStrings to a MultiLineString ...
+    lines = shapely.geometry.multilinestring.MultiLineString(lines).simplify(tol)
     if debug:
         pyguymer3.geo.check(lines)
 
@@ -172,12 +172,12 @@ def saveAllCanals(fname, kwArgCheck = None, debug = False, simp = 0.1, tol = 1.0
         # Save simplified MultiLineString ...
         with open(f"{fname[:-7]}.geojson", "wt", encoding = "utf-8") as fObj:
             geojson.dump(
-                lines,
+                linesSimp,
                 fObj,
                 ensure_ascii = False,
                       indent = 4,
                    sort_keys = True,
-           )
+            )
 
         # Return ...
         return True
@@ -194,7 +194,7 @@ def saveAllCanals(fname, kwArgCheck = None, debug = False, simp = 0.1, tol = 1.0
             ensure_ascii = False,
                   indent = 4,
                sort_keys = True,
-       )
+        )
 
     # Return ...
     return True
