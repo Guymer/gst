@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 
-# Import standard modules ...
-import os
-
 # Import special modules ...
 try:
     import cartopy
@@ -74,14 +71,6 @@ neShapeFiles = [
         resolution = "10m",
     ),
 ]
-
-# ******************************************************************************
-
-# Make output folders ...
-if not os.path.exists("compareDatasets/gshhg/records"):
-    os.makedirs("compareDatasets/gshhg/records")
-if not os.path.exists("compareDatasets/ne/records"):
-    os.makedirs("compareDatasets/ne/records")
 
 # ******************************************************************************
 
