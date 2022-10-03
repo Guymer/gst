@@ -95,7 +95,7 @@ def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = Fals
                     coords[0][0],
                     coords[0][1],
                     bear,
-                    2.0 * dist,
+                    3.0 * dist,
                 )                                                               # [°], [°]
                 coords = [(newLon, newLat)] + coords                            # [°]
 
@@ -113,7 +113,7 @@ def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = Fals
                     coords[-1][0],
                     coords[-1][1],
                     bear,
-                    2.0 * dist,
+                    3.0 * dist,
                 )                                                               # [°], [°]
                 coords = coords + [(newLon, newLat)]                            # [°]
 
