@@ -79,7 +79,7 @@ def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = Fals
             # Loop over canals ...
             for canal in pyguymer3.geo.extract_lines(allCanals):
                 # Extract coordinates ...
-                coords = canal.coords[:]                                        # [°]
+                coords = list(canal.coords)                                     # [°]
 
                 # Find the bearing from the second coordinate to the first
                 # coordinate (assuming that the CoordinateSequence goes from
@@ -95,7 +95,7 @@ def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = Fals
                     coords[0][0],
                     coords[0][1],
                     bear,
-                    3.0 * dist,
+                    6.0 * dist,         # NOTE: Chosen by trial and error.
                 )                                                               # [°], [°]
                 coords = [(newLon, newLat)] + coords                            # [°]
 
@@ -113,7 +113,7 @@ def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = Fals
                     coords[-1][0],
                     coords[-1][1],
                     bear,
-                    3.0 * dist,
+                    6.0 * dist,         # NOTE: Chosen by trial and error.
                 )                                                               # [°], [°]
                 coords = coords + [(newLon, newLat)]                            # [°]
 
