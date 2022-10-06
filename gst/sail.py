@@ -1,4 +1,4 @@
-def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, detailed = False, dur = 1.0, freqLand = 100, freqPlot = 25, freqSimp = 25, local = False, nang = 9, plot = False, prec = 10000.0, res = "110m", tol = 1.0e-10):
+def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100, freqPlot = 25, freqSimp = 25, local = False, nang = 9, plot = False, prec = 10000.0, res = "c", tol = 1.0e-10):
     """Sail from a point
 
     This function reads in a starting coordinate (in degrees) and a sailing
@@ -15,8 +15,6 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, detailed = False, dur = 1
         the speed of the vessel (in knots)
     cons : float, optional
         the amount of conservatism to add to the calculation
-    detailed : bool, optional
-        take account of minor islands
     dur : float, optional
         the duration of the voyage (in days)
     freqLand : int, optional
@@ -34,7 +32,8 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, detailed = False, dur = 1
     prec : float, optional
         the precision of the calculation (in metres)
     res : string, optional
-        the resolution of the Natural Earth datasets
+        the resolution of the Global Self-Consistent, Hierarchical,
+        High-Resolution Geography datasets
     tol : float, optional
         the Euclidean distance that defines two points as being the same (in
         degrees)
@@ -163,7 +162,7 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, detailed = False, dur = 1
     # **************************************************************************
 
     # Determine first output folder name and make it if it is missing ...
-    output1 = f"detailed={repr(detailed)[0]}_res={res}_cons={cons:.2e}_tol={tol:.2e}"
+    output1 = f"res={res}_cons={cons:.2e}_tol={tol:.2e}"
     if not os.path.exists(output1):
         os.mkdir(output1)
     if not os.path.exists(f"{output1}/allLands"):
@@ -198,10 +197,9 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, detailed = False, dur = 1
         savedAllLands = saveAllLands(
             allLandsName,
             f"{output1}/allLands",
-            detailed = detailed,
-                 res = res,
-                simp = simp,
-                 tol = tol,
+             res = res,
+            simp = simp,
+             tol = tol,
         )
 
     # **************************************************************************
@@ -245,7 +243,6 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, detailed = False, dur = 1
             allLandsName,
             f"{output2}/allLands",
             allCanals = allCanals,
-             detailed = detailed,
                  dist = prec,
                  fill = fill,
                  nang = nang,

@@ -1,4 +1,4 @@
-def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = False, detailed = False, dist = -1.0, fill = 1.0, nang = 9, res = "110m", simp = 0.1, tol = 1.0e-10):
+def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = False, dist = -1.0, fill = 1.0, nang = 9, res = "c", simp = 0.1, tol = 1.0e-10):
     """Save (optionally buffered and optionally simplified) land to a compressed WKB file.
 
     Parameters
@@ -12,8 +12,6 @@ def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = Fals
         ships through
     debug : bool, optional
         print debug messages
-    detailed : bool, optional
-        take account of minor islands
     dist : float, optional
         the distance to buffer the canals by; negative values disable buffering
         (in metres)
@@ -24,7 +22,8 @@ def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = Fals
         the number of angles around each point that are calculated when
         buffering
     res : string, optional
-        the resolution of the Natural Earth datasets
+        the resolution of the Global Self-Consistent, Hierarchical,
+        High-Resolution Geography datasets
     simp : float, optional
         how much intermediary [Multi]Polygons are simplified by; negative values
         disable simplification (in degrees)
@@ -147,108 +146,89 @@ def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = Fals
 
     # **************************************************************************
 
-    # Initialize list ...
-    sfiles = []
-
-    # Find file containing all the land (and major islands) as [Multi]Polygons ...
-    sfiles.append(
-        cartopy.io.shapereader.natural_earth(
-              category = "physical",
-                  name = "land",
-            resolution = res,
-        )
+    # Find file containing all the coastlines as [Multi]Polygons ...
+    sfile = cartopy.io.shapereader.gshhs(
+        level = 1,
+        scale = res,
     )
-
-    # Check if the user wants to be detailed ...
-    if detailed:
-        # Find file containing all the minor islands as [Multi]Polygons ...
-        sfiles.append(
-            cartopy.io.shapereader.natural_earth(
-                  category = "physical",
-                      name = "minor_islands",
-                resolution = res,
-            )
-        )
 
     # **************************************************************************
 
-    # Loop over Shapefiles ...
-    for sfile in sfiles:
-        print(f" > Loading \"{sfile}\" ...")
+    print(f" > Loading \"{sfile}\" ...")
 
-        # Loop over records ...
-        for record in cartopy.io.shapereader.Reader(sfile).records():
-            # Skip bad records ...
-            if record.geometry is None:
-                print(f"WARNING: Skipping a collection of land in \"{sfile}\" as it is None.")
+    # Loop over records ...
+    for record in cartopy.io.shapereader.Reader(sfile).records():
+        # Skip bad records ...
+        if record.geometry is None:
+            print(f"WARNING: Skipping a collection of land in \"{sfile}\" as it is None.")
+            continue
+        if not record.geometry.is_valid:
+            print(f"WARNING: Skipping a collection of land in \"{sfile}\" as it is not valid.")
+            continue
+        if record.geometry.is_empty:
+            print(f"WARNING: Skipping a collection of land in \"{sfile}\" as it is empty.")
+            continue
+
+        # Check type ...
+        if not isinstance(record.geometry, shapely.geometry.polygon.Polygon) and not isinstance(record.geometry, shapely.geometry.multipolygon.MultiPolygon):
+            print(f"WARNING: Skipping a collection of land in \"{sfile}\" as it is not a [Multi]Polygon.")
+            continue
+
+        # Deduce temporary file name and skip if it exists already ...
+        tname = f"{dname}/{record.geometry.centroid.x:+014.9f},{record.geometry.centroid.y:+013.9f}.wkb.gz"
+        if os.path.exists(tname):
+            continue
+
+        print(f"   > Making \"{tname}\" ...")
+
+        # Initialize list ...
+        polys = []
+
+        # Loop over Polygons ...
+        for poly in pyguymer3.geo.extract_polys(record.geometry):
+            # Skip bad Polygons ...
+            if poly is None:
+                print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is None.")
                 continue
-            if not record.geometry.is_valid:
-                print(f"WARNING: Skipping a collection of land in \"{sfile}\" as it is not valid.")
+            if not poly.is_valid:
+                print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is not valid.")
                 continue
-            if record.geometry.is_empty:
-                print(f"WARNING: Skipping a collection of land in \"{sfile}\" as it is empty.")
-                continue
-
-            # Check type ...
-            if not isinstance(record.geometry, shapely.geometry.polygon.Polygon) and not isinstance(record.geometry, shapely.geometry.multipolygon.MultiPolygon):
-                print(f"WARNING: Skipping a collection of land in \"{sfile}\" as it is not a [Multi]Polygon.")
+            if poly.is_empty:
+                print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is empty.")
                 continue
 
-            # Deduce temporary file name and skip if it exists already ...
-            tname = f"{dname}/{record.geometry.centroid.x:+014.9f},{record.geometry.centroid.y:+013.9f}.wkb.gz"
-            if os.path.exists(tname):
-                continue
+            # Check if the user wants to buffer the land ...
+            if dist > 0.0:
+                # Find the buffer of the land ...
+                # NOTE: The land should probably be buffered to prohibit ships
+                #       jumping over narrow stretches that are narrower than the
+                #       iteration distance.
+                poly = pyguymer3.geo.buffer(
+                    poly,
+                    dist,
+                             fill = fill,
+                    keepInteriors = False,
+                             nang = nang,
+                             simp = simp,
+                              tol = tol,
+                )
 
-            print(f"   > Making \"{tname}\" ...")
+            # Loop over canals ...
+            for line in lines:
+                # Subtract this canal from the [Multi]Polygon ...
+                poly = poly.difference(line)
 
-            # Initialize list ...
-            polys = []
+            # Add the Polygons to the list ...
+            polys += pyguymer3.geo.extract_polys(poly)
 
-            # Loop over Polygons ...
-            for poly in pyguymer3.geo.extract_polys(record.geometry):
-                # Skip bad Polygons ...
-                if poly is None:
-                    print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is None.")
-                    continue
-                if not poly.is_valid:
-                    print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is not valid.")
-                    continue
-                if poly.is_empty:
-                    print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is empty.")
-                    continue
+        # Convert list of Polygons to a (unified) [Multi]Polygon ...
+        polys = shapely.ops.unary_union(polys).simplify(tol)
+        if debug:
+            pyguymer3.geo.check(polys)
 
-                # Check if the user wants to buffer the land ...
-                if dist > 0.0:
-                    # Find the buffer of the land ...
-                    # NOTE: The land should probably be buffered to prohibit
-                    #       ships jumping over narrow stretches that are
-                    #       narrower than the iteration distance.
-                    poly = pyguymer3.geo.buffer(
-                        poly,
-                        dist,
-                                 fill = fill,
-                        keepInteriors = False,
-                                 nang = nang,
-                                 simp = simp,
-                                  tol = tol,
-                    )
-
-                # Loop over canals ...
-                for line in lines:
-                    # Subtract this canal from the [Multi]Polygon ...
-                    poly = poly.difference(line)
-
-                # Add the Polygons to the list ...
-                polys += pyguymer3.geo.extract_polys(poly)
-
-            # Convert list of Polygons to a (unified) [Multi]Polygon ...
-            polys = shapely.ops.unary_union(polys).simplify(tol)
-            if debug:
-                pyguymer3.geo.check(polys)
-
-            # Save [Multi]Polygon ...
-            with gzip.open(tname, "wb", compresslevel = 9) as fObj:
-                fObj.write(shapely.wkb.dumps(polys))
+        # Save [Multi]Polygon ...
+        with gzip.open(tname, "wb", compresslevel = 9) as fObj:
+            fObj.write(shapely.wkb.dumps(polys))
 
     # **************************************************************************
 
