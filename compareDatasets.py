@@ -48,7 +48,7 @@ tol = 1.0e-10
 
 # Set Global Self-Consistent, Hierarchical, High-Resolution Geography Shapefile
 # list ...
-# NOTE: See https://www.ngdc.noaa.gov/mgg/shorelines/gshhs.html
+# NOTE: See https://www.ngdc.noaa.gov/mgg/shorelines/
 gshhgShapeFiles = [
     cartopy.io.shapereader.gshhs(
         level = 1,
