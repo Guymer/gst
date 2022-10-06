@@ -18,7 +18,6 @@ if __name__ == "__main__":
     parser.add_argument("lat", help = "the latitude of the starting point (in degrees)", type = float)
     parser.add_argument("spd", help = "the speed of the vessel (in knots)", type = float)
     parser.add_argument("--conservatism", default = 2.0, help = "the amount of conservatism to add to the calculation", type = float)
-    parser.add_argument("--detailed", action = "store_true", help = "take account of minor islands")
     parser.add_argument("--duration", default = 1.0, help = "the duration of the voyage (in days)", type = float)
     parser.add_argument("--freqLand", default = 100, help = "re-evaluate the relevant land every freqLand iteration", type = int)
     parser.add_argument("--freqPlot", default = 25, help = "plot sailing contours every freqPlot iteration", type = int)
@@ -27,7 +26,7 @@ if __name__ == "__main__":
     parser.add_argument("--nang", default = 9, help = "the number of directions from each point that the vessel could sail in", type = int)
     parser.add_argument("--plot", action = "store_true", help = "make a plot")
     parser.add_argument("--precision", default = 10000.0, help = "the precision of the calculation (in metres)", type = float)
-    parser.add_argument("--resolution", default = "110m", help = "the resolution of the Natural Earth datasets", type = str)
+    parser.add_argument("--resolution", default = "c", help = "the resolution of the Global Self-Consistent, Hierarchical, High-Resolution Geography datasets", type = str)
     parser.add_argument("--tolerance", default = 1.0e-10, help = "the Euclidean distance that defines two points as being the same (in degrees)", type = float)
     args = parser.parse_args()
 
@@ -37,7 +36,6 @@ if __name__ == "__main__":
         args.lat,
         args.spd,
             cons = args.conservatism,
-        detailed = args.detailed,
              dur = args.duration,
         freqLand = args.freqLand,
         freqPlot = args.freqPlot,
