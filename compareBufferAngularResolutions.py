@@ -222,6 +222,7 @@ ax1.scatter(
         color = "gold",
        marker = "*",
     transform = cartopy.crs.Geodetic(),
+       zorder = 5.0,
 )
 
 # ******************************************************************************
