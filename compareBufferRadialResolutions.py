@@ -296,8 +296,8 @@ ax2.semilogx()
 # )                                                                               # MatPlotLib ≥ 3.5.0
 ax2.set_xticks([1250, 2500, 5000, 10000, 20000, 40000])                         # MatPlotLib < 3.5.0
 ax2.set_xticklabels([1250, 2500, 5000, 10000, 20000, 40000])                    # MatPlotLib < 3.5.0
-ax2.set_ylim(77, 102)
-ax2.set_yticks(range(77, 103))
+ax2.set_ylim(76, 102)
+ax2.set_yticks(range(76, 103))
 
 # Configure figure ...
 fg.tight_layout()
