@@ -193,6 +193,12 @@ for res in ress:
         )
 
         # Configure axis ...
+        pyguymer3.geo.add_coastlines(
+            ax[iloc],
+             colorName = "white",
+             linewidth = 1.0,
+            resolution = "f",
+        )
         ax[iloc].set_title(f"lon={loc[0]:+.2f}°, lat={loc[1]:+.2f}°")
 
     # Configure figure ...
