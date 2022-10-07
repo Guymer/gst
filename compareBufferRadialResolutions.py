@@ -47,26 +47,29 @@ xmax = -180.0                                                                   
 ymax =  -90.0                                                                   # [°]
 
 # Loop over precisions ...
-for prec in [1250, 2500, 5000, 10000, 20000, 40000, 80000]:
-    print(f"Running \"--precision {prec:.1f}\" ...")
-
+for prec in [1250, 2500, 5000, 10000, 20000, 40000]:
     # Create short-hand ...
     # NOTE: Say that 40,000 metres takes 1 hour at 20 knots.
     freq = 24 * 40000 // prec                                                   # [#]
 
+    # Populate GST command ...
+    cmd = [
+        "python3.10", "run.py",
+        f"{lon:+.1f}", f"{lat:+.1f}", "20.0",
+        "--duration", "0.09",           # some sailing (20 knots * 0.09 days = 80.01 kilometres)
+        "--precision", f"{prec:.1f}",   # LOOP VARIABLE
+        "--conservatism", "2.0",        # some conservatism
+        "--freqLand", f"{freq:d}",      # ~daily land re-evaluation
+        "--freqSimp", f"{freq:d}",      # ~daily simplification
+        "--nang", "257",                # converged number of angles (from "compareBufferAngularResolutions.py")
+        "--resolution", "i",            # intermediate coastline resolution
+    ]
+
+    print(f'Running "{" ".join(cmd)}" ...')
+
     # Run GST ...
     subprocess.run(
-        [
-            "python3.10", "run.py",
-            f"{lon:+.1f}", f"{lat:+.1f}", "20.0",
-            "--duration", "0.09",           # some sailing (20 knots * 0.09 days = 80.01 kilometres)
-            "--precision", f"{prec:.1f}",   # LOOP VARIABLE
-            "--conservatism", "2.0",        # some conservatism
-            "--freqLand", f"{freq:d}",      # ~daily land re-evaluation
-            "--freqSimp", f"{freq:d}",      # ~daily simplification
-            "--nang", "513",                # converged number of angles (from "compareBufferAngularResolutions.py")
-            "--resolution", "10m",          # finest land resolution
-        ],
+        cmd,
            check = False,
         encoding = "utf-8",
           stderr = subprocess.DEVNULL,
@@ -82,7 +85,7 @@ for prec in [1250, 2500, 5000, 10000, 20000, 40000, 80000]:
         istep = ((1000 * dist) // prec) - 1
 
         # Deduce file name and skip if it is missing ...
-        dname = f"detailed=F_res=10m_cons=2.00e+00_tol=1.00e-10/nang=513_prec={prec:.2e}/freqLand={freq:d}_freqSimp={freq:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/contours"
+        dname = f"res=i_cons=2.00e+00_tol=1.00e-10/nang=257_prec={prec:.2e}/freqLand={freq:d}_freqSimp={freq:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/contours"
         fname = f"{dname}/istep={istep:06d}.wkb.gz"
         if not os.path.exists(fname):
             continue
@@ -150,7 +153,7 @@ ax2.set_ylabel("Area [%]")
 # ******************************************************************************
 
 # Load MultiPolygon ...
-with gzip.open("detailed=F_res=10m_cons=2.00e+00_tol=1.00e-10/allLands.wkb.gz", "rb") as fObj:
+with gzip.open("res=i_cons=2.00e+00_tol=1.00e-10/allLands.wkb.gz", "rb") as fObj:
     allLands = shapely.wkb.loads(fObj.read())
 
 # Plot MultiPolygon ...
@@ -173,7 +176,7 @@ labels = []
 lines = []
 
 # Loop over precisions ...
-for iprec, prec in enumerate([1250, 2500, 5000, 10000, 20000, 40000, 80000]):
+for iprec, prec in enumerate([1250, 2500, 5000, 10000, 20000, 40000]):
     # Create short-hands ...
     # NOTE: Say that 40,000 metres takes 1 hour at 20 knots.
     color = f"C{iprec:d}"
@@ -188,7 +191,7 @@ for iprec, prec in enumerate([1250, 2500, 5000, 10000, 20000, 40000, 80000]):
         istep = ((1000 * dist) // prec) - 1
 
         # Deduce file name and skip if it is missing ...
-        dname = f"detailed=F_res=10m_cons=2.00e+00_tol=1.00e-10/nang=513_prec={prec:.2e}/freqLand={freq:d}_freqSimp={freq:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/contours"
+        dname = f"res=i_cons=2.00e+00_tol=1.00e-10/nang=257_prec={prec:.2e}/freqLand={freq:d}_freqSimp={freq:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/contours"
         fname = f"{dname}/istep={istep:06d}.wkb.gz"
         if not os.path.exists(fname):
             continue
@@ -262,6 +265,12 @@ for key in sorted(list(data.keys())):
 # ******************************************************************************
 
 # Configure axis ...
+pyguymer3.geo.add_coastlines(
+    ax1,
+     colorName = "white",
+     linewidth = 1.0,
+    resolution = "f",
+)
 ax1.legend(
     lines,
     labels,
@@ -282,11 +291,11 @@ ax2.legend(
 )
 ax2.semilogx()
 # ax2.set_xticks(                                                                 # MatPlotLib ≥ 3.5.0
-#     [1250, 2500, 5000, 10000, 20000, 40000, 80000],                             # MatPlotLib ≥ 3.5.0
-#     labels = [1250, 2500, 5000, 10000, 20000, 40000, 80000],                    # MatPlotLib ≥ 3.5.0
+#     [1250, 2500, 5000, 10000, 20000, 40000],                                    # MatPlotLib ≥ 3.5.0
+#     labels = [1250, 2500, 5000, 10000, 20000, 40000],                           # MatPlotLib ≥ 3.5.0
 # )                                                                               # MatPlotLib ≥ 3.5.0
-ax2.set_xticks([1250, 2500, 5000, 10000, 20000, 40000, 80000])                  # MatPlotLib < 3.5.0
-ax2.set_xticklabels([1250, 2500, 5000, 10000, 20000, 40000, 80000])             # MatPlotLib < 3.5.0
+ax2.set_xticks([1250, 2500, 5000, 10000, 20000, 40000])                         # MatPlotLib < 3.5.0
+ax2.set_xticklabels([1250, 2500, 5000, 10000, 20000, 40000])                    # MatPlotLib < 3.5.0
 ax2.set_ylim(77, 102)
 ax2.set_yticks(range(77, 103))
 

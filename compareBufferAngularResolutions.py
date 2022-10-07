@@ -47,22 +47,25 @@ xmax = -180.0                                                                   
 ymax =  -90.0                                                                   # [°]
 
 # Loop over number of angles ...
-for nang in [9, 17, 33, 65, 129, 257, 513]:
-    print(f"Running \"--nang {nang:d}\" ...")
+for nang in [9, 17, 33, 65, 129, 257]:
+    # Populate GST command ...
+    cmd = [
+        "python3.10", "run.py",
+        f"{lon:+.1f}", f"{lat:+.1f}", "20.0",
+        "--duration", "0.09",           # some sailing (20 knots * 0.09 days = 80.01 kilometres)
+        "--precision", "1250.0",        # converged precision (from "compareBufferRadialResolutions.py")
+        "--conservatism", "2.0",        # some conservatism
+        "--freqLand", "768",            # ~daily land re-evaluation
+        "--freqSimp", "768",            # ~daily simplification
+        "--nang", f"{nang:d}",          # LOOP VARIABLE
+        "--resolution", "i",            # intermediate coastline resolution
+    ]
+
+    print(f'Running "{" ".join(cmd)}" ...')
 
     # Run GST ...
     subprocess.run(
-        [
-            "python3.10", "run.py",
-            f"{lon:+.1f}", f"{lat:+.1f}", "20.0",
-            "--duration", "0.09",           # some sailing (20 knots * 0.09 days = 80.01 kilometres)
-            "--precision", "1250.0",        # converged precision (from "compareBufferRadialResolutions.py")
-            "--conservatism", "2.0",        # some conservatism
-            "--freqLand", "768",            # ~daily land re-evaluation
-            "--freqSimp", "768",            # ~daily simplification
-            "--nang", f"{nang:d}",          # LOOP VARIABLE
-            "--resolution", "10m",          # finest land resolution
-        ],
+        cmd,
            check = False,
         encoding = "utf-8",
           stderr = subprocess.DEVNULL,
@@ -75,7 +78,7 @@ for nang in [9, 17, 33, 65, 129, 257, 513]:
         istep = ((1000 * dist) // 1250) - 1
 
         # Deduce file name and skip if it is missing ...
-        dname = f"detailed=F_res=10m_cons=2.00e+00_tol=1.00e-10/nang={nang:d}_prec=1.25e+03/freqLand=768_freqSimp=768_lon={lon:+011.6f}_lat={lat:+010.6f}/contours"
+        dname = f"res=i_cons=2.00e+00_tol=1.00e-10/nang={nang:d}_prec=1.25e+03/freqLand=768_freqSimp=768_lon={lon:+011.6f}_lat={lat:+010.6f}/contours"
         fname = f"{dname}/istep={istep:06d}.wkb.gz"
         if not os.path.exists(fname):
             continue
@@ -143,7 +146,7 @@ ax2.set_ylabel("Area [%]")
 # ******************************************************************************
 
 # Load MultiPolygon ...
-with gzip.open("detailed=F_res=10m_cons=2.00e+00_tol=1.00e-10/allLands.wkb.gz", "rb") as fObj:
+with gzip.open("res=i_cons=2.00e+00_tol=1.00e-10/allLands.wkb.gz", "rb") as fObj:
     allLands = shapely.wkb.loads(fObj.read())
 
 # Plot MultiPolygon ...
@@ -166,7 +169,7 @@ labels = []
 lines = []
 
 # Loop over number of angles ...
-for iang, nang in enumerate([9, 17, 33, 65, 129, 257, 513]):
+for iang, nang in enumerate([9, 17, 33, 65, 129, 257]):
     # Create short-hand ...
     color = f"C{iang:d}"
 
@@ -176,7 +179,7 @@ for iang, nang in enumerate([9, 17, 33, 65, 129, 257, 513]):
         istep = ((1000 * dist) // 1250) - 1
 
         # Deduce file name and skip if it is missing ...
-        dname = f"detailed=F_res=10m_cons=2.00e+00_tol=1.00e-10/nang={nang:d}_prec=1.25e+03/freqLand=768_freqSimp=768_lon={lon:+011.6f}_lat={lat:+010.6f}/contours"
+        dname = f"res=i_cons=2.00e+00_tol=1.00e-10/nang={nang:d}_prec=1.25e+03/freqLand=768_freqSimp=768_lon={lon:+011.6f}_lat={lat:+010.6f}/contours"
         fname = f"{dname}/istep={istep:06d}.wkb.gz"
         if not os.path.exists(fname):
             continue
@@ -250,6 +253,12 @@ for key in sorted(list(data.keys())):
 # ******************************************************************************
 
 # Configure axis ...
+pyguymer3.geo.add_coastlines(
+    ax1,
+     colorName = "white",
+     linewidth = 1.0,
+    resolution = "f",
+)
 ax1.legend(
     lines,
     labels,
@@ -270,13 +279,13 @@ ax2.legend(
 )
 ax2.semilogx()
 # ax2.set_xticks(                                                                 # MatPlotLib ≥ 3.5.0
-#     [8, 16, 32, 64, 128, 256, 512],                                             # MatPlotLib ≥ 3.5.0
-#     labels = [8, 16, 32, 64, 128, 256, 512],                                    # MatPlotLib ≥ 3.5.0
+#     [8, 16, 32, 64, 128, 256],                                                  # MatPlotLib ≥ 3.5.0
+#     labels = [8, 16, 32, 64, 128, 256],                                         # MatPlotLib ≥ 3.5.0
 # )                                                                               # MatPlotLib ≥ 3.5.0
-ax2.set_xticks([8, 16, 32, 64, 128, 256, 512])                                  # MatPlotLib < 3.5.0
-ax2.set_xticklabels([8, 16, 32, 64, 128, 256, 512])                             # MatPlotLib < 3.5.0
-ax2.set_ylim(85, 102)
-ax2.set_yticks(range(85, 103))
+ax2.set_xticks([8, 16, 32, 64, 128, 256])                                       # MatPlotLib < 3.5.0
+ax2.set_xticklabels([8, 16, 32, 64, 128, 256])                                  # MatPlotLib < 3.5.0
+ax2.set_ylim(90, 102)
+ax2.set_yticks(range(90, 103))
 
 # Configure figure ...
 fg.tight_layout()
