@@ -24,7 +24,7 @@ second.log
 second.out
 
 # Hide large datasets ...
-detailed=*
+res=*
 *.geojson
 *.png
 *.wkb.gz
