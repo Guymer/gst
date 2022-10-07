@@ -46,7 +46,7 @@ tol = 1.0e-10
 
 # ******************************************************************************
 
-# Set Global Self-Consistent, Hierarchical, High-Resolution Geography Shapefile
+# Set Global Self-Consistent Hierarchical High-Resolution Geography Shapefile
 # list ...
 # NOTE: See https://www.ngdc.noaa.gov/mgg/shorelines/
 gshhgShapeFiles = [
@@ -106,7 +106,7 @@ pyguymer3.geo.add_vertical_gridlines(
     ngrid = 21,
 )
 
-# Loop over Global Self-Consistent, Hierarchical, High-Resolution Geography
+# Loop over Global Self-Consistent Hierarchical High-Resolution Geography
 # Shapefiles ...
 for sfile in gshhgShapeFiles:
     print(f"Loading \"{sfile}\" ...")

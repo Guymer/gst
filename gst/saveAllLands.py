@@ -22,7 +22,7 @@ def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = Fals
         the number of angles around each point that are calculated when
         buffering
     res : string, optional
-        the resolution of the Global Self-Consistent, Hierarchical,
+        the resolution of the Global Self-Consistent Hierarchical
         High-Resolution Geography datasets
     simp : float, optional
         how much intermediary [Multi]Polygons are simplified by; negative values

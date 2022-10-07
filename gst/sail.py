@@ -32,7 +32,7 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
     prec : float, optional
         the precision of the calculation (in metres)
     res : string, optional
-        the resolution of the Global Self-Consistent, Hierarchical,
+        the resolution of the Global Self-Consistent Hierarchical
         High-Resolution Geography datasets
     tol : float, optional
         the Euclidean distance that defines two points as being the same (in
