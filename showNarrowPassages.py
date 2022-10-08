@@ -27,6 +27,7 @@ try:
     import pyguymer3
     import pyguymer3.geo
     import pyguymer3.image
+    import pyguymer3.media
 except:
     raise Exception("\"pyguymer3\" is not installed; you need to have the Python module from https://github.com/Guymer/PyGuymer3 located somewhere in your $PYTHONPATH") from None
 
@@ -60,6 +61,9 @@ ress = [
 
 # ******************************************************************************
 
+# Initialize list ...
+frames = []
+
 # Loop over resolutions ...
 for res in ress:
     # Loop over combinations ...
@@ -89,6 +93,14 @@ for res in ress:
         )
 
     # **************************************************************************
+
+    # Deduce PNG name, append it to the list and skip if it already exists ...
+    frame = f"showNarrowPassages_res={res}.png"
+    frames.append(frame)
+    if os.path.exists(frame):
+        continue
+
+    print(f"Making \"{frame}\" ...")
 
     # Create figure ...
     fg = matplotlib.pyplot.figure(
@@ -164,7 +176,7 @@ for res in ress:
             if not os.path.exists(fname):
                 continue
 
-            print(f"Plotting \"{fname}\" ...")
+            print(f" > Plotting \"{fname}\" ...")
 
             # Load [Multi]Polygon ...
             with gzip.open(fname, "rb") as fObj:
@@ -206,11 +218,22 @@ for res in ress:
 
     # Save figure ...
     fg.savefig(
-        f"showNarrowPassages_res={res}.png",
+        frame,
                dpi = 300,
         pad_inches = 0.1,
     )
     matplotlib.pyplot.close(fg)
 
     # Optimize PNG ...
-    pyguymer3.image.optimize_image(f"showNarrowPassages_res={res}.png", strip = True)
+    pyguymer3.image.optimize_image(frame, strip = True)
+
+# ******************************************************************************
+
+print("Making \"showNarrowPassages.webp\" ...")
+
+# Save 1fps WEBP ...
+pyguymer3.media.images2webp(
+    frames,
+    "showNarrowPassages.webp",
+    fps = 1.0,
+)
