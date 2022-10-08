@@ -67,7 +67,7 @@ frames = []
 # Loop over resolutions ...
 for res in ress:
     # Loop over combinations ...
-    for cons, nang, prec, colour in combs:
+    for cons, nang, prec, color in combs:
         # Populate GST command ...
         cmd = [
             "python3.10", "run.py",
@@ -169,7 +169,7 @@ for res in ress:
         )
 
         # Loop over combinations ...
-        for cons, nang, prec, colour in combs:
+        for cons, nang, prec, color in combs:
             # Deduce file name and skip if it is missing ...
             dname = f"res={res}_cons={cons:.2e}_tol=1.00e-10/nang={nang:d}_prec={prec:.2e}"
             fname = f"{dname}/allLands.wkb.gz"
@@ -187,7 +187,7 @@ for res in ress:
                 pyguymer3.geo.extract_polys(allLands),
                 cartopy.crs.PlateCarree(),
                 edgecolor = (0.0, 0.0, 0.0, 0.5),
-                facecolor = colour,
+                facecolor = color,
                 linewidth = 1.0,
             )
 

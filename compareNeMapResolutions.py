@@ -40,7 +40,7 @@ ext = [
 
 # ******************************************************************************
 
-# Define resolutions and their colours ...
+# Define resolutions and their colors ...
 pairs = [
     ("110m", (1.0, 0.0, 0.0, 0.5)),
     ( "50m", (0.0, 1.0, 0.0, 0.5)),
@@ -70,7 +70,7 @@ pyguymer3.geo.add_horizontal_gridlines(ax, ext, ngrid = 21)
 pyguymer3.geo.add_vertical_gridlines(ax, ext, ngrid = 21)
 
 # Loop over resolutions ...
-for i, (resolution, colour) in enumerate(pairs):
+for i, (resolution, color) in enumerate(pairs):
     # Deduce Shapefile name ...
     sfile = cartopy.io.shapereader.natural_earth(
           category = "physical",
@@ -122,7 +122,7 @@ for i, (resolution, colour) in enumerate(pairs):
         polys,
         cartopy.crs.PlateCarree(),
         edgecolor = (0.0, 0.0, 0.0, 0.5),
-        facecolor = colour,
+        facecolor = color,
         linewidth = 1.0
     )
 
