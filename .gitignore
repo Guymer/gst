@@ -27,4 +27,5 @@ second.out
 res=*
 *.geojson
 *.png
+*.webp
 *.wkb.gz
