@@ -179,8 +179,10 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
     output3 = f"{output2}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}"
     if not os.path.exists(output3):
         os.mkdir(output3)
-    if not os.path.exists(f"{output3}/contours"):
-        os.mkdir(f"{output3}/contours")
+    if not os.path.exists(f"{output3}/limit"):
+        os.mkdir(f"{output3}/limit")
+    if not os.path.exists(f"{output3}/ship"):
+        os.mkdir(f"{output3}/ship")
 
     # **************************************************************************
 
@@ -354,7 +356,7 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
         # **********************************************************************
 
         # Deduce temporary file name and skip if it exists already ...
-        tname = f"{output3}/contours/istep={istep:06d}.wkb.gz"
+        tname = f"{output3}/ship/istep={istep:06d}.wkb.gz"
         if os.path.exists(tname):
             # Load [Multi]Polygon ...
             with gzip.open(tname, "rb") as fObj:
@@ -372,6 +374,10 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
                         removeLands(poly.exterior, relevantLands, simp = -1.0)
                     )
                 limit = shapely.geometry.multilinestring.MultiLineString(limit)
+
+                # Save [Multi]LineString ...
+                with gzip.open(f"{output3}/limit/istep={istep:06d}.wkb.gz", "wb", compresslevel = 9) as fObj:
+                    fObj.write(shapely.wkb.dumps(limit))
 
             # ******************************************************************
 
