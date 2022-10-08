@@ -26,6 +26,7 @@ second.out
 # Hide large datasets ...
 res=*
 *.geojson
+*.mp4
 *.png
 *.webp
 *.wkb.gz
