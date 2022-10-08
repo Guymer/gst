@@ -84,8 +84,10 @@ for prec in [1250, 2500, 5000, 10000, 20000, 40000]:
             continue
         istep = ((1000 * dist) // prec) - 1                                     # [#]
 
-        # Deduce file name and skip if it is missing ...
+        # Deduce directory name ...
         dname = f"res=i_cons=2.00e+00_tol=1.00e-10/nang=257_prec={prec:.2e}/freqLand={freq:d}_freqSimp={freq:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/ship"
+
+        # Deduce file name and skip if it is missing ...
         fname = f"{dname}/istep={istep:06d}.wkb.gz"
         if not os.path.exists(fname):
             continue
@@ -190,8 +192,10 @@ for iprec, prec in enumerate([1250, 2500, 5000, 10000, 20000, 40000]):
             continue
         istep = ((1000 * dist) // prec) - 1                                     # [#]
 
-        # Deduce file name and skip if it is missing ...
+        # Deduce directory name ...
         dname = f"res=i_cons=2.00e+00_tol=1.00e-10/nang=257_prec={prec:.2e}/freqLand={freq:d}_freqSimp={freq:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/ship"
+
+        # Deduce file name and skip if it is missing ...
         fname = f"{dname}/istep={istep:06d}.wkb.gz"
         if not os.path.exists(fname):
             continue
