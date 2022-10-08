@@ -44,6 +44,17 @@ python3.10 run.py -1.0 +50.5 20.0 --duration 0.09 --precision 5000.0 --nang 513 
 
 After sailing for 0.09 days at 20.0 knots a vessel will have gone 80,006.4 metres, which I'll round to 80 kilometres.
 
+## Running `showNarrowPassages.py`
+
+To generate the data needed, [showNarrowPassages.py](showNarrowPassages.py) will run commands like:
+
+```
+python3.10 run.py -1.0 +50.5 20.0 --precision 5000.0 --conservatism 2.0 --nang  9
+python3.10 run.py -1.0 +50.5 20.0 --precision 2500.0 --conservatism 4.0 --nang 17
+python3.10 run.py -1.0 +50.5 20.0 --precision 1250.0 --conservatism 8.0 --nang 33
+...
+```
+
 ## Maximum Sailing Distance
 
 To very quickly find out how far a vessel can sail, try running something like:
@@ -59,7 +70,7 @@ python3.10 run.py      \
     --freqSimp 8       \   # ~hourly simplification (8 * 7.5 minutes = 1 hour)
     --nang 9           \   # minimum number of angles
     --plot             \   # make a plot
-    --resolution i         # intermediate coastline resolution
+    --resolution c         # crude coastline resolution
 ```
 
 ... to repeat the above studies at x2 angular resolution, x2 radial resolution and x2 conservatism then try running something like:
@@ -75,7 +86,7 @@ python3.10 run.py      \
     --freqSimp 16      \
     --nang 17          \   # x2 angular resolution
     --plot             \
-    --resolution i
+    --resolution c
 ```
 
 ... to repeat the above studies at x4 angular resolution, x4 radial resolution and x4 conservatism then try running something like:
@@ -91,7 +102,7 @@ python3.10 run.py      \
     --freqSimp 32      \
     --nang 33          \   # x4 angular resolution
     --plot             \
-    --resolution i
+    --resolution c
 ```
 
 ## Dependencies
@@ -105,4 +116,4 @@ GST requires the following Python modules to be installed and available in your 
 * [pyguymer3](https://github.com/Guymer/PyGuymer3)
 * [shapely](https://pypi.org/project/Shapely/)
 
-GST uses some [Global Self-Consistent Hierarchical High-Resolution Geography](https://www.ngdc.noaa.gov/mgg/shorelines/) resources and some [Natural Earth](https://www.naturalearthdata.com/) resources via the [cartopy](https://pypi.org/project/Cartopy/) module. If they do not exist on your system then Cartopy will download them for you in the background. Consequently, a working internet connection may be required the first time you run GST.
+GST uses some [Global Self-Consistent Hierarchical High-Resolution Geography](https://www.ngdc.noaa.gov/mgg/shorelines/) resources and some [Natural Earth](https://www.naturalearthdata.com/) resources via the [cartopy](https://pypi.org/project/Cartopy/) module. If they do not exist on your system then [cartopy](https://pypi.org/project/Cartopy/) will download them for you in the background. Consequently, a working internet connection may be required the first time you run GST.
