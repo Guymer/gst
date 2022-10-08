@@ -59,7 +59,7 @@ for cons, nang, prec, color in combs:
     cmd = [
         "python3.10", "run.py",
         f"{lon:+.1f}", f"{lat:+.1f}", "20.0",
-        "--duration", "1.0",                # some sailing
+        "--duration", "11.2",               # some sailing
         "--precision", f"{prec:.1f}",       # LOOP VARIABLE
         "--conservatism", f"{cons:.1f}",    # LOOP VARIABLE
         "--freqLand", f"{freqLand:d}",      # ~daily land re-evaluation
@@ -86,7 +86,7 @@ for cons, nang, prec, color in combs:
     fname = sorted(glob.glob(f"{dname}/istep=??????.wkb.gz"))[-1]
     istep = int(os.path.basename(fname).split("=")[1].split(".")[0])            #
 
-    print(f" > {0.001 * float(istep) * float(prec):.2f} kilometres of sailing is available.")
+    print(f" > {0.001 * float(istep * prec):.2f} kilometres of sailing is available.")
 
 # ******************************************************************************
 
