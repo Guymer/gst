@@ -148,11 +148,11 @@ if __name__ == "__main__":
 
     # Save figure ...
     fg.savefig(
-        "bug1.png",
+        "bug.png",
                dpi = 300,
         pad_inches = 0.1,
     )
     matplotlib.pyplot.close(fg)
 
     # Optimize PNG ...
-    pyguymer3.image.optimize_image("bug1.png", strip = True)
+    pyguymer3.image.optimize_image("bug.png", strip = True)
