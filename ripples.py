@@ -59,7 +59,7 @@ for cons, nang, prec, color in combs:
     cmd = [
         "python3.10", "run.py",
         f"{lon:+.1f}", f"{lat:+.1f}", "20.0",
-        "--duration", "11.2",               # some sailing
+        "--duration", "2.0",                # some sailing
         "--precision", f"{prec:.1f}",       # LOOP VARIABLE
         "--conservatism", f"{cons:.1f}",    # LOOP VARIABLE
         "--freqLand", f"{freqLand:d}",      # ~daily land re-evaluation
@@ -212,6 +212,7 @@ for dist in range(5, 10005, 5):
     )
 
     # Configure axis ...
+    pyguymer3.geo.add_coastlines(ax)
     ax.legend(
         lines,
         labels,
