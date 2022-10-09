@@ -25,6 +25,7 @@ second.out
 
 # Hide large datasets ...
 res=*
+ripples
 *.geojson
 *.mp4
 *.png
