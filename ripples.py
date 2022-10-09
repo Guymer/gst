@@ -62,7 +62,7 @@ for cons, nang, prec, color in combs:
     cmd = [
         "python3.10", "run.py",
         f"{lon:+.1f}", f"{lat:+.1f}", "20.0",
-        "--duration", "2.0",                # some sailing
+        "--duration", "1.1",                # some sailing
         "--precision", f"{prec:.1f}",       # LOOP VARIABLE
         "--conservatism", f"{cons:.1f}",    # LOOP VARIABLE
         "--freqLand", f"{freqLand:d}",      # ~daily land re-evaluation
@@ -87,9 +87,13 @@ for cons, nang, prec, color in combs:
 
     # Find the maximum distance that has been calculated so far ...
     fname = sorted(glob.glob(f"{dname}/istep=??????.wkb.gz"))[-1]
-    istep = int(os.path.basename(fname).split("=")[1].split(".")[0])            #
+    istep = int(os.path.basename(fname).split("=")[1].split(".")[0])            # [#]
 
-    print(f" > {0.001 * float(istep * prec):.2f} kilometres of sailing is available.")
+    # Create short-hands ...
+    maxDist = float(istep * prec)                                               # [m]
+    maxDur = maxDist / (1852.0 * 20.0)                                          # [hr]
+
+    print(f" > {0.001 * maxDist:.2f} kilometres of sailing is available (which is {maxDur / 24.0:,.4f} days).")
 
 # ******************************************************************************
 
