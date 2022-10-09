@@ -35,6 +35,9 @@ except:
 
 # ******************************************************************************
 
+# Define resolution ...
+res = "c"
+
 # Define starting location ...
 lon = -1.0                                                                      # [°]
 lat = 50.5                                                                      # [°]
@@ -65,7 +68,7 @@ for cons, nang, prec, color in combs:
         "--freqLand", f"{freqLand:d}",      # ~daily land re-evaluation
         "--freqSimp", f"{freqSimp:d}",      # ~hourly land re-evaluation
         "--nang", f"{nang:d}",              # LOOP VARIABLE
-        "--resolution", "c",                # a resolution
+        "--resolution", res,
     ]
 
     print(f'Running "{" ".join(cmd)}" ...')
@@ -80,7 +83,7 @@ for cons, nang, prec, color in combs:
     )
 
     # Deduce directory name ...
-    dname = f"res=c_cons={cons:.2e}_tol=1.00e-10/nang={nang:d}_prec={prec:.2e}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/limit"
+    dname = f"res={res}_cons={cons:.2e}_tol=1.00e-10/nang={nang:d}_prec={prec:.2e}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/limit"
 
     # Find the maximum distance that has been calculated so far ...
     fname = sorted(glob.glob(f"{dname}/istep=??????.wkb.gz"))[-1]
@@ -93,6 +96,8 @@ for cons, nang, prec, color in combs:
 # Make output folder if it is missing ...
 if not os.path.exists("ripples"):
     os.mkdir("ripples")
+if not os.path.exists(f"ripples/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}"):
+    os.mkdir(f"ripples/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}")
 
 # Initialize list ...
 frames = []
@@ -100,7 +105,7 @@ frames = []
 # Loop over distances ...
 for dist in range(5, 10005, 5):
     # Deduce PNG name, append it to the list and skip if it already exists ...
-    frame = f"ripples/dist={dist:05d}.png"
+    frame = f"ripples/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}/dist={dist:05d}.png"
     frames.append(frame)
     if os.path.exists(frame):
         continue
@@ -126,7 +131,7 @@ for dist in range(5, 10005, 5):
         freqSimp = 40000 // prec                                                # [#]
 
         # Deduce directory name ...
-        dname = f"res=c_cons={cons:.2e}_tol=1.00e-10/nang={nang:d}_prec={prec:.2e}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/limit"
+        dname = f"res={res}_cons={cons:.2e}_tol=1.00e-10/nang={nang:d}_prec={prec:.2e}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/limit"
 
         # Deduce file name and skip if it is missing ...
         fname = f"{dname}/istep={istep + 1:06d}.wkb.gz"
@@ -241,11 +246,11 @@ for dist in range(5, 10005, 5):
 
 # ******************************************************************************
 
-print("Making \"ripples.mp4\" ...")
+print(f"Making \"ripples/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}.mp4\" ...")
 
 # Save 60fps MP4 ...
 vname = pyguymer3.media.images2mp4(
     frames,
     fps = 60.0,
 )
-shutil.move(vname, "ripples.mp4")
+shutil.move(vname, f"ripples/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}.mp4")
