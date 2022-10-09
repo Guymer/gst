@@ -105,6 +105,12 @@ python3.10 run.py      \
     --resolution c
 ```
 
+## To Do
+
+* GSHHG does not have Antarctica in the "level 1" dataset
+* Sail for more than 10,001.5 kilometres.
+* Keep interior rings in `ship` when getting to the antipode
+
 ## Dependencies
 
 GST requires the following Python modules to be installed and available in your `PYTHONPATH`.
