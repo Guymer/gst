@@ -30,6 +30,7 @@ def saveAllCanals(fname, kwArgCheck = None, debug = False, simp = 0.1, tol = 1.0
     try:
         import shapely
         import shapely.geometry
+        import shapely.validation
     except:
         raise Exception("\"shapely\" is not installed; run \"pip install --user Shapely\"") from None
 
@@ -72,7 +73,7 @@ def saveAllCanals(fname, kwArgCheck = None, debug = False, simp = 0.1, tol = 1.0
             print(f"WARNING: Skipping a collection of rivers in \"{sfile}\" as it is None.")
             continue
         if not record.geometry.is_valid:
-            print(f"WARNING: Skipping a collection of rivers in \"{sfile}\" as it is not valid.")
+            print(f"WARNING: Skipping a collection of rivers in \"{sfile}\" as it is not valid ({shapely.validation.explain_validity(record.geometry)}).")
             continue
         if record.geometry.is_empty:
             print(f"WARNING: Skipping a collection of rivers in \"{sfile}\" as it is empty.")
@@ -97,7 +98,7 @@ def saveAllCanals(fname, kwArgCheck = None, debug = False, simp = 0.1, tol = 1.0
                 print(f"WARNING: Skipping a river in \"{sfile}\" as it is None.")
                 continue
             if not line.is_valid:
-                print(f"WARNING: Skipping a river in \"{sfile}\" as it is not valid.")
+                print(f"WARNING: Skipping a river in \"{sfile}\" as it is not valid ({shapely.validation.explain_validity(line)}).")
                 continue
             if line.is_empty:
                 print(f"WARNING: Skipping a river in \"{sfile}\" as it is empty.")

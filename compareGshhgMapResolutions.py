@@ -13,6 +13,7 @@ except:
     raise Exception("\"matplotlib\" is not installed; run \"pip install --user matplotlib\"") from None
 try:
     import shapely
+    import shapely.validation
 except:
     raise Exception("\"shapely\" is not installed; run \"pip install --user Shapely\"") from None
 
@@ -103,7 +104,7 @@ for i, (resolution, color) in enumerate(pairs):
             print(f"WARNING: Skipping a collection of land in \"{sfile}\" as it is None.")
             continue
         if not record.geometry.is_valid:
-            print(f"WARNING: Skipping a collection of land in \"{sfile}\" as it is not valid.")
+            print(f"WARNING: Skipping a collection of land in \"{sfile}\" as it is not valid ({shapely.validation.explain_validity(record.geometry)}).")
             continue
         if record.geometry.is_empty:
             print(f"WARNING: Skipping a collection of land in \"{sfile}\" as it is empty.")
@@ -121,7 +122,7 @@ for i, (resolution, color) in enumerate(pairs):
                 print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is None.")
                 continue
             if not poly.is_valid:
-                print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is not valid.")
+                print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is not valid ({shapely.validation.explain_validity(poly)}).")
                 continue
             if poly.is_empty:
                 print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is empty.")

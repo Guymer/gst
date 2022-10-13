@@ -48,6 +48,7 @@ def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = Fals
         raise Exception("\"geojson\" is not installed; run \"pip install --user geojson\"") from None
     try:
         import shapely
+        import shapely.validation
         import shapely.wkb
     except:
         raise Exception("\"shapely\" is not installed; run \"pip install --user Shapely\"") from None
@@ -163,7 +164,7 @@ def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = Fals
             print(f"WARNING: Skipping a collection of land in \"{sfile}\" as it is None.")
             continue
         if not record.geometry.is_valid:
-            print(f"WARNING: Skipping a collection of land in \"{sfile}\" as it is not valid.")
+            print(f"WARNING: Skipping a collection of land in \"{sfile}\" as it is not valid ({shapely.validation.explain_validity(record.geometry)}).")
             continue
         if record.geometry.is_empty:
             print(f"WARNING: Skipping a collection of land in \"{sfile}\" as it is empty.")
@@ -191,7 +192,7 @@ def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = Fals
                 print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is None.")
                 continue
             if not poly.is_valid:
-                print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is not valid.")
+                print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is not valid ({shapely.validation.explain_validity(poly)}).")
                 continue
             if poly.is_empty:
                 print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is empty.")
