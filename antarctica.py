@@ -1,0 +1,155 @@
+#!/usr/bin/env python3
+
+# Import standard modules ...
+import os
+
+# Import special modules ...
+try:
+    import cartopy
+except:
+    raise Exception("\"cartopy\" is not installed; run \"pip install --user Cartopy\"") from None
+try:
+    import matplotlib
+    matplotlib.use("Agg")                                                       # NOTE: See https://matplotlib.org/stable/gallery/user_interfaces/canvasagg.html
+    import matplotlib.pyplot
+except:
+    raise Exception("\"matplotlib\" is not installed; run \"pip install --user matplotlib\"") from None
+
+# Import my modules ...
+try:
+    import pyguymer3
+    import pyguymer3.geo
+    import pyguymer3.image
+    import pyguymer3.media
+except:
+    raise Exception("\"pyguymer3\" is not installed; you need to have the Python module from https://github.com/Guymer/PyGuymer3 located somewhere in your $PYTHONPATH") from None
+
+# Define resolutions ...
+ress = [
+    "c",                                # crude
+    "l",                                # low
+    "i",                                # intermediate
+    "h",                                # high
+    "f",                                # full
+]
+
+# ******************************************************************************
+
+# Initialize list ...
+frames = []
+
+# Loop over resolutions ...
+for res in ress:
+    # Deduce PNG name, append it to the list and skip if it already exists ...
+    frame = f"antarctica_res={res}.png"
+    frames.append(frame)
+    if os.path.exists(frame):
+        continue
+
+    print(f"Making \"{frame}\" ...")
+
+    # Create figure ...
+    fg = matplotlib.pyplot.figure(
+            dpi = 300,
+        figsize = (12, 8),
+    )
+
+    # Initialize list ...
+    ax = []
+
+    # Loop over axes ...
+    for i in range(4):
+        # Check if it is left or right ...
+        if i in [0, 2]:
+            # Create axis ...
+            ax.append(
+                fg.add_subplot(
+                    2,
+                    2,
+                    i + 1,
+                    projection = cartopy.crs.Robinson(),
+                )
+            )
+        else:
+            # Create axis ...
+            ax.append(
+                fg.add_subplot(
+                    2,
+                    2,
+                    i + 1,
+                    projection = cartopy.crs.Orthographic(
+                        central_longitude =   0.0,
+                         central_latitude = -90.0,
+                    ),
+                )
+            )
+
+        # Configure axis ...
+        ax[i].set_global()
+        pyguymer3.geo.add_map_background(
+            ax[i],
+                  name = "shaded-relief",
+            resolution = "large8192px",
+        )
+        pyguymer3.geo.add_horizontal_gridlines(
+            ax[i],
+            [-180.0, +180.0, -90.0, +90.0],
+            locs = range(-90, 135, 45),
+        )
+        pyguymer3.geo.add_vertical_gridlines(
+            ax[i],
+            [-180.0, +180.0, -90.0, +90.0],
+            locs = range(-180, 225, 45),
+        )
+        pyguymer3.geo.add_coastlines(
+            ax[i],
+             colorName = "red",
+                 level = 1,
+             linewidth = 1.0,
+            resolution = res,
+        )
+
+        # Check if it is top or bottom ...
+        if i in [0, 1]:
+            # Draw Antarctica ...
+            pyguymer3.geo.add_coastlines(
+                ax[i],
+                 colorName = "green",
+                     level = 5,
+                 linewidth = 1.0,
+                resolution = res,
+            )
+        else:
+            # Draw Antarctica ...
+            pyguymer3.geo.add_coastlines(
+                ax[i],
+                 colorName = "blue",
+                     level = 6,
+                 linewidth = 1.0,
+                resolution = res,
+            )
+
+    # Configure figure ...
+    fg.tight_layout()
+
+    # Save figure ...
+    fg.savefig(
+        frame,
+               dpi = 300,
+        pad_inches = 0.1,
+    )
+    matplotlib.pyplot.close(fg)
+
+    # Optimize PNG ...
+    pyguymer3.image.optimize_image(frame, strip = True)
+
+# ******************************************************************************
+
+print("Making \"antarctica.webp\" ...")
+
+# Save 1fps WEBP ...
+pyguymer3.media.images2webp(
+    frames,
+    "antarctica.webp",
+    fps = 1.0,
+)
