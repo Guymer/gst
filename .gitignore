@@ -24,8 +24,8 @@ second.log
 second.out
 
 # Hide large datasets ...
+cons=*
 res=*
-ripples
 *.geojson
 *.mp4
 *.png

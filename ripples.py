@@ -47,7 +47,24 @@ combs = [
     (2,  9, 5000, (1.0, 0.0, 0.0, 1.0),),
     (4, 17, 2500, (0.0, 1.0, 0.0, 1.0),),
     (8, 33, 1250, (0.0, 0.0, 1.0, 1.0),),
+
+    # (2,  9, 5000, (1.0, 0.0, 0.0, 1.0),),
+    # (2, 17, 2500, (0.0, 1.0, 0.0, 1.0),),
+    # (2, 33, 1250, (0.0, 0.0, 1.0, 1.0),),
 ]
+
+# Determine output directory and make it if it is missing ...
+outDir = "_".join(
+    [
+        "cons=" + ",".join([f"{cons:.2e}" for cons, nang, prec, color in combs]),
+        "nang=" + ",".join([f"{nang:d}" for cons, nang, prec, color in combs]),
+        "prec=" + ",".join([f"{prec:.2e}" for cons, nang, prec, color in combs]),
+    ]
+)
+if not os.path.exists(outDir):
+    os.mkdir(outDir)
+if not os.path.exists(f"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}"):
+    os.mkdir(f"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}")
 
 # ******************************************************************************
 
@@ -62,7 +79,7 @@ for cons, nang, prec, color in combs:
     cmd = [
         "python3.10", "run.py",
         f"{lon:+.1f}", f"{lat:+.1f}", "20.0",
-        "--duration", "1.1",                # some sailing
+        "--duration", "6.0",                # some sailing
         "--precision", f"{prec:.1f}",       # LOOP VARIABLE
         "--conservatism", f"{cons:.1f}",    # LOOP VARIABLE
         "--freqLand", f"{freqLand:d}",      # ~daily land re-evaluation
@@ -97,21 +114,15 @@ for cons, nang, prec, color in combs:
 
 # ******************************************************************************
 
-# Make output folder if it is missing ...
-if not os.path.exists("ripples"):
-    os.mkdir("ripples")
-if not os.path.exists(f"ripples/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}"):
-    os.mkdir(f"ripples/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}")
-
 # Initialize list ...
 frames = []
 
 # Loop over distances ...
 for dist in range(5, 10005, 5):
-    # Deduce PNG name, append it to the list and skip if it already exists ...
-    frame = f"ripples/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}/dist={dist:05d}.png"
-    frames.append(frame)
+    # Deduce PNG name, if it exists then append it to the list and skip ...
+    frame = f"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}/dist={dist:05d}.png"
     if os.path.exists(frame):
+        frames.append(frame)
         continue
 
     # **************************************************************************
@@ -248,13 +259,16 @@ for dist in range(5, 10005, 5):
     # Optimize PNG ...
     pyguymer3.image.optimize_image(frame, strip = True)
 
+    # Append frame to list ...
+    frames.append(frame)
+
 # ******************************************************************************
 
-print(f"Making \"ripples/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}.mp4\" ...")
+print(f"Making \"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}.mp4\" ...")
 
 # Save 60fps MP4 ...
 vname = pyguymer3.media.images2mp4(
     frames,
     fps = 60.0,
 )
-shutil.move(vname, f"ripples/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}.mp4")
+shutil.move(vname, f"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}.mp4")
