@@ -160,12 +160,12 @@ for res in ress:
         pyguymer3.geo.add_horizontal_gridlines(
             ax[iloc],
             ext[iloc],
-            locs = range(-180, 181, 1),
+            locs = range(-90, 91, 1),
         )
         pyguymer3.geo.add_vertical_gridlines(
             ax[iloc],
             ext[iloc],
-            locs = range(-90, 91, 1),
+            locs = range(-180, 181, 1),
         )
 
         # Loop over combinations ...

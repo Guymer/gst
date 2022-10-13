@@ -94,12 +94,12 @@ for iloc, loc in enumerate(locs):
     pyguymer3.geo.add_horizontal_gridlines(
         ax[iloc],
         ext[iloc],
-        locs = range(-180, 181, 1),
+        locs = range(-90, 91, 1),
     )
     pyguymer3.geo.add_vertical_gridlines(
         ax[iloc],
         ext[iloc],
-        locs = range(-90, 91, 1),
+        locs = range(-180, 181, 1),
     )
 
     # Find the Shapefile ...
