@@ -5,11 +5,6 @@ try:
     import cartopy
 except:
     raise Exception("\"cartopy\" is not installed; run \"pip install --user Cartopy\"") from None
-try:
-    import shapely
-    import shapely.validation
-except:
-    raise Exception("\"shapely\" is not installed; run \"pip install --user Shapely\"") from None
 
 # Import my modules ...
 try:
@@ -40,35 +35,8 @@ sfiles = [
 for sfile in sfiles:
     # Loop over records ...
     for record in cartopy.io.shapereader.Reader(sfile).records():
-        # Skip bad records ...
-        if record.geometry is None:
-            print(f"WARNING: Skipping a collection of land in \"{sfile}\" as it is None.")
-            continue
-        if not record.geometry.is_valid:
-            print(f"WARNING: Skipping a collection of land in \"{sfile}\" as it is not valid ({shapely.validation.explain_validity(record.geometry)}).")
-            continue
-        if record.geometry.is_empty:
-            print(f"WARNING: Skipping a collection of land in \"{sfile}\" as it is empty.")
-            continue
-
-        # Check type ...
-        if not isinstance(record.geometry, shapely.geometry.polygon.Polygon) and not isinstance(record.geometry, shapely.geometry.multipolygon.MultiPolygon):
-            print(f"WARNING: Skipping a collection of land in \"{sfile}\" as it is not a [Multi]Polygon.")
-            continue
-
         # Loop over Polygons ...
         for poly in pyguymer3.geo.extract_polys(record.geometry):
-            # Skip bad Polygons ...
-            if poly is None:
-                print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is None.")
-                continue
-            if not poly.is_valid:
-                print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is not valid ({shapely.validation.explain_validity(poly)}).")
-                continue
-            if poly.is_empty:
-                print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is empty.")
-                continue
-
             # Loop over coordinates in the exterior of the Polygon ...
             for coord in poly.exterior.coords:
                 # Skip un-real points (that only exist to make the

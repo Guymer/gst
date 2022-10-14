@@ -114,37 +114,8 @@ for iloc, loc in enumerate(locs):
 
     # Loop over records ...
     for record in cartopy.io.shapereader.Reader(sfile).records():
-        # Skip bad records ...
-        if record.geometry is None:
-            print(f"WARNING: Skipping a collection of coastlines in \"{sfile}\" as it is None.")
-            continue
-        if not record.geometry.is_valid:
-            print(f"WARNING: Skipping a collection of coastlines in \"{sfile}\" as it is not valid ({shapely.validation.explain_validity(record.geometry)}).")
-            continue
-        if record.geometry.is_empty:
-            print(f"WARNING: Skipping a collection of coastlines in \"{sfile}\" as it is empty.")
-            continue
-
-        # Check type ...
-        if not isinstance(record.geometry, shapely.geometry.polygon.Polygon) and not isinstance(record.geometry, shapely.geometry.multipolygon.MultiPolygon):
-            print(f"WARNING: Skipping a collection of coastlines in \"{sfile}\" as it is not a [Multi]Polygon.")
-            continue
-
-        # Loop over Polygons ...
-        for poly in pyguymer3.geo.extract_polys(record.geometry):
-            # Skip bad Polygons ...
-            if poly is None:
-                print(f"WARNING: Skipping a piece of coastline in \"{sfile}\" as it is None.")
-                continue
-            if not poly.is_valid:
-                print(f"WARNING: Skipping a piece of coastline in \"{sfile}\" as it is not valid ({shapely.validation.explain_validity(poly)}).")
-                continue
-            if poly.is_empty:
-                print(f"WARNING: Skipping a piece of coastline in \"{sfile}\" as it is empty.")
-                continue
-
-            # Append the Polygon to the list ...
-            polys.append(poly)
+        # Add the Polygons to the list ...
+        polys += pyguymer3.geo.extract_polys(record.geometry)
 
     # Plot geometry ...
     ax[iloc].add_geometries(
@@ -239,37 +210,8 @@ for iloc, loc in enumerate(locs):
 
     # Loop over records ...
     for record in cartopy.io.shapereader.Reader(sfile).records():
-        # Skip bad records ...
-        if record.geometry is None:
-            print(f"WARNING: Skipping a collection of land in \"{sfile}\" as it is None.")
-            continue
-        if not record.geometry.is_valid:
-            print(f"WARNING: Skipping a collection of land in \"{sfile}\" as it is not valid ({shapely.validation.explain_validity(record.geometry)}).")
-            continue
-        if record.geometry.is_empty:
-            print(f"WARNING: Skipping a collection of land in \"{sfile}\" as it is empty.")
-            continue
-
-        # Check type ...
-        if not isinstance(record.geometry, shapely.geometry.polygon.Polygon) and not isinstance(record.geometry, shapely.geometry.multipolygon.MultiPolygon):
-            print(f"WARNING: Skipping a collection of land in \"{sfile}\" as it is not a [Multi]Polygon.")
-            continue
-
-        # Loop over Polygons ...
-        for poly in pyguymer3.geo.extract_polys(record.geometry):
-            # Skip bad Polygons ...
-            if poly is None:
-                print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is None.")
-                continue
-            if not poly.is_valid:
-                print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is not valid ({shapely.validation.explain_validity(poly)}).")
-                continue
-            if poly.is_empty:
-                print(f"WARNING: Skipping a piece of land in \"{sfile}\" as it is empty.")
-                continue
-
-            # Append the Polygon to the list ...
-            polys.append(poly)
+        # Add the Polygons to the list ...
+        polys += pyguymer3.geo.extract_polys(record.geometry)
 
     # Plot geometry ...
     ax[iloc + 2].add_geometries(
