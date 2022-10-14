@@ -291,16 +291,32 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
 
             # Configure axis ...
             ax.set_extent(maxShipExt)
-            pyguymer3.geo.add_horizontal_gridlines(ax, maxShipExtSym, locs = range(-90, 100, 10))
-            pyguymer3.geo.add_vertical_gridlines(ax, maxShipExtSym, locs = range(-180, 190, 10))
+            pyguymer3.geo.add_horizontal_gridlines(
+                ax,
+                maxShipExtSym,
+                locs = range(-90, 100, 10),
+            )
+            pyguymer3.geo.add_vertical_gridlines(
+                ax,
+                maxShipExtSym,
+                locs = range(-180, 190, 10),
+            )
         else:
             # Create axis ...
             ax = fg.add_subplot(projection = cartopy.crs.Robinson())
 
             # Configure axis ...
             ax.set_global()
-            pyguymer3.geo.add_horizontal_gridlines(ax, [-180.0, +180.0, -90.0, +90.0], locs = range(-90, 135, 45))
-            pyguymer3.geo.add_vertical_gridlines(ax, [-180.0, +180.0, -90.0, +90.0], locs = range(-180, 225, 45))
+            pyguymer3.geo.add_horizontal_gridlines(
+                ax,
+                [-180.0, +180.0, -90.0, +90.0],
+                locs = range(-90, 135, 45),
+            )
+            pyguymer3.geo.add_vertical_gridlines(
+                ax,
+                [-180.0, +180.0, -90.0, +90.0],
+                locs = range(-180, 225, 45),
+            )
 
         # Configure axis ...
         pyguymer3.geo.add_map_background(ax, resolution = "large8192px")
