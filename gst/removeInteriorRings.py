@@ -42,7 +42,7 @@ def removeInteriorRings(shape):
         polys = []
 
         # Loop over Polygons ...
-        for poly in pyguymer3.geo.extract_polys(shape):
+        for poly in pyguymer3.geo.extract_polys(shape, keepInvalid = True):
             # Append a correctly oriented Polygon made up of just the exterior
             # LinearRing ...
             polys.append(shapely.geometry.polygon.orient(shapely.geometry.polygon.Polygon(poly.exterior)))
