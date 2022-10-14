@@ -68,22 +68,6 @@ def saveAllCanals(fname, kwArgCheck = None, debug = False, simp = 0.1, tol = 1.0
 
     # Loop over records ...
     for record in cartopy.io.shapereader.Reader(sfile).records():
-        # Skip bad records ...
-        if record.geometry is None:
-            print(f"WARNING: Skipping a collection of rivers in \"{sfile}\" as it is None.")
-            continue
-        if not record.geometry.is_valid:
-            print(f"WARNING: Skipping a collection of rivers in \"{sfile}\" as it is not valid ({shapely.validation.explain_validity(record.geometry)}).")
-            continue
-        if record.geometry.is_empty:
-            print(f"WARNING: Skipping a collection of rivers in \"{sfile}\" as it is empty.")
-            continue
-
-        # Check type ...
-        if not isinstance(record.geometry, shapely.geometry.linestring.LineString) and not isinstance(record.geometry, shapely.geometry.multilinestring.MultiLineString):
-            print(f"WARNING: Skipping a collection of rivers in \"{sfile}\" as it is not a [Multi]LineString.")
-            continue
-
         # Create short-hand ...
         neName = pyguymer3.geo.getRecordAttribute(record, "NAME")
 
@@ -93,17 +77,6 @@ def saveAllCanals(fname, kwArgCheck = None, debug = False, simp = 0.1, tol = 1.0
 
         # Loop over LineStrings ...
         for line in pyguymer3.geo.extract_lines(record.geometry):
-            # Skip bad LineStrings ...
-            if line is None:
-                print(f"WARNING: Skipping a river in \"{sfile}\" as it is None.")
-                continue
-            if not line.is_valid:
-                print(f"WARNING: Skipping a river in \"{sfile}\" as it is not valid ({shapely.validation.explain_validity(line)}).")
-                continue
-            if line.is_empty:
-                print(f"WARNING: Skipping a river in \"{sfile}\" as it is empty.")
-                continue
-
             # Append LineString (and its top) to lists ...
             db[neName]["raw"].append(line)
             db[neName]["top"].append(line.bounds[3])                            # [°]
