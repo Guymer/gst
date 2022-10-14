@@ -14,6 +14,11 @@ try:
     import matplotlib.pyplot
 except:
     raise Exception("\"matplotlib\" is not installed; run \"pip install --user matplotlib\"") from None
+try:
+    import shapely
+    import shapely.ops
+except:
+    raise Exception("\"shapely\" is not installed; run \"pip install --user Shapely\"") from None
 
 # Import my modules ...
 try:
@@ -51,20 +56,20 @@ for res in ress:
     # Create figure ...
     fg = matplotlib.pyplot.figure(
             dpi = 300,
-        figsize = (12, 8),
+        figsize = (12, 12),
     )
 
     # Initialize list ...
     ax = []
 
     # Loop over axes ...
-    for i in range(4):
+    for i in range(6):
         # Check if it is left or right ...
-        if i in [0, 2]:
+        if i % 2 == 0:
             # Create axis ...
             ax.append(
                 fg.add_subplot(
-                    2,
+                    3,
                     2,
                     i + 1,
                     projection = cartopy.crs.Robinson(),
@@ -74,7 +79,7 @@ for res in ress:
             # Create axis ...
             ax.append(
                 fg.add_subplot(
-                    2,
+                    3,
                     2,
                     i + 1,
                     projection = cartopy.crs.Orthographic(
@@ -109,8 +114,8 @@ for res in ress:
             resolution = res,
         )
 
-        # Check if it is top or bottom ...
-        if i in [0, 1]:
+        # Check if it is top, middle or bottom ...
+        if i // 2 == 0:
             # Draw Antarctica ...
             pyguymer3.geo.add_coastlines(
                 ax[i],
@@ -119,7 +124,7 @@ for res in ress:
                  linewidth = 1.0,
                 resolution = res,
             )
-        else:
+        elif i // 2 == 1:
             # Draw Antarctica ...
             pyguymer3.geo.add_coastlines(
                 ax[i],
@@ -127,6 +132,35 @@ for res in ress:
                      level = 6,
                  linewidth = 1.0,
                 resolution = res,
+            )
+        else:
+            # Initialize list ...
+            polys = []
+
+            # Loop over levels ...
+            for level in [5, 6]:
+                # Find the Shapefile ...
+                sfile = cartopy.io.shapereader.gshhs(
+                    level = level,
+                    scale = res,
+                )
+
+                # Loop over records ...
+                for record in cartopy.io.shapereader.Reader(sfile).records():
+                    # Add Polygons to the list ...
+                    polys += pyguymer3.geo.extract_polys(record.geometry)
+
+            # Convert list of Polygons to a (unified) [Multi]Polygon ...
+            polys = shapely.ops.unary_union(polys)
+
+            # Plot geometry ...
+            ax[i].add_geometries(
+                pyguymer3.geo.extract_polys(polys),
+                cartopy.crs.PlateCarree(),
+                edgecolor = "cyan",
+                facecolor = "none",
+                linestyle = "solid",
+                linewidth = 1.0,
             )
 
     # Configure figure ...
