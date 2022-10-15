@@ -44,13 +44,23 @@ lat = 50.5                                                                      
 
 # Define combinations ...
 combs = [
+    # Study convergence (changing just "nang" and "prec") ...
+    # (2,  9, 5000, (1.0, 0.0, 0.0, 1.0),),
+    # (2, 17, 2500, (0.0, 1.0, 0.0, 1.0),),
+    # (2, 33, 1250, (0.0, 0.0, 1.0, 1.0),),
+
+    # Study convergence (changing "cons", "nang" and "prec") ...
     (2,  9, 5000, (1.0, 0.0, 0.0, 1.0),),
     (4, 17, 2500, (0.0, 1.0, 0.0, 1.0),),
     (8, 33, 1250, (0.0, 0.0, 1.0, 1.0),),
 
-    # (2,  9, 5000, (1.0, 0.0, 0.0, 1.0),),
-    # (2, 17, 2500, (0.0, 1.0, 0.0, 1.0),),
-    # (2, 33, 1250, (0.0, 0.0, 1.0, 1.0),),
+    # With "nang=17" and "prec=2500", is "cons=2" good enough?
+    # (2, 17, 2500, (1.0, 0.0, 0.0, 1.0),),
+    # (4, 17, 2500, (0.0, 1.0, 0.0, 1.0),),
+
+    # With "nang=33" and "prec=1250", is "cons=2" good enough?
+    # (2, 33, 1250, (1.0, 0.0, 0.0, 1.0),),
+    # (8, 33, 1250, (0.0, 1.0, 0.0, 1.0),),
 ]
 
 # Determine output directory and make it if it is missing ...
@@ -110,7 +120,7 @@ for cons, nang, prec, color in combs:
     maxDist = float(istep * prec)                                               # [m]
     maxDur = maxDist / (1852.0 * 20.0)                                          # [hr]
 
-    print(f" > {0.001 * maxDist:.2f} kilometres of sailing is available (which is {maxDur / 24.0:,.4f} days).")
+    print(f" > {0.001 * maxDist:,.2f} kilometres of sailing is available (which is {maxDur / 24.0:,.4f} days).")
 
 # ******************************************************************************
 
