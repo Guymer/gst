@@ -2,7 +2,7 @@
 
 This project aims to show how a vessel sails around the globe.
 
-The `buffer()` function in [PyGuymer3](https://github.com/Guymer/PyGuymer3) has a maximum buffer distance (in one go) of 10,001.5 kilometres. At a speed of 20.0 knots, you will have gone 9,778.56 kilometres in 11 days and 10,667.52 kilometres in 12 days.
+The `_points2polys()` function in [PyGuymer3](https://github.com/Guymer/PyGuymer3), which is called by the `buffer()` function in [PyGuymer3](https://github.com/Guymer/PyGuymer3), changes *how* it turns an array of points in a Polygon when the buffering distance (in one go) is large (currently defined as more than 10,001.5 kilometres). At a speed of 20.0 knots, you will have gone 9,778.56 kilometres in 11 days and 10,667.52 kilometres in 12 days. To one decimal place, this threshold is crossed between 11.2 days and 11.3 days of sailing at 20.0 knots.
 
 ## Profiling
 
@@ -108,7 +108,6 @@ python3.10 run.py      \
 ## To Do
 
 * GSHHG does not have Antarctica in the "level 1" dataset
-* Sail for more than 10,001.5 kilometres.
 * Keep interior rings in `ship` when getting to the antipode
 
 ## Dependencies
