@@ -49,9 +49,9 @@ After sailing for 0.09 days at 20.0 knots a vessel will have gone 80,006.4 metre
 To generate the data needed, [showNarrowPassages.py](showNarrowPassages.py) will run commands like:
 
 ```
-python3.10 run.py -1.0 +50.5 20.0 --precision 5000.0 --conservatism 2.0 --nang  9
-python3.10 run.py -1.0 +50.5 20.0 --precision 2500.0 --conservatism 4.0 --nang 17
-python3.10 run.py -1.0 +50.5 20.0 --precision 1250.0 --conservatism 8.0 --nang 33
+python3.10 run.py -1.0 +50.5 20.0 --precision 5000.0 --nang  9
+python3.10 run.py -1.0 +50.5 20.0 --precision 2500.0 --nang 17
+python3.10 run.py -1.0 +50.5 20.0 --precision 1250.0 --nang 33
 ...
 ```
 
@@ -64,7 +64,6 @@ python3.10 run.py      \
     -1.0 +50.5 20.0    \   # depart Portsmouth Harbour at 20 knots
     --duration 11.2    \   # ~maximum distance (20 knots * 11.2 days = 9,956.35 kilometres)
     --precision 5000.0 \   # ~⅛ hour distance steps (20 knots * 7.5 minutes = 4.63 kilometres)
-    --conservatism 2.0 \   # some conservatism
     --freqLand 192     \   # ~daily land re-evaluation (192 * 7.5 minutes = 1 day)
     --freqPlot 8       \   # ~hourly plotting (8 * 7.5 minutes = 1 hour)
     --freqSimp 8       \   # ~hourly simplification (8 * 7.5 minutes = 1 hour)
@@ -73,14 +72,13 @@ python3.10 run.py      \
     --resolution c         # crude coastline resolution
 ```
 
-... to repeat the above studies at x2 angular resolution, x2 radial resolution and x2 conservatism then try running something like:
+... to repeat the above studies at x2 angular resolution and x2 radial resolution then try running something like:
 
 ```
 python3.10 run.py      \
     -1.0 +50.5 20.0    \
     --duration 11.2    \
     --precision 2500.0 \   # x2 radial resolution
-    --conservatism 4.0 \   # x2 conservatism
     --freqLand 384     \
     --freqPlot 16      \
     --freqSimp 16      \
@@ -89,14 +87,13 @@ python3.10 run.py      \
     --resolution c
 ```
 
-... to repeat the above studies at x4 angular resolution, x4 radial resolution and x4 conservatism then try running something like:
+... to repeat the above studies at x4 angular resolution and x4 radial resolution then try running something like:
 
 ```
 python3.10 run.py      \
     -1.0 +50.5 20.0    \
     --duration 11.2    \
     --precision 1250.0 \   # x4 radial resolution
-    --conservatism 8.0 \   # x4 conservatism
     --freqLand 768     \
     --freqPlot 32      \
     --freqSimp 32      \
