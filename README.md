@@ -36,9 +36,9 @@ After sailing for 0.09 days at 20.0 knots a vessel will have gone 80,006.4 metre
 To generate the data needed, [compareBufferRadialResolutions.py](compareBufferRadialResolutions.py) will run commands like:
 
 ```
-python3.10 run.py -1.0 +50.5 20.0 --duration 0.09 --precision 1250.0 --nang 513 --resolution i
-python3.10 run.py -1.0 +50.5 20.0 --duration 0.09 --precision 2500.0 --nang 513 --resolution i
-python3.10 run.py -1.0 +50.5 20.0 --duration 0.09 --precision 5000.0 --nang 513 --resolution i
+python3.10 run.py -1.0 +50.5 20.0 --duration 0.09 --precision 1250.0 --nang 257 --resolution i
+python3.10 run.py -1.0 +50.5 20.0 --duration 0.09 --precision 2500.0 --nang 257 --resolution i
+python3.10 run.py -1.0 +50.5 20.0 --duration 0.09 --precision 5000.0 --nang 257 --resolution i
 ...
 ```
 
