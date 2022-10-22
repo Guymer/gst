@@ -14,6 +14,7 @@ try:
     import matplotlib
     matplotlib.use("Agg")                                                       # NOTE: See https://matplotlib.org/stable/gallery/user_interfaces/canvasagg.html
     import matplotlib.pyplot
+    matplotlib.pyplot.rcParams.update({"font.size" : 8})
 except:
     raise Exception("\"matplotlib\" is not installed; run \"pip install --user matplotlib\"") from None
 try:
@@ -35,9 +36,9 @@ except:
 
 # Define combinations ...
 combs = [
-    (2,  9, 5000, (1.0, 0.0, 0.0, 0.5),),
-    (4, 17, 2500, (0.0, 1.0, 0.0, 0.5),),
-    (8, 33, 1250, (0.0, 0.0, 1.0, 0.5),),
+    ( 9, 5000, (1.0, 0.0, 0.0, 0.5),),
+    (17, 2500, (0.0, 1.0, 0.0, 0.5),),
+    (33, 1250, (0.0, 0.0, 1.0, 0.5),),
 ]
 
 # Define locations ...
@@ -67,16 +68,19 @@ frames = []
 # Loop over resolutions ...
 for res in ress:
     # Loop over combinations ...
-    for cons, nang, prec, color in combs:
+    for nang, prec, color in combs:
+        # Create short-hand ...
+        # NOTE: Say that 40,000 metres takes 1 hour at 20 knots.
+        freq = 24 * 40000 // prec                                               # [#]
+
         # Populate GST command ...
         cmd = [
             "python3.10", "run.py",
             "-1.0", "+50.5", "20.0",            # depart Portsmouth Harbour at 20 knots
             "--duration", "0.012",              # some sailing
             "--precision", f"{prec:.1f}",       # LOOP VARIABLE
-            "--conservatism", f"{cons:.1f}",    # LOOP VARIABLE
-            "--freqLand", "1024",               # don't re-evalutate land
-            "--freqSimp", "1024",               # don't simplify
+            "--freqLand", f"{freq:d}",          # ~daily land re-evaluation
+            "--freqSimp", f"{freq:d}",          # ~daily simplification
             "--nang", f"{nang:d}",              # LOOP VARIABLE
             "--resolution", res,                # LOOP VARIABLE
         ]
@@ -169,9 +173,9 @@ for res in ress:
         )
 
         # Loop over combinations ...
-        for cons, nang, prec, color in combs:
+        for nang, prec, color in combs:
             # Deduce file name and skip if it is missing ...
-            dname = f"res={res}_cons={cons:.2e}_tol=1.00e-10/nang={nang:d}_prec={prec:.2e}"
+            dname = f"res={res}_cons=2.00e+00_tol=1.00e-10/nang={nang:d}_prec={prec:.2e}"
             fname = f"{dname}/allLands.wkb.gz"
             if not os.path.exists(fname):
                 continue

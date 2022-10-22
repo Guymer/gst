@@ -14,6 +14,7 @@ try:
     import matplotlib
     matplotlib.use("Agg")                                                       # NOTE: See https://matplotlib.org/stable/gallery/user_interfaces/canvasagg.html
     import matplotlib.pyplot
+    matplotlib.pyplot.rcParams.update({"font.size" : 8})
 except:
     raise Exception("\"matplotlib\" is not installed; run \"pip install --user matplotlib\"") from None
 try:
@@ -58,7 +59,6 @@ for prec in [1250, 2500, 5000, 10000, 20000, 40000]:
         f"{lon:+.1f}", f"{lat:+.1f}", "20.0",
         "--duration", "0.09",           # some sailing (20 knots * 0.09 days = 80.01 kilometres)
         "--precision", f"{prec:.1f}",   # LOOP VARIABLE
-        "--conservatism", "2.0",        # some conservatism
         "--freqLand", f"{freq:d}",      # ~daily land re-evaluation
         "--freqSimp", f"{freq:d}",      # ~daily simplification
         "--nang", "257",                # converged number of angles (from "compareBufferAngularResolutions.py")
@@ -278,9 +278,8 @@ pyguymer3.geo.add_coastlines(
 ax1.legend(
     lines,
     labels,
-    fontsize = "small",
-         loc = "upper center",
-        ncol = 3,
+     loc = "upper center",
+    ncol = 3,
 )
 
 # Configure axis ...
@@ -289,10 +288,7 @@ ax2.axhspan(
     101,
     color = (0.0, 1.0, 0.0, 0.25),
 )
-ax2.legend(
-    fontsize = "small",
-         loc = "lower right",
-)
+ax2.legend(loc = "lower right")
 ax2.semilogx()
 # ax2.set_xticks(                                                                 # MatPlotLib ≥ 3.5.0
 #     [1250, 2500, 5000, 10000, 20000, 40000],                                    # MatPlotLib ≥ 3.5.0
