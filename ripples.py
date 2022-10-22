@@ -137,8 +137,6 @@ for dist in range(5, 10005, 5):
 
     # **************************************************************************
 
-    print(f"Surveying for \"{frame}\" ...")
-
     # Initialize list ...
     fnames = []
 
