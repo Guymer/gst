@@ -164,6 +164,7 @@ for res in ress:
             )
 
     # Configure figure ...
+    fg.suptitle(f"res={res}")
     fg.tight_layout()
 
     # Save figure ...

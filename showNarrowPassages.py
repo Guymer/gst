@@ -214,6 +214,7 @@ for res in ress:
         ax[iloc].set_title(f"lon={loc[0]:+.2f}°, lat={loc[1]:+.2f}°")
 
     # Configure figure ...
+    fg.suptitle(f"res={res}")
     fg.tight_layout()
 
     # Save figure ...
