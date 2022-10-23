@@ -29,12 +29,34 @@ try:
 except:
     raise Exception("\"pyguymer3\" is not installed; you need to have the Python module from https://github.com/Guymer/PyGuymer3 located somewhere in your $PYTHONPATH") from None
 
+# ******************************************************************************
+
 # Define central location ...
 lon = -1.0                                                                      # [°]
 lat = 50.5                                                                      # [°]
 
-# Define extent ...
-ext = [lon - 5.0, lon + 5.0, lat - 5.0, lat + 5.0]                              # [°]
+# ******************************************************************************
+
+# Find how large a 500km radius circle is around the central location ...
+point = shapely.geometry.point.Point(lon, lat)
+poly = pyguymer3.geo.buffer(
+    point,
+    500.0e3,
+    fill = -1.0,
+    nang = 9,
+    simp = -1.0,
+)
+
+# Create extent ...
+ext = [
+    poly.bounds[0],                     # minx
+    poly.bounds[2],                     # maxx
+    poly.bounds[1],                     # miny
+    poly.bounds[3],                     # maxy
+]                                                                               # [°]
+
+# Clean up ...
+del point, poly
 
 # ******************************************************************************
 
@@ -54,9 +76,21 @@ ax = fg.add_subplot(
 
 # Configure axis ...
 ax.set_extent(ext)
-pyguymer3.geo.add_map_background(ax, resolution = "large8192px")
-pyguymer3.geo.add_horizontal_gridlines(ax, ext, locs = [45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56])
-pyguymer3.geo.add_vertical_gridlines(ax, ext, locs = [-6, -5, -4, -3, -2, -1, 0, +1, +2, +3, +4])
+pyguymer3.geo.add_map_background(
+    ax,
+          name = "shaded-relief",
+    resolution = "large8192px",
+)
+pyguymer3.geo.add_horizontal_gridlines(
+    ax,
+    ext,
+    locs = range(-90, 91, 1),
+)
+pyguymer3.geo.add_vertical_gridlines(
+    ax,
+    ext,
+    locs = range(-180, 181, 1),
+)
 
 # ******************************************************************************
 
@@ -75,7 +109,8 @@ ax.add_geometries(
     cartopy.crs.PlateCarree(),
     edgecolor = (1.0, 0.0, 0.0, 0.50),
     facecolor = (1.0, 0.0, 0.0, 0.25),
-    linewidth = 1.0
+    linestyle = "solid",
+    linewidth = 1.0,
 )
 
 # ******************************************************************************
@@ -95,7 +130,8 @@ ax.add_geometries(
     cartopy.crs.PlateCarree(),
     edgecolor = (0.0, 1.0, 0.0, 0.50),
     facecolor = (0.0, 1.0, 0.0, 0.25),
-    linewidth = 1.0
+    linestyle = "solid",
+    linewidth = 1.0,
 )
 
 # ******************************************************************************
@@ -115,7 +151,8 @@ ax.add_geometries(
     cartopy.crs.PlateCarree(),
     edgecolor = (0.0, 0.0, 1.0, 0.50),
     facecolor = (0.0, 0.0, 1.0, 0.25),
-    linewidth = 1.0
+    linestyle = "solid",
+    linewidth = 1.0,
 )
 
 # ******************************************************************************
@@ -128,9 +165,10 @@ ax.plot(
     coords[:, 0],
     coords[:, 1],
         color = "C0",
+    linestyle = "solid",
     linewidth = 1.0,
        marker = "d",
-    transform = cartopy.crs.PlateCarree()
+    transform = cartopy.crs.PlateCarree(),
 )
 
 # Find the limit of the ship's sailing distance that is not on the coastline of
@@ -142,9 +180,10 @@ ax.plot(
     coords[:, 0],
     coords[:, 1],
         color = "C1",
+    linestyle = "solid",
     linewidth = 1.0,
        marker = "d",
-    transform = cartopy.crs.PlateCarree()
+    transform = cartopy.crs.PlateCarree(),
 )
 
 # Find the limit of the ship's sailing distance that is not on either the
@@ -158,9 +197,10 @@ for line in pyguymer3.geo.extract_lines(limit):
         coords[:, 0],
         coords[:, 1],
             color = "C2",
+        linestyle = "solid",
         linewidth = 1.0,
            marker = "d",
-        transform = cartopy.crs.PlateCarree()
+        transform = cartopy.crs.PlateCarree(),
     )
 
 # ******************************************************************************
