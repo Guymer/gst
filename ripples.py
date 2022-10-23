@@ -241,6 +241,10 @@ for dist in range(5, 10005, 5):
     )
 
     # Configure axis ...
+    # NOTE: Really, I should be plotting "allLands" to be consistent with the
+    #       ships, however, as each ship (potentially) is using different
+    #       collections of land then I will just use the raw GSHHG dataset
+    #       instead.
     pyguymer3.geo.add_coastlines(ax)
     ax.legend(
         lines,
