@@ -12,6 +12,10 @@ try:
     matplotlib.pyplot.rcParams.update({"font.size" : 8})
 except:
     raise Exception("\"matplotlib\" is not installed; run \"pip install --user matplotlib\"") from None
+try:
+    import shapely
+except:
+    raise Exception("\"shapely\" is not installed; run \"pip install --user Shapely\"") from None
 
 # Import my modules ...
 try:
@@ -27,19 +31,28 @@ except:
 lon = -1.0                                                                      # [°]
 lat = 50.5                                                                      # [°]
 
-# Define extent ...
+# ******************************************************************************
+
+# Find how large a 100km radius circle is around the central location ...
+point = shapely.geometry.point.Point(lon, lat)
+poly = pyguymer3.geo.buffer(
+    point,
+    100.0e3,
+    fill = -1.0,
+    nang = 9,
+    simp = -1.0,
+)
+
+# Create extent ...
 ext = [
-    lon - 1.0,
-    lon + 1.0,
-    lat - 1.0,
-    lat + 1.0,
+    poly.bounds[0],                     # minx
+    poly.bounds[2],                     # maxx
+    poly.bounds[1],                     # miny
+    poly.bounds[3],                     # maxy
 ]                                                                               # [°]
 
-# Set mode ...
-debug = True
-
-# Set tolerance ...
-tol = 1.0e-10
+# Clean up ...
+del point, poly
 
 # ******************************************************************************
 
@@ -95,13 +108,15 @@ pyguymer3.geo.add_map_background(
 pyguymer3.geo.add_horizontal_gridlines(
     ax,
     ext,
-    ngrid = 21,
+    locs = range(-90, 91, 1),
 )
 pyguymer3.geo.add_vertical_gridlines(
     ax,
     ext,
-    ngrid = 21,
+    locs = range(-180, 181, 1),
 )
+
+# ******************************************************************************
 
 # Loop over Global Self-Consistent Hierarchical High-Resolution Geography
 # Shapefiles ...
@@ -122,11 +137,14 @@ for sfile in gshhgShapeFiles:
         cartopy.crs.PlateCarree(),
         edgecolor = (0.0, 0.0, 0.0, 0.5),
         facecolor = (1.0, 0.0, 0.0, 0.5),
-        linewidth = 1.0
+        linestyle = "solid",
+        linewidth = 1.0,
     )
 
     # Clean up ...
     del polys
+
+# ******************************************************************************
 
 # Loop over Natural Earth Shapefiles ...
 for sfile in neShapeFiles:
@@ -146,11 +164,14 @@ for sfile in neShapeFiles:
         cartopy.crs.PlateCarree(),
         edgecolor = (0.0, 0.0, 0.0, 0.5),
         facecolor = (0.0, 0.0, 1.0, 0.5),
-        linewidth = 1.0
+        linestyle = "solid",
+        linewidth = 1.0,
     )
 
     # Clean up ...
     del polys
+
+# ******************************************************************************
 
 # Plot the central location ...
 ax.scatter(
