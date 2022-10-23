@@ -104,7 +104,6 @@ python3.10 run.py      \
 
 ## To Do
 
-* GSHHG does not have Antarctica in the "level 1" dataset
 * Keep interior rings in `ship` when getting to the antipode
 
 ## Dependencies
