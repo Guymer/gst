@@ -31,6 +31,7 @@ except:
 locs = [
     (-79.7,  9.1),                      # Panama Canal
     ( 32.3, 30.6),                      # Suez Canal
+    ( 29.1, 41.1),                      # Bosporus Strait
 ]                                                                               # [°]
 
 # ******************************************************************************
@@ -53,7 +54,7 @@ for iloc, loc in enumerate(locs):
     ax.append(
         fg.add_subplot(
             2,
-            2,
+            3,
             iloc + 1,
             projection = cartopy.crs.Orthographic(
                 central_longitude = loc[0],
@@ -148,8 +149,8 @@ for iloc, loc in enumerate(locs):
     ax.append(
         fg.add_subplot(
             2,
-            2,
-            iloc + 2 + 1,
+            3,
+            iloc + 3 + 1,
             projection = cartopy.crs.Orthographic(
                 central_longitude = loc[0],
                  central_latitude = loc[1],
@@ -181,20 +182,20 @@ for iloc, loc in enumerate(locs):
     del point, poly
 
     # Configure axis ...
-    ax[iloc + 2].set_extent(ext[iloc + 2])
+    ax[iloc + 3].set_extent(ext[iloc + 3])
     pyguymer3.geo.add_map_background(
-        ax[iloc + 2],
+        ax[iloc + 3],
               name = "shaded-relief",
         resolution = "large8192px",
     )
     pyguymer3.geo.add_horizontal_gridlines(
-        ax[iloc + 2],
-        ext[iloc + 2],
+        ax[iloc + 3],
+        ext[iloc + 3],
         locs = range(-180, 181, 1),
     )
     pyguymer3.geo.add_vertical_gridlines(
-        ax[iloc + 2],
-        ext[iloc + 2],
+        ax[iloc + 3],
+        ext[iloc + 3],
         locs = range(-90, 91, 1),
     )
 
@@ -214,7 +215,7 @@ for iloc, loc in enumerate(locs):
         polys += pyguymer3.geo.extract_polys(record.geometry)
 
     # Plot geometry ...
-    ax[iloc + 2].add_geometries(
+    ax[iloc + 3].add_geometries(
         polys,
         cartopy.crs.PlateCarree(),
         edgecolor = (1.0, 0.0, 0.0, 1.0),
@@ -224,7 +225,7 @@ for iloc, loc in enumerate(locs):
     )
 
     # Plot the central location ...
-    ax[iloc + 2].scatter(
+    ax[iloc + 3].scatter(
         [loc[0]],
         [loc[1]],
             color = "gold",
@@ -234,7 +235,7 @@ for iloc, loc in enumerate(locs):
     )
 
     # Configure axis ...
-    ax[iloc + 2].set_title(f"NE at (lon={loc[0]:+.2f}°, lat={loc[1]:+.2f}°)")
+    ax[iloc + 3].set_title(f"NE at (lon={loc[0]:+.2f}°, lat={loc[1]:+.2f}°)")
 
 # ******************************************************************************
 
