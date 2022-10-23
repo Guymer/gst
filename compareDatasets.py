@@ -137,7 +137,6 @@ for sfile in gshhgShapeFiles:
         cartopy.crs.PlateCarree(),
         edgecolor = (0.0, 0.0, 0.0, 0.5),
         facecolor = (1.0, 0.0, 0.0, 0.5),
-        linestyle = "solid",
         linewidth = 1.0,
     )
 
@@ -164,7 +163,6 @@ for sfile in neShapeFiles:
         cartopy.crs.PlateCarree(),
         edgecolor = (0.0, 0.0, 0.0, 0.5),
         facecolor = (0.0, 0.0, 1.0, 0.5),
-        linestyle = "solid",
         linewidth = 1.0,
     )
 

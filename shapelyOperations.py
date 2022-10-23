@@ -109,7 +109,6 @@ ax.add_geometries(
     cartopy.crs.PlateCarree(),
     edgecolor = (1.0, 0.0, 0.0, 0.50),
     facecolor = (1.0, 0.0, 0.0, 0.25),
-    linestyle = "solid",
     linewidth = 1.0,
 )
 
@@ -130,7 +129,6 @@ ax.add_geometries(
     cartopy.crs.PlateCarree(),
     edgecolor = (0.0, 1.0, 0.0, 0.50),
     facecolor = (0.0, 1.0, 0.0, 0.25),
-    linestyle = "solid",
     linewidth = 1.0,
 )
 
@@ -151,7 +149,6 @@ ax.add_geometries(
     cartopy.crs.PlateCarree(),
     edgecolor = (0.0, 0.0, 1.0, 0.50),
     facecolor = (0.0, 0.0, 1.0, 0.25),
-    linestyle = "solid",
     linewidth = 1.0,
 )
 
@@ -165,7 +162,6 @@ ax.plot(
     coords[:, 0],
     coords[:, 1],
         color = "C0",
-    linestyle = "solid",
     linewidth = 1.0,
        marker = "d",
     transform = cartopy.crs.PlateCarree(),
@@ -180,7 +176,6 @@ ax.plot(
     coords[:, 0],
     coords[:, 1],
         color = "C1",
-    linestyle = "solid",
     linewidth = 1.0,
        marker = "d",
     transform = cartopy.crs.PlateCarree(),
@@ -197,7 +192,6 @@ for line in pyguymer3.geo.extract_lines(limit):
         coords[:, 0],
         coords[:, 1],
             color = "C2",
-        linestyle = "solid",
         linewidth = 1.0,
            marker = "d",
         transform = cartopy.crs.PlateCarree(),
