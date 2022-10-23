@@ -65,6 +65,8 @@ def saveAllCanals(fname, kwArgCheck = None, debug = False, simp = 0.1, tol = 1.0
         resolution = "10m",
     )
 
+    print(f" > Loading \"{sfile}\" ...")
+
     # Loop over records ...
     for record in cartopy.io.shapereader.Reader(sfile).records():
         # Create short-hand ...
