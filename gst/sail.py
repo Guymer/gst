@@ -90,6 +90,10 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
     # filled by at the point where a degree (of longitude) is the largest, i.e.,
     # the equator ...
     # NOTE: See https://en.wikipedia.org/wiki/Earth_radius#Mean_radius
+    # NOTE: These equate to:
+    #         * 1 °  = 111.195 km
+    #         * 1 m° = 111.195 m
+    #         * 1 μ° = 11.1195 cm
     radiusOfEarth = 6371008.8                                                   # [m]
     circumOfEarth = 2.0 * math.pi * radiusOfEarth                               # [m]
     resoluOfEarth = circumOfEarth / 360.0                                       # [m/°]
