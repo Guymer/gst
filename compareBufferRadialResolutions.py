@@ -269,12 +269,6 @@ for key in sorted(list(data.keys())):
 # ******************************************************************************
 
 # Configure axis ...
-pyguymer3.geo.add_coastlines(
-    ax1,
-     colorName = "white",
-     linewidth = 1.0,
-    resolution = "f",
-)
 ax1.legend(
     lines,
     labels,
