@@ -160,7 +160,7 @@ for res in ress:
                 cartopy.crs.PlateCarree(),
                 edgecolor = "cyan",
                 facecolor = "none",
-                linewidth = 1.0,
+                    linewidth = 1.0,
             )
 
     # Configure figure ...
