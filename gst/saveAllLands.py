@@ -1,4 +1,4 @@
-def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = False, dist = -1.0, fill = 1.0, nang = 9, res = "c", simp = 0.1, tol = 1.0e-10):
+def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = False, dist = -1.0, fill = 1.0, levels = (1, 5, 6), nang = 9, res = "c", simp = 0.1, tol = 1.0e-10):
     """Save (optionally buffered and optionally simplified) land to a compressed WKB file.
 
     Parameters
@@ -18,6 +18,9 @@ def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = Fals
     fill : float, optional
         how many intermediary points are added to fill in the straight lines
         which connect the points; negative values disable filling
+    levels : tuple of int, optional
+        the GSHHG levels to include (you should probably use more than just
+        level 1, as it does not contain any representation of Antarctica at all)
     nang : int, optional
         the number of angles around each point that are calculated when
         buffering
@@ -146,62 +149,64 @@ def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = Fals
 
     # **************************************************************************
 
-    # Find file containing all the coastlines as [Multi]Polygons ...
-    sfile = cartopy.io.shapereader.gshhs(
-        level = 1,
-        scale = res,
-    )
+    # Loop over levels ...
+    for level in levels:
+        # Find file containing all the coastlines as [Multi]Polygons ...
+        sfile = cartopy.io.shapereader.gshhs(
+            level = level,
+            scale = res,
+        )
 
-    # **************************************************************************
+        # **********************************************************************
 
-    print(f" > Loading \"{sfile}\" ...")
+        print(f" > Loading \"{sfile}\" ...")
 
-    # Loop over records ...
-    for record in cartopy.io.shapereader.Reader(sfile).records():
-        # Deduce temporary file name and skip if it exists already ...
-        tname = f"{dname}/{record.geometry.centroid.x:+014.9f},{record.geometry.centroid.y:+013.9f}.wkb.gz"
-        if os.path.exists(tname):
-            continue
+        # Loop over records ...
+        for record in cartopy.io.shapereader.Reader(sfile).records():
+            # Deduce temporary file name and skip if it exists already ...
+            tname = f"{dname}/{record.geometry.centroid.x:+011.6f},{record.geometry.centroid.y:+010.6f},{record.geometry.area:012.7f}.wkb.gz"
+            if os.path.exists(tname):
+                continue
 
-        print(f"   > Making \"{tname}\" ...")
+            print(f"   > Making \"{tname}\" ...")
 
-        # Initialize list ...
-        polys = []
+            # Initialize list ...
+            polys = []
 
-        # Loop over Polygons ...
-        for poly in pyguymer3.geo.extract_polys(record.geometry):
-            # Check if the user wants to buffer the land ...
-            if dist > 0.0:
-                # Find the buffer of the land ...
+            # Loop over Polygons ...
+            for poly in pyguymer3.geo.extract_polys(record.geometry):
+                # Check if the user wants to buffer the land ...
                 # NOTE: The land should probably be buffered to prohibit ships
                 #       jumping over narrow stretches that are narrower than the
                 #       iteration distance.
-                poly = pyguymer3.geo.buffer(
-                    poly,
-                    dist,
-                             fill = fill,
-                    keepInteriors = False,
-                             nang = nang,
-                             simp = simp,
-                              tol = tol,
-                )
+                if dist > 0.0:
+                    # Find the buffer of the land ...
+                    poly = pyguymer3.geo.buffer(
+                        poly,
+                        dist,
+                                 fill = fill,
+                        keepInteriors = False,
+                                 nang = nang,
+                                 simp = simp,
+                                  tol = tol,
+                    )
 
-            # Loop over canals ...
-            for line in lines:
-                # Subtract this canal from the [Multi]Polygon ...
-                poly = poly.difference(line)
+                # Loop over canals ...
+                for line in lines:
+                    # Subtract this canal from the [Multi]Polygon ...
+                    poly = poly.difference(line)
 
-            # Add the Polygons to the list ...
-            polys += pyguymer3.geo.extract_polys(poly)
+                # Add the Polygons to the list ...
+                polys += pyguymer3.geo.extract_polys(poly)
 
-        # Convert list of Polygons to a (unified) [Multi]Polygon ...
-        polys = shapely.ops.unary_union(polys).simplify(tol)
-        if debug:
-            pyguymer3.geo.check(polys)
+            # Convert list of Polygons to a (unified) [Multi]Polygon ...
+            polys = shapely.ops.unary_union(polys).simplify(tol)
+            if debug:
+                pyguymer3.geo.check(polys)
 
-        # Save [Multi]Polygon ...
-        with gzip.open(tname, "wb", compresslevel = 9) as fObj:
-            fObj.write(shapely.wkb.dumps(polys))
+            # Save [Multi]Polygon ...
+            with gzip.open(tname, "wb", compresslevel = 9) as fObj:
+                fObj.write(shapely.wkb.dumps(polys))
 
     # **************************************************************************
 
@@ -209,8 +214,8 @@ def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = Fals
     polys = []
 
     # Loop over temporary compressed WKB files ...
-    for tname in sorted(glob.glob(f"{dname}/????.?????????,???.?????????.wkb.gz")):
-        print(f"   > Loading \"{tname}\" ...")
+    for tname in sorted(glob.glob(f"{dname}/????.??????,???.??????,????.???????.wkb.gz")):
+        print(f" > Loading \"{tname}\" ...")
 
         # Add the individual Polygons to the list ...
         with gzip.open(tname, "rb") as fObj:
