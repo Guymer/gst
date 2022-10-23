@@ -49,6 +49,8 @@ locs = [
     ( 32.3,  30.6),                     # Suez Canal
     ( 43.4,  12.6),                     # Bab-el-Mandeb
     (-69.6, -52.5),                     # Primera Angostura
+    ( 26.5,  40.2),                     # Dardanelles
+    ( 29.1,  41.1),                     # Bosporus Strait
 ]                                                                               # [°]
 
 # Define resolutions ...
@@ -109,7 +111,7 @@ for res in ress:
     # Create figure ...
     fg = matplotlib.pyplot.figure(
             dpi = 300,
-        figsize = (12, 9),
+        figsize = (12, 12),
     )
 
     # Initialize lists ...
@@ -121,7 +123,7 @@ for res in ress:
         # Create axis ...
         ax.append(
             fg.add_subplot(
-                2,
+                3,
                 3,
                 iloc + 1,
                 projection = cartopy.crs.Orthographic(
