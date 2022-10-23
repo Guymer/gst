@@ -37,7 +37,7 @@ except:
 # ******************************************************************************
 
 # Define resolution ...
-res = "c"
+res = "i"
 
 # Define starting location ...
 lon = -1.0                                                                      # [°]
