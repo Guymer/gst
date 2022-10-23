@@ -66,7 +66,7 @@ if __name__ == "__main__":
     # Create figure ...
     fg = matplotlib.pyplot.figure(
             dpi = 300,
-        figsize = (12, 8),
+        figsize = (9, 6),
     )
 
     # Create axes ...

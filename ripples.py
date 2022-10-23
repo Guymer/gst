@@ -176,7 +176,7 @@ for dist in range(5, 10005, 5):
     # Create figure ...
     fg = matplotlib.pyplot.figure(
             dpi = 300,
-        figsize = (9, 5),
+        figsize = (9, 6),
     )
 
     # Create axis ...

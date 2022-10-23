@@ -38,7 +38,7 @@ locs = [
 # Create figure ...
 fg = matplotlib.pyplot.figure(
         dpi = 300,
-    figsize = (12, 8),
+    figsize = (12, 9),
 )
 
 # Initialize lists ...
