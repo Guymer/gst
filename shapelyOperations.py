@@ -29,7 +29,7 @@ try:
 except:
     raise Exception("\"pyguymer3\" is not installed; you need to have the Python module from https://github.com/Guymer/PyGuymer3 located somewhere in your $PYTHONPATH") from None
 
-# Define starting location ...
+# Define central location ...
 lon = -1.0                                                                      # [°]
 lat = 50.5                                                                      # [°]
 

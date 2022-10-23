@@ -23,7 +23,7 @@ except:
 
 # ******************************************************************************
 
-# Define starting location ...
+# Define central location ...
 lon = -1.0                                                                      # [°]
 lat = 50.5                                                                      # [°]
 
@@ -152,7 +152,7 @@ for sfile in neShapeFiles:
     # Clean up ...
     del polys
 
-# Plot the starting location ...
+# Plot the central location ...
 ax.scatter(
     [lon],
     [lat],
