@@ -30,7 +30,6 @@ def saveAllCanals(fname, kwArgCheck = None, debug = False, simp = 0.1, tol = 1.0
     try:
         import shapely
         import shapely.geometry
-        import shapely.validation
     except:
         raise Exception("\"shapely\" is not installed; run \"pip install --user Shapely\"") from None
 

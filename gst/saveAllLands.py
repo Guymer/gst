@@ -48,7 +48,6 @@ def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = Fals
         raise Exception("\"geojson\" is not installed; run \"pip install --user geojson\"") from None
     try:
         import shapely
-        import shapely.validation
         import shapely.wkb
     except:
         raise Exception("\"shapely\" is not installed; run \"pip install --user Shapely\"") from None
