@@ -126,15 +126,35 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
     ship = shapely.geometry.point.Point(lon, lat)
 
     # Calculate the maximum possible sailing distance (ignoring all land) ...
+    # NOTE: If the distance is very large then the ship can sail anywhere.
     maxDist = (1852.0 * spd) * (24.0 * dur)                                     # [m]
-    maxShip = pyguymer3.geo.buffer(
-        ship,
-        maxDist,
-        fill = +1.0,
-        nang = 361,
-        simp = -1.0,
-         tol = tol,
-    )
+    if maxDist > 19970326.3:
+        maxShip = pyguymer3.geo.fillin(
+            shapely.geometry.polygon.orient(
+                shapely.geometry.polygon.Polygon(
+                    shapely.geometry.polygon.LinearRing(
+                        [
+                            (-180.0,  90.0),
+                            (+180.0,  90.0),
+                            (+180.0, -90.0),
+                            (-180.0, -90.0),
+                            (-180.0,  90.0),
+                        ]
+                    )
+                )
+            ),
+            +1.0,
+            tol = tol,
+        )
+    else:
+        maxShip = pyguymer3.geo.buffer(
+            ship,
+            maxDist,
+            fill = +1.0,
+            nang = 361,
+            simp = -1.0,
+             tol = tol,
+        )
     maxShipExt = [
         maxShip.bounds[0],              # minx
         maxShip.bounds[2],              # maxx
@@ -142,16 +162,18 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
         maxShip.bounds[3],              # maxy
     ]                                                                           # [°]
 
-    # Determine the maximum symmetric sailing distance ...
-    maxShipLon = max(abs(maxShipExt[0] - lon), abs(maxShipExt[1] - lon))        # [°]
-    maxShipLat = max(abs(maxShipExt[2] - lat), abs(maxShipExt[3] - lat))        # [°]
-    maxShipHyp = max(maxShipLon, maxShipLat)                                    # [°]
-    maxShipExtSym = [
-        lon - maxShipHyp,               # minx
-        lon + maxShipHyp,               # maxx
-        lat - maxShipHyp,               # miny
-        lat + maxShipHyp,               # maxy
-    ]                                                                           # [°]
+    # Check if the user wants a local plot (for local people) ...
+    if local:
+        # Determine the maximum symmetric sailing distance ...
+        maxShipLon = max(abs(maxShipExt[0] - lon), abs(maxShipExt[1] - lon))    # [°]
+        maxShipLat = max(abs(maxShipExt[2] - lat), abs(maxShipExt[3] - lat))    # [°]
+        maxShipHyp = max(maxShipLon, maxShipLat)                                # [°]
+        maxShipExtSym = [
+            lon - maxShipHyp,           # minx
+            lon + maxShipHyp,           # maxx
+            lat - maxShipHyp,           # miny
+            lat + maxShipHyp,           # maxy
+        ]                                                                       # [°]
 
     # Check if the user is being far too coarse ...
     if prec > maxDist:
