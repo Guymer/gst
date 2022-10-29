@@ -90,7 +90,7 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
     # filled by at the point where a degree (of longitude) is the largest, i.e.,
     # the equator ...
     # NOTE: See https://en.wikipedia.org/wiki/Earth_radius#Mean_radius
-    # NOTE: These equate to:
+    # NOTE: Using a radius of 6,371,008.8 m equates to:
     #         * 1 °  = 111.195 km
     #         * 1 m° = 111.195 m
     #         * 1 μ° = 11.1195 cm
@@ -130,9 +130,9 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
     maxShip = pyguymer3.geo.buffer(
         ship,
         maxDist,
-        fill = fill,
-        nang = nang,
-        simp = simp,
+        fill = +1.0,
+        nang = 361,
+        simp = -1.0,
          tol = tol,
     )
     maxShipExt = [
@@ -147,10 +147,10 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
     maxShipLat = max(abs(maxShipExt[2] - lat), abs(maxShipExt[3] - lat))        # [°]
     maxShipHyp = max(maxShipLon, maxShipLat)                                    # [°]
     maxShipExtSym = [
-        lon - maxShipHyp,
-        lon + maxShipHyp,
-        lat - maxShipHyp,
-        lat + maxShipHyp,
+        lon - maxShipHyp,               # minx
+        lon + maxShipHyp,               # maxx
+        lat - maxShipHyp,               # miny
+        lat + maxShipHyp,               # maxy
     ]                                                                           # [°]
 
     # Check if the user is being far too coarse ...
@@ -363,6 +363,8 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
             for allLand in pyguymer3.geo.extract_polys(allLands):
                 # Skip land which is outside of the maximum possible sailing
                 # distance of the ship ...
+                # TODO: Shouldn't use "maxShip" here, but rather, should use a
+                #       version that is just the buffer to the next "freqLand".
                 if maxShip.disjoint(allLand):
                     continue
 
