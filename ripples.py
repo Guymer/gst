@@ -21,6 +21,7 @@ except:
     raise Exception("\"matplotlib\" is not installed; run \"pip install --user matplotlib\"") from None
 try:
     import shapely
+    import shapely.geometry
     import shapely.wkb
 except:
     raise Exception("\"shapely\" is not installed; run \"pip install --user Shapely\"") from None
@@ -76,6 +77,11 @@ if not os.path.exists(outDir):
     os.mkdir(outDir)
 if not os.path.exists(f"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}"):
     os.mkdir(f"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}")
+
+# ******************************************************************************
+
+# Create the initial starting Point ...
+ship = shapely.geometry.point.Point(lon, lat)
 
 # ******************************************************************************
 
@@ -230,6 +236,29 @@ for dist in range(5, 10005, 5):
         labels.append(f"cons={cons:d}, nang={nang:d}, prec={prec:d}")
         lines.append(matplotlib.lines.Line2D([], [], color = color))
 
+    # Check that the distance isn't too large ...
+    if float(dist) <= 19970.3263:
+        # Calculate the maximum distance the ship could have got to ...
+        maxShip = pyguymer3.geo.buffer(
+            ship,
+            1000.0 * float(dist),
+            fill = +1.0,
+            nang = 361,
+            simp = -1.0,
+        )
+
+        # Plot [Multi]Polygon ...
+        ax.add_geometries(
+            pyguymer3.geo.extract_polys(maxShip),
+            cartopy.crs.PlateCarree(),
+            edgecolor = "gold",
+            facecolor = "none",
+            linewidth = 1.0,
+        )
+
+        # Clean up ...
+        del maxShip
+
     # Plot the central location ...
     ax.scatter(
         [lon],
@@ -245,7 +274,9 @@ for dist in range(5, 10005, 5):
     #       ships, however, as each ship (potentially) is using different
     #       collections of land then I will just use the raw GSHHG dataset
     #       instead.
-    pyguymer3.geo.add_coastlines(ax)
+    pyguymer3.geo.add_coastlines(ax, level = 1)
+    pyguymer3.geo.add_coastlines(ax, level = 5)
+    pyguymer3.geo.add_coastlines(ax, level = 6)
     ax.legend(
         lines,
         labels,
