@@ -72,9 +72,10 @@ frames = []
 for res in ress:
     # Loop over combinations ...
     for nang, prec, color in combs:
-        # Create short-hand ...
+        # Create short-hands ...
         # NOTE: Say that 40,000 metres takes 1 hour at 20 knots.
-        freq = 24 * 40000 // prec                                               # [#]
+        freqLand = 24 * 40000 // prec                                           # [#]
+        freqSimp = 40000 // prec                                                # [#]
 
         # Populate GST command ...
         cmd = [
@@ -82,8 +83,8 @@ for res in ress:
             "-1.0", "+50.5", "20.0",            # depart Portsmouth Harbour at 20 knots
             "--duration", "0.01",               # some sailing (20 knots * 0.01 days = 8.89 kilometres)
             "--precision", f"{prec:.1f}",       # LOOP VARIABLE
-            "--freqLand", f"{freq:d}",          # ~daily land re-evaluation
-            "--freqSimp", f"{freq:d}",          # ~daily simplification
+            "--freqLand", f"{freqLand:d}",      # ~daily land re-evaluation
+            "--freqSimp", f"{freqSimp:d}",      # ~hourly simplification
             "--nang", f"{nang:d}",              # LOOP VARIABLE
             "--resolution", res,                # LOOP VARIABLE
         ]
