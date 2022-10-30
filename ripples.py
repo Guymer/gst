@@ -96,7 +96,7 @@ for cons, nang, prec, color in combs:
     cmd = [
         "python3.10", "run.py",
         f"{lon:+.1f}", f"{lat:+.1f}", "20.0",
-        "--duration", "30.0",               # some sailing
+        "--duration", "30.0",               # some sailing (20 knots * 30.0 days = 26,668.80 kilometres)
         # "--duration", "0.01",               # some sailing (20 knots * 0.01 days = 8.89 kilometres)
         "--precision", f"{prec:.1f}",       # LOOP VARIABLE
         "--conservatism", f"{cons:.1f}",    # LOOP VARIABLE
@@ -136,7 +136,7 @@ for cons, nang, prec, color in combs:
 frames = []
 
 # Loop over distances ...
-for dist in range(5, 10005, 5):
+for dist in range(5, 30005, 5):
     # Deduce PNG name, if it exists then append it to the list and skip ...
     frame = f"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}/dist={dist:05d}.png"
     if os.path.exists(frame):
