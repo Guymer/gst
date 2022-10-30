@@ -87,7 +87,7 @@ ship = shapely.geometry.point.Point(lon, lat)
 
 # Loop over combinations ...
 for cons, nang, prec, color in combs:
-    # Create short-hand ...
+    # Create short-hands ...
     # NOTE: Say that 40,000 metres takes 1 hour at 20 knots.
     freqLand = 24 * 40000 // prec                                               # [#]
     freqSimp = 40000 // prec                                                    # [#]
@@ -156,7 +156,7 @@ for dist in range(5, 10005, 5):
             continue
         istep = ((1000 * dist) // prec) - 1                                     # [#]
 
-        # Create short-hand ...
+        # Create short-hands ...
         # NOTE: Say that 40,000 metres takes 1 hour at 20 knots.
         freqLand = 24 * 40000 // prec                                           # [#]
         freqSimp = 40000 // prec                                                # [#]
