@@ -51,6 +51,7 @@ locs = [
     (-69.6, -52.5),                     # Primera Angostura
     ( 26.5,  40.2),                     # Dardanelles
     ( 29.1,  41.1),                     # Bosporus Strait
+    (103.7,   0.9),                     # Singapore
 ]                                                                               # [°]
 
 # Define resolutions ...
@@ -120,6 +121,8 @@ for res in ress:
 
     # Loop over locations ...
     for iloc, loc in enumerate(locs):
+        print(f" > Making axis for \"lon={loc[0]:+.2f}°, lat={loc[1]:+.2f}°\" ...")
+
         # Create axis ...
         ax.append(
             fg.add_subplot(
@@ -182,7 +185,7 @@ for res in ress:
             if not os.path.exists(fname):
                 continue
 
-            print(f" > Plotting \"{fname}\" ...")
+            print(f"   > Plotting \"{fname}\" ...")
 
             # Load [Multi]Polygon ...
             with gzip.open(fname, "rb") as fObj:
