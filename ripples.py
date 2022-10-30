@@ -96,7 +96,7 @@ for cons, nang, prec, color in combs:
     cmd = [
         "python3.10", "run.py",
         f"{lon:+.1f}", f"{lat:+.1f}", "20.0",
-        "--duration", "6.0",                # some sailing
+        "--duration", "30.0",               # some sailing
         # "--duration", "0.01",               # some sailing (20 knots * 0.01 days = 8.89 kilometres)
         "--precision", f"{prec:.1f}",       # LOOP VARIABLE
         "--conservatism", f"{cons:.1f}",    # LOOP VARIABLE
