@@ -51,7 +51,7 @@ locs = [
     (-69.6, -52.5),                     # Primera Angostura
     ( 26.5,  40.2),                     # Dardanelles
     ( 29.1,  41.1),                     # Bosporus Strait
-    (103.7,   0.9),                     # Singapore
+    (104.0,   0.9),                     # Singapore
 ]                                                                               # [°]
 
 # Define resolutions ...
