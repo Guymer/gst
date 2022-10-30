@@ -140,11 +140,6 @@ pyguymer3.geo.add_map_background(ax1, resolution = "large8192px")
 pyguymer3.geo.add_horizontal_gridlines(ax1, ext, locs = [50.0, 50.5, 51.0])
 pyguymer3.geo.add_vertical_gridlines(ax1, ext, locs = [-2.0, -1.5, -1.0, -0.5, 0.0])
 
-# Configure axis ...
-ax2.grid()
-ax2.set_xlabel("Number Of Angles")
-ax2.set_ylabel("Area [%]")
-
 # ******************************************************************************
 
 # Load MultiPolygon ...
@@ -270,14 +265,17 @@ ax2.axhspan(
     101,
     color = (0.0, 1.0, 0.0, 0.25),
 )
+ax2.grid()
 ax2.legend(loc = "lower right")
 ax2.semilogx()
+ax2.set_xlabel("Number Of Angles")
 # ax2.set_xticks(                                                                 # MatPlotLib ≥ 3.5.0
 #     [8, 16, 32, 64, 128, 256],                                                  # MatPlotLib ≥ 3.5.0
 #     labels = [8, 16, 32, 64, 128, 256],                                         # MatPlotLib ≥ 3.5.0
 # )                                                                               # MatPlotLib ≥ 3.5.0
 ax2.set_xticks([8, 16, 32, 64, 128, 256])                                       # MatPlotLib < 3.5.0
 ax2.set_xticklabels([8, 16, 32, 64, 128, 256])                                  # MatPlotLib < 3.5.0
+ax2.set_ylabel("Euclidean Area [%]")
 ax2.set_ylim(90, 102)
 ax2.set_yticks(range(90, 103))
 
