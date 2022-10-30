@@ -237,7 +237,7 @@ for dist in range(5, 10005, 5):
         lines.append(matplotlib.lines.Line2D([], [], color = color))
 
     # Check that the distance isn't too large ...
-    if float(dist) <= 19970.3263:
+    if 1000.0 * float(dist) <= 19970326.3:
         # Calculate the maximum distance the ship could have got to ...
         maxShip = pyguymer3.geo.buffer(
             ship,
