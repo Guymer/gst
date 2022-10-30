@@ -27,7 +27,9 @@ second.out
 cons=*
 res=*
 *.geojson
+*.geojson.gz
 *.mp4
 *.png
 *.webp
+*.wkb
 *.wkb.gz
