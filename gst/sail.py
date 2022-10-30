@@ -368,6 +368,9 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
 
     # **************************************************************************
 
+    # Initialize area ...
+    oldArea = 0.0                                                               # [°2]
+
     # Loop over iterations ...
     for istep in range(nstep):
         print(f"Iteration {istep + 1:,d}/{nstep:,d} ({0.001 * (istep + 1) * prec:,.2f} kilometres/{(istep + 1) * prec / (24.0 * 1852.0 * spd):,.4f} days of sailing) ...")
@@ -511,6 +514,18 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
                 facecolor = "none",
                 linewidth = 1.0,
             )
+
+        # **********************************************************************
+
+        # Check if the ship hasn't moved ...
+        if (abs(ship.area - oldArea) / max(tol, oldArea)) < tol:
+            print("WARNING: The ship hasn't moved, stopping sailing.")
+
+            # Stop looping ...
+            break
+
+        # Update the area ...
+        oldArea = ship.area                                                     # [°2]
 
     # **************************************************************************
 
