@@ -102,10 +102,6 @@ python3.10 run.py      \
     --resolution c
 ```
 
-## To Do
-
-* Extend the Suez Canal further south
-
 ## Dependencies
 
 GST requires the following Python modules to be installed and available in your `PYTHONPATH`.

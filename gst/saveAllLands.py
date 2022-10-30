@@ -97,13 +97,13 @@ def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = Fals
                     coords[0][0],
                     coords[0][1],
                     bear,
-                    6.0 * dist,         # NOTE: Chosen by trial and error.
+                    30000.0,            # NOTE: Chosen by trial and error.
                 )                                                               # [°], [°]
                 coords = [(newLon, newLat)] + coords                            # [°]
 
                 # Find the bearing from the penultimate coordinate to the
                 # ultimate coordinate (assuming that the CoordinateSequence goes
-                # from North-to-South) and use it to prepend a starting
+                # from North-to-South) and use it to append a finishing
                 # coordinate even further away ...
                 _, bear, _ = pyguymer3.geo.calc_dist_between_two_locs(
                     coords[-2][0],
@@ -115,7 +115,16 @@ def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = Fals
                     coords[-1][0],
                     coords[-1][1],
                     bear,
-                    6.0 * dist,         # NOTE: Chosen by trial and error.
+                    30000.0,            # NOTE: Chosen by trial and error.
+                )                                                               # [°], [°]
+                coords = coords + [(newLon, newLat)]                            # [°]
+
+                # Append a finishing coordinate due South even further away ...
+                newLon, newLat, _ = pyguymer3.geo.calc_loc_from_loc_and_bearing_and_dist(
+                    coords[-1][0],
+                    coords[-1][1],
+                    180.0,
+                    30000.0,            # NOTE: Chosen by trial and error.
                 )                                                               # [°], [°]
                 coords = coords + [(newLon, newLat)]                            # [°]
 
