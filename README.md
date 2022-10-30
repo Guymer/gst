@@ -105,6 +105,7 @@ python3.10 run.py      \
 ## To Do
 
 * Keep interior rings in `ship` when getting to the antipode
+* Extend the Suez Canal further south
 
 ## Dependencies
 
