@@ -176,3 +176,20 @@ pyguymer3.media.images2webp(
     "compareNeMapResolutions.webp",
     fps = 1.0,
 )
+
+# Set maximum sizes ...
+# NOTE: By inspection, the PNG frames are 2700px tall.
+maxSizes = [256, 512, 1024, 2048]                                               # [px]
+
+# Loop over maximum sizes ...
+for maxSize in maxSizes:
+    print(f"Making \"compareNeMapResolutions{maxSize:04d}px.webp\" ...")
+
+    # Save 1fps WEBP ...
+    pyguymer3.media.images2webp(
+        frames,
+        f"compareNeMapResolutions{maxSize:04d}px.webp",
+                 fps = 1.0,
+        screenHeight = maxSize,
+         screenWidth = maxSize,
+    )

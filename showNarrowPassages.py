@@ -248,3 +248,20 @@ pyguymer3.media.images2webp(
     "showNarrowPassages.webp",
     fps = 1.0,
 )
+
+# Set maximum sizes ...
+# NOTE: By inspection, the PNG frames are 3600px tall/wide.
+maxSizes = [256, 512, 1024, 2048]                                               # [px]
+
+# Loop over maximum sizes ...
+for maxSize in maxSizes:
+    print(f"Making \"showNarrowPassages{maxSize:04d}px.webp\" ...")
+
+    # Save 1fps WEBP ...
+    pyguymer3.media.images2webp(
+        frames,
+        f"showNarrowPassages{maxSize:04d}px.webp",
+                 fps = 1.0,
+        screenHeight = maxSize,
+         screenWidth = maxSize,
+    )
