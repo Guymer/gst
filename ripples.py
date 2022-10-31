@@ -270,6 +270,9 @@ for dist in range(5, 30005, 5):
            zorder = 5.0,
     )
 
+    # Create short-hand ...
+    dur = 1000.0 * float(dist) / (1852.0 * 20.0 * 24.0)                         # [day]
+
     # Configure axis ...
     # NOTE: Really, I should be plotting "allLands" to be consistent with the
     #       ships, however, as each ship (potentially) is using different
@@ -284,7 +287,7 @@ for dist in range(5, 30005, 5):
         loc = "lower left",
     )
     ax.set_title(
-        f"{dist:,d} km",
+        f"{dist:6,d} km ({dur:5.2f} days)",
         fontfamily = "monospace",
                loc = "right",
     )
