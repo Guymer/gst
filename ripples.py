@@ -316,3 +316,20 @@ vname = pyguymer3.media.images2mp4(
     fps = 60.0,
 )
 shutil.move(vname, f"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}.mp4")
+
+# Set maximum sizes ...
+# NOTE: By inspection, the PNG frames are 2700px wide.
+maxSizes = [256, 512, 1024, 2048]                                               # [px]
+
+# Loop over maximum sizes ...
+for maxSize in maxSizes:
+    print(f"Making \"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}{maxSize:04d}px.mp4\" ...")
+
+    # Save 60fps MP4 ...
+    vname = pyguymer3.media.images2mp4(
+        frames,
+                 fps = 60.0,
+        screenHeight = maxSize,
+         screenWidth = maxSize,
+    )
+    shutil.move(vname, f"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}{maxSize:04d}px.mp4")
