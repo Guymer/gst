@@ -278,9 +278,21 @@ for dist in range(5, 30005, 5):
     #       ships, however, as each ship (potentially) is using different
     #       collections of land then I will just use the raw GSHHG dataset
     #       instead.
-    pyguymer3.geo.add_coastlines(ax, level = 1)
-    pyguymer3.geo.add_coastlines(ax, level = 5)
-    pyguymer3.geo.add_coastlines(ax, level = 6)
+    pyguymer3.geo.add_coastlines(
+        ax,
+             level = 1,
+        resolution = res,
+    )
+    pyguymer3.geo.add_coastlines(
+        ax,
+             level = 5,
+        resolution = res,
+    )
+    pyguymer3.geo.add_coastlines(
+        ax,
+             level = 6,
+        resolution = res,
+    )
     ax.legend(
         lines,
         labels,
