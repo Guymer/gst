@@ -175,7 +175,8 @@ print("Making \"compareGshhgMapResolutions.webp\" ...")
 pyguymer3.media.images2webp(
     frames,
     "compareGshhgMapResolutions.webp",
-    fps = 1.0,
+      fps = 1.0,
+    strip = True,
 )
 
 # Set maximum sizes ...
@@ -193,4 +194,5 @@ for maxSize in maxSizes:
                  fps = 1.0,
         screenHeight = maxSize,
          screenWidth = maxSize,
+               strip = True,
     )
