@@ -85,37 +85,47 @@ ship = shapely.geometry.point.Point(lon, lat)
 
 # ******************************************************************************
 
+# Loop over days ...
+for dur in range(1, 31):
+    # Loop over combinations ...
+    for cons, nang, prec, color in combs:
+        # Create short-hands ...
+        # NOTE: Say that 40,000 metres takes 1 hour at 20 knots.
+        freqLand = 24 * 40000 // prec                                               # [#]
+        freqSimp = 40000 // prec                                                    # [#]
+
+        # Populate GST command ...
+        cmd = [
+            "python3.10", "run.py",
+            f"{lon:+.1f}", f"{lat:+.1f}", "20.0",
+            "--duration", f"{dur:.1f}",         # LOOP VARIABLE
+            "--precision", f"{prec:.1f}",       # LOOP VARIABLE
+            "--conservatism", f"{cons:.1f}",    # LOOP VARIABLE
+            "--freqLand", f"{freqLand:d}",      # ~daily land re-evaluation
+            "--freqSimp", f"{freqSimp:d}",      # ~hourly land re-evaluation
+            "--nang", f"{nang:d}",              # LOOP VARIABLE
+            "--resolution", res,
+        ]
+
+        print(f'Running "{" ".join(cmd)}" ...')
+
+        # Run GST ...
+        subprocess.run(
+            cmd,
+               check = False,
+            encoding = "utf-8",
+              stderr = subprocess.DEVNULL,
+              stdout = subprocess.DEVNULL,
+        )
+
+# ******************************************************************************
+
 # Loop over combinations ...
 for cons, nang, prec, color in combs:
     # Create short-hands ...
     # NOTE: Say that 40,000 metres takes 1 hour at 20 knots.
     freqLand = 24 * 40000 // prec                                               # [#]
     freqSimp = 40000 // prec                                                    # [#]
-
-    # Populate GST command ...
-    cmd = [
-        "python3.10", "run.py",
-        f"{lon:+.1f}", f"{lat:+.1f}", "20.0",
-        "--duration", "30.0",               # some sailing (20 knots * 30.0 days = 26,668.80 kilometres)
-        # "--duration", "0.01",               # some sailing (20 knots * 0.01 days = 8.89 kilometres)
-        "--precision", f"{prec:.1f}",       # LOOP VARIABLE
-        "--conservatism", f"{cons:.1f}",    # LOOP VARIABLE
-        "--freqLand", f"{freqLand:d}",      # ~daily land re-evaluation
-        "--freqSimp", f"{freqSimp:d}",      # ~hourly land re-evaluation
-        "--nang", f"{nang:d}",              # LOOP VARIABLE
-        "--resolution", res,
-    ]
-
-    print(f'Running "{" ".join(cmd)}" ...')
-
-    # Run GST ...
-    subprocess.run(
-        cmd,
-           check = False,
-        encoding = "utf-8",
-          stderr = subprocess.DEVNULL,
-          stdout = subprocess.DEVNULL,
-    )
 
     # Deduce directory name ...
     dname = f"res={res}_cons={cons:.2e}_tol=1.00e-10/nang={nang:d}_prec={prec:.2e}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/limit"
