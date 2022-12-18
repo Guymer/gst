@@ -72,7 +72,6 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
         raise Exception("\"pyguymer3\" is not installed; you need to have the Python module from https://github.com/Guymer/PyGuymer3 located somewhere in your $PYTHONPATH") from None
 
     # Import sub-functions ...
-    from .removeInteriorRings import removeInteriorRings
     from .removeLands import removeLands
     from .saveAllCanals import saveAllCanals
     from .saveAllLands import saveAllLands
@@ -226,9 +225,11 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
         savedAllLands = saveAllLands(
             allLandsName,
             f"{output1}/allLands",
-             res = res,
-            simp = simp,
-             tol = tol,
+             debug = False,
+            levels = (1, 5, 6),
+               res = res,
+              simp = simp,
+               tol = tol,
         )
 
     # **************************************************************************
@@ -272,12 +273,14 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
             allLandsName,
             f"{output2}/allLands",
             allCanals = allCanals,
-                 dist = prec,
-                 fill = fill,
-                 nang = nang,
-                  res = res,
-                 simp = simp,
-                  tol = tol,
+                 debug = False,
+                  dist = prec,
+                  fill = fill,
+                levels = (1, 5, 6),
+                  nang = nang,
+                   res = res,
+                  simp = simp,
+                   tol = tol,
         )
     else:
         # Set flag (if the file exists then land must have been saved) ...
@@ -419,11 +422,21 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
                 limit = []
                 for poly in pyguymer3.geo.extract_polys(ship):
                     limit += pyguymer3.geo.extract_lines(
-                        removeLands(poly.exterior, relevantLands, simp = -1.0)
+                        removeLands(
+                            poly.exterior,
+                            relevantLands,
+                            debug = False,
+                             simp = -1.0,
+                        )
                     )
                     for interior in poly.interiors:
                         limit += pyguymer3.geo.extract_lines(
-                            removeLands(interior, relevantLands, simp = -1.0)
+                            removeLands(
+                                interior,
+                                relevantLands,
+                                debug = False,
+                                 simp = -1.0,
+                            )
                         )
                 limit = shapely.geometry.multilinestring.MultiLineString(limit)
 
@@ -461,7 +474,12 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
                      tol = tol,
                 )
                 ship = shapely.ops.unary_union([limit, ship])
-                ship = removeLands(ship, relevantLands, simp = simp)
+                ship = removeLands(
+                    ship,
+                    relevantLands,
+                    debug = False,
+                     simp = simp,
+                )
 
                 print(f" > filled/buffered/simplified/unioned/removed in {time.time() - start:,.2f} seconds.")
             else:
@@ -475,7 +493,12 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
                      tol = tol,
                 )
                 ship = shapely.ops.unary_union([limit, ship])
-                ship = removeLands(ship, relevantLands, simp = -1.0)
+                ship = removeLands(
+                    ship,
+                    relevantLands,
+                    debug = False,
+                     simp = -1.0,
+                )
 
                 print(f" > filled/buffered/filled/unioned/removed in {time.time() - start:,.2f} seconds.")
 
