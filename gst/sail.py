@@ -255,7 +255,7 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
     # Load all the canals ...
     if savedAllCanals:
         with gzip.open(allCanalsName, "rb") as fObj:
-            allCanals = shapely.wkb.loads(fObj.read())
+            allCanals = pyguymer3.geo.extract_lines(shapely.wkb.loads(fObj.read()))
     else:
         allCanals = None
 
@@ -289,15 +289,16 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
     # Load all the land ...
     if savedAllLands:
         with gzip.open(allLandsName, "rb") as fObj:
-            allLands = shapely.wkb.loads(fObj.read())
+            allLands = pyguymer3.geo.extract_polys(shapely.wkb.loads(fObj.read()))
     else:
         allLands = None
 
     # **************************************************************************
 
     # Check that the ship is not starting on any land ...
-    if allLands.contains(ship):
-        raise Exception("the ship is starting on land") from None
+    for allLand in allLands:
+        if allLand.contains(ship):
+            raise Exception("the ship is starting on land") from None
 
     # **************************************************************************
 
@@ -353,7 +354,7 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
 
         # Plot Polygons ...
         ax.add_geometries(
-            pyguymer3.geo.extract_polys(allLands),
+            allLands,
             cartopy.crs.PlateCarree(),
             edgecolor = (1.0, 0.0, 0.0, 0.2),
             facecolor = (1.0, 0.0, 0.0, 0.2),
@@ -399,7 +400,7 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
             relevantLands = []
 
             # Loop over Polygons in the MultiPolygon of all of the land ...
-            for allLand in pyguymer3.geo.extract_polys(allLands):
+            for allLand in allLands:
                 # Skip land which is outside of the maximum possible sailing
                 # distance of the ship ...
                 if tmpMaxShip.disjoint(allLand):

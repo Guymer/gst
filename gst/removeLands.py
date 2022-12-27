@@ -61,22 +61,15 @@ def removeLands(shape, lands, kwArgCheck = None, debug = False, simp = 0.1):
         ]
     )
     shape = shape.difference(edge)
-
-    # Check shape ...
     if debug:
         pyguymer3.geo.check(shape)
 
     # Check if the user wants to simplify the shape ...
     if simp > 0.0:
         # Simplify shape ...
-        shapeSimp = shape.simplify(simp)
-
-        # Check simplified shape ...
+        shape = shape.simplify(simp)
         if debug:
-            pyguymer3.geo.check(shapeSimp)
-
-        # Return simplified shape ...
-        return shapeSimp
+            pyguymer3.geo.check(shape)
 
     # Return shape ...
     return shape

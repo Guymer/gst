@@ -136,26 +136,9 @@ def saveAllCanals(fname, kwArgCheck = None, debug = False, simp = 0.1, tol = 1.0
     # Check if the user wants to simplify the MultiLineString ...
     if simp > 0.0:
         # Simplify MultiLineString ...
-        linesSimp = lines.simplify(simp)
+        lines = lines.simplify(simp)
         if debug:
-            pyguymer3.geo.check(linesSimp)
-
-        # Save simplified MultiLineString ...
-        with gzip.open(fname, "wb", compresslevel = 9) as fObj:
-            fObj.write(shapely.wkb.dumps(linesSimp))
-
-        # Save simplified MultiLineString ...
-        with open(f"{fname[:-7]}.geojson", "wt", encoding = "utf-8") as fObj:
-            geojson.dump(
-                linesSimp,
-                fObj,
-                ensure_ascii = False,
-                      indent = 4,
-                   sort_keys = True,
-            )
-
-        # Return ...
-        return True
+            pyguymer3.geo.check(lines)
 
     # Save MultiLineString ...
     with gzip.open(fname, "wb", compresslevel = 9) as fObj:

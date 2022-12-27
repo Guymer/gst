@@ -7,7 +7,7 @@ def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = Fals
         the file name of the compressed WKB file
     dname : string
         the directory name where temporary compressed WKB files can be stored
-    allCanals : shapely.geometry.multilinestring.MultiLineString, optional
+    allCanals : list of shapely.geometry.linestring.LineString, optional
         a MultiLineString of canals to use to cut up pieces of land to allow
         ships through
     debug : bool, optional
@@ -72,16 +72,16 @@ def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = Fals
     # **************************************************************************
 
     # Check if the user supplied canals ...
-    if isinstance(allCanals, shapely.geometry.multilinestring.MultiLineString):
+    if isinstance(allCanals, list):
         # Check if the user wants to buffer the canals ...
         if dist > 0.0:
             # Initialize list ...
             lines = []
 
             # Loop over canals ...
-            for canal in pyguymer3.geo.extract_lines(allCanals):
+            for allCanal in allCanals:
                 # Extract coordinates ...
-                coords = list(canal.coords)                                     # [°]
+                coords = list(allCanal.coords)                                  # [°]
 
                 # Find the bearing from the second coordinate to the first
                 # coordinate (assuming that the CoordinateSequence goes from
@@ -243,27 +243,10 @@ def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = Fals
     # Check if the user wants to simplify the MultiPolygon ...
     if simp > 0.0:
         # Simplify MultiPolygon ...
-        polysSimp = polys.simplify(simp)
-        polysSimp = removeInteriorRings(polysSimp)
+        polys = polys.simplify(simp)
+        polys = removeInteriorRings(polys)
         if debug:
-            pyguymer3.geo.check(polysSimp)
-
-        # Save simplified MultiPolygon ...
-        with gzip.open(fname, "wb", compresslevel = 9) as fObj:
-            fObj.write(shapely.wkb.dumps(polysSimp))
-
-        # Save MultiPolygon ...
-        with open(f"{fname[:-7]}.geojson", "wt", encoding = "utf-8") as fObj:
-            geojson.dump(
-                polysSimp,
-                fObj,
-                ensure_ascii = False,
-                      indent = 4,
-                   sort_keys = True,
-            )
-
-        # Return ...
-        return True
+            pyguymer3.geo.check(polys)
 
     # Save MultiPolygon ...
     with gzip.open(fname, "wb", compresslevel = 9) as fObj:
