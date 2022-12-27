@@ -244,7 +244,7 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
         # Make the compressed WKB file of all of the canals ...
         savedAllCanals = saveAllCanals(
             allCanalsName,
-            debug = True,
+            debug = False,
              simp = simp,
               tol = tol,
         )
@@ -273,14 +273,14 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
             allLandsName,
             f"{output2}/allLands",
             allCanals = allCanals,
-                 debug = False,
-                  dist = prec,
-                  fill = fill,
-                levels = (1, 5, 6),
-                  nang = nang,
-                   res = res,
-                  simp = simp,
-                   tol = tol,
+                debug = False,
+                 dist = prec,
+                 fill = fill,
+               levels = (1, 5, 6),
+                 nang = nang,
+                  res = res,
+                 simp = simp,
+                  tol = tol,
         )
     else:
         # Set flag (if the file exists then land must have been saved) ...
@@ -384,6 +384,17 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
         if istep % freqLand == 0:
             print(" > Re-evaluating the relevant land ...")
 
+            # Calculate the maximum possible sailing distance until the next
+            # time the list of relevant land needs updating (ignoring all land) ...
+            tmpMaxShip = pyguymer3.geo.buffer(
+                ship,
+                freqLand * prec,
+                fill = +1.0,
+                nang = 361,
+                simp = -1.0,
+                 tol = tol,
+            )
+
             # Initialize list ...
             relevantLands = []
 
@@ -391,9 +402,7 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
             for allLand in pyguymer3.geo.extract_polys(allLands):
                 # Skip land which is outside of the maximum possible sailing
                 # distance of the ship ...
-                # TODO: Shouldn't use "maxShip" here, but rather, should use a
-                #       version that is just the buffer to the next "freqLand".
-                if maxShip.disjoint(allLand):
+                if tmpMaxShip.disjoint(allLand):
                     continue
 
                 # Skip land that is wholly contained within the ship (i.e., the
@@ -403,6 +412,9 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
 
                 # Append land to list ...
                 relevantLands.append(allLand)
+
+            # Clean up ...
+            del tmpMaxShip
 
         # **********************************************************************
 
