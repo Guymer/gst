@@ -91,19 +91,22 @@ for dur in range(1, 31):
     for cons, nang, prec, color in combs:
         # Create short-hands ...
         # NOTE: Say that 40,000 metres takes 1 hour at 20 knots.
-        freqLand = 24 * 40000 // prec                                               # [#]
-        freqSimp = 40000 // prec                                                    # [#]
+        freqLand = 24 * 40000 // prec                                           # [#]
+        freqPlot = 40000 // prec                                                # [#]
+        freqSimp = 40000 // prec                                                # [#]
 
         # Populate GST command ...
         cmd = [
             "python3.10", "run.py",
             f"{lon:+.1f}", f"{lat:+.1f}", "20.0",
-            "--duration", f"{dur:.1f}",         # LOOP VARIABLE
-            "--precision", f"{prec:.1f}",       # LOOP VARIABLE
             "--conservatism", f"{cons:.1f}",    # LOOP VARIABLE
+            "--duration", f"{dur:.1f}",         # LOOP VARIABLE
             "--freqLand", f"{freqLand:d}",      # ~daily land re-evaluation
-            "--freqSimp", f"{freqSimp:d}",      # ~hourly land re-evaluation
+            "--freqPlot", f"{freqPlot:d}",      # ~hourly plotting
+            "--freqSimp", f"{freqSimp:d}",      # ~hourly simplification
             "--nang", f"{nang:d}",              # LOOP VARIABLE
+            "--plot",
+            "--precision", f"{prec:.1f}",       # LOOP VARIABLE
             "--resolution", res,
         ]
 
