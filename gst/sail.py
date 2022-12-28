@@ -50,10 +50,6 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
         import cartopy
     except:
         raise Exception("\"cartopy\" is not installed; run \"pip install --user Cartopy\"") from None
-    # try:
-    #     import geojson
-    # except:
-    #     raise Exception("\"geojson\" is not installed; run \"pip install --user geojson\"") from None
     try:
         import matplotlib
         matplotlib.use("Agg")                                                   # NOTE: See https://matplotlib.org/stable/gallery/user_interfaces/canvasagg.html
@@ -79,6 +75,7 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
     from .removeLands import removeLands
     from .saveAllCanals import saveAllCanals
     from .saveAllLands import saveAllLands
+    from .saveRelevantLands import saveRelevantLands
 
     # Check keyword arguments ...
     if kwArgCheck is not None:
@@ -211,6 +208,8 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
         os.mkdir(output3)
     if not os.path.exists(f"{output3}/limit"):
         os.mkdir(f"{output3}/limit")
+    if not os.path.exists(f"{output3}/relevantLands"):
+        os.mkdir(f"{output3}/relevantLands")
     if not os.path.exists(f"{output3}/ship"):
         os.mkdir(f"{output3}/ship")
 
@@ -395,56 +394,37 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
         if istep % freqLand == 0:
             print(" > Re-evaluating the relevant land ...")
 
-            # Calculate the maximum possible sailing distance until the next
-            # time the list of relevant land needs updating (ignoring all land) ...
-            tmpMaxShip = pyguymer3.geo.buffer(
-                ship,
-                cons * freqLand * prec,
-                fill = +1.0,
-                nang = 361,
-                simp = -1.0,
-                 tol = tol,
-            )
+            # Deduce input filename ...
+            relevantLandsName = f"{output3}/relevantLands/istep={istep:06d}.wkb.gz"
 
-            # Initialize list ...
-            relevantLands = []
+            # Check if the input file is missing ...
+            if not os.path.exists(relevantLandsName):
+                print(f"   Making \"{relevantLandsName}\" ...")
 
-            # Loop over Polygons in the MultiPolygon of all of the land ...
-            for allLand in allLands:
-                # Skip land which is outside of the maximum possible sailing
-                # distance of the ship ...
-                if tmpMaxShip.disjoint(allLand):
-                    continue
+                # Make the compressed WKB file of all of the relevant land ...
+                savedRelevantLands = saveRelevantLands(
+                    relevantLandsName,
+                    ship,
+                    cons * freqLand * prec,
+                    allLands,
+                    fill = +1.0,
+                    nang = 361,
+                    simp = -1.0,
+                     tol = tol,
+                )
+            else:
+                # Set flag (if the file exists then land must have been saved) ...
+                savedRelevantLands = True
 
-                # Skip land that is wholly contained within the ship (i.e., the
-                # ship has already sailed around/past this piece of land) ...
-                if ship.contains(allLand):
-                    continue
-
-                # Append land to list ...
-                relevantLands.append(allLand)
-
-            # Clean up ...
-            del tmpMaxShip
-
-            # # Convert list of Polygons to a (unified) MultiPolygon ...
-            # abcdef = shapely.ops.unary_union(relevantLands)
-            #
-            # # Save MultiPolygon ...
-            # with gzip.open("relevantLands.wkb.gz", "wb", compresslevel = 9) as fObj:
-            #     fObj.write(shapely.wkb.dumps(abcdef))
-            #
-            # # Save MultiPolygon ...
-            # with open("relevantLands.geojson", "wt", encoding = "utf-8") as fObj:
-            #     geojson.dump(
-            #         abcdef,
-            #         fObj,
-            #         ensure_ascii = False,
-            #               indent = 4,
-            #            sort_keys = True,
-            #     )
-            #
-            # exit()
+            # Load all the relevant land ...
+            # NOTE: Given how "relevantLands" was made, we know that there
+            #       aren't any invalid Polygons, so don't bother checking for
+            #       them.
+            if savedRelevantLands:
+                with gzip.open(relevantLandsName, "rb") as fObj:
+                    relevantLands = pyguymer3.geo.extract_polys(shapely.wkb.loads(fObj.read()), onlyValid = False, repair = False)
+            else:
+                relevantLands = None
 
         # **********************************************************************
 
