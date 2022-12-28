@@ -85,7 +85,7 @@ if __name__ == "__main__":
         )
 
         # Manually plot the exterior rings of all of the Polygons ...
-        for j, poly in enumerate(pyguymer3.geo.extract_polys(maxShip1)):
+        for j, poly in enumerate(pyguymer3.geo.extract_polys(maxShip1, onlyValid = False, repair = False)):
             coords = numpy.array(poly.exterior.coords)                          # [°]
             ax[i].plot(
                 coords[:, 0],
@@ -117,7 +117,7 @@ if __name__ == "__main__":
         )
 
         # Manually plot the exterior rings of all of the Polygons ...
-        for j, poly in enumerate(pyguymer3.geo.extract_polys(maxShip2)):
+        for j, poly in enumerate(pyguymer3.geo.extract_polys(maxShip2, onlyValid = False, repair = False)):
             coords = numpy.array(poly.exterior.coords)                          # [°]
             ax[i].plot(
                 coords[:, 0],

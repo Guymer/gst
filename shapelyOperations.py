@@ -186,7 +186,7 @@ ax.plot(
 # it ...
 limit = limit.difference(land2)
 print(type(limit))
-for line in pyguymer3.geo.extract_lines(limit):
+for line in pyguymer3.geo.extract_lines(limit, onlyValid = False):
     coords = numpy.array(line.coords)                                           # [°]
     ax.plot(
         coords[:, 0],

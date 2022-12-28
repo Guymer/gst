@@ -147,8 +147,10 @@ with gzip.open("res=i_cons=2.00e+00_tol=1.00e-10/allLands.wkb.gz", "rb") as fObj
     allLands = shapely.wkb.loads(fObj.read())
 
 # Plot MultiPolygon ...
+# NOTE: Given how "allLands" was made, we know that there aren't any invalid
+#       Polygons, so don't bother checking for them.
 ax1.add_geometries(
-    pyguymer3.geo.extract_polys(allLands),
+    pyguymer3.geo.extract_polys(allLands, onlyValid = False, repair = False),
     cartopy.crs.PlateCarree(),
     edgecolor = (1.0, 0.0, 0.0, 1.0),
     facecolor = (1.0, 0.0, 0.0, 0.5),

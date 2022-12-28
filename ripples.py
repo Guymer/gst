@@ -232,8 +232,10 @@ for dist in range(5, 30005, 5):
             limit = shapely.wkb.loads(fObj.read())
 
         # Plot [Multi]LineString ...
+        # NOTE: Given how "limit" was made, we know that there aren't any
+        #       invalid LineStrings, so don't bother checking for them.
         ax.add_geometries(
-            pyguymer3.geo.extract_lines(limit),
+            pyguymer3.geo.extract_lines(limit, onlyValid = False),
             cartopy.crs.PlateCarree(),
             edgecolor = color,
             facecolor = "none",
@@ -260,7 +262,7 @@ for dist in range(5, 30005, 5):
 
         # Plot [Multi]Polygon ...
         ax.add_geometries(
-            pyguymer3.geo.extract_polys(maxShip),
+            pyguymer3.geo.extract_polys(maxShip, onlyValid = False, repair = False),
             cartopy.crs.PlateCarree(),
             edgecolor = "gold",
             facecolor = "none",

@@ -257,9 +257,11 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
         savedAllCanals = True
 
     # Load all the canals ...
+    # NOTE: Given how "allCanals" was made, we know that there aren't any
+    #       invalid LineStrings, so don't bother checking for them.
     if savedAllCanals:
         with gzip.open(allCanalsName, "rb") as fObj:
-            allCanals = pyguymer3.geo.extract_lines(shapely.wkb.loads(fObj.read()))
+            allCanals = pyguymer3.geo.extract_lines(shapely.wkb.loads(fObj.read()), onlyValid = False)
     else:
         allCanals = None
 
@@ -291,9 +293,11 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
         savedAllLands = True
 
     # Load all the land ...
+    # NOTE: Given how "allLands" was made, we know that there aren't any invalid
+    #       Polygons, so don't bother checking for them.
     if savedAllLands:
         with gzip.open(allLandsName, "rb") as fObj:
-            allLands = pyguymer3.geo.extract_polys(shapely.wkb.loads(fObj.read()))
+            allLands = pyguymer3.geo.extract_polys(shapely.wkb.loads(fObj.read()), onlyValid = False, repair = False)
     else:
         allLands = None
 
@@ -366,8 +370,10 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
         )
 
         # Plot Polygons ...
+        # NOTE: Given how "maxShip" was made, we know that there aren't any
+        #       invalid Polygons, so don't bother checking for them.
         ax.add_geometries(
-            pyguymer3.geo.extract_polys(maxShip),
+            pyguymer3.geo.extract_polys(maxShip, onlyValid = False, repair = False),
             cartopy.crs.PlateCarree(),
             edgecolor = (0.0, 0.0, 0.0, 0.2),
             facecolor = (0.0, 0.0, 0.0, 0.2),
@@ -455,15 +461,18 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
                 limit = shapely.geometry.point.Point(lon, lat)
             else:
                 # Extract the current limit of sailing (on water) ...
+                # NOTE: Given how "ship" was made, we know that there aren't any
+                #       invalid Polygons, so don't bother checking for them.
                 limit = []
-                for poly in pyguymer3.geo.extract_polys(ship):
+                for poly in pyguymer3.geo.extract_polys(ship, onlyValid = False, repair = False):
                     limit += pyguymer3.geo.extract_lines(
                         removeLands(
                             poly.exterior,
                             relevantLands,
                             debug = False,
                              simp = -1.0,
-                        )
+                        ),
+                        onlyValid = False,
                     )
                     for interior in poly.interiors:
                         limit += pyguymer3.geo.extract_lines(
@@ -472,7 +481,8 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
                                 relevantLands,
                                 debug = False,
                                  simp = -1.0,
-                            )
+                            ),
+                            onlyValid = False,
                         )
                 limit = shapely.geometry.multilinestring.MultiLineString(limit)
 
@@ -483,9 +493,11 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
             # ******************************************************************
 
             # Find out how many points describe this [Multi]LineString ...
+            # NOTE: Given how "limit" was made, we know that there aren't any
+            #       invalid LineStrings, so don't bother checking for them.
             nline = 0                                                           # [#]
             npoint = 0                                                          # [#]
-            for line in pyguymer3.geo.extract_lines(limit):
+            for line in pyguymer3.geo.extract_lines(limit, onlyValid = False):
                 nline += 1                                                      # [#]
                 npoint += len(line.coords)                                      # [#]
 
@@ -548,9 +560,11 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
         # **********************************************************************
 
         # Find out how many points describe this [Multi]Polygon ...
+        # NOTE: Given how "ship" was made, we know that there aren't any invalid
+        #       Polygons, so don't bother checking for them.
         npoint = 0                                                              # [#]
         npoly = 0                                                               # [#]
-        for poly in pyguymer3.geo.extract_polys(ship):
+        for poly in pyguymer3.geo.extract_polys(ship, onlyValid = False, repair = False):
             npoint += len(poly.exterior.coords)                                 # [#]
             npoly += 1                                                          # [#]
             for interior in poly.interiors:
@@ -568,8 +582,10 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
             print(" > Plotting ...")
 
             # Plot Polygons ...
+            # NOTE: Given how "ship" was made, we know that there aren't any
+            #       invalid Polygons, so don't bother checking for them.
             ax.add_geometries(
-                pyguymer3.geo.extract_polys(ship),
+                pyguymer3.geo.extract_polys(ship, onlyValid = False, repair = False),
                 cartopy.crs.PlateCarree(),
                 edgecolor = f"C{((istep + 1) // freqPlot) - 1:d}",
                 facecolor = "none",

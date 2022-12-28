@@ -1,4 +1,4 @@
-def removeInteriorRings(shape):
+def removeInteriorRings(shape, kwArgCheck = None, onlyValid = False, repair = False):
     """Remove all interior rings from a [Multi]Polygon
 
     This function reads in a [Multi]Polygon and returns a [Multi]Polygon which
@@ -8,6 +8,11 @@ def removeInteriorRings(shape):
     ----------
     shape : shapely.geometry.polygon.Polygon, shapely.geometry.multipolygon.MultiPolygon
         the input shape
+    onlyValid : bool, optional
+        only return valid Polygons (checks for validity can take a while, if
+        being called often)
+    repair : bool, optional
+        attempt to repair invalid Polygons
 
     Returns
     -------
@@ -28,6 +33,10 @@ def removeInteriorRings(shape):
     except:
         raise Exception("\"pyguymer3\" is not installed; you need to have the Python module from https://github.com/Guymer/PyGuymer3 located somewhere in your $PYTHONPATH") from None
 
+    # Check keyword arguments ...
+    if kwArgCheck is not None:
+        print(f"WARNING: \"{__name__}\" has been called with an extra positional argument")
+
     # **************************************************************************
 
     # Check the input type ...
@@ -42,7 +51,7 @@ def removeInteriorRings(shape):
         polys = []
 
         # Loop over Polygons ...
-        for poly in pyguymer3.geo.extract_polys(shape, keepInvalid = True):
+        for poly in pyguymer3.geo.extract_polys(shape, onlyValid = onlyValid, repair = repair):
             # Append a correctly oriented Polygon made up of just the exterior
             # LinearRing ...
             polys.append(shapely.geometry.polygon.orient(shapely.geometry.polygon.Polygon(poly.exterior)))

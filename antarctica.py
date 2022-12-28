@@ -149,14 +149,16 @@ for res in ress:
                 # Loop over records ...
                 for record in cartopy.io.shapereader.Reader(sfile).records():
                     # Add Polygons to the list ...
-                    polys += pyguymer3.geo.extract_polys(record.geometry)
+                    polys += pyguymer3.geo.extract_polys(record.geometry, onlyValid = True, repair = True)
 
             # Convert list of Polygons to a (unified) [Multi]Polygon ...
             polys = shapely.ops.unary_union(polys)
 
             # Plot geometry ...
+            # NOTE: Given how "polys" was made, we know that there aren't any
+            #       invalid Polygons, so don't bother checking for them.
             ax[i].add_geometries(
-                pyguymer3.geo.extract_polys(polys),
+                pyguymer3.geo.extract_polys(polys, onlyValid = False, repair = False),
                 cartopy.crs.PlateCarree(),
                 edgecolor = "cyan",
                 facecolor = "none",

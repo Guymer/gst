@@ -193,8 +193,10 @@ for res in ress:
                 allLands = shapely.wkb.loads(fObj.read())
 
             # Plot Polygons ...
+            # NOTE: Given how "allLands" was made, we know that there aren't any
+            #       invalid Polygons, so don't bother checking for them.
             ax[iloc].add_geometries(
-                pyguymer3.geo.extract_polys(allLands),
+                pyguymer3.geo.extract_polys(allLands, onlyValid = False, repair = False),
                 cartopy.crs.PlateCarree(),
                 edgecolor = (0.0, 0.0, 0.0, 0.5),
                 facecolor = color,

@@ -183,7 +183,7 @@ def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = Fals
             polys = []
 
             # Loop over Polygons ...
-            for poly in pyguymer3.geo.extract_polys(record.geometry):
+            for poly in pyguymer3.geo.extract_polys(record.geometry, onlyValid = True, repair = True):
                 # Check if the user wants to buffer the land ...
                 # NOTE: The land should probably be buffered to prohibit ships
                 #       jumping over narrow stretches that are narrower than the
@@ -206,7 +206,9 @@ def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = Fals
                     poly = poly.difference(line)
 
                 # Add the Polygons to the list ...
-                polys += pyguymer3.geo.extract_polys(poly)
+                # NOTE: Given how "poly" was made, we know that there aren't any
+                #       invalid Polygons, so don't bother checking for them.
+                polys += pyguymer3.geo.extract_polys(poly, onlyValid = False, repair = False)
 
             # Convert list of Polygons to a (unified) [Multi]Polygon ...
             polys = shapely.ops.unary_union(polys).simplify(tol)
@@ -227,24 +229,30 @@ def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = Fals
         print(f" > Loading \"{tname}\" ...")
 
         # Add the individual Polygons to the list ...
+        # NOTE: Given how "polys" was made, we know that there aren't any
+        #       invalid Polygons, so don't bother checking for them.
         with gzip.open(tname, "rb") as fObj:
-            polys += pyguymer3.geo.extract_polys(shapely.wkb.loads(fObj.read()))
+            polys += pyguymer3.geo.extract_polys(shapely.wkb.loads(fObj.read()), onlyValid = False, repair = False)
 
     # Return if there isn't any land at this resolution ...
     if len(polys) == 0:
         return False
 
     # Convert list of Polygons to a (unified) MultiPolygon ...
+    # NOTE: Given how "polys" was made, we know that there aren't any invalid
+    #       Polygons, so don't bother checking for them.
     polys = shapely.ops.unary_union(polys).simplify(tol)
-    polys = removeInteriorRings(polys)
+    polys = removeInteriorRings(polys, onlyValid = False, repair = False)
     if debug:
         pyguymer3.geo.check(polys)
 
     # Check if the user wants to simplify the MultiPolygon ...
     if simp > 0.0:
         # Simplify MultiPolygon ...
+        # NOTE: Given how "polys" was made, we know that there aren't any
+        #       invalid Polygons, so don't bother checking for them.
         polys = polys.simplify(simp)
-        polys = removeInteriorRings(polys)
+        polys = removeInteriorRings(polys, onlyValid = False, repair = False)
         if debug:
             pyguymer3.geo.check(polys)
 

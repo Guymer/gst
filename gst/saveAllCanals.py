@@ -77,7 +77,7 @@ def saveAllCanals(fname, kwArgCheck = None, debug = False, simp = 0.1, tol = 1.0
             continue
 
         # Loop over LineStrings ...
-        for line in pyguymer3.geo.extract_lines(record.geometry):
+        for line in pyguymer3.geo.extract_lines(record.geometry, onlyValid = True):
             # Append LineString (and its top) to lists ...
             db[neName]["raw"].append(line)
             db[neName]["top"].append(line.bounds[3])                            # [°]
