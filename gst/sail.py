@@ -399,7 +399,7 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
             # time the list of relevant land needs updating (ignoring all land) ...
             tmpMaxShip = pyguymer3.geo.buffer(
                 ship,
-                freqLand * prec,
+                cons * freqLand * prec,
                 fill = +1.0,
                 nang = 361,
                 simp = -1.0,
