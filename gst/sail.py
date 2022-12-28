@@ -50,6 +50,10 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
         import cartopy
     except:
         raise Exception("\"cartopy\" is not installed; run \"pip install --user Cartopy\"") from None
+    # try:
+    #     import geojson
+    # except:
+    #     raise Exception("\"geojson\" is not installed; run \"pip install --user geojson\"") from None
     try:
         import matplotlib
         matplotlib.use("Agg")                                                   # NOTE: See https://matplotlib.org/stable/gallery/user_interfaces/canvasagg.html
@@ -416,6 +420,25 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
 
             # Clean up ...
             del tmpMaxShip
+
+            # # Convert list of Polygons to a (unified) MultiPolygon ...
+            # abcdef = shapely.ops.unary_union(relevantLands)
+            #
+            # # Save MultiPolygon ...
+            # with gzip.open("relevantLands.wkb.gz", "wb", compresslevel = 9) as fObj:
+            #     fObj.write(shapely.wkb.dumps(abcdef))
+            #
+            # # Save MultiPolygon ...
+            # with open("relevantLands.geojson", "wt", encoding = "utf-8") as fObj:
+            #     geojson.dump(
+            #         abcdef,
+            #         fObj,
+            #         ensure_ascii = False,
+            #               indent = 4,
+            #            sort_keys = True,
+            #     )
+            #
+            # exit()
 
         # **********************************************************************
 
