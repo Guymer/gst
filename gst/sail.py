@@ -514,6 +514,7 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
                     relevantLands,
                     onlyValid = False,
                        repair = False,
+                          tol = tol,
                 )
 
                 print(f" > filled/buffered/simplified/unioned/removed in {time.time() - start:,.2f} seconds.")
@@ -539,6 +540,7 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
                     relevantLands,
                     onlyValid = False,
                        repair = False,
+                          tol = tol,
                 )
 
                 print(f" > filled/buffered/filled/unioned/removed in {time.time() - start:,.2f} seconds.")
