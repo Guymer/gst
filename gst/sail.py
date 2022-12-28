@@ -72,6 +72,7 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
         raise Exception("\"pyguymer3\" is not installed; you need to have the Python module from https://github.com/Guymer/PyGuymer3 located somewhere in your $PYTHONPATH") from None
 
     # Import sub-functions ...
+    from .removeInteriorRingsWhichAreLand import removeInteriorRingsWhichAreLand
     from .removeLands import removeLands
     from .saveAllCanals import saveAllCanals
     from .saveAllLands import saveAllLands
@@ -508,6 +509,12 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
                     debug = False,
                      simp = simp,
                 )
+                ship = removeInteriorRingsWhichAreLand(
+                    ship,
+                    relevantLands,
+                    onlyValid = False,
+                       repair = False,
+                )
 
                 print(f" > filled/buffered/simplified/unioned/removed in {time.time() - start:,.2f} seconds.")
             else:
@@ -526,6 +533,12 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
                     relevantLands,
                     debug = False,
                      simp = -1.0,
+                )
+                ship = removeInteriorRingsWhichAreLand(
+                    ship,
+                    relevantLands,
+                    onlyValid = False,
+                       repair = False,
                 )
 
                 print(f" > filled/buffered/filled/unioned/removed in {time.time() - start:,.2f} seconds.")
