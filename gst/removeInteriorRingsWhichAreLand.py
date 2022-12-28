@@ -1,4 +1,4 @@
-def removeInteriorRingsWhichAreLand(shape, lands, kwArgCheck = None, onlyValid = False, repair = False, tol = 1.0e-10):
+def removeInteriorRingsWhichAreLand(shape, lands, kwArgCheck = None, onlyValid = False, prec = 10000.0, repair = False):
     """Remove the holes in a shape which match land
 
     This function reads in a shape and a list of Polygons of land masses. Each
@@ -14,20 +14,16 @@ def removeInteriorRingsWhichAreLand(shape, lands, kwArgCheck = None, onlyValid =
     onlyValid : bool, optional
         only return valid Polygons (checks for validity can take a while, if
         being called often)
+    prec : float, optional
+        the precision of the calculation (in metres)
     repair : bool, optional
         attempt to repair invalid Polygons
-    tol : float, optional
-        the Euclidean distance that defines two points as being the same (in
-        degrees)
 
     Returns
     -------
     shape : shapely.geometry.polygon.Polygon, shapely.geometry.multipolygon.MultiPolygon
         the output shape
     """
-
-    # Import standard modules ...
-    import math
 
     # Import special modules ...
     try:
@@ -61,11 +57,13 @@ def removeInteriorRingsWhichAreLand(shape, lands, kwArgCheck = None, onlyValid =
             # Skip this hole if it is the same as a land mass ...
             skip = False
             for land in lands:
-                r = math.hypot(
-                    land.centroid.x - possibleLand.centroid.x,
-                    land.centroid.y - possibleLand.centroid.y,
-                )                                                               # [°]
-                if r < tol:
+                dist, _, _ = pyguymer3.geo.calc_dist_between_two_locs(
+                    land.centroid.x,
+                    land.centroid.y,
+                    possibleLand.centroid.x,
+                    possibleLand.centroid.y,
+                )                                                               # [m], [°], [°]
+                if dist < prec:
                     skip = True
                     break
             if skip:
@@ -87,7 +85,7 @@ def removeInteriorRingsWhichAreLand(shape, lands, kwArgCheck = None, onlyValid =
         for poly in pyguymer3.geo.extract_polys(shape, onlyValid = onlyValid, repair = repair):
             # Append a correctly oriented Polygon made up of the exterior
             # LinearRing and the interior LinearRings which are not land ...
-            polys.append(removeInteriorRingsWhichAreLand(poly, lands, onlyValid = onlyValid, repair = repair, tol = tol))
+            polys.append(removeInteriorRingsWhichAreLand(poly, lands, onlyValid = onlyValid, prec = prec, repair = repair))
 
         # Return a [Multi]Polygon made of Polygons made of the exterior
         # LinearRing and the interior LinearRings which are not land ...
