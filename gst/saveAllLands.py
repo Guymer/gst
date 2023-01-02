@@ -47,6 +47,7 @@ def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = Fals
         raise Exception("\"cartopy\" is not installed; run \"pip install --user Cartopy\"") from None
     try:
         import geojson
+        geojson.geometry.Geometry.__init__.__defaults__ = (None, False, 12)     # NOTE: See https://github.com/jazzband/geojson/issues/135#issuecomment-596509669
     except:
         raise Exception("\"geojson\" is not installed; run \"pip install --user geojson\"") from None
     try:
