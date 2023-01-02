@@ -189,8 +189,8 @@ for res in ress:
             print(f"   > Plotting \"{fname}\" ...")
 
             # Load [Multi]Polygon ...
-            with gzip.open(fname, "rb") as fObj:
-                allLands = shapely.wkb.loads(fObj.read())
+            with gzip.open(fname, "rb") as gzObj:
+                allLands = shapely.wkb.loads(gzObj.read())
 
             # Plot Polygons ...
             # NOTE: Given how "allLands" was made, we know that there aren't any

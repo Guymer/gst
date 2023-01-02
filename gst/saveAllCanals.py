@@ -142,8 +142,8 @@ def saveAllCanals(fname, kwArgCheck = None, debug = False, simp = 0.1, tol = 1.0
             pyguymer3.geo.check(lines)
 
     # Save MultiLineString ...
-    with gzip.open(fname, "wb", compresslevel = 9) as fObj:
-        fObj.write(shapely.wkb.dumps(lines))
+    with gzip.open(fname, "wb", compresslevel = 9) as gzObj:
+        gzObj.write(shapely.wkb.dumps(lines))
 
     # Save MultiLineString ...
     with open(f"{fname[:-7]}.geojson", "wt", encoding = "utf-8") as fObj:

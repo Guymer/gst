@@ -95,8 +95,8 @@ for prec in [1250, 2500, 5000, 10000, 20000, 40000]:
         print(f"Surveying \"{fname}\" ...")
 
         # Load Polygon ...
-        with gzip.open(fname, "rb") as fObj:
-            ship = shapely.wkb.loads(fObj.read())
+        with gzip.open(fname, "rb") as gzObj:
+            ship = shapely.wkb.loads(gzObj.read())
 
         # Update global bounding box ...
         xmin = min(xmin, ship.bounds[0])                                        # [°]
@@ -150,8 +150,8 @@ pyguymer3.geo.add_vertical_gridlines(ax1, ext, locs = [-2.0, -1.5, -1.0, -0.5, 0
 # ******************************************************************************
 
 # Load MultiPolygon ...
-with gzip.open("res=i_cons=2.00e+00_tol=1.00e-10/allLands.wkb.gz", "rb") as fObj:
-    allLands = shapely.wkb.loads(fObj.read())
+with gzip.open("res=i_cons=2.00e+00_tol=1.00e-10/allLands.wkb.gz", "rb") as gzObj:
+    allLands = shapely.wkb.loads(gzObj.read())
 
 # Plot MultiPolygon ...
 # NOTE: Given how "allLands" was made, we know that there aren't any invalid
@@ -200,8 +200,8 @@ for iprec, prec in enumerate([1250, 2500, 5000, 10000, 20000, 40000]):
         print(f"Plotting \"{fname}\" ...")
 
         # Load Polygon ...
-        with gzip.open(fname, "rb") as fObj:
-            ship = shapely.wkb.loads(fObj.read())
+        with gzip.open(fname, "rb") as gzObj:
+            ship = shapely.wkb.loads(gzObj.read())
 
         # Populate dictionary ...
         key = f"{dist:,d}km"

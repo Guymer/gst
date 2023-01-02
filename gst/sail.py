@@ -260,8 +260,8 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
     # NOTE: Given how "allCanals" was made, we know that there aren't any
     #       invalid LineStrings, so don't bother checking for them.
     if savedAllCanals:
-        with gzip.open(allCanalsName, "rb") as fObj:
-            allCanals = pyguymer3.geo.extract_lines(shapely.wkb.loads(fObj.read()), onlyValid = False)
+        with gzip.open(allCanalsName, "rb") as gzObj:
+            allCanals = pyguymer3.geo.extract_lines(shapely.wkb.loads(gzObj.read()), onlyValid = False)
     else:
         allCanals = None
 
@@ -296,8 +296,8 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
     # NOTE: Given how "allLands" was made, we know that there aren't any invalid
     #       Polygons, so don't bother checking for them.
     if savedAllLands:
-        with gzip.open(allLandsName, "rb") as fObj:
-            allLands = pyguymer3.geo.extract_polys(shapely.wkb.loads(fObj.read()), onlyValid = False, repair = False)
+        with gzip.open(allLandsName, "rb") as gzObj:
+            allLands = pyguymer3.geo.extract_polys(shapely.wkb.loads(gzObj.read()), onlyValid = False, repair = False)
     else:
         allLands = None
 
@@ -422,8 +422,8 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
             #       aren't any invalid Polygons, so don't bother checking for
             #       them.
             if savedRelevantLands:
-                with gzip.open(relevantLandsName, "rb") as fObj:
-                    relevantLands = pyguymer3.geo.extract_polys(shapely.wkb.loads(fObj.read()), onlyValid = False, repair = False)
+                with gzip.open(relevantLandsName, "rb") as gzObj:
+                    relevantLands = pyguymer3.geo.extract_polys(shapely.wkb.loads(gzObj.read()), onlyValid = False, repair = False)
             else:
                 relevantLands = None
 
@@ -433,8 +433,8 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
         tname = f"{output3}/ship/istep={istep:06d}.wkb.gz"
         if os.path.exists(tname):
             # Load [Multi]Polygon ...
-            with gzip.open(tname, "rb") as fObj:
-                ship = shapely.wkb.loads(fObj.read())
+            with gzip.open(tname, "rb") as gzObj:
+                ship = shapely.wkb.loads(gzObj.read())
         else:
             # Check what type the ship is currently ...
             if isinstance(ship, shapely.geometry.point.Point):
@@ -468,8 +468,8 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
                 limit = shapely.geometry.multilinestring.MultiLineString(limit)
 
                 # Save [Multi]LineString ...
-                with gzip.open(f"{output3}/limit/istep={istep:06d}.wkb.gz", "wb", compresslevel = 9) as fObj:
-                    fObj.write(shapely.wkb.dumps(limit))
+                with gzip.open(f"{output3}/limit/istep={istep:06d}.wkb.gz", "wb", compresslevel = 9) as gzObj:
+                    gzObj.write(shapely.wkb.dumps(limit))
 
             # ******************************************************************
 
@@ -549,8 +549,8 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
             del limit
 
             # Save [Multi]Polygon ...
-            with gzip.open(tname, "wb", compresslevel = 9) as fObj:
-                fObj.write(shapely.wkb.dumps(ship))
+            with gzip.open(tname, "wb", compresslevel = 9) as gzObj:
+                gzObj.write(shapely.wkb.dumps(ship))
 
         # **********************************************************************
 

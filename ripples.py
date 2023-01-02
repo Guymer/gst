@@ -231,8 +231,8 @@ for dist in range(5, 30005, 5):
         print(f" > Loading \"{fname}\" ...")
 
         # Load [Multi]LineString ...
-        with gzip.open(fname, "rb") as fObj:
-            limit = shapely.wkb.loads(fObj.read())
+        with gzip.open(fname, "rb") as gzObj:
+            limit = shapely.wkb.loads(gzObj.read())
 
         # Plot [Multi]LineString ...
         # NOTE: Given how "limit" was made, we know that there aren't any
