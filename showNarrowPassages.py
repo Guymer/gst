@@ -82,10 +82,10 @@ for res in ress:
             "python3.10", "run.py",
             "-1.0", "+50.5", "20.0",            # depart Portsmouth Harbour at 20 knots
             "--duration", "0.01",               # some sailing (20 knots * 0.01 days = 8.89 kilometres)
-            "--precision", f"{prec:.1f}",       # LOOP VARIABLE
             "--freqLand", f"{freqLand:d}",      # ~daily land re-evaluation
             "--freqSimp", f"{freqSimp:d}",      # ~hourly simplification
             "--nang", f"{nang:d}",              # LOOP VARIABLE
+            "--precision", f"{prec:.1f}",       # LOOP VARIABLE
             "--resolution", res,                # LOOP VARIABLE
         ]
 

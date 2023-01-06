@@ -58,10 +58,10 @@ for prec in [1250, 2500, 5000, 10000, 20000, 40000]:
         "python3.10", "run.py",
         f"{lon:+.1f}", f"{lat:+.1f}", "20.0",
         "--duration", "0.09",           # some sailing (20 knots * 0.09 days = 80.01 kilometres)
-        "--precision", f"{prec:.1f}",   # LOOP VARIABLE
         "--freqLand", f"{freq:d}",      # ~daily land re-evaluation
         "--freqSimp", f"{freq:d}",      # ~daily simplification
         "--nang", "257",                # converged number of angles (from "compareBufferAngularResolutions.py")
+        "--precision", f"{prec:.1f}",   # LOOP VARIABLE
         "--resolution", "i",            # intermediate coastline resolution
     ]
 

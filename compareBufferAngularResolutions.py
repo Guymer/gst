@@ -54,10 +54,10 @@ for nang in [9, 17, 33, 65, 129, 257]:
         "python3.10", "run.py",
         f"{lon:+.1f}", f"{lat:+.1f}", "20.0",
         "--duration", "0.09",           # some sailing (20 knots * 0.09 days = 80.01 kilometres)
-        "--precision", "1250.0",        # converged precision (from "compareBufferRadialResolutions.py")
         "--freqLand", "768",            # ~daily land re-evaluation
         "--freqSimp", "768",            # ~daily simplification
         "--nang", f"{nang:d}",          # LOOP VARIABLE
+        "--precision", "1250.0",        # converged precision (from "compareBufferRadialResolutions.py")
         "--resolution", "i",            # intermediate coastline resolution
     ]
 
