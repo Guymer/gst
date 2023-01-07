@@ -363,3 +363,240 @@ for maxSize in maxSizes:
          screenWidth = maxSize,
     )
     shutil.move(vname, f"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}{maxSize:04d}px.mp4")
+
+# ******************************************************************************
+
+# Initialize list ...
+frames = []
+
+# Loop over distances ...
+for dist in range(3290, 5185, 5):
+    # Deduce PNG name, if it exists then append it to the list and skip ...
+    frame = f"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}/dist={dist:05d}_NovayaZemlya.png"
+    if os.path.exists(frame):
+        frames.append(frame)
+        continue
+
+    # **************************************************************************
+
+    # Initialize list ...
+    fnames = []
+
+    # Loop over combinations ...
+    for cons, nang, prec, color in combs:
+        # Skip if this distance cannot exist (because the precision is too
+        # coarse) and determine the step count ...
+        if (1000 * dist) % prec != 0:
+            continue
+        istep = ((1000 * dist) // prec) - 1                                     # [#]
+
+        # Create short-hands ...
+        # NOTE: Say that 40,000 metres takes 1 hour at 20 knots.
+        freqLand = 24 * 40000 // prec                                           # [#]
+        freqSimp = 40000 // prec                                                # [#]
+
+        # Deduce directory name ...
+        dname = f"res={res}_cons={cons:.2e}_tol=1.00e-10/nang={nang:d}_prec={prec:.2e}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/limit"
+
+        # Deduce file name and skip if it is missing ...
+        fname = f"{dname}/istep={istep + 1:06d}.wkb.gz"
+        if not os.path.exists(fname):
+            continue
+
+        # Append it to the list ...
+        fnames.append(fname)
+
+    # Skip this frame if there are not enough files ...
+    if len(fnames) != len(combs):
+        continue
+
+    # **************************************************************************
+
+    print(f"Making \"{frame}\" ...")
+
+    # Create figure ...
+    fg = matplotlib.pyplot.figure(
+            dpi = 300,
+        figsize = (6, 6),
+    )
+
+    # Create axis ...
+    ax = fg.add_subplot(
+        projection = cartopy.crs.Orthographic(
+            central_longitude = 60.0,
+             central_latitude = 73.5,
+        )
+    )
+
+    # Find how large a 400km radius circle is around Novaya Zemlya ...
+    point = shapely.geometry.point.Point(60.0, 73.5)
+    poly = pyguymer3.geo.buffer(
+        point,
+        400.0e3,
+        fill = +1.0,
+        nang = 361,
+        simp = -1.0,
+    )
+
+    # Create extent ...
+    ext = [
+        poly.bounds[0],                 # minx
+        poly.bounds[2],                 # maxx
+        poly.bounds[1],                 # miny
+        poly.bounds[3],                 # maxy
+    ]                                                                           # [°]
+
+    # Clean up ...
+    del point, poly
+
+    # Configure axis ...
+    ax.set_extent(ext)
+    pyguymer3.geo.add_horizontal_gridlines(
+        ax,
+        ext,
+        locs = range(-90, 91, 1),
+    )
+    pyguymer3.geo.add_vertical_gridlines(
+        ax,
+        ext,
+        locs = range(-180, 181, 1),
+    )
+
+    # Configure axis ...
+    pyguymer3.geo.add_map_background(
+        ax,
+              name = "shaded-relief",
+        resolution = "large8192px",
+    )
+
+    # Initialize lists ...
+    labels = []
+    lines = []
+
+    # Loop over combinations/files ...
+    for (cons, nang, prec, color), fname in zip(combs, fnames):
+        print(f" > Loading \"{fname}\" ...")
+
+        # Load [Multi]LineString ...
+        with gzip.open(fname, "rb") as gzObj:
+            limit = shapely.wkb.loads(gzObj.read())
+
+        # Plot [Multi]LineString ...
+        # NOTE: Given how "limit" was made, we know that there aren't any
+        #       invalid LineStrings, so don't bother checking for them.
+        ax.add_geometries(
+            pyguymer3.geo.extract_lines(limit, onlyValid = False),
+            cartopy.crs.PlateCarree(),
+            edgecolor = color,
+            facecolor = "none",
+            linewidth = 1.0,
+        )
+
+        # Clean up ...
+        del limit
+
+        # Add an entry to the legend ...
+        labels.append(f"cons={cons:d}, nang={nang:d}, prec={prec:d}")
+        lines.append(matplotlib.lines.Line2D([], [], color = color))
+
+    # Check that the distance isn't too large ...
+    if 1000.0 * float(dist) <= 19970326.3:
+        # Calculate the maximum distance the ship could have got to ...
+        maxShip = pyguymer3.geo.buffer(
+            ship,
+            1000.0 * float(dist),
+            fill = +1.0,
+            nang = 361,
+            simp = -1.0,
+        )
+
+        # Plot [Multi]Polygon ...
+        ax.add_geometries(
+            pyguymer3.geo.extract_polys(maxShip, onlyValid = False, repair = False),
+            cartopy.crs.PlateCarree(),
+            edgecolor = "gold",
+            facecolor = "none",
+            linewidth = 1.0,
+        )
+
+        # Clean up ...
+        del maxShip
+
+    # Create short-hand ...
+    dur = 1000.0 * float(dist) / (1852.0 * 20.0 * 24.0)                         # [day]
+
+    # Configure axis ...
+    # NOTE: Really, I should be plotting "allLands" to be consistent with the
+    #       ships, however, as each ship (potentially) is using different
+    #       collections of land then I will just use the raw GSHHG dataset
+    #       instead.
+    pyguymer3.geo.add_coastlines(
+        ax,
+             level = 1,
+        resolution = res,
+    )
+    pyguymer3.geo.add_coastlines(
+        ax,
+             level = 5,
+        resolution = res,
+    )
+    pyguymer3.geo.add_coastlines(
+        ax,
+             level = 6,
+        resolution = res,
+    )
+    ax.legend(
+        lines,
+        labels,
+        loc = "lower right",
+    )
+    ax.set_title(
+        f"{dist:6,d} km ({dur:5.2f} days)",
+        fontfamily = "monospace",
+               loc = "right",
+    )
+
+    # Configure figure ...
+    fg.tight_layout()
+
+    # Save figure ...
+    fg.savefig(
+        frame,
+               dpi = 300,
+        pad_inches = 0.1,
+    )
+    matplotlib.pyplot.close(fg)
+
+    # Optimize PNG ...
+    pyguymer3.image.optimize_image(frame, strip = True)
+
+    # Append frame to list ...
+    frames.append(frame)
+
+# ******************************************************************************
+
+print(f"Making \"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}_NovayaZemlya.mp4\" ...")
+
+# Save 60fps MP4 ...
+vname = pyguymer3.media.images2mp4(
+    frames,
+    fps = 60.0,
+)
+shutil.move(vname, f"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}_NovayaZemlya.mp4")
+
+# Set maximum sizes ...
+# NOTE: By inspection, the PNG frames are 1800px wide.
+maxSizes = [256, 512, 1024]                                                     # [px]
+
+# Loop over maximum sizes ...
+for maxSize in maxSizes:
+    print(f"Making \"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}_NovayaZemlya{maxSize:04d}px.mp4\" ...")
+
+    # Save 60fps MP4 ...
+    vname = pyguymer3.media.images2mp4(
+        frames,
+                 fps = 60.0,
+        screenHeight = maxSize,
+         screenWidth = maxSize,
+    )
+    shutil.move(vname, f"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}_NovayaZemlya{maxSize:04d}px.mp4")
