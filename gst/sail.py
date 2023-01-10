@@ -593,6 +593,10 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
         if (abs(ship.area - oldArea) / max(tol, oldArea)) < tol:
             print("WARNING: The ship hasn't moved, stopping sailing.")
 
+            # Make sure that a plot isn't made as the user-requested duration
+            # may differ from the actual sailed duration ...
+            plot = False
+
             # Stop looping ...
             break
 
