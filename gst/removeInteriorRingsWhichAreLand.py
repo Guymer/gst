@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+
+# Define function ...
 def removeInteriorRingsWhichAreLand(shape, lands, kwArgCheck = None, onlyValid = False, prec = 10000.0, repair = False):
     """Remove the holes in a shape which match land
 

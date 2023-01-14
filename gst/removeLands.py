@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+
+# Define function ...
 def removeLands(shape, lands, kwArgCheck = None, debug = False, simp = 0.1):
     """Remove the parts of a shape that lie on land
 

@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+
+# Define function ...
 def saveRelevantLands(fname, ship, dist, allLands, kwArgCheck = None, fill = 1.0, nang = 9, simp = 0.1, tol = 1.0e-10):
     """Save relevant land to a compressed WKB file.
 

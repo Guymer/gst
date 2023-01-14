@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+
+# Define function ...
 def removeInteriorRings(shape, kwArgCheck = None, onlyValid = False, repair = False):
     """Remove all interior rings from a [Multi]Polygon
 

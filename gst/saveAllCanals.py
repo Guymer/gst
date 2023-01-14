@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+
+# Define function ...
 def saveAllCanals(fname, kwArgCheck = None, debug = False, simp = 0.1, tol = 1.0e-10):
     """Save (optionally simplified) canals to a compressed WKB file.
 
