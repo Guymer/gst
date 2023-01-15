@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 # Import sub-functions ...
 from .removeInteriorRings import removeInteriorRings
 from .removeInteriorRingsWhichAreLand import removeInteriorRingsWhichAreLand
