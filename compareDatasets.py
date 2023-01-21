@@ -7,9 +7,14 @@ except:
     raise Exception("\"cartopy\" is not installed; run \"pip install --user Cartopy\"") from None
 try:
     import matplotlib
-    matplotlib.use("Agg")                                                       # NOTE: See https://matplotlib.org/stable/gallery/user_interfaces/canvasagg.html
+    matplotlib.rcParams.update(
+        {
+               "backend" : "Agg",                                               # NOTE: See https://matplotlib.org/stable/gallery/user_interfaces/canvasagg.html
+            "figure.dpi" : 300,
+             "font.size" : 8,
+        }
+    )
     import matplotlib.pyplot
-    matplotlib.pyplot.rcParams.update({"font.size" : 8})
 except:
     raise Exception("\"matplotlib\" is not installed; run \"pip install --user matplotlib\"") from None
 try:
@@ -85,10 +90,7 @@ neShapeFiles = [
 # ******************************************************************************
 
 # Create figure ...
-fg = matplotlib.pyplot.figure(
-        dpi = 300,
-    figsize = (9, 6),
-)
+fg = matplotlib.pyplot.figure(figsize = (9, 6))
 
 # Create axis ...
 ax = fg.add_subplot(
@@ -185,11 +187,7 @@ ax.scatter(
 fg.tight_layout()
 
 # Save figure ...
-fg.savefig(
-    "compareDatasets.png",
-           dpi = 300,
-    pad_inches = 0.1,
-)
+fg.savefig("compareDatasets.png")
 matplotlib.pyplot.close(fg)
 
 # Optimize PNG ...

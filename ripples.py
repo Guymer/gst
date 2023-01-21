@@ -14,9 +14,14 @@ except:
     raise Exception("\"cartopy\" is not installed; run \"pip install --user Cartopy\"") from None
 try:
     import matplotlib
-    matplotlib.use("Agg")                                                       # NOTE: See https://matplotlib.org/stable/gallery/user_interfaces/canvasagg.html
+    matplotlib.rcParams.update(
+        {
+               "backend" : "Agg",                                               # NOTE: See https://matplotlib.org/stable/gallery/user_interfaces/canvasagg.html
+            "figure.dpi" : 300,
+             "font.size" : 8,
+        }
+    )
     import matplotlib.pyplot
-    matplotlib.pyplot.rcParams.update({"font.size" : 8})
 except:
     raise Exception("\"matplotlib\" is not installed; run \"pip install --user matplotlib\"") from None
 try:
@@ -194,10 +199,7 @@ for dist in range(5, 30005, 5):
     print(f"Making \"{frame}\" ...")
 
     # Create figure ...
-    fg = matplotlib.pyplot.figure(
-            dpi = 300,
-        figsize = (9, 6),
-    )
+    fg = matplotlib.pyplot.figure(figsize = (9, 6))
 
     # Create axis ...
     ax = fg.add_subplot(projection = cartopy.crs.Robinson())
@@ -323,11 +325,7 @@ for dist in range(5, 30005, 5):
     fg.tight_layout()
 
     # Save figure ...
-    fg.savefig(
-        frame,
-               dpi = 300,
-        pad_inches = 0.1,
-    )
+    fg.savefig(frame)
     matplotlib.pyplot.close(fg)
 
     # Optimize PNG ...
@@ -415,10 +413,7 @@ for dist in range(3290, 5185, 5):
     print(f"Making \"{frame}\" ...")
 
     # Create figure ...
-    fg = matplotlib.pyplot.figure(
-            dpi = 300,
-        figsize = (6, 6),
-    )
+    fg = matplotlib.pyplot.figure(figsize = (6, 6))
 
     # Create axis ...
     ax = fg.add_subplot(
@@ -560,11 +555,7 @@ for dist in range(3290, 5185, 5):
     fg.tight_layout()
 
     # Save figure ...
-    fg.savefig(
-        frame,
-               dpi = 300,
-        pad_inches = 0.1,
-    )
+    fg.savefig(frame)
     matplotlib.pyplot.close(fg)
 
     # Optimize PNG ...

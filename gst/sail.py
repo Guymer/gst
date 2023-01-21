@@ -55,9 +55,14 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
         raise Exception("\"cartopy\" is not installed; run \"pip install --user Cartopy\"") from None
     try:
         import matplotlib
-        matplotlib.use("Agg")                                                   # NOTE: See https://matplotlib.org/stable/gallery/user_interfaces/canvasagg.html
+        matplotlib.rcParams.update(
+            {
+                   "backend" : "Agg",                                           # NOTE: See https://matplotlib.org/stable/gallery/user_interfaces/canvasagg.html
+                "figure.dpi" : 300,
+                 "font.size" : 8,
+            }
+        )
         import matplotlib.pyplot
-        matplotlib.pyplot.rcParams.update({"font.size" : 8})
     except:
         raise Exception("\"matplotlib\" is not installed; run \"pip install --user matplotlib\"") from None
     try:
@@ -316,10 +321,7 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
     # Check if the user wants to make a plot ...
     if plot:
         # Create figure ...
-        fg = matplotlib.pyplot.figure(
-                dpi = 300,
-            figsize = (9, 6),
-        )
+        fg = matplotlib.pyplot.figure(figsize = (9, 6))
 
         # Check if the user wants a local plot (for local people) ...
         if local:
@@ -619,11 +621,7 @@ def sail(lon, lat, spd, kwArgCheck = None, cons = 2.0, dur = 1.0, freqLand = 100
         fg.tight_layout()
 
         # Save figure ...
-        fg.savefig(
-            png,
-                   dpi = 300,
-            pad_inches = 0.1,
-        )
+        fg.savefig(png)
         matplotlib.pyplot.close(fg)
 
         # Optimize PNG ...
