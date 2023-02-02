@@ -68,6 +68,11 @@ if __name__ == "__main__":
         print(f"Processing \"cons={cons:.2e}, nang={nang:d}, prec={prec:.2e}\" ...")
 
         # Deduce expected run time increase ...
+        # NOTE: The logic here is:
+        #         * it will take "nang" times longer each step due to more
+        #           angles around each corner; and
+        #         * it will take "prec" times longer each step due to more
+        #           points along each line.
         scaleFactor = (float(nang) / float(combs[0][1])) * (float(combs[0][2]) / float(prec))
 
         # **********************************************************************
@@ -159,6 +164,7 @@ if __name__ == "__main__":
     ax.legend(loc = "upper right")
     ax.set_xlabel("Sailing Duration [days]")
     ax.set_xlim(0.0, 24.1)
+    ax.set_xticks(range(25))
     ax.set_ylabel("(Equivalent) Average Calculation Duration [s/step]")
     ax.set_ylim(0.0, 150.0)
 
