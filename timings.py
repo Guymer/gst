@@ -115,6 +115,8 @@ if __name__ == "__main__":
             tmpCalcDur.append(times[i] - times[i - 1])                          # [s/step]
             tmpSailingDur.append(dur)                                           # [day]
 
+            # ******************************************************************
+
             # Check if this was a simplification step ...
             if (istep + 1) % freqSimp == 0:
                 # Convert lists to arrays ...
