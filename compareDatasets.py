@@ -53,10 +53,10 @@ if __name__ == "__main__":
 
     # Create extent ...
     ext = [
-        poly.bounds[0],                # minx
-        poly.bounds[2],                # maxx
-        poly.bounds[1],                # miny
-        poly.bounds[3],                # maxy
+        poly.bounds[0],                 # minx
+        poly.bounds[2],                 # maxx
+        poly.bounds[1],                 # miny
+        poly.bounds[3],                 # maxy
     ]                                                                           # [°]
 
     # Clean up ...
