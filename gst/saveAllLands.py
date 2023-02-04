@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # Define function ...
-def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = False, dist = -1.0, fill = 1.0, levels = (1, 5, 6), nang = 9, res = "c", simp = 0.1, tol = 1.0e-10):
+def saveAllLands(fname, dname, /, *, allCanals = None, debug = False, dist = -1.0, fill = 1.0, levels = (1, 5, 6), nang = 9, res = "c", simp = 0.1, tol = 1.0e-10):
     """Save (optionally buffered and optionally simplified) land to a compressed WKB file.
 
     Parameters
@@ -68,10 +68,6 @@ def saveAllLands(fname, dname, kwArgCheck = None, allCanals = None, debug = Fals
 
     # Import sub-functions ...
     from .removeInteriorRings import removeInteriorRings
-
-    # Check keyword arguments ...
-    if kwArgCheck is not None:
-        print(f"WARNING: \"{__name__}\" has been called with an extra positional argument")
 
     # **************************************************************************
 

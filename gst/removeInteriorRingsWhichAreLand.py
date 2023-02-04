@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # Define function ...
-def removeInteriorRingsWhichAreLand(shape, lands, kwArgCheck = None, onlyValid = False, prec = 10000.0, repair = False):
+def removeInteriorRingsWhichAreLand(shape, lands, /, *, onlyValid = False, prec = 10000.0, repair = False):
     """Remove the holes in a shape which match land
 
     This function reads in a shape and a list of Polygons of land masses. Each
@@ -40,10 +40,6 @@ def removeInteriorRingsWhichAreLand(shape, lands, kwArgCheck = None, onlyValid =
         import pyguymer3.geo
     except:
         raise Exception("\"pyguymer3\" is not installed; you need to have the Python module from https://github.com/Guymer/PyGuymer3 located somewhere in your $PYTHONPATH") from None
-
-    # Check keyword arguments ...
-    if kwArgCheck is not None:
-        print(f"WARNING: \"{__name__}\" has been called with an extra positional argument")
 
     # **************************************************************************
 

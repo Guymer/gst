@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # Define function ...
-def removeInteriorRings(shape, kwArgCheck = None, onlyValid = False, repair = False):
+def removeInteriorRings(shape, /, *, onlyValid = False, repair = False):
     """Remove all interior rings from a [Multi]Polygon
 
     This function reads in a [Multi]Polygon and returns a [Multi]Polygon which
@@ -35,10 +35,6 @@ def removeInteriorRings(shape, kwArgCheck = None, onlyValid = False, repair = Fa
         import pyguymer3.geo
     except:
         raise Exception("\"pyguymer3\" is not installed; you need to have the Python module from https://github.com/Guymer/PyGuymer3 located somewhere in your $PYTHONPATH") from None
-
-    # Check keyword arguments ...
-    if kwArgCheck is not None:
-        print(f"WARNING: \"{__name__}\" has been called with an extra positional argument")
 
     # **************************************************************************
 

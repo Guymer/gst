@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # Define function ...
-def saveRelevantLands(fname, ship, dist, allLands, kwArgCheck = None, fill = 1.0, nang = 9, simp = 0.1, tol = 1.0e-10):
+def saveRelevantLands(fname, ship, dist, allLands, /, *, fill = 1.0, nang = 9, simp = 0.1, tol = 1.0e-10):
     """Save relevant land to a compressed WKB file.
 
     Parameters
@@ -49,10 +49,6 @@ def saveRelevantLands(fname, ship, dist, allLands, kwArgCheck = None, fill = 1.0
         import pyguymer3.geo
     except:
         raise Exception("\"pyguymer3\" is not installed; you need to have the Python module from https://github.com/Guymer/PyGuymer3 located somewhere in your $PYTHONPATH") from None
-
-    # Check keyword arguments ...
-    if kwArgCheck is not None:
-        print(f"WARNING: \"{__name__}\" has been called with an extra positional argument")
 
     # **************************************************************************
 
