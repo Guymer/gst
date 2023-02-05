@@ -216,7 +216,7 @@ def saveAllLands(fname, dname, /, *, allCanals = None, debug = False, dist = -1.
                 pyguymer3.geo.check(polys)
 
             # Save [Multi]Polygon ...
-            with gzip.open(tname, "wb", compresslevel = 9) as gzObj:
+            with gzip.open(tname, mode = "wb", compresslevel = 9) as gzObj:
                 gzObj.write(shapely.wkb.dumps(polys))
 
     # **************************************************************************
@@ -231,7 +231,7 @@ def saveAllLands(fname, dname, /, *, allCanals = None, debug = False, dist = -1.
         # Add the individual Polygons to the list ...
         # NOTE: Given how "polys" was made, we know that there aren't any
         #       invalid Polygons, so don't bother checking for them.
-        with gzip.open(tname, "rb") as gzObj:
+        with gzip.open(tname, mode = "rb") as gzObj:
             polys += pyguymer3.geo.extract_polys(shapely.wkb.loads(gzObj.read()), onlyValid = False, repair = False)
 
     # Return if there isn't any land at this resolution ...
@@ -257,7 +257,7 @@ def saveAllLands(fname, dname, /, *, allCanals = None, debug = False, dist = -1.
             pyguymer3.geo.check(polys)
 
     # Save MultiPolygon ...
-    with gzip.open(fname, "wb", compresslevel = 9) as gzObj:
+    with gzip.open(fname, mode = "wb", compresslevel = 9) as gzObj:
         gzObj.write(shapely.wkb.dumps(polys))
 
     # Save MultiPolygon ...

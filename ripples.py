@@ -236,7 +236,7 @@ if __name__ == "__main__":
             print(f" > Loading \"{fname}\" ...")
 
             # Load [Multi]LineString ...
-            with gzip.open(fname, "rb") as gzObj:
+            with gzip.open(fname, mode = "rb") as gzObj:
                 limit = shapely.wkb.loads(gzObj.read())
 
             # Plot [Multi]LineString ...
@@ -476,7 +476,7 @@ if __name__ == "__main__":
             print(f" > Loading \"{fname}\" ...")
 
             # Load [Multi]LineString ...
-            with gzip.open(fname, "rb") as gzObj:
+            with gzip.open(fname, mode = "rb") as gzObj:
                 limit = shapely.wkb.loads(gzObj.read())
 
             # Plot [Multi]LineString ...

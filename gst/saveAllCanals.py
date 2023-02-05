@@ -141,7 +141,7 @@ def saveAllCanals(fname, /, *, debug = False, simp = 0.1, tol = 1.0e-10):
             pyguymer3.geo.check(lines)
 
     # Save MultiLineString ...
-    with gzip.open(fname, "wb", compresslevel = 9) as gzObj:
+    with gzip.open(fname, mode = "wb", compresslevel = 9) as gzObj:
         gzObj.write(shapely.wkb.dumps(lines))
 
     # Save MultiLineString ...

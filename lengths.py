@@ -109,7 +109,7 @@ if __name__ == "__main__":
             length = 0                                                          # [#]
 
             # Load [Multi]LineString ...
-            with gzip.open(fname, "rb") as gzObj:
+            with gzip.open(fname, mode = "rb") as gzObj:
                 limit = shapely.wkb.loads(gzObj.read())
 
             # Loop over lines ...

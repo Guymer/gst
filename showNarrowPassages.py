@@ -195,7 +195,7 @@ if __name__ == "__main__":
                 print(f"   > Plotting \"{fname}\" ...")
 
                 # Load [Multi]Polygon ...
-                with gzip.open(fname, "rb") as gzObj:
+                with gzip.open(fname, mode = "rb") as gzObj:
                     allLands = shapely.wkb.loads(gzObj.read())
 
                 # Plot Polygons ...

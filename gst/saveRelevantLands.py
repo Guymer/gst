@@ -89,7 +89,7 @@ def saveRelevantLands(fname, ship, dist, allLands, /, *, fill = 1.0, nang = 9, s
     polys = shapely.ops.unary_union(polys).simplify(tol)
 
     # Save MultiPolygon ...
-    with gzip.open(fname, "wb", compresslevel = 9) as gzObj:
+    with gzip.open(fname, mode = "wb", compresslevel = 9) as gzObj:
         gzObj.write(shapely.wkb.dumps(polys))
 
     # Save MultiPolygon ...

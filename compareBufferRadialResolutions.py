@@ -103,7 +103,7 @@ if __name__ == "__main__":
             print(f"Surveying \"{fname}\" ...")
 
             # Load Polygon ...
-            with gzip.open(fname, "rb") as gzObj:
+            with gzip.open(fname, mode = "rb") as gzObj:
                 ship = shapely.wkb.loads(gzObj.read())
 
             # Update global bounding box ...
@@ -155,7 +155,7 @@ if __name__ == "__main__":
     # **************************************************************************
 
     # Load MultiPolygon ...
-    with gzip.open("res=i_cons=2.00e+00_tol=1.00e-10/allLands.wkb.gz", "rb") as gzObj:
+    with gzip.open("res=i_cons=2.00e+00_tol=1.00e-10/allLands.wkb.gz", mode = "rb") as gzObj:
         allLands = shapely.wkb.loads(gzObj.read())
 
     # Plot MultiPolygon ...
@@ -205,7 +205,7 @@ if __name__ == "__main__":
             print(f"Plotting \"{fname}\" ...")
 
             # Load Polygon ...
-            with gzip.open(fname, "rb") as gzObj:
+            with gzip.open(fname, mode = "rb") as gzObj:
                 ship = shapely.wkb.loads(gzObj.read())
 
             # Populate dictionary ...
