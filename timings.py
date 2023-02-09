@@ -58,8 +58,9 @@ if __name__ == "__main__":
     # Create figure ...
     fg = matplotlib.pyplot.figure(figsize = (9, 6))
 
-    # Create axis ...
-    ax = fg.add_subplot()
+    # Create axes ...
+    axL = fg.add_subplot(1, 2, 1)
+    axR = fg.add_subplot(1, 2, 2)
 
     # **************************************************************************
 
@@ -145,29 +146,64 @@ if __name__ == "__main__":
                 if calcDur[i] / scaleFactor > 50.0:
                     keys[i] = False
 
+        # Replace arrays with versions without the discontinuities ...
+        calcDur = calcDur[keys]                                                 # [s/step]
+        sailingDur = sailingDur[keys]                                           # [day]
+
         # **********************************************************************
 
         # Plot data ...
-        ax.plot(
-            sailingDur[keys],
-            calcDur[keys] / scaleFactor,
+        axL.plot(
+            sailingDur,
+            calcDur / scaleFactor,
+            color = f"C{colour:d}",
+            label = f"(cons={cons:d}, nang={nang:d}, prec={prec:d}) ÷ {scaleFactor:.2f}",
+        )
+
+        # **********************************************************************
+
+        # Initialize arrays ...
+        cumCalcDur = numpy.zeros(calcDur.size + 1, dtype = numpy.float64)       # [s/step]
+        cumSailingDur = numpy.zeros(sailingDur.size + 1, dtype = numpy.float64) # [day]
+
+        # Calculate cumulative sailing duration ...
+        for istep in range(sailingDur.size):
+            cumCalcDur[istep + 1] = cumCalcDur[istep] + calcDur[istep]          # [s/step]
+            cumSailingDur[istep + 1] = sailingDur[istep]                        # [day]
+
+        # Clean up ...
+        del calcDur, sailingDur
+
+        # Plot data ...
+        axR.plot(
+            cumSailingDur,
+            cumCalcDur / cumCalcDur[-1],
             color = f"C{colour:d}",
             label = f"(cons={cons:d}, nang={nang:d}, prec={prec:d}) ÷ {scaleFactor:.2f}",
         )
 
         # Clean up ...
-        del calcDur, sailingDur
+        del cumCalcDur, cumSailingDur
 
     # **************************************************************************
 
     # Configure axis ...
-    ax.grid()
-    ax.legend(loc = "upper right")
-    ax.set_xlabel("Sailing Duration [days]")
-    ax.set_xlim(0.0, 24.1)
-    ax.set_xticks(range(25))
-    ax.set_ylabel("(Equivalent) Average Calculation Duration [s/step]")
-    ax.set_ylim(0.0, 150.0)
+    axL.grid()
+    axL.legend(loc = "upper right")
+    axL.set_xlabel("Sailing Duration [days]")
+    axL.set_xlim(0.0, 24.1)
+    axL.set_xticks(range(25))
+    axL.set_ylabel("(Equivalent) Average Calculation Duration [s/step]")
+    axL.set_ylim(0.0, 150.0)
+
+    # Configure axis ...
+    axR.grid()
+    axR.legend(loc = "upper left")
+    axR.set_xlabel("Sailing Duration [days]")
+    axR.set_xlim(0.0, 24.1)
+    axR.set_xticks(range(25))
+    axR.set_ylabel("Normalized Cumulative Average Calculation Duration")
+    axR.set_ylim(0.0, 1.0)
 
     # Configure figure ...
     fg.tight_layout()
