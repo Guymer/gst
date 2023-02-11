@@ -93,7 +93,7 @@ def saveRelevantLands(fname, ship, dist, allLands, /, *, fill = 1.0, nang = 9, s
         gzObj.write(shapely.wkb.dumps(polys))
 
     # Save MultiPolygon ...
-    with open(f"{fname[:-7]}.geojson", "wt", encoding = "utf-8") as fObj:
+    with open(f'{fname.removesuffix(".wkb.gz")}.geojson', "wt", encoding = "utf-8") as fObj:
         geojson.dump(
             polys,
             fObj,

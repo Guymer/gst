@@ -145,7 +145,7 @@ def saveAllCanals(fname, /, *, debug = False, simp = 0.1, tol = 1.0e-10):
         gzObj.write(shapely.wkb.dumps(lines))
 
     # Save MultiLineString ...
-    with open(f"{fname[:-7]}.geojson", "wt", encoding = "utf-8") as fObj:
+    with open(f'{fname.removesuffix(".wkb.gz")}.geojson', "wt", encoding = "utf-8") as fObj:
         geojson.dump(
             lines,
             fObj,
