@@ -67,6 +67,8 @@ def sail(lon, lat, spd, /, *, cons = 2.0, dur = 1.0, freqLand = 100, freqPlot = 
         raise Exception("\"matplotlib\" is not installed; run \"pip install --user matplotlib\"") from None
     try:
         import shapely
+        import shapely.geometry
+        import shapely.ops
         import shapely.wkb
     except:
         raise Exception("\"shapely\" is not installed; run \"pip install --user Shapely\"") from None

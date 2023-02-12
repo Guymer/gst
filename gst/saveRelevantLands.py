@@ -39,6 +39,7 @@ def saveRelevantLands(fname, ship, dist, allLands, /, *, fill = 1.0, nang = 9, s
         raise Exception("\"geojson\" is not installed; run \"pip install --user geojson\"") from None
     try:
         import shapely
+        import shapely.ops
         import shapely.wkb
     except:
         raise Exception("\"shapely\" is not installed; run \"pip install --user Shapely\"") from None

@@ -26,6 +26,8 @@ def removeInteriorRings(shape, /, *, onlyValid = False, repair = False):
     # Import special modules ...
     try:
         import shapely
+        import shapely.geometry
+        import shapely.ops
     except:
         raise Exception("\"shapely\" is not installed; run \"pip install --user Shapely\"") from None
 

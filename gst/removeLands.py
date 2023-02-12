@@ -29,6 +29,7 @@ def removeLands(shape, lands, /, *, debug = False, simp = 0.1):
     # Import special modules ...
     try:
         import shapely
+        import shapely.geometry
     except:
         raise Exception("\"shapely\" is not installed; run \"pip install --user Shapely\"") from None
 

@@ -34,6 +34,7 @@ def saveAllCanals(fname, /, *, debug = False, simp = 0.1, tol = 1.0e-10):
     try:
         import shapely
         import shapely.geometry
+        import shapely.wkb
     except:
         raise Exception("\"shapely\" is not installed; run \"pip install --user Shapely\"") from None
 
