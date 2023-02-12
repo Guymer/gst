@@ -179,7 +179,7 @@ if __name__ == "__main__":
             cumSailingDur,
             cumCalcDur / cumCalcDur[-1],
             color = f"C{colour:d}",
-            label = f"(cons={cons:d}, nang={nang:d}, prec={prec:d}) ÷ {scaleFactor:.2f}",
+            label = f"cons={cons:d}, nang={nang:d}, prec={prec:d}",
         )
 
         # Clean up ...
