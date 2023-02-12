@@ -5,6 +5,8 @@
 if __name__ == "__main__":
     # Import standard modules ...
     import gzip
+    import json
+    import math
     import os
     import subprocess
 
@@ -13,6 +15,13 @@ if __name__ == "__main__":
         import numpy
     except:
         raise Exception("\"numpy\" is not installed; run \"pip install --user numpy\"") from None
+    try:
+        import PIL
+        import PIL.Image
+        PIL.Image.MAX_IMAGE_PIXELS = 1024 * 1024 * 1024                         # [px]
+        import PIL.ImageDraw
+    except:
+        raise Exception("\"PIL\" is not installed; run \"pip install --user Pillow\"") from None
     try:
         import shapely
         import shapely.wkb
@@ -43,6 +52,10 @@ if __name__ == "__main__":
         (2, 17, 2500,),
         (2, 33, 1250,),
     ]
+
+    # Load colour tables ...
+    with open(f"{pyguymer3.__path__[0]}/data/json/colourTables.json", "rt", encoding = "utf-8") as fObj:
+        cts = json.load(fObj)
 
     # **************************************************************************
 
@@ -79,11 +92,11 @@ if __name__ == "__main__":
 
     # **************************************************************************
 
-    # Define axes ...
+    # Define axes for initial image ...
+    dLon = 10.0                                                                 # [°]
+    dLat = 10.0                                                                 # [°]
     nLon = 36                                                                   # [px]
     nLat = 18                                                                   # [px]
-    lons = numpy.linspace(-180.0, +180.0, num = nLon + 1, dtype = numpy.float64)# [°]
-    lats = numpy.linspace( +90.0,  -90.0, num = nLat + 1, dtype = numpy.float64)# [°]
 
     # Define scale for final upscaled image ...
     scale = 100
@@ -102,7 +115,7 @@ if __name__ == "__main__":
 
         # **********************************************************************
 
-        # Initialize image ...
+        # Initialize array ...
         hist = numpy.zeros((nLat, nLon), dtype = numpy.uint64)                  # [#]
 
         # Load [Multi]Polygon ...
@@ -114,40 +127,87 @@ if __name__ == "__main__":
             # Loop over coordinates in the exterior ring ...
             for coord in allLand.exterior.coords:
                 # Find the pixel that this coordinate corresponds to ...
-                iLon = min(nLon - 1, numpy.flatnonzero(lons <= coord[0])[-1])   # [px]
-                iLat = min(nLat - 1, numpy.flatnonzero(lats >= coord[1])[-1])   # [px]
+                iLon = max(0, min(nLon - 1, math.floor((coord[0] + 180.0) / dLon))) # [px]
+                iLat = max(0, min(nLat - 1, math.floor(( 90.0 - coord[1]) / dLat))) # [px]
 
-                # Increment image ...
+                # Increment array ...
                 hist[iLat, iLon] += 1                                           # [#]
+
+        print(f" > Maximum value = {hist.max():,d}.")
 
         # **********************************************************************
 
-        # Initialize image ...
-        histUp = numpy.zeros((nLat * scale, nLon * scale), dtype = numpy.uint64)# [#]
+        # NOTE: Maximum value = 2,148.
+        # NOTE: Maximum value = 3,548.
+        # NOTE: Maximum value = 5,860.
 
-        # Loop over longitudes ...
-        for iLon in range(nLon):
-            # Deduce indices ...
-            iLon1 =  iLon      * scale                                          # [px]
-            iLon2 = (iLon + 1) * scale                                          # [px]
+        # **********************************************************************
 
-            # Loop over latitudes ...
-            for iLat in range(nLat):
-                # Deduce indices ...
-                iLat1 =  iLat      * scale                                      # [px]
-                iLat2 = (iLat + 1) * scale                                      # [px]
+        # Scale array ...
+        hist = hist.astype(numpy.float64)                                       # [#]
+        hist = 255.0 * (hist / 5860.0)
+        numpy.place(hist, hist > 255.0, 255.0)
+        hist = hist.astype(numpy.uint8)
 
-                # Populate image ...
-                histUp[iLat1:iLat2, iLon1:iLon2] = hist[iLat, iLon]             # [#]
+        # Initialize array ...
+        histImg = numpy.zeros((nLat * scale, nLon * scale, 3), dtype = numpy.uint8)
+
+        # Loop over initial longitudes ...
+        for iLon0 in range(nLon):
+            # Deduce final upscaled indices ...
+            iLon1 =  iLon0      * scale                                         # [px]
+            iLon2 = (iLon0 + 1) * scale                                         # [px]
+
+            # Loop over initial latitudes ...
+            for iLat0 in range(nLat):
+                # Deduce final upscaled indices ...
+                iLat1 =  iLat0      * scale                                     # [px]
+                iLat2 = (iLat0 + 1) * scale                                     # [px]
+
+                # Populate array ...
+                for iLon in range(iLon1, iLon2):
+                    for iLat in range(iLat1, iLat2):
+                        histImg[iLat, iLon, :] = cts["rainbow"][hist[iLat0, iLon0]][:]
+
+        # Clean up ...
+        del hist
+
+        # Convert array to image ...
+        histImg = PIL.Image.fromarray(histImg)
+
+        # **********************************************************************
+
+        # Create drawing object ...
+        histDraw = PIL.ImageDraw.Draw(histImg)
+
+        # Loop over Polygons ...
+        for allLand in pyguymer3.geo.extract_polys(allLands, onlyValid = False, repair = False):
+            # Initialize list ...
+            coords = []                                                         # [px], [px]
+
+            # Loop over coordinates in exterior ring ...
+            for coord in allLand.exterior.coords:
+                # Deduce location and append to list ...
+                x = max(0.0, min(float(nLon * scale), float(scale) * (coord[0] + 180.0) / dLon))    # [px]
+                y = max(0.0, min(float(nLat * scale), float(scale) * ( 90.0 - coord[1]) / dLat))    # [px]
+                coords.append((x, y))                                           # [px], [px]
+
+            # Draw exterior ring ...
+            histDraw.line(coords, fill = (255, 255, 255), width = 1)
+
+            # Clean up ...
+            del coords
+
+        # Clean up ...
+        del histDraw
 
         # **********************************************************************
 
         print(f"Saving \"complexity_res={res}_cons={cons:.2e}_nang={nang:d}_prec={prec:.2e}.png\" ...")
 
-        # Save image ...
-        pyguymer3.image.save_array_as_image(
-            histUp,
-            f"complexity_res={res}_cons={cons:.2e}_nang={nang:d}_prec={prec:.2e}.png",
-               ct = "rainbow",
-            scale = True,
-        )
+        # Save PNG ...
+        histImg.save(f"complexity_res={res}_cons={cons:.2e}_nang={nang:d}_prec={prec:.2e}.png")
+        pyguymer3.image.optimize_image(f"complexity_res={res}_cons={cons:.2e}_nang={nang:d}_prec={prec:.2e}.png", strip = True)
+
+        # Clean up ...
+        del histImg
