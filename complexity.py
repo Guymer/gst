@@ -85,11 +85,11 @@ if __name__ == "__main__":
     lons = numpy.linspace(-180.0, +180.0, num = nLon + 1, dtype = numpy.float64)# [°]
     lats = numpy.linspace( +90.0,  -90.0, num = nLat + 1, dtype = numpy.float64)# [°]
 
+    # Define scale for final upscaled image ...
+    scale = 100
+
     # Loop over combinations ...
     for cons, nang, prec in combs:
-        # Initialize image ...
-        hist = numpy.zeros((nLat, nLon), dtype = numpy.uint64)                  # [#]
-
         # Deduce directory name ...
         dname = f"res={res}_cons={cons:.2e}_tol=1.00e-10/nang={nang:d}_prec={prec:.2e}"
 
@@ -99,6 +99,11 @@ if __name__ == "__main__":
             continue
 
         print(f"Surveying \"{fname}\" ...")
+
+        # **********************************************************************
+
+        # Initialize image ...
+        hist = numpy.zeros((nLat, nLon), dtype = numpy.uint64)                  # [#]
 
         # Load [Multi]Polygon ...
         with gzip.open(fname, mode = "rb") as gzObj:
@@ -115,11 +120,33 @@ if __name__ == "__main__":
                 # Increment image ...
                 hist[iLat, iLon] += 1                                           # [#]
 
+        # **********************************************************************
+
+        # Initialize image ...
+        histUp = numpy.zeros((nLat * scale, nLon * scale), dtype = numpy.uint64)# [#]
+
+        # Loop over longitudes ...
+        for iLon in range(nLon):
+            # Deduce indices ...
+            iLon1 =  iLon      * scale                                          # [px]
+            iLon2 = (iLon + 1) * scale                                          # [px]
+
+            # Loop over latitudes ...
+            for iLat in range(nLat):
+                # Deduce indices ...
+                iLat1 =  iLat      * scale                                      # [px]
+                iLat2 = (iLat + 1) * scale                                      # [px]
+
+                # Populate image ...
+                histUp[iLat1:iLat2, iLon1:iLon2] = hist[iLat, iLon]             # [#]
+
+        # **********************************************************************
+
         print(f"Saving \"complexity_res={res}_cons={cons:.2e}_nang={nang:d}_prec={prec:.2e}.png\" ...")
 
         # Save image ...
         pyguymer3.image.save_array_as_image(
-            hist,
+            histUp,
             f"complexity_res={res}_cons={cons:.2e}_nang={nang:d}_prec={prec:.2e}.png",
                ct = "rainbow",
             scale = True,
