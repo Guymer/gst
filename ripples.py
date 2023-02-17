@@ -232,7 +232,7 @@ if __name__ == "__main__":
         lines = []
 
         # Loop over combinations/files ...
-        for (cons, nang, prec, color), fname in zip(combs, fnames):
+        for (cons, nang, prec, color), fname in zip(combs, fnames, strict = True):
             print(f" > Loading \"{fname}\" ...")
 
             # Load [Multi]LineString ...
@@ -472,7 +472,7 @@ if __name__ == "__main__":
         lines = []
 
         # Loop over combinations/files ...
-        for (cons, nang, prec, color), fname in zip(combs, fnames):
+        for (cons, nang, prec, color), fname in zip(combs, fnames, strict = True):
             print(f" > Loading \"{fname}\" ...")
 
             # Load [Multi]LineString ...
