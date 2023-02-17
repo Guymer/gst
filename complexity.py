@@ -143,12 +143,6 @@ if __name__ == "__main__":
 
         # **********************************************************************
 
-        # Scale array ...
-        hist = hist.astype(numpy.float64)                                       # [#]
-        hist = 255.0 * (hist / 5860.0)
-        numpy.place(hist, hist > 255.0, 255.0)
-        hist = hist.astype(numpy.uint8)
-
         # Initialize array ...
         histImg = numpy.zeros((nLat * scale, nLon * scale, 3), dtype = numpy.uint8)
 
@@ -167,7 +161,16 @@ if __name__ == "__main__":
                 # Populate array ...
                 for iLon in range(iLon1, iLon2):
                     for iLat in range(iLat1, iLat2):
-                        histImg[iLat, iLon, :] = cts["rainbow"][hist[iLat0, iLon0]][:]
+                        if hist[iLat0, iLon0] > 0:
+                            color = round(
+                                min(
+                                    255.0,
+                                    255.0 * hist[iLat0, iLon0].astype(numpy.float64) / 5860.0,
+                                )
+                            )
+                            histImg[iLat, iLon, :] = cts["rainbow"][color][:]
+                        else:
+                            histImg[iLat, iLon, :] = 255
 
         # Clean up ...
         del hist
