@@ -42,7 +42,7 @@ def sail(lon, lat, spd, /, *, cons = 2.0, dur = 1.0, freqLand = 100, freqPlot = 
         degrees)
     """
 
-    # Improt standard modules ...
+    # Import standard modules ...
     import gzip
     import math
     import os
