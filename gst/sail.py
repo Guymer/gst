@@ -444,6 +444,9 @@ def sail(lon, lat, spd, /, *, cons = 2.0, dur = 1.0, freqLand = 100, freqPlot = 
                 # Create copy of the ship ...
                 limit = shapely.geometry.point.Point(lon, lat)
             else:
+                # Start timer ...
+                start = time.time()                                             # [s]
+
                 # Extract the current limit of sailing (on water) ...
                 # NOTE: Given how "ship" was made, we know that there aren't any
                 #       invalid Polygons, so don't bother checking for them.
@@ -469,6 +472,8 @@ def sail(lon, lat, spd, /, *, cons = 2.0, dur = 1.0, freqLand = 100, freqPlot = 
                             onlyValid = False,
                         )
                 limit = shapely.geometry.multilinestring.MultiLineString(limit)
+
+                print(f" > removed/unioned in {time.time() - start:,.2f} seconds.")
 
                 # Save [Multi]LineString ...
                 with gzip.open(f"{output3}/limit/istep={istep:06d}.wkb.gz", mode = "wb", compresslevel = 9) as gzObj:
