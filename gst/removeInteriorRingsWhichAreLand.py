@@ -56,6 +56,11 @@ def removeInteriorRingsWhichAreLand(shape, lands, /, *, onlyValid = False, prec 
             possibleLand = shapely.geometry.polygon.orient(shapely.geometry.polygon.Polygon(interior))
 
             # Skip this hole if it is the same as a land mass ...
+            # TODO: Also check the area of the Polygons (if "centroid" just
+            #       returned the centre of the bounding box, rather than a
+            #       mass-weighted centre, then this check would be a bug as it
+            #       would incorrectly say that two Polygons were identical if
+            #       they just had the same extrema).
             skip = False
             for land in lands:
                 dist, _, _ = pyguymer3.geo.calc_dist_between_two_locs(
