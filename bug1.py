@@ -150,8 +150,8 @@ if __name__ == "__main__":
     fg.tight_layout()
 
     # Save figure ...
-    fg.savefig("bug.png")
+    fg.savefig("bug1.png")
     matplotlib.pyplot.close(fg)
 
     # Optimize PNG ...
-    pyguymer3.image.optimize_image("bug.png", strip = True)
+    pyguymer3.image.optimize_image("bug1.png", strip = True)
