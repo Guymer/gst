@@ -229,7 +229,7 @@ if __name__ == "__main__":
     axR.set_xlabel("Sailing Duration [days]")
     axR.set_xlim(0.0, 24.1)
     axR.set_xticks(range(25))
-    axR.set_ylabel("Normalized Total Calculation Duration")
+    axR.set_ylabel("Normalized Cumulative Calculation Duration")
     axR.set_ylim(0.0, 1.0)
 
     # Configure figure ...
