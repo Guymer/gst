@@ -35,6 +35,33 @@ if __name__ == "__main__":
 
     # **************************************************************************
 
+    # Define function ...
+    def meanWithoutOutlier(oldArr, /):
+        """
+        In this scenario, the user may have cancelled "run.py" mid-calculation
+        and then restarted it at a later date. Therefore, if purely looking at
+        the filesystem times, then one of the step durations will be much longer
+        than the rest. Let's try and recover "the true" average step duration
+        (assuming only one cancellation/restart per array).
+        """
+
+        # Find mean and standard deviation of the old array ...
+        oldMean = pyguymer3.mean(oldArr)
+        oldStddev = pyguymer3.stddev(oldArr)
+
+        # Check if the standard deviation is wider than the mean ...
+        if oldStddev > oldMean:
+            # Create a new array without the maximum value ...
+            newArr = oldArr[oldArr.argsort()][:-1]
+
+            # Return new mean ...
+            return pyguymer3.mean(newArr)
+
+        # Return old mean ...
+        return oldMean
+
+    # **************************************************************************
+
     # Define resolution ...
     res = "i"
 
@@ -124,7 +151,7 @@ if __name__ == "__main__":
                 tmpSailingDur = numpy.array(tmpSailingDur)                      # [day]
 
                 # Append values to lists ...
-                calcDur.append(pyguymer3.mean(tmpCalcDur))                      # [s/step]
+                calcDur.append(meanWithoutOutlier(tmpCalcDur))                  # [s/step]
                 sailingDur.append(pyguymer3.mean(tmpSailingDur))                # [day]
 
                 # Re-initialize lists ...
@@ -202,7 +229,7 @@ if __name__ == "__main__":
     axR.set_xlabel("Sailing Duration [days]")
     axR.set_xlim(0.0, 24.1)
     axR.set_xticks(range(25))
-    axR.set_ylabel("Normalized Cumulative Average Calculation Duration")
+    axR.set_ylabel("Normalized Total Calculation Duration")
     axR.set_ylim(0.0, 1.0)
 
     # Configure figure ...
