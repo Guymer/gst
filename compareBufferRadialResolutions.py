@@ -56,7 +56,7 @@ if __name__ == "__main__":
     ymax =  -90.0                                                               # [°]
 
     # Loop over precisions ...
-    for prec in [1250, 2500, 5000, 10000, 20000, 40000]:
+    for prec in [625, 1250, 2500, 5000, 10000, 20000]:
         # Create short-hand ...
         # NOTE: Say that 40,000 metres takes 1 hour at 20 knots.
         freq = 24 * 40000 // prec                                               # [#]
@@ -147,30 +147,38 @@ if __name__ == "__main__":
     )
 
     # Configure axis ...
+    # NOTE: Really, I should be plotting "allLands" to be consistent with the
+    #       ships, however, as each ship (potentially) is using different
+    #       collections of land then I will just use the raw GSHHG dataset
+    #       instead.
     ax1.set_extent(ext)
     pyguymer3.geo.add_map_background(ax1, resolution = "large8192px")
     pyguymer3.geo.add_horizontal_gridlines(ax1, ext, locs = [50.0, 50.5, 51.0])
     pyguymer3.geo.add_vertical_gridlines(ax1, ext, locs = [-2.0, -1.5, -1.0, -0.5, 0.0])
-
-    # **************************************************************************
-
-    # Load MultiPolygon ...
-    with gzip.open("res=i_cons=2.00e+00_tol=1.00e-10/allLands.wkb.gz", mode = "rb") as gzObj:
-        allLands = shapely.wkb.loads(gzObj.read())
-
-    # Plot MultiPolygon ...
-    # NOTE: Given how "allLands" was made, we know that there aren't any invalid
-    #       Polygons, so don't bother checking for them.
-    ax1.add_geometries(
-        pyguymer3.geo.extract_polys(allLands, onlyValid = False, repair = False),
-        cartopy.crs.PlateCarree(),
-        edgecolor = (1.0, 0.0, 0.0, 1.0),
-        facecolor = (1.0, 0.0, 0.0, 0.5),
-        linewidth = 1.0,
+    pyguymer3.geo.add_coastlines(
+        ax1,
+         colorName = "red",
+          faceOpac = 0.5,
+             level = 1,
+         linewidth = 1.0,
+        resolution = "i",
     )
-
-    # Clean up ...
-    del allLands
+    pyguymer3.geo.add_coastlines(
+        ax1,
+         colorName = "red",
+          faceOpac = 0.5,
+             level = 5,
+         linewidth = 1.0,
+        resolution = "i",
+    )
+    pyguymer3.geo.add_coastlines(
+        ax1,
+         colorName = "red",
+          faceOpac = 0.5,
+             level = 6,
+         linewidth = 1.0,
+        resolution = "i",
+    )
 
     # **************************************************************************
 
@@ -180,7 +188,7 @@ if __name__ == "__main__":
     lines = []
 
     # Loop over precisions ...
-    for iprec, prec in enumerate([1250, 2500, 5000, 10000, 20000, 40000]):
+    for iprec, prec in enumerate([625, 1250, 2500, 5000, 10000, 20000]):
         # Create short-hands ...
         # NOTE: Say that 40,000 metres takes 1 hour at 20 knots.
         color = f"C{iprec:d}"
@@ -289,14 +297,14 @@ if __name__ == "__main__":
     ax2.semilogx()
     ax2.set_xlabel("Precision [m]")
     # ax2.set_xticks(                                                             # MatPlotLib ≥ 3.5.0
-    #     [1250, 2500, 5000, 10000, 20000, 40000],                                # MatPlotLib ≥ 3.5.0
-    #     labels = [1250, 2500, 5000, 10000, 20000, 40000],                       # MatPlotLib ≥ 3.5.0
+    #     [625, 1250, 2500, 5000, 10000, 20000],                                  # MatPlotLib ≥ 3.5.0
+    #     labels = [625, 1250, 2500, 5000, 10000, 20000],                         # MatPlotLib ≥ 3.5.0
     # )                                                                           # MatPlotLib ≥ 3.5.0
-    ax2.set_xticks([1250, 2500, 5000, 10000, 20000, 40000])                     # MatPlotLib < 3.5.0
-    ax2.set_xticklabels([1250, 2500, 5000, 10000, 20000, 40000])                # MatPlotLib < 3.5.0
+    ax2.set_xticks([625, 1250, 2500, 5000, 10000, 20000])                       # MatPlotLib < 3.5.0
+    ax2.set_xticklabels([625, 1250, 2500, 5000, 10000, 20000])                  # MatPlotLib < 3.5.0
     ax2.set_ylabel("Euclidean Area [%]")
-    ax2.set_ylim(76, 102)
-    ax2.set_yticks(range(76, 103))
+    ax2.set_ylim(75, 102)
+    ax2.set_yticks(range(75, 103))
 
     # Configure figure ...
     fg.tight_layout()
