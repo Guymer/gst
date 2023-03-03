@@ -227,10 +227,7 @@ def sail(lon, lat, spd, /, *, cons = 2.0, dur = 1.0, freqLand = 100, freqPlot = 
 
     # Check if the file is missing ...
     if not os.path.exists(allLandsName):
-        print(f"Making \"{allLandsName}\" ...", end = " ")
-
-        # Start timer ...
-        start = time.time()                                                     # [s]
+        print(f"Making \"{allLandsName}\" ...")
 
         # Make the compressed WKB file of all of the land ...
         # NOTE: This is an un-buffered dataset without canals that is used
@@ -245,9 +242,6 @@ def sail(lon, lat, spd, /, *, cons = 2.0, dur = 1.0, freqLand = 100, freqPlot = 
                tol = tol,
         )
 
-        # Print timer ...
-        print(f"took {time.time() - start:,.2f} seconds.")
-
     # **************************************************************************
 
     # Deduce input filename ...
@@ -255,10 +249,7 @@ def sail(lon, lat, spd, /, *, cons = 2.0, dur = 1.0, freqLand = 100, freqPlot = 
 
     # Check if the input file is missing ...
     if not os.path.exists(allCanalsName):
-        print(f"Making \"{allCanalsName}\" ...", end = " ")
-
-        # Start timer ...
-        start = time.time()                                                     # [s]
+        print(f"Making \"{allCanalsName}\" ...")
 
         # Make the compressed WKB file of all of the canals ...
         savedAllCanals = saveAllCanals(
@@ -267,9 +258,6 @@ def sail(lon, lat, spd, /, *, cons = 2.0, dur = 1.0, freqLand = 100, freqPlot = 
              simp = simp,
               tol = tol,
         )
-
-        # Print timer ...
-        print(f"took {time.time() - start:,.2f} seconds.")
     else:
         # Set flag (if the file exists then canals must have been saved) ...
         savedAllCanals = True
@@ -290,10 +278,7 @@ def sail(lon, lat, spd, /, *, cons = 2.0, dur = 1.0, freqLand = 100, freqPlot = 
 
     # Check if the input file is missing ...
     if not os.path.exists(allLandsName):
-        print(f"Making \"{allLandsName}\" ...", end = " ")
-
-        # Start timer ...
-        start = time.time()                                                     # [s]
+        print(f"Making \"{allLandsName}\" ...")
 
         # Make the compressed WKB file of all of the land ...
         savedAllLands = saveAllLands(
@@ -309,9 +294,6 @@ def sail(lon, lat, spd, /, *, cons = 2.0, dur = 1.0, freqLand = 100, freqPlot = 
                  simp = simp,
                   tol = tol,
         )
-
-        # Print timer ...
-        print(f"took {time.time() - start:,.2f} seconds.")
     else:
         # Set flag (if the file exists then land must have been saved) ...
         savedAllLands = True
