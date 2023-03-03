@@ -227,6 +227,21 @@ if __name__ == "__main__":
             pyguymer3.geo.add_coastlines(
                 ax[iloc],
                  colorName = "white",
+                     level = 1,
+                 linewidth = 1.0,
+                resolution = "f",
+            )
+            pyguymer3.geo.add_coastlines(
+                ax[iloc],
+                 colorName = "white",
+                     level = 5,
+                 linewidth = 1.0,
+                resolution = "f",
+            )
+            pyguymer3.geo.add_coastlines(
+                ax[iloc],
+                 colorName = "white",
+                     level = 6,
                  linewidth = 1.0,
                 resolution = "f",
             )
