@@ -140,30 +140,38 @@ if __name__ == "__main__":
     )
 
     # Configure axis ...
+    # NOTE: Really, I should be plotting "allLands" to be consistent with the
+    #       ships, however, as each ship (potentially) is using different
+    #       collections of land then I will just use the raw GSHHG dataset
+    #       instead.
     ax1.set_extent(ext)
     pyguymer3.geo.add_map_background(ax1, resolution = "large8192px")
     pyguymer3.geo.add_horizontal_gridlines(ax1, ext, locs = [50.0, 50.5, 51.0])
     pyguymer3.geo.add_vertical_gridlines(ax1, ext, locs = [-2.0, -1.5, -1.0, -0.5, 0.0])
-
-    # **************************************************************************
-
-    # Load MultiPolygon ...
-    with gzip.open("res=i_cons=2.00e+00_tol=1.00e-10/allLands.wkb.gz", mode = "rb") as gzObj:
-        allLands = shapely.wkb.loads(gzObj.read())
-
-    # Plot MultiPolygon ...
-    # NOTE: Given how "allLands" was made, we know that there aren't any invalid
-    #       Polygons, so don't bother checking for them.
-    ax1.add_geometries(
-        pyguymer3.geo.extract_polys(allLands, onlyValid = False, repair = False),
-        cartopy.crs.PlateCarree(),
-        edgecolor = (1.0, 0.0, 0.0, 1.0),
-        facecolor = (1.0, 0.0, 0.0, 0.5),
-        linewidth = 1.0,
+    pyguymer3.geo.add_coastlines(
+        ax1,
+         colorName = "red",
+          faceOpac = 0.5,
+             level = 1,
+         linewidth = 1.0,
+        resolution = "i",
     )
-
-    # Clean up ...
-    del allLands
+    pyguymer3.geo.add_coastlines(
+        ax1,
+         colorName = "red",
+          faceOpac = 0.5,
+             level = 5,
+         linewidth = 1.0,
+        resolution = "i",
+    )
+    pyguymer3.geo.add_coastlines(
+        ax1,
+         colorName = "red",
+          faceOpac = 0.5,
+             level = 6,
+         linewidth = 1.0,
+        resolution = "i",
+    )
 
     # **************************************************************************
 
