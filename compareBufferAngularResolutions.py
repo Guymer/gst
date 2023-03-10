@@ -59,7 +59,7 @@ if __name__ == "__main__":
     for nang in [9, 17, 33, 65, 129, 257]:
         # Populate GST command ...
         cmd = [
-            "python3.10", "run.py",
+            "python3.11", "run.py",
             f"{lon:+.1f}", f"{lat:+.1f}", "20.0",
             "--duration", "0.09",       # some sailing (20 knots * 0.09 days = 80.01 kilometres)
             "--freqLand", "768",        # ~daily land re-evaluation

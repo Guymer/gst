@@ -88,7 +88,7 @@ if __name__ == "__main__":
 
             # Populate GST command ...
             cmd = [
-                "python3.10", "run.py",
+                "python3.11", "run.py",
                 "-1.0", "+50.5", "20.0",        # depart Portsmouth Harbour at 20 knots
                 "--duration", "0.01",           # some sailing (20 knots * 0.01 days = 8.89 kilometres)
                 "--freqLand", f"{freqLand:d}",  # ~daily land re-evaluation

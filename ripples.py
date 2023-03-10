@@ -105,7 +105,7 @@ if __name__ == "__main__":
 
             # Populate GST command ...
             cmd = [
-                "python3.10", "run.py",
+                "python3.11", "run.py",
                 f"{lon:+.1f}", f"{lat:+.1f}", "20.0",
                 "--conservatism", f"{cons:.1f}",    # LOOP VARIABLE
                 "--duration", f"{dur:.1f}",         # LOOP VARIABLE
