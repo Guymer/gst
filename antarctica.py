@@ -104,12 +104,10 @@ if __name__ == "__main__":
             )
             pyguymer3.geo.add_horizontal_gridlines(
                 ax[i],
-                [-180.0, +180.0, -90.0, +90.0],
                 locs = range(-90, 135, 45),
             )
             pyguymer3.geo.add_vertical_gridlines(
                 ax[i],
-                [-180.0, +180.0, -90.0, +90.0],
                 locs = range(-180, 225, 45),
             )
             pyguymer3.geo.add_coastlines(

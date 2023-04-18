@@ -211,12 +211,10 @@ if __name__ == "__main__":
         ax.set_global()
         pyguymer3.geo.add_horizontal_gridlines(
             ax,
-            [-180.0, +180.0, -90.0, +90.0],
             locs = range(-90, 135, 45),
         )
         pyguymer3.geo.add_vertical_gridlines(
             ax,
-            [-180.0, +180.0, -90.0, +90.0],
             locs = range(-180, 225, 45),
         )
 
@@ -451,12 +449,10 @@ if __name__ == "__main__":
         ax.set_extent(ext)
         pyguymer3.geo.add_horizontal_gridlines(
             ax,
-            ext,
             locs = range(-90, 91, 1),
         )
         pyguymer3.geo.add_vertical_gridlines(
             ax,
-            ext,
             locs = range(-180, 181, 1),
         )
 
@@ -681,12 +677,10 @@ if __name__ == "__main__":
         ax.set_extent(ext)
         pyguymer3.geo.add_horizontal_gridlines(
             ax,
-            ext,
             locs = range(-90, 91, 1),
         )
         pyguymer3.geo.add_vertical_gridlines(
             ax,
-            ext,
             locs = range(-180, 181, 1),
         )
 

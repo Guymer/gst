@@ -169,19 +169,6 @@ def sail(lon, lat, spd, /, *, cons = 2.0, dur = 1.0, freqLand = 100, freqPlot = 
         maxShip.bounds[3],              # maxy
     ]                                                                           # [°]
 
-    # Check if the user wants a local plot (for local people) ...
-    if local:
-        # Determine the maximum symmetric sailing distance ...
-        maxShipLon = max(abs(maxShipExt[0] - lon), abs(maxShipExt[1] - lon))    # [°]
-        maxShipLat = max(abs(maxShipExt[2] - lat), abs(maxShipExt[3] - lat))    # [°]
-        maxShipHyp = max(maxShipLon, maxShipLat)                                # [°]
-        maxShipExtSym = [
-            lon - maxShipHyp,           # minx
-            lon + maxShipHyp,           # maxx
-            lat - maxShipHyp,           # miny
-            lat + maxShipHyp,           # maxy
-        ]                                                                       # [°]
-
     # Check if the user is being far too coarse ...
     if prec > maxDist:
         raise Exception(f"the maximum possible sailing distance is {0.001 * maxDist:,.2f} kilometres but the precision is {0.001 * prec:,.2f} kilometres") from None
@@ -335,12 +322,10 @@ def sail(lon, lat, spd, /, *, cons = 2.0, dur = 1.0, freqLand = 100, freqPlot = 
             ax.set_extent(maxShipExt)
             pyguymer3.geo.add_horizontal_gridlines(
                 ax,
-                maxShipExtSym,
                 locs = range(-90, 100, 10),
             )
             pyguymer3.geo.add_vertical_gridlines(
                 ax,
-                maxShipExtSym,
                 locs = range(-180, 190, 10),
             )
         else:
@@ -351,12 +336,10 @@ def sail(lon, lat, spd, /, *, cons = 2.0, dur = 1.0, freqLand = 100, freqPlot = 
             ax.set_global()
             pyguymer3.geo.add_horizontal_gridlines(
                 ax,
-                [-180.0, +180.0, -90.0, +90.0],
                 locs = range(-90, 135, 45),
             )
             pyguymer3.geo.add_vertical_gridlines(
                 ax,
-                [-180.0, +180.0, -90.0, +90.0],
                 locs = range(-180, 225, 45),
             )
 
