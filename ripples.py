@@ -417,36 +417,14 @@ if __name__ == "__main__":
         fg = matplotlib.pyplot.figure(figsize = (6, 6))
 
         # Create axis ...
-        ax = fg.add_subplot(
-            projection = cartopy.crs.Orthographic(
-                central_longitude = 60.0,
-                 central_latitude = 73.5,
-            )
-        )
-
-        # Find how large a 400km radius circle is around Novaya Zemlya ...
-        point = shapely.geometry.point.Point(60.0, 73.5)
-        poly = pyguymer3.geo.buffer(
-            point,
+        ax = pyguymer3.geo.add_top_down_axis(
+            fg,
+            60.0,
+            73.5,
             400.0e3,
-            fill = +1.0,
-            nang = 361,
-            simp = -1.0,
         )
-
-        # Create extent ...
-        ext = [
-            poly.bounds[0],             # minx
-            poly.bounds[2],             # maxx
-            poly.bounds[1],             # miny
-            poly.bounds[3],             # maxy
-        ]                                                                       # [°]
-
-        # Clean up ...
-        del point, poly
 
         # Configure axis ...
-        ax.set_extent(ext)
         pyguymer3.geo.add_horizontal_gridlines(
             ax,
             locs = range(-90, 91, 1),
@@ -645,36 +623,14 @@ if __name__ == "__main__":
         fg = matplotlib.pyplot.figure(figsize = (6, 6))
 
         # Create axis ...
-        ax = fg.add_subplot(
-            projection = cartopy.crs.Orthographic(
-                central_longitude = -74.0,
-                 central_latitude = -44.0,
-            )
-        )
-
-        # Find how large a 300km radius circle is around Boca Del Guafo ...
-        point = shapely.geometry.point.Point(-74.0, -44.0)
-        poly = pyguymer3.geo.buffer(
-            point,
+        ax = pyguymer3.geo.add_top_down_axis(
+            fg,
+            -74.0,
+            -44.0,
             300.0e3,
-            fill = +1.0,
-            nang = 361,
-            simp = -1.0,
         )
-
-        # Create extent ...
-        ext = [
-            poly.bounds[0],             # minx
-            poly.bounds[2],             # maxx
-            poly.bounds[1],             # miny
-            poly.bounds[3],             # maxy
-        ]                                                                       # [°]
-
-        # Clean up ...
-        del point, poly
 
         # Configure axis ...
-        ax.set_extent(ext)
         pyguymer3.geo.add_horizontal_gridlines(
             ax,
             locs = range(-90, 91, 1),
