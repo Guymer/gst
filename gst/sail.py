@@ -162,12 +162,6 @@ def sail(lon, lat, spd, /, *, cons = 2.0, dur = 1.0, freqLand = 100, freqPlot = 
             simp = -1.0,
              tol = tol,
         )
-    maxShipExt = [
-        maxShip.bounds[0],              # minx
-        maxShip.bounds[2],              # maxx
-        maxShip.bounds[1],              # miny
-        maxShip.bounds[3],              # maxy
-    ]                                                                           # [°]
 
     # Check if the user is being far too coarse ...
     if prec > maxDist:
@@ -311,15 +305,14 @@ def sail(lon, lat, spd, /, *, cons = 2.0, dur = 1.0, freqLand = 100, freqPlot = 
         # Check if the user wants a local plot (for local people) ...
         if local:
             # Create axis ...
-            ax = fg.add_subplot(
-                projection = cartopy.crs.Orthographic(
-                    central_longitude = lon,
-                     central_latitude = lat,
-                ),
+            ax = pyguymer3.geo.add_top_down_axis(
+                fg,
+                lon,
+                lat,
+                maxDist,
             )
 
             # Configure axis ...
-            ax.set_extent(maxShipExt)
             pyguymer3.geo.add_horizontal_gridlines(
                 ax,
                 locs = range(-90, 100, 10),
