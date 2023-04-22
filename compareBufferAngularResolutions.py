@@ -108,28 +108,20 @@ if __name__ == "__main__":
             # Clean up ...
             del ship
 
-    # Define extent ...
-    ext = [
-        xmin - 0.05,
-        xmax + 0.05,
-        ymin - 0.05,
-        ymax + 0.05,
-    ]                                                                           # [°], [°], [°], [°]
-
     # **************************************************************************
 
     # Create figure ...
     fg = matplotlib.pyplot.figure(figsize = (9, 12))
 
     # Create axis ...
-    ax1 = fg.add_subplot(
-        2,
-        1,
-        1,
-        projection = cartopy.crs.Orthographic(
-            central_longitude = lon,
-             central_latitude = lat,
-        ),
+    ax1 = pyguymer3.geo.add_top_down_axis(
+        fg,
+        lon,
+        lat,
+        90.0e3,
+        nrows = 2,
+        ncols = 1,
+        index = 1,
     )
 
     # Create axis ...
@@ -144,7 +136,6 @@ if __name__ == "__main__":
     #       ships, however, as each ship (potentially) is using different
     #       collections of land then I will just use the raw GSHHG dataset
     #       instead.
-    ax1.set_extent(ext)
     pyguymer3.geo.add_map_background(ax1, resolution = "large8192px")
     pyguymer3.geo.add_horizontal_gridlines(
         ax1,
