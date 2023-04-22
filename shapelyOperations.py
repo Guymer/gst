@@ -46,42 +46,18 @@ if __name__ == "__main__":
 
     # **************************************************************************
 
-    # Find how large a 500km radius circle is around the central location ...
-    point = shapely.geometry.point.Point(lon, lat)
-    poly = pyguymer3.geo.buffer(
-        point,
-        500.0e3,
-        fill = -1.0,
-        nang = 9,
-        simp = -1.0,
-    )
-
-    # Create extent ...
-    ext = [
-        poly.bounds[0],                 # minx
-        poly.bounds[2],                 # maxx
-        poly.bounds[1],                 # miny
-        poly.bounds[3],                 # maxy
-    ]                                                                           # [°]
-
-    # Clean up ...
-    del point, poly
-
-    # **************************************************************************
-
     # Create figure ...
-    fg = matplotlib.pyplot.figure(figsize = (9, 6))
+    fg = matplotlib.pyplot.figure(figsize = (9, 9))
 
     # Create axis ...
-    ax = fg.add_subplot(
-        projection = cartopy.crs.Orthographic(
-            central_longitude = lon,
-             central_latitude = lat,
-        )
+    ax = pyguymer3.geo.add_top_down_axis(
+        fg,
+        lon,
+        lat,
+        500.0e3,
     )
 
     # Configure axis ...
-    ax.set_extent(ext)
     pyguymer3.geo.add_map_background(
         ax,
               name = "shaded-relief",
