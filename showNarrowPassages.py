@@ -27,7 +27,6 @@ if __name__ == "__main__":
         raise Exception("\"matplotlib\" is not installed; run \"pip install --user matplotlib\"") from None
     try:
         import shapely
-        import shapely.geometry
         import shapely.wkb
     except:
         raise Exception("\"shapely\" is not installed; run \"pip install --user Shapely\"") from None
@@ -132,43 +131,18 @@ if __name__ == "__main__":
 
             # Create axis ...
             ax.append(
-                fg.add_subplot(
-                    3,
-                    3,
-                    iloc + 1,
-                    projection = cartopy.crs.Orthographic(
-                        central_longitude = loc[0],
-                         central_latitude = loc[1],
-                    )
+                pyguymer3.geo.add_top_down_axis(
+                    fg,
+                    loc[0],
+                    loc[1],
+                    100.0e3,
+                    nrows = 3,
+                    ncols = 3,
+                    index = iloc + 1,
                 )
             )
 
-            # Find how large a 100km radius circle is around the central
-            # location ...
-            point = shapely.geometry.point.Point(loc[0], loc[1])
-            poly = pyguymer3.geo.buffer(
-                point,
-                100.0e3,
-                fill = -1.0,
-                nang = 9,
-                simp = -1.0,
-            )
-
-            # Create extent ...
-            ext.append(
-                [
-                    poly.bounds[0],     # minx
-                    poly.bounds[2],     # maxx
-                    poly.bounds[1],     # miny
-                    poly.bounds[3],     # maxy
-                ]
-            )                                                                   # [°]
-
-            # Clean up ...
-            del point, poly
-
             # Configure axis ...
-            ax[iloc].set_extent(ext[iloc])
             pyguymer3.geo.add_map_background(
                 ax[iloc],
                       name = "shaded-relief",
