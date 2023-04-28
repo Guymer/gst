@@ -113,7 +113,7 @@ if __name__ == "__main__":
             pyguymer3.geo.add_coastlines(
                 ax[i],
                  colorName = "red",
-                     level = 1,
+                    levels = [1],
                  linewidth = 1.0,
                 resolution = res,
             )
@@ -124,7 +124,7 @@ if __name__ == "__main__":
                 pyguymer3.geo.add_coastlines(
                     ax[i],
                      colorName = "green",
-                         level = 5,
+                        levels = [5],
                      linewidth = 1.0,
                     resolution = res,
                 )
@@ -133,7 +133,7 @@ if __name__ == "__main__":
                 pyguymer3.geo.add_coastlines(
                     ax[i],
                      colorName = "blue",
-                         level = 6,
+                        levels = [6],
                      linewidth = 1.0,
                     resolution = res,
                 )

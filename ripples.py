@@ -298,17 +298,6 @@ if __name__ == "__main__":
         #       dataset instead.
         pyguymer3.geo.add_coastlines(
             ax,
-                 level = 1,
-            resolution = res,
-        )
-        pyguymer3.geo.add_coastlines(
-            ax,
-                 level = 5,
-            resolution = res,
-        )
-        pyguymer3.geo.add_coastlines(
-            ax,
-                 level = 6,
             resolution = res,
         )
         ax.legend(
@@ -504,17 +493,6 @@ if __name__ == "__main__":
         #       dataset instead.
         pyguymer3.geo.add_coastlines(
             ax,
-                 level = 1,
-            resolution = res,
-        )
-        pyguymer3.geo.add_coastlines(
-            ax,
-                 level = 5,
-            resolution = res,
-        )
-        pyguymer3.geo.add_coastlines(
-            ax,
-                 level = 6,
             resolution = res,
         )
         ax.legend(
@@ -710,17 +688,6 @@ if __name__ == "__main__":
         #       dataset instead.
         pyguymer3.geo.add_coastlines(
             ax,
-                 level = 1,
-            resolution = res,
-        )
-        pyguymer3.geo.add_coastlines(
-            ax,
-                 level = 5,
-            resolution = res,
-        )
-        pyguymer3.geo.add_coastlines(
-            ax,
-                 level = 6,
             resolution = res,
         )
         ax.legend(
