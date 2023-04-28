@@ -296,10 +296,7 @@ if __name__ == "__main__":
         #       the ships, however, as each ship (potentially) is using
         #       different collections of land then I will just use the raw GSHHG
         #       dataset instead.
-        pyguymer3.geo.add_coastlines(
-            ax,
-            resolution = res,
-        )
+        pyguymer3.geo.add_coastlines(ax, resolution = res)
         ax.legend(
             lines,
             labels,
@@ -491,10 +488,7 @@ if __name__ == "__main__":
         #       the ships, however, as each ship (potentially) is using
         #       different collections of land then I will just use the raw GSHHG
         #       dataset instead.
-        pyguymer3.geo.add_coastlines(
-            ax,
-            resolution = res,
-        )
+        pyguymer3.geo.add_coastlines(ax, resolution = res)
         ax.legend(
             lines,
             labels,
@@ -686,10 +680,7 @@ if __name__ == "__main__":
         #       the ships, however, as each ship (potentially) is using
         #       different collections of land then I will just use the raw GSHHG
         #       dataset instead.
-        pyguymer3.geo.add_coastlines(
-            ax,
-            resolution = res,
-        )
+        pyguymer3.geo.add_coastlines(ax, resolution = res)
         ax.legend(
             lines,
             labels,
