@@ -8,7 +8,7 @@ The `_points2polys()` function in [PyGuymer3](https://github.com/Guymer/PyGuymer
 
 If you want to run [the example script](run.py) using a profiler and print out the top 10 most time-consuming functions then run:
 
-```
+```sh
 # for the first time a command is run ...
 python3.11 -m cProfile -o first.log run.py -1.0 +50.5 20.0 --duration 5.0 > first.out 2> first.err
 python3.11 -c 'import pstats; p = pstats.Stats("first.log"); p.sort_stats(pstats.SortKey.CUMULATIVE).print_stats(10)'
@@ -22,7 +22,7 @@ python3.11 -c 'import pstats; p = pstats.Stats("second.log"); p.sort_stats(pstat
 
 To generate the data needed, [compareBufferAngularResolutions.py](compareBufferAngularResolutions.py) will run commands like:
 
-```
+```sh
 python3.11 run.py -1.0 +50.5 20.0 --duration 0.09 --nang  9 --precision 1250.0 --resolution i
 python3.11 run.py -1.0 +50.5 20.0 --duration 0.09 --nang 17 --precision 1250.0 --resolution i
 python3.11 run.py -1.0 +50.5 20.0 --duration 0.09 --nang 33 --precision 1250.0 --resolution i
@@ -35,7 +35,7 @@ After sailing for 0.09 days at 20.0 knots a vessel will have gone 80,006.4 metre
 
 To generate the data needed, [compareBufferRadialResolutions.py](compareBufferRadialResolutions.py) will run commands like:
 
-```
+```sh
 python3.11 run.py -1.0 +50.5 20.0 --duration 0.09 --nang 257 --precision 1250.0 --resolution i
 python3.11 run.py -1.0 +50.5 20.0 --duration 0.09 --nang 257 --precision 2500.0 --resolution i
 python3.11 run.py -1.0 +50.5 20.0 --duration 0.09 --nang 257 --precision 5000.0 --resolution i
@@ -48,7 +48,7 @@ After sailing for 0.09 days at 20.0 knots a vessel will have gone 80,006.4 metre
 
 To generate the data needed, [showNarrowPassages.py](showNarrowPassages.py) will run commands like:
 
-```
+```sh
 python3.11 run.py -1.0 +50.5 20.0 --duration 0.01 --nang  9 --precision 5000.0
 python3.11 run.py -1.0 +50.5 20.0 --duration 0.01 --nang 17 --precision 2500.0
 python3.11 run.py -1.0 +50.5 20.0 --duration 0.01 --nang 33 --precision 1250.0
@@ -59,7 +59,7 @@ python3.11 run.py -1.0 +50.5 20.0 --duration 0.01 --nang 33 --precision 1250.0
 
 To very quickly find out how far a vessel can sail, try running something like:
 
-```
+```sh
 python3.11 run.py      \
     -1.0 +50.5 20.0    \   # depart Portsmouth Harbour at 20 knots
     --duration 11.2    \   # ~maximum distance (20 knots * 11.2 days = 9,956.35 kilometres)
@@ -74,7 +74,7 @@ python3.11 run.py      \
 
 ... to repeat the above study at x2 angular resolution and x2 radial resolution then try running something like:
 
-```
+```sh
 python3.11 run.py      \
     -1.0 +50.5 20.0    \
     --duration 11.2    \
@@ -89,7 +89,7 @@ python3.11 run.py      \
 
 ... to repeat the above study at x4 angular resolution and x4 radial resolution then try running something like:
 
-```
+```sh
 python3.11 run.py      \
     -1.0 +50.5 20.0    \
     --duration 11.2    \
