@@ -162,10 +162,9 @@ if __name__ == "__main__":
     )
     pyguymer3.geo.add_coastlines(
         ax1,
-         colorName = "red",
-          faceOpac = 0.5,
-         linewidth = 1.0,
-        resolution = "i",
+        colorName = "red",
+         faceOpac = 0.5,
+        linewidth = 1.0,
     )
 
     # **************************************************************************
