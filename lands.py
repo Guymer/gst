@@ -134,9 +134,6 @@ if __name__ == "__main__":
             label = f"(cons={cons:d}, nang={nang:d}, prec={prec:d}) ÷ {scaleFactor:.2f}",
         )
 
-        # Clean up ...
-        del calcLength, sailingDur
-
     # **************************************************************************
 
     # Configure axis ...

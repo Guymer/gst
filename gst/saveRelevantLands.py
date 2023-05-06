@@ -83,9 +83,6 @@ def saveRelevantLands(fname, ship, dist, allLands, /, *, fill = 1.0, nang = 9, s
         # Append land to list ...
         polys.append(allLand)
 
-    # Clean up ...
-    del maxShip
-
     # Convert list of Polygons to a (unified) MultiPolygon ...
     polys = shapely.ops.unary_union(polys).simplify(tol)
 

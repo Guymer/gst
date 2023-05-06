@@ -136,9 +136,6 @@ if __name__ == "__main__":
                 tmpCalcLength = []                                              # [#]
                 tmpSailingDur = []                                              # [day]
 
-        # Clean up ...
-        del tmpCalcLength, tmpSailingDur
-
         # Convert lists to arrays ...
         calcLength = numpy.array(calcLength)                                    # [#]
         sailingDur = numpy.array(sailingDur)                                    # [day]
@@ -152,9 +149,6 @@ if __name__ == "__main__":
             color = f"C{colour:d}",
             label = f"(cons={cons:d}, nang={nang:d}, prec={prec:d}) ÷ {scaleFactor:.2f}",
         )
-
-        # Clean up ...
-        del calcLength, sailingDur
 
     # **************************************************************************
 

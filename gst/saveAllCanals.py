@@ -115,17 +115,8 @@ def saveAllCanals(fname, /, *, debug = False, simp = 0.1, tol = 1.0e-10):
         if debug:
             pyguymer3.geo.check(line)
 
-        # Clean up ...
-        del coords
-
         # Append LineString to list ...
         lines.append(line)
-
-        # Clean up ...
-        del line
-
-    # Clean up ...
-    del db
 
     # **************************************************************************
 

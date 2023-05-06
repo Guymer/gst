@@ -135,9 +135,6 @@ def saveAllLands(fname, dname, /, *, allCanals = None, debug = False, dist = -1.
                 if debug:
                     pyguymer3.geo.check(line)
 
-                # Clean up ...
-                del coords
-
                 # Append the buffer of the LineString to the list ...
                 lines.append(
                     pyguymer3.geo.buffer(
@@ -149,9 +146,6 @@ def saveAllLands(fname, dname, /, *, allCanals = None, debug = False, dist = -1.
                          tol = tol,
                     )
                 )
-
-                # Clean up ...
-                del line
         else:
             raise Exception("you have provided canals, but no distance to buffer them by") from None
     else:

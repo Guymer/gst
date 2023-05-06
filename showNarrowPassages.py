@@ -182,9 +182,6 @@ if __name__ == "__main__":
                     linewidth = 1.0,
                 )
 
-                # Clean up ...
-                del allLands
-
             # Plot the central location ...
             ax[iloc].scatter(
                 [loc[0]],

@@ -172,9 +172,6 @@ if __name__ == "__main__":
                         else:
                             histImg[iLat, iLon, :] = 255
 
-        # Clean up ...
-        del hist
-
         # Convert array to image ...
         histImg = PIL.Image.fromarray(histImg)
 
@@ -198,12 +195,6 @@ if __name__ == "__main__":
             # Draw exterior ring ...
             histDraw.line(coords, fill = (255, 255, 255), width = 1)
 
-            # Clean up ...
-            del coords
-
-        # Clean up ...
-        del histDraw
-
         # **********************************************************************
 
         print(f"Saving \"complexity_res={res}_cons={cons:.2e}_nang={nang:d}_prec={prec:.2e}.png\" ...")
@@ -211,6 +202,3 @@ if __name__ == "__main__":
         # Save PNG ...
         histImg.save(f"complexity_res={res}_cons={cons:.2e}_nang={nang:d}_prec={prec:.2e}.png")
         pyguymer3.image.optimize_image(f"complexity_res={res}_cons={cons:.2e}_nang={nang:d}_prec={prec:.2e}.png", strip = True)
-
-        # Clean up ...
-        del histImg

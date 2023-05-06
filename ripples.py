@@ -248,9 +248,6 @@ if __name__ == "__main__":
                 linewidth = 1.0,
             )
 
-            # Clean up ...
-            del limit
-
             # Add an entry to the legend ...
             labels.append(f"cons={cons:d}, nang={nang:d}, prec={prec:d}")
             lines.append(matplotlib.lines.Line2D([], [], color = color))
@@ -274,9 +271,6 @@ if __name__ == "__main__":
                 facecolor = "none",
                 linewidth = 1.0,
             )
-
-            # Clean up ...
-            del maxShip
 
         # Plot the central location ...
         ax.scatter(
@@ -450,9 +444,6 @@ if __name__ == "__main__":
                 linewidth = 1.0,
             )
 
-            # Clean up ...
-            del limit
-
             # Add an entry to the legend ...
             labels.append(f"cons={cons:d}, nang={nang:d}, prec={prec:d}")
             lines.append(matplotlib.lines.Line2D([], [], color = color))
@@ -476,9 +467,6 @@ if __name__ == "__main__":
                 facecolor = "none",
                 linewidth = 1.0,
             )
-
-            # Clean up ...
-            del maxShip
 
         # Create short-hand ...
         dur = 1000.0 * float(dist) / (1852.0 * 20.0 * 24.0)                     # [day]
@@ -642,9 +630,6 @@ if __name__ == "__main__":
                 linewidth = 1.0,
             )
 
-            # Clean up ...
-            del limit
-
             # Add an entry to the legend ...
             labels.append(f"cons={cons:d}, nang={nang:d}, prec={prec:d}")
             lines.append(matplotlib.lines.Line2D([], [], color = color))
@@ -668,9 +653,6 @@ if __name__ == "__main__":
                 facecolor = "none",
                 linewidth = 1.0,
             )
-
-            # Clean up ...
-            del maxShip
 
         # Create short-hand ...
         dur = 1000.0 * float(dist) / (1852.0 * 20.0 * 24.0)                     # [day]

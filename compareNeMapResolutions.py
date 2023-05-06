@@ -113,9 +113,6 @@ if __name__ == "__main__":
             linewidth = 1.0,
         )
 
-        # Clean up ...
-        del polys
-
         # Plot the central location ...
         ax.scatter(
             [lon],

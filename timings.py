@@ -158,9 +158,6 @@ if __name__ == "__main__":
                 tmpCalcDur = []                                                 # [s/step]
                 tmpSailingDur = []                                              # [day]
 
-        # Clean up ...
-        del tmpCalcDur, tmpSailingDur
-
         # Convert lists to arrays ...
         calcDur = numpy.array(calcDur)                                          # [s/step]
         sailingDur = numpy.array(sailingDur)                                    # [day]
@@ -198,9 +195,6 @@ if __name__ == "__main__":
             cumCalcDur[istep + 1] = cumCalcDur[istep] + calcDur[istep]          # [s/step]
             cumSailingDur[istep + 1] = sailingDur[istep]                        # [day]
 
-        # Clean up ...
-        del calcDur, sailingDur
-
         # Plot data ...
         axR.plot(
             cumSailingDur,
@@ -208,9 +202,6 @@ if __name__ == "__main__":
             color = f"C{colour:d}",
             label = f"cons={cons:d}, nang={nang:d}, prec={prec:d}",
         )
-
-        # Clean up ...
-        del cumCalcDur, cumSailingDur
 
     # **************************************************************************
 
