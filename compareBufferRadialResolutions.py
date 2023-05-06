@@ -49,12 +49,6 @@ if __name__ == "__main__":
 
     # **************************************************************************
 
-    # Initialize global bounding box ...
-    xmin = +180.0                                                               # [°]
-    ymin =  +90.0                                                               # [°]
-    xmax = -180.0                                                               # [°]
-    ymax =  -90.0                                                               # [°]
-
     # Loop over precisions ...
     for prec in [625, 1250, 2500, 5000, 10000, 20000]:
         # Create short-hand ...
@@ -83,45 +77,6 @@ if __name__ == "__main__":
               stderr = subprocess.DEVNULL,
               stdout = subprocess.DEVNULL,
         )
-
-        # Loop over distances ...
-        for dist in range(10, 90, 10):
-            # Skip if this distance cannot exist (because the precision is too
-            # coarse) and determine the step count ...
-            if (1000 * dist) % prec != 0:
-                continue
-            istep = ((1000 * dist) // prec) - 1                                 # [#]
-
-            # Deduce directory name ...
-            dname = f"res=i_cons=2.00e+00_tol=1.00e-10/nang=257_prec={prec:.2e}/freqLand={freq:d}_freqSimp={freq:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/ship"
-
-            # Deduce file name and skip if it is missing ...
-            fname = f"{dname}/istep={istep:06d}.wkb.gz"
-            if not os.path.exists(fname):
-                continue
-
-            print(f"Surveying \"{fname}\" ...")
-
-            # Load Polygon ...
-            with gzip.open(fname, mode = "rb") as gzObj:
-                ship = shapely.wkb.loads(gzObj.read())
-
-            # Update global bounding box ...
-            xmin = min(xmin, ship.bounds[0])                                    # [°]
-            ymin = min(ymin, ship.bounds[1])                                    # [°]
-            xmax = max(xmax, ship.bounds[2])                                    # [°]
-            ymax = max(ymax, ship.bounds[3])                                    # [°]
-
-            # Clean up ...
-            del ship
-
-    # Define extent ...
-    ext = [
-        xmin - 0.05,
-        xmax + 0.05,
-        ymin - 0.05,
-        ymax + 0.05,
-    ]                                                                           # [°], [°], [°], [°]
 
     # **************************************************************************
 
@@ -227,9 +182,6 @@ if __name__ == "__main__":
                 # Add an entry to the legend ...
                 labels.append(f"{prec:,d}m")
                 lines.append(matplotlib.lines.Line2D([], [], color = color))
-
-            # Clean up ...
-            del ship
 
     # Plot the starting location ...
     ax1.scatter(
