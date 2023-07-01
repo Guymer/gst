@@ -253,7 +253,7 @@ if __name__ == "__main__":
             lines.append(matplotlib.lines.Line2D([], [], color = color))
 
         # Check that the distance isn't too large ...
-        if 1000.0 * float(dist) <= 19970326.3:
+        if 1000.0 * float(dist) <= 0.5 * pyguymer3.CIRCUMFERENCE_OF_EARTH:
             # Calculate the maximum distance the ship could have got to ...
             maxShip = pyguymer3.geo.buffer(
                 ship,
@@ -449,7 +449,7 @@ if __name__ == "__main__":
             lines.append(matplotlib.lines.Line2D([], [], color = color))
 
         # Check that the distance isn't too large ...
-        if 1000.0 * float(dist) <= 19970326.3:
+        if 1000.0 * float(dist) <= 0.5 * pyguymer3.CIRCUMFERENCE_OF_EARTH:
             # Calculate the maximum distance the ship could have got to ...
             maxShip = pyguymer3.geo.buffer(
                 ship,
@@ -635,7 +635,7 @@ if __name__ == "__main__":
             lines.append(matplotlib.lines.Line2D([], [], color = color))
 
         # Check that the distance isn't too large ...
-        if 1000.0 * float(dist) <= 19970326.3:
+        if 1000.0 * float(dist) <= 0.5 * pyguymer3.CIRCUMFERENCE_OF_EARTH:
             # Calculate the maximum distance the ship could have got to ...
             maxShip = pyguymer3.geo.buffer(
                 ship,

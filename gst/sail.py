@@ -44,7 +44,6 @@ def sail(lon, lat, spd, /, *, cons = 2.0, dur = 1.0, freqLand = 100, freqPlot = 
 
     # Import standard modules ...
     import gzip
-    import math
     import os
     import time
 
@@ -93,18 +92,8 @@ def sail(lon, lat, spd, /, *, cons = 2.0, dur = 1.0, freqLand = 100, freqPlot = 
     print(f"{spd:,.1f} knots is {0.001 * 1852.0 * spd:,.2f} kilometres/hour.")
     print(f"{spd:,.1f} knots is {0.001 * 24.0 * 1852.0 * spd:,.2f} kilometres/day.")
 
-    # Determine how many degrees (of longitude) a [Multi]Polygon can be
-    # filled by at the point where a degree (of longitude) is the largest, i.e.,
-    # the equator ...
-    # NOTE: See https://en.wikipedia.org/wiki/Earth_radius#Mean_radius
-    # NOTE: Using a radius of 6,371,008.8 m equates to:
-    #         * 1 °  = 111.195 km
-    #         * 1 m° = 111.195 m
-    #         * 1 μ° = 11.1195 cm
-    radiusOfEarth = 6371008.8                                                   # [m]
-    circumOfEarth = 2.0 * math.pi * radiusOfEarth                               # [m]
-    resoluOfEarth = circumOfEarth / 360.0                                       # [m/°]
-    fill = prec / resoluOfEarth                                                 # [°]
+    # Determine how many degrees a [Multi]Polygon can be filled by ...
+    fill = prec / pyguymer3.RESOLUTION_OF_EARTH                                 # [°]
 
     # Add conservatism ...
     fill /= cons                                                                # [°]
@@ -135,7 +124,7 @@ def sail(lon, lat, spd, /, *, cons = 2.0, dur = 1.0, freqLand = 100, freqPlot = 
     # Calculate the maximum possible sailing distance (ignoring all land) ...
     # NOTE: If the distance is very large then the ship can sail anywhere.
     maxDist = (1852.0 * spd) * (24.0 * dur)                                     # [m]
-    if maxDist > 19970326.3:
+    if maxDist > 0.5 * pyguymer3.CIRCUMFERENCE_OF_EARTH:
         maxShip = pyguymer3.geo.fillin(
             shapely.geometry.polygon.orient(
                 shapely.geometry.polygon.Polygon(
