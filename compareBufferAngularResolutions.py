@@ -220,7 +220,8 @@ if __name__ == "__main__":
     ax2.axhspan(
         99,
         101,
-        color = (0.0, 1.0, 0.0, 0.25),
+            alpha = 0.25,
+        facecolor = "green",
     )
     ax2.grid()
     ax2.legend(loc = "lower right")
