@@ -8,9 +8,10 @@ if __name__ == "__main__":
         import matplotlib
         matplotlib.rcParams.update(
             {
-                   "backend" : "Agg",                                           # NOTE: See https://matplotlib.org/stable/gallery/user_interfaces/canvasagg.html
-                "figure.dpi" : 300,
-                 "font.size" : 8,
+                       "backend" : "Agg",                                       # NOTE: See https://matplotlib.org/stable/gallery/user_interfaces/canvasagg.html
+                    "figure.dpi" : 300,
+                "figure.figsize" : (9.6, 7.2),                                  # NOTE: See https://github.com/Guymer/misc/blob/main/README.md#matplotlib-figure-sizes
+                     "font.size" : 8,
             }
         )
         import matplotlib.pyplot
@@ -69,7 +70,7 @@ if __name__ == "__main__":
     ship = shapely.geometry.point.Point(lon, lat)
 
     # Create figure ...
-    fg = matplotlib.pyplot.figure(figsize = (9, 6))
+    fg = matplotlib.pyplot.figure(figsize = (12.8, 7.2))
 
     # Create axes ...
     ax = fg.subplots(2, 2).flatten()

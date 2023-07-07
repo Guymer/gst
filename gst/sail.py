@@ -56,9 +56,10 @@ def sail(lon, lat, spd, /, *, cons = 2.0, dur = 1.0, freqLand = 100, freqPlot = 
         import matplotlib
         matplotlib.rcParams.update(
             {
-                   "backend" : "Agg",                                           # NOTE: See https://matplotlib.org/stable/gallery/user_interfaces/canvasagg.html
-                "figure.dpi" : 300,
-                 "font.size" : 8,
+                       "backend" : "Agg",                                       # NOTE: See https://matplotlib.org/stable/gallery/user_interfaces/canvasagg.html
+                    "figure.dpi" : 300,
+                "figure.figsize" : (9.6, 7.2),                                  # NOTE: See https://github.com/Guymer/misc/blob/main/README.md#matplotlib-figure-sizes
+                     "font.size" : 8,
             }
         )
         import matplotlib.pyplot
@@ -288,11 +289,11 @@ def sail(lon, lat, spd, /, *, cons = 2.0, dur = 1.0, freqLand = 100, freqPlot = 
 
     # Check if the user wants to make a plot ...
     if plot:
-        # Create figure ...
-        fg = matplotlib.pyplot.figure(figsize = (9, 6))
-
         # Check if the user wants a local plot (for local people) ...
         if local:
+            # Create figure ...
+            fg = matplotlib.pyplot.figure(figsize = (7.2, 7.2))
+
             # Create axis ...
             ax = pyguymer3.geo.add_top_down_axis(
                 fg,
@@ -311,6 +312,9 @@ def sail(lon, lat, spd, /, *, cons = 2.0, dur = 1.0, freqLand = 100, freqPlot = 
                 locs = range(-180, 190, 10),
             )
         else:
+            # Create figure ...
+            fg = matplotlib.pyplot.figure(figsize = (12.8, 7.2))
+
             # Create axis ...
             ax = fg.add_subplot(projection = cartopy.crs.Robinson())
 
