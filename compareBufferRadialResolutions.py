@@ -77,7 +77,7 @@ if __name__ == "__main__":
             encoding = "utf-8",
               stderr = subprocess.DEVNULL,
               stdout = subprocess.DEVNULL,
-             timeout = 4.0 * 60.0 * 60.0,
+             timeout = None,
         )
 
     # **************************************************************************
