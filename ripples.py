@@ -329,7 +329,7 @@ if __name__ == "__main__":
     shutil.move(vname, f"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}.mp4")
 
     # Set maximum sizes ...
-    # NOTE: By inspection, the PNG frames are 2700px wide.
+    # NOTE: By inspection, the PNG frames are 3,840 px wide.
     maxSizes = [512, 1024, 2048]                                                # [px]
 
     # Loop over maximum sizes ...
@@ -515,8 +515,8 @@ if __name__ == "__main__":
     shutil.move(vname, f"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}_NovayaZemlya.mp4")
 
     # Set maximum sizes ...
-    # NOTE: By inspection, the PNG frames are 1800px wide.
-    maxSizes = [512, 1024]                                                      # [px]
+    # NOTE: By inspection, the PNG frames are 2,160 px tall/wide.
+    maxSizes = [512, 1024, 2048]                                                # [px]
 
     # Loop over maximum sizes ...
     for maxSize in maxSizes:
@@ -701,8 +701,8 @@ if __name__ == "__main__":
     shutil.move(vname, f"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}_BocaDelGuafo.mp4")
 
     # Set maximum sizes ...
-    # NOTE: By inspection, the PNG frames are 1800px wide.
-    maxSizes = [512, 1024]                                                      # [px]
+    # NOTE: By inspection, the PNG frames are 2,160 px tall/wide.
+    maxSizes = [512, 1024, 2048]                                                # [px]
 
     # Loop over maximum sizes ...
     for maxSize in maxSizes:

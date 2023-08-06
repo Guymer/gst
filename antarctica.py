@@ -193,7 +193,7 @@ if __name__ == "__main__":
     )
 
     # Set maximum sizes ...
-    # NOTE: By inspection, the PNG frames are 3600px tall/wide.
+    # NOTE: By inspection, the PNG frames are 2,160 px tall/wide.
     maxSizes = [512, 1024, 2048]                                                # [px]
 
     # Loop over maximum sizes ...
