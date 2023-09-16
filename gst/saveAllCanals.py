@@ -20,10 +20,16 @@ def saveAllCanals(fname, /, *, debug = False, simp = 0.1, tol = 1.0e-10):
 
     # Import standard modules ...
     import gzip
+    import os
 
     # Import special modules ...
     try:
         import cartopy
+        cartopy.config.update(
+            {
+                "cache_dir" : os.path.expanduser("~/.local/share/cartopy_cache"),
+            }
+        )
     except:
         raise Exception("\"cartopy\" is not installed; run \"pip install --user Cartopy\"") from None
     try:

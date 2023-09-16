@@ -3,9 +3,17 @@
 # Use the proper idiom in the main module ...
 # NOTE: See https://docs.python.org/3.11/library/multiprocessing.html#the-spawn-and-forkserver-start-methods
 if __name__ == "__main__":
+    # Import standard modules ...
+    import os
+
     # Import special modules ...
     try:
         import cartopy
+        cartopy.config.update(
+            {
+                "cache_dir" : os.path.expanduser("~/.local/share/cartopy_cache"),
+            }
+        )
     except:
         raise Exception("\"cartopy\" is not installed; run \"pip install --user Cartopy\"") from None
     try:
