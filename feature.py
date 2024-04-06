@@ -66,10 +66,10 @@ if __name__ == "__main__":
                 fg,
                 loc[0],
                 loc[1],
-                100.0e3,
-                nrows = 2,
-                ncols = 3,
+                 dist = 100.0e3,
                 index = iloc + 1,
+                ncols = 3,
+                nrows = 2,
             )
         )
 
@@ -134,10 +134,10 @@ if __name__ == "__main__":
                 fg,
                 loc[0],
                 loc[1],
-                100.0e3,
-                nrows = 2,
-                ncols = 3,
+                 dist = 100.0e3,
                 index = iloc + 3 + 1,
+                ncols = 3,
+                nrows = 2,
             )
         )
 

@@ -91,10 +91,10 @@ if __name__ == "__main__":
         fg,
         lon,
         lat,
-        90.0e3,
-        nrows = 2,
-        ncols = 1,
+         dist = 90.0e3,
         index = 1,
+        ncols = 1,
+        nrows = 2,
     )
 
     # Create axis ...

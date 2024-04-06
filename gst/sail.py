@@ -304,7 +304,7 @@ def sail(lon, lat, spd, /, *, cons = 2.0, dur = 1.0, freqLand = 100, freqPlot = 
                 fg,
                 lon,
                 lat,
-                maxDist,
+                dist = maxDist,
             )
 
             # Configure axis ...

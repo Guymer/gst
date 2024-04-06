@@ -97,10 +97,9 @@ if __name__ == "__main__":
                         fg,
                           0.0,
                         -90.0,
-                        1.0e99,
-                        nrows = 3,
-                        ncols = 2,
                         index = i + 1,
+                        ncols = 2,
+                        nrows = 3,
                     )
                 )
 
