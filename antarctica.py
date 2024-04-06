@@ -87,22 +87,24 @@ if __name__ == "__main__":
                         projection = cartopy.crs.Robinson(),
                     )
                 )
+
+                # Configure axis ...
+                ax[i].set_global()
             else:
                 # Create axis ...
                 ax.append(
-                    fg.add_subplot(
-                        3,
-                        2,
-                        i + 1,
-                        projection = cartopy.crs.Orthographic(
-                            central_longitude =   0.0,
-                             central_latitude = -90.0,
-                        ),
+                    pyguymer3.geo.add_top_down_axis(
+                        fg,
+                          0.0,
+                        -90.0,
+                        1.0e99,
+                        nrows = 3,
+                        ncols = 2,
+                        index = i + 1,
                     )
                 )
 
             # Configure axis ...
-            ax[i].set_global()
             pyguymer3.geo.add_map_background(
                 ax[i],
                       name = "shaded-relief",
@@ -171,7 +173,7 @@ if __name__ == "__main__":
                     cartopy.crs.PlateCarree(),
                     edgecolor = "cyan",
                     facecolor = "none",
-                        linewidth = 1.0,
+                    linewidth = 1.0,
                 )
 
         # Configure figure ...
