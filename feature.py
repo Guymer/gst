@@ -62,7 +62,7 @@ if __name__ == "__main__":
     for iloc, loc in enumerate(locs):
         # Create axis ...
         ax.append(
-            pyguymer3.geo.add_top_down_axis(
+            pyguymer3.geo.add_topDown_axis(
                 fg,
                 loc[0],
                 loc[1],
@@ -130,7 +130,7 @@ if __name__ == "__main__":
     for iloc, loc in enumerate(locs):
         # Create axis ...
         ax.append(
-            pyguymer3.geo.add_top_down_axis(
+            pyguymer3.geo.add_topDown_axis(
                 fg,
                 loc[0],
                 loc[1],

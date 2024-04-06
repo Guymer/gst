@@ -300,7 +300,7 @@ def sail(lon, lat, spd, /, *, cons = 2.0, dur = 1.0, freqLand = 100, freqPlot = 
             fg = matplotlib.pyplot.figure(figsize = (7.2, 7.2))
 
             # Create axis ...
-            ax = pyguymer3.geo.add_top_down_axis(
+            ax = pyguymer3.geo.add_topDown_axis(
                 fg,
                 lon,
                 lat,

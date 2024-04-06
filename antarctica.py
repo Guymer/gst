@@ -93,7 +93,7 @@ if __name__ == "__main__":
             else:
                 # Create axis ...
                 ax.append(
-                    pyguymer3.geo.add_top_down_axis(
+                    pyguymer3.geo.add_topDown_axis(
                         fg,
                           0.0,
                         -90.0,
