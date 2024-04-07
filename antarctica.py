@@ -80,24 +80,21 @@ if __name__ == "__main__":
             if i % 2 == 0:
                 # Create axis ...
                 ax.append(
-                    fg.add_subplot(
-                        3,
-                        2,
-                        i + 1,
-                        projection = cartopy.crs.Robinson(),
+                    pyguymer3.geo.add_axis(
+                        fg,
+                        index = i + 1,
+                        ncols = 2,
+                        nrows = 3,
                     )
                 )
-
-                # Configure axis ...
-                ax[i].set_global()
             else:
                 # Create axis ...
                 ax.append(
-                    pyguymer3.geo.add_topDown_axis(
+                    pyguymer3.geo.add_axis(
                         fg,
-                          0.0,
-                        -90.0,
                         index = i + 1,
+                          lat = -90.0,
+                          lon =   0.0,
                         ncols = 2,
                         nrows = 3,
                     )
