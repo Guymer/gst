@@ -91,12 +91,12 @@ if __name__ == "__main__":
     fg = matplotlib.pyplot.figure(figsize = (4.0, 7.2))
 
     # Create axis ...
-    ax1 = pyguymer3.geo.add_topDown_axis(
+    ax1 = pyguymer3.geo.add_axis(
         fg,
-        lon,
-        lat,
-         dist = 90.0e3,
+         dist = 100.0e3,
         index = 1,
+          lat = lat,
+          lon = lon,
         ncols = 1,
         nrows = 2,
     )
