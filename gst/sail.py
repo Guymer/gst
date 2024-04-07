@@ -321,7 +321,7 @@ def sail(lon, lat, spd, /, *, cons = 2.0, dur = 1.0, freqLand = 100, freqPlot = 
             fg = matplotlib.pyplot.figure(figsize = (12.8, 7.2))
 
             # Create axis ...
-            ax = fg.add_subplot(projection = cartopy.crs.Robinson())
+            ax = pyguymer3.geo.add_axis(fg)
 
             # Configure axis ...
             ax.set_global()
