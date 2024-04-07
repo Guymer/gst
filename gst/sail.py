@@ -300,11 +300,11 @@ def sail(lon, lat, spd, /, *, cons = 2.0, dur = 1.0, freqLand = 100, freqPlot = 
             fg = matplotlib.pyplot.figure(figsize = (7.2, 7.2))
 
             # Create axis ...
-            ax = pyguymer3.geo.add_topDown_axis(
+            ax = pyguymer3.geo.add_axis(
                 fg,
-                lon,
-                lat,
                 dist = maxDist,
+                 lat = lat,
+                 lon = lon,
             )
 
             # Configure axis ...
@@ -324,7 +324,6 @@ def sail(lon, lat, spd, /, *, cons = 2.0, dur = 1.0, freqLand = 100, freqPlot = 
             ax = pyguymer3.geo.add_axis(fg)
 
             # Configure axis ...
-            ax.set_global()
             pyguymer3.geo.add_horizontal_gridlines(
                 ax,
                 locs = range(-90, 135, 45),

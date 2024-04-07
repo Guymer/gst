@@ -215,7 +215,6 @@ if __name__ == "__main__":
         ax = pyguymer3.geo.add_axis(fg)
 
         # Configure axis ...
-        ax.set_global()
         pyguymer3.geo.add_horizontal_gridlines(
             ax,
             locs = range(-90, 135, 45),
@@ -404,11 +403,11 @@ if __name__ == "__main__":
         fg = matplotlib.pyplot.figure(figsize = (7.2, 7.2))
 
         # Create axis ...
-        ax = pyguymer3.geo.add_topDown_axis(
+        ax = pyguymer3.geo.add_axis(
             fg,
-            60.0,
-            73.5,
             dist = 400.0e3,
+             lat = 73.5,
+             lon = 60.0,
         )
 
         # Configure axis ...
@@ -590,11 +589,11 @@ if __name__ == "__main__":
         fg = matplotlib.pyplot.figure(figsize = (7.2, 7.2))
 
         # Create axis ...
-        ax = pyguymer3.geo.add_topDown_axis(
+        ax = pyguymer3.geo.add_axis(
             fg,
-            -74.0,
-            -44.0,
             dist = 300.0e3,
+             lat = -44.0,
+             lon = -74.0,
         )
 
         # Configure axis ...
