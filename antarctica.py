@@ -106,14 +106,6 @@ if __name__ == "__main__":
                       name = "shaded-relief",
                 resolution = "large8192px",
             )
-            pyguymer3.geo.add_horizontal_gridlines(
-                ax[i],
-                locs = range(-90, 135, 45),
-            )
-            pyguymer3.geo.add_vertical_gridlines(
-                ax[i],
-                locs = range(-180, 225, 45),
-            )
             pyguymer3.geo.add_coastlines(
                 ax[i],
                  colorName = "red",

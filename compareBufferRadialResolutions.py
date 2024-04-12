@@ -114,14 +114,6 @@ if __name__ == "__main__":
     #       collections of land then I will just use the raw GSHHG dataset
     #       instead.
     pyguymer3.geo.add_map_background(ax1, resolution = "large8192px")
-    pyguymer3.geo.add_horizontal_gridlines(
-        ax1,
-        locs = [50.0, 50.5, 51.0],
-    )
-    pyguymer3.geo.add_vertical_gridlines(
-        ax1,
-        locs = [-2.0, -1.5, -1.0, -0.5, 0.0],
-    )
     pyguymer3.geo.add_coastlines(
         ax1,
         colorName = "red",

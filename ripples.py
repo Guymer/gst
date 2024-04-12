@@ -215,16 +215,6 @@ if __name__ == "__main__":
         ax = pyguymer3.geo.add_axis(fg)
 
         # Configure axis ...
-        pyguymer3.geo.add_horizontal_gridlines(
-            ax,
-            locs = range(-90, 135, 45),
-        )
-        pyguymer3.geo.add_vertical_gridlines(
-            ax,
-            locs = range(-180, 225, 45),
-        )
-
-        # Configure axis ...
         pyguymer3.geo.add_map_background(
             ax,
                   name = "shaded-relief",
@@ -411,16 +401,6 @@ if __name__ == "__main__":
         )
 
         # Configure axis ...
-        pyguymer3.geo.add_horizontal_gridlines(
-            ax,
-            locs = range(-90, 91, 1),
-        )
-        pyguymer3.geo.add_vertical_gridlines(
-            ax,
-            locs = range(-180, 181, 1),
-        )
-
-        # Configure axis ...
         pyguymer3.geo.add_map_background(
             ax,
                   name = "shaded-relief",
@@ -594,16 +574,6 @@ if __name__ == "__main__":
             dist = 300.0e3,
              lat = -44.0,
              lon = -74.0,
-        )
-
-        # Configure axis ...
-        pyguymer3.geo.add_horizontal_gridlines(
-            ax,
-            locs = range(-90, 91, 1),
-        )
-        pyguymer3.geo.add_vertical_gridlines(
-            ax,
-            locs = range(-180, 181, 1),
         )
 
         # Configure axis ...

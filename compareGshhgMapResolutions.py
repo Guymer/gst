@@ -86,14 +86,6 @@ if __name__ == "__main__":
                   name = "shaded-relief",
             resolution = "large8192px",
         )
-        pyguymer3.geo.add_horizontal_gridlines(
-            ax,
-            locs = [50.0, 50.5, 51.0],
-        )
-        pyguymer3.geo.add_vertical_gridlines(
-            ax,
-            locs = [-2.0, -1.5, -1.0, -0.5, 0.0],
-        )
 
         # Deduce Shapefile name ...
         sfile = cartopy.io.shapereader.gshhs(

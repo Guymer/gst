@@ -72,14 +72,6 @@ if __name__ == "__main__":
               name = "shaded-relief",
         resolution = "large8192px",
     )
-    pyguymer3.geo.add_horizontal_gridlines(
-        ax,
-        locs = range(-90, 91, 1),
-    )
-    pyguymer3.geo.add_vertical_gridlines(
-        ax,
-        locs = range(-180, 181, 1),
-    )
 
     # **************************************************************************
 
