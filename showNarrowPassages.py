@@ -140,12 +140,14 @@ if __name__ == "__main__":
             ax.append(
                 pyguymer3.geo.add_axis(
                     fg,
-                     dist = 100.0e3,
-                    index = iloc + 1,
-                      lat = loc[1],
-                      lon = loc[0],
-                    ncols = 3,
-                    nrows = 3,
+                    coastlines_edgecolor = "white",
+                    coastlines_linewidth = 1.0,
+                                    dist = 100.0e3,
+                                   index = iloc + 1,
+                                     lat = loc[1],
+                                     lon = loc[0],
+                                   ncols = 3,
+                                   nrows = 3,
                 )
             )
 
@@ -195,12 +197,6 @@ if __name__ == "__main__":
             )
 
             # Configure axis ...
-            pyguymer3.geo.add_coastlines(
-                ax[iloc],
-                 colorName = "white",
-                 linewidth = 1.0,
-                resolution = "f",
-            )
             ax[iloc].set_title(f"lon={loc[0]:+.2f}°, lat={loc[1]:+.2f}°")
 
         # Configure figure ...
