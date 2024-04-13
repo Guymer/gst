@@ -73,9 +73,10 @@ if __name__ == "__main__":
         # Create axis ...
         ax = pyguymer3.geo.add_axis(
             fg,
-            dist = 100.0e3,
-             lat = lat,
-             lon = lon,
+            add_coastlines = False,
+                      dist = 100.0e3,
+                       lat = lat,
+                       lon = lon,
         )
 
         # Configure axis ...

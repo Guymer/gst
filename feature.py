@@ -127,12 +127,13 @@ if __name__ == "__main__":
         ax.append(
             pyguymer3.geo.add_axis(
                 fg,
-                 dist = 100.0e3,
-                index = iloc + 3 + 1,
-                  lat = loc[1],
-                  lon = loc[0],
-                ncols = 3,
-                nrows = 2,
+                add_coastlines = False,
+                          dist = 100.0e3,
+                         index = iloc + 3 + 1,
+                           lat = loc[1],
+                           lon = loc[0],
+                         ncols = 3,
+                         nrows = 2,
             )
         )
 
