@@ -212,7 +212,14 @@ if __name__ == "__main__":
         fg = matplotlib.pyplot.figure(figsize = (12.8, 7.2))
 
         # Create axis ...
-        ax = pyguymer3.geo.add_axis(fg)
+        # NOTE: Really, I should be plotting "allLands" to be consistent with
+        #       the ships, however, as each ship (potentially) is using
+        #       different collections of land then I will just use the raw GSHHG
+        #       dataset instead.
+        ax = pyguymer3.geo.add_axis(
+            fg,
+            coastlines_resolution = res,
+        )
 
         # Configure axis ...
         pyguymer3.geo.add_map_background(
@@ -285,11 +292,6 @@ if __name__ == "__main__":
         dur = 1000.0 * float(dist) / (1852.0 * 20.0 * 24.0)                     # [day]
 
         # Configure axis ...
-        # NOTE: Really, I should be plotting "allLands" to be consistent with
-        #       the ships, however, as each ship (potentially) is using
-        #       different collections of land then I will just use the raw GSHHG
-        #       dataset instead.
-        pyguymer3.geo.add_coastlines(ax, resolution = res)
         ax.legend(
             lines,
             labels,
@@ -396,11 +398,16 @@ if __name__ == "__main__":
         fg = matplotlib.pyplot.figure(figsize = (7.2, 7.2))
 
         # Create axis ...
+        # NOTE: Really, I should be plotting "allLands" to be consistent with
+        #       the ships, however, as each ship (potentially) is using
+        #       different collections of land then I will just use the raw GSHHG
+        #       dataset instead.
         ax = pyguymer3.geo.add_axis(
             fg,
-            dist = 400.0e3,
-             lat = 73.5,
-             lon = 60.0,
+            coastlines_resolution = res,
+                             dist = 400.0e3,
+                              lat = 73.5,
+                              lon = 60.0,
         )
 
         # Configure axis ...
@@ -461,11 +468,6 @@ if __name__ == "__main__":
         dur = 1000.0 * float(dist) / (1852.0 * 20.0 * 24.0)                     # [day]
 
         # Configure axis ...
-        # NOTE: Really, I should be plotting "allLands" to be consistent with
-        #       the ships, however, as each ship (potentially) is using
-        #       different collections of land then I will just use the raw GSHHG
-        #       dataset instead.
-        pyguymer3.geo.add_coastlines(ax, resolution = res)
         ax.legend(
             lines,
             labels,
@@ -572,11 +574,16 @@ if __name__ == "__main__":
         fg = matplotlib.pyplot.figure(figsize = (7.2, 7.2))
 
         # Create axis ...
+        # NOTE: Really, I should be plotting "allLands" to be consistent with
+        #       the ships, however, as each ship (potentially) is using
+        #       different collections of land then I will just use the raw GSHHG
+        #       dataset instead.
         ax = pyguymer3.geo.add_axis(
             fg,
-            dist = 300.0e3,
-             lat = -44.0,
-             lon = -74.0,
+            coastlines_resolution = res,
+                             dist = 300.0e3,
+                              lat = -44.0,
+                              lon = -74.0,
         )
 
         # Configure axis ...
@@ -637,11 +644,6 @@ if __name__ == "__main__":
         dur = 1000.0 * float(dist) / (1852.0 * 20.0 * 24.0)                     # [day]
 
         # Configure axis ...
-        # NOTE: Really, I should be plotting "allLands" to be consistent with
-        #       the ships, however, as each ship (potentially) is using
-        #       different collections of land then I will just use the raw GSHHG
-        #       dataset instead.
-        pyguymer3.geo.add_coastlines(ax, resolution = res)
         ax.legend(
             lines,
             labels,
