@@ -142,6 +142,9 @@ if __name__ == "__main__":
     # **************************************************************************
 
     # Plot the central location ...
+    # NOTE: As of 5/Dec/2023, the default "zorder" of the coastlines is 1.5, the
+    #       default "zorder" of the gridlines is 2.0 and the default "zorder" of
+    #       the scattered points is 1.0.
     ax.scatter(
         [lon],
         [lat],
