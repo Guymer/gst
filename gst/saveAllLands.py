@@ -161,11 +161,14 @@ def saveAllLands(fname, dname, /, *, allCanals = None, debug = False, dist = -1.
 
     # Loop over levels ...
     for level in levels:
-        # Find file containing all the coastlines as [Multi]Polygons ...
+        # Deduce Shapefile name (catching missing datasets) ...
         sfile = cartopy.io.shapereader.gshhs(
             level = level,
             scale = res,
         )
+        if os.path.basename(sfile) != f"GSHHS_{res}_L{level:d}.shp":
+            print(f" > Skipping \"{sfile}\" (filename does not match request).")
+            continue
 
         # **********************************************************************
 

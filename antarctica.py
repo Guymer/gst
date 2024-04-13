@@ -141,11 +141,14 @@ if __name__ == "__main__":
 
                 # Loop over levels ...
                 for level in [5, 6]:
-                    # Find the Shapefile ...
+                    # Deduce Shapefile name (catching missing datasets) ...
                     sfile = cartopy.io.shapereader.gshhs(
                         level = level,
                         scale = res,
                     )
+                    if os.path.basename(sfile) != f"GSHHS_{res}_L{level:d}.shp":
+                        print(f" > Skipping \"{sfile}\" (filename does not match request).")
+                        continue
 
                     # Loop over records ...
                     for record in cartopy.io.shapereader.Reader(sfile).records():
