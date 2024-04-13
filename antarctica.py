@@ -82,9 +82,10 @@ if __name__ == "__main__":
                 ax.append(
                     pyguymer3.geo.add_axis(
                         fg,
-                        index = i + 1,
-                        ncols = 2,
-                        nrows = 3,
+                        add_coastlines = False,
+                                 index = i + 1,
+                                 ncols = 2,
+                                 nrows = 3,
                     )
                 )
             else:
@@ -92,11 +93,12 @@ if __name__ == "__main__":
                 ax.append(
                     pyguymer3.geo.add_axis(
                         fg,
-                        index = i + 1,
-                          lat = -90.0,
-                          lon =   0.0,
-                        ncols = 2,
-                        nrows = 3,
+                        add_coastlines = False,
+                                 index = i + 1,
+                                   lat = -90.0,
+                                   lon =   0.0,
+                                 ncols = 2,
+                                 nrows = 3,
                     )
                 )
 
@@ -106,9 +108,9 @@ if __name__ == "__main__":
                       name = "shaded-relief",
                 resolution = "large8192px",
             )
-            pyguymer3.geo.add_coastlines(
+            pyguymer3.geo._add_coastlines(
                 ax[i],
-                 colorName = "red",
+                 edgecolor = "red",
                     levels = [1],
                  linewidth = 1.0,
                 resolution = res,
@@ -117,18 +119,18 @@ if __name__ == "__main__":
             # Check if it is top, middle or bottom ...
             if i // 2 == 0:
                 # Draw Antarctica ...
-                pyguymer3.geo.add_coastlines(
+                pyguymer3.geo._add_coastlines(
                     ax[i],
-                     colorName = "green",
+                     edgecolor = "green",
                         levels = [5],
                      linewidth = 1.0,
                     resolution = res,
                 )
             elif i // 2 == 1:
                 # Draw Antarctica ...
-                pyguymer3.geo.add_coastlines(
+                pyguymer3.geo._add_coastlines(
                     ax[i],
-                     colorName = "blue",
+                     edgecolor = "blue",
                         levels = [6],
                      linewidth = 1.0,
                     resolution = res,
