@@ -84,38 +84,36 @@ if __name__ == "__main__":
     # **************************************************************************
 
     # Create figure ...
-    fg = matplotlib.pyplot.figure(figsize = (4.0, 7.2))
+    fg = matplotlib.pyplot.figure(figsize = (12.8, 7.2))
 
     # Create axis ...
-    ax1 = pyguymer3.geo.add_axis(
-        fg,
-         dist = 100.0e3,
-        index = 1,
-          lat = lat,
-          lon = lon,
-        ncols = 1,
-        nrows = 2,
-    )
-
-    # Create axis ...
-    ax2 = fg.add_subplot(
-        2,
-        1,
-        2,
-    )
-
-    # Configure axis ...
     # NOTE: Really, I should be plotting "allLands" to be consistent with the
     #       ships, however, as each ship (potentially) is using different
     #       collections of land then I will just use the raw GSHHG dataset
     #       instead.
-    pyguymer3.geo.add_map_background(ax1, resolution = "large8192px")
-    pyguymer3.geo.add_coastlines(
-        ax1,
-        colorName = "red",
-         faceOpac = 0.5,
-        linewidth = 1.0,
+    ax1 = pyguymer3.geo.add_axis(
+        fg,
+         coastlines_edgecolor = (1.0, 0.0, 0.0, 1.0),
+         coastlines_facecolor = (1.0, 0.0, 0.0, 0.5),
+         coastlines_linewidth = 1.0,
+        coastlines_resolution = "i",
+                         dist = 100.0e3,
+                        index = 1,
+                          lat = lat,
+                          lon = lon,
+                        ncols = 2,
+                        nrows = 1,
     )
+
+    # Create axis ...
+    ax2 = fg.add_subplot(
+        1,
+        2,
+        2,
+    )
+
+    # Configure axis ...
+    pyguymer3.geo.add_map_background(ax1, resolution = "large8192px")
 
     # **************************************************************************
 
@@ -149,7 +147,7 @@ if __name__ == "__main__":
                 ship = shapely.wkb.loads(gzObj.read())
 
             # Populate dictionary ...
-            key = f"{dist:,d}km"
+            key = f"{dist:,d}"
             if key not in data:
                 data[key] = {
                     "nang" : [],                                                # [#]
@@ -168,9 +166,10 @@ if __name__ == "__main__":
             )
 
             # Check if it is the first distance for this number of angles ...
-            if f"{nang:d} Angles" not in labels:
+            label = f"{nang:,d}"
+            if label not in labels:
                 # Add an entry to the legend ...
-                labels.append(f"{nang:d} Angles")
+                labels.append(label)
                 lines.append(matplotlib.lines.Line2D([], [], color = color))
 
     # Plot the starting location ...
@@ -214,8 +213,9 @@ if __name__ == "__main__":
     ax1.legend(
         lines,
         labels,
-         loc = "upper center",
-        ncol = 3,
+          loc = "upper center",
+         ncol = 3,
+        title = "Number Of Angles",
     )
 
     # Configure axis ...
@@ -226,7 +226,10 @@ if __name__ == "__main__":
         facecolor = "green",
     )
     ax2.grid()
-    ax2.legend(loc = "lower right")
+    ax2.legend(
+          loc = "lower right",
+        title = "Distances [km]",
+    )
     ax2.semilogx()
     ax2.set_xlabel("Number Of Angles")
     # ax2.set_xticks(                                                             # MatPlotLib ≥ 3.5.0

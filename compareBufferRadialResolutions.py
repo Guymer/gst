@@ -56,7 +56,7 @@ if __name__ == "__main__":
     # **************************************************************************
 
     # Loop over precisions ...
-    for prec in [625, 1250, 2500, 5000, 10000, 20000]:
+    for prec in [625, 1250, 2500, 5000, 10000]:
         # Create short-hand ...
         # NOTE: Say that 40,000 metres takes 1 hour at 20 knots.
         freq = 24 * 40000 // prec                                               # [#]
@@ -88,38 +88,36 @@ if __name__ == "__main__":
     # **************************************************************************
 
     # Create figure ...
-    fg = matplotlib.pyplot.figure(figsize = (4.0, 7.2))
+    fg = matplotlib.pyplot.figure(figsize = (12.8, 7.2))
 
     # Create axis ...
-    ax1 = pyguymer3.geo.add_axis(
-        fg,
-         dist = 100.0e3,
-        index = 1,
-          lat = lat,
-          lon = lon,
-        ncols = 1,
-        nrows = 2,
-    )
-
-    # Create axis ...
-    ax2 = fg.add_subplot(
-        2,
-        1,
-        2,
-    )
-
-    # Configure axis ...
     # NOTE: Really, I should be plotting "allLands" to be consistent with the
     #       ships, however, as each ship (potentially) is using different
     #       collections of land then I will just use the raw GSHHG dataset
     #       instead.
-    pyguymer3.geo.add_map_background(ax1, resolution = "large8192px")
-    pyguymer3.geo.add_coastlines(
-        ax1,
-        colorName = "red",
-         faceOpac = 0.5,
-        linewidth = 1.0,
+    ax1 = pyguymer3.geo.add_axis(
+        fg,
+         coastlines_edgecolor = (1.0, 0.0, 0.0, 1.0),
+         coastlines_facecolor = (1.0, 0.0, 0.0, 0.5),
+         coastlines_linewidth = 1.0,
+        coastlines_resolution = "i",
+                         dist = 100.0e3,
+                        index = 1,
+                          lat = lat,
+                          lon = lon,
+                        ncols = 2,
+                        nrows = 1,
     )
+
+    # Create axis ...
+    ax2 = fg.add_subplot(
+        1,
+        2,
+        2,
+    )
+
+    # Configure axis ...
+    pyguymer3.geo.add_map_background(ax1, resolution = "large8192px")
 
     # **************************************************************************
 
@@ -129,7 +127,7 @@ if __name__ == "__main__":
     lines = []
 
     # Loop over precisions ...
-    for iprec, prec in enumerate([625, 1250, 2500, 5000, 10000, 20000]):
+    for iprec, prec in enumerate([625, 1250, 2500, 5000, 10000]):
         # Create short-hands ...
         # NOTE: Say that 40,000 metres takes 1 hour at 20 knots.
         color = f"C{iprec:d}"
@@ -158,7 +156,7 @@ if __name__ == "__main__":
                 ship = shapely.wkb.loads(gzObj.read())
 
             # Populate dictionary ...
-            key = f"{dist:,d}km"
+            key = f"{dist:,d}"
             if key not in data:
                 data[key] = {
                     "prec" : [],                                                # [m]
@@ -177,9 +175,10 @@ if __name__ == "__main__":
             )
 
             # Check if it is the first distance for this precision ...
-            if f"{prec:,d}m" not in labels:
+            label = f"{prec:,d}"
+            if label not in labels:
                 # Add an entry to the legend ...
-                labels.append(f"{prec:,d}m")
+                labels.append(label)
                 lines.append(matplotlib.lines.Line2D([], [], color = color))
 
     # Plot the starting location ...
@@ -223,8 +222,9 @@ if __name__ == "__main__":
     ax1.legend(
         lines,
         labels,
-         loc = "upper center",
-        ncol = 3,
+          loc = "upper center",
+         ncol = 3,
+        title = "Precision [m]",
     )
 
     # Configure axis ...
@@ -235,15 +235,18 @@ if __name__ == "__main__":
         facecolor = "green",
     )
     ax2.grid()
-    ax2.legend(loc = "lower right")
+    ax2.legend(
+          loc = "lower left",
+        title = "Distances [km]",
+    )
     ax2.semilogx()
     ax2.set_xlabel("Precision [m]")
     # ax2.set_xticks(                                                             # MatPlotLib ≥ 3.5.0
-    #     [625, 1250, 2500, 5000, 10000, 20000],                                  # MatPlotLib ≥ 3.5.0
-    #     labels = [625, 1250, 2500, 5000, 10000, 20000],                         # MatPlotLib ≥ 3.5.0
+    #     [625, 1250, 2500, 5000, 10000],                                         # MatPlotLib ≥ 3.5.0
+    #     labels = [625, 1250, 2500, 5000, 10000],                                # MatPlotLib ≥ 3.5.0
     # )                                                                           # MatPlotLib ≥ 3.5.0
-    ax2.set_xticks([625, 1250, 2500, 5000, 10000, 20000])                       # MatPlotLib < 3.5.0
-    ax2.set_xticklabels([625, 1250, 2500, 5000, 10000, 20000])                  # MatPlotLib < 3.5.0
+    ax2.set_xticks([625, 1250, 2500, 5000, 10000])                              # MatPlotLib < 3.5.0
+    ax2.set_xticklabels([625, 1250, 2500, 5000, 10000])                         # MatPlotLib < 3.5.0
     ax2.set_ylabel("Euclidean Area [%]")
     ax2.set_ylim(75, 102)
     ax2.set_yticks(range(75, 103))
