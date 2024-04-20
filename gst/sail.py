@@ -45,6 +45,7 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
     """
 
     # Import standard modules ...
+    import datetime
     import gzip
     import os
     import time
@@ -171,7 +172,14 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
     # Figure out how many steps are going to be required ...
     nstep = round(maxDist / prec)                                               # [#]
 
-    print(f"Each sailing iteration is {prec / (24.0 * 1852.0 * spd):,.4f} days for the vessel.")
+    # Find how long an iteration will cover ...
+    # NOTE: Rounding to the nearest second ensures that the string will be
+    #       pretty.
+    sailDur = prec / (1852.0 * spd)                                             # [hr]
+    sailDur = 3600.0 * sailDur                                                  # [s]
+    sailDur = datetime.timedelta(seconds = round(sailDur))
+
+    print(f"Each sailing iteration is {str(sailDur)} for the vessel.")
 
     # **************************************************************************
 
