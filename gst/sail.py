@@ -215,7 +215,7 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
         savedAllLands = saveAllLands(
             allLandsName,
             f"{output1}/allLands",
-             debug = False,
+             debug = debug,
             levels = (1, 5, 6),
                res = res,
               simp = simp,
@@ -234,7 +234,7 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
         # Make the compressed WKB file of all of the canals ...
         savedAllCanals = saveAllCanals(
             allCanalsName,
-            debug = False,
+            debug = debug,
              simp = simp,
               tol = tol,
         )
@@ -265,7 +265,7 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
             allLandsName,
             f"{output2}/allLands",
             allCanals = allCanals,
-                debug = False,
+                debug = debug,
                  dist = prec,
                  fill = fill,
                levels = (1, 5, 6),
@@ -421,7 +421,7 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
                         removeLands(
                             poly.exterior,
                             relevantLands,
-                            debug = False,
+                            debug = debug,
                              simp = -1.0,
                         ),
                         onlyValid = False,
@@ -431,7 +431,7 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
                             removeLands(
                                 interior,
                                 relevantLands,
-                                debug = False,
+                                debug = debug,
                                  simp = -1.0,
                             ),
                             onlyValid = False,
@@ -480,7 +480,7 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
                 ship = removeLands(
                     ship,
                     relevantLands,
-                    debug = False,
+                    debug = debug,
                      simp = simp,
                 )
                 ship = removeInteriorRingsWhichAreLand(
@@ -510,7 +510,7 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
                 ship = removeLands(
                     ship,
                     relevantLands,
-                    debug = False,
+                    debug = debug,
                      simp = -1.0,
                 )
                 ship = removeInteriorRingsWhichAreLand(
