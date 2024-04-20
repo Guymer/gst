@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # Define function ...
-def sail(lon, lat, spd, /, *, cons = 2.0, dur = 1.0, freqLand = 100, freqPlot = 25, freqSimp = 25, local = False, nang = 9, plot = False, prec = 10000.0, res = "c", tol = 1.0e-10):
+def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 100, freqPlot = 25, freqSimp = 25, local = False, nang = 9, plot = False, prec = 10000.0, res = "c", tol = 1.0e-10):
     """Sail from a point
 
     This function reads in a starting coordinate (in degrees) and a sailing
@@ -18,6 +18,8 @@ def sail(lon, lat, spd, /, *, cons = 2.0, dur = 1.0, freqLand = 100, freqPlot = 
         the speed of the vessel (in knots)
     cons : float, optional
         the amount of conservatism to add to the calculation
+    debug : bool, optional
+        print debug messages
     dur : float, optional
         the duration of the voyage (in days)
     freqLand : int, optional
@@ -146,16 +148,18 @@ def sail(lon, lat, spd, /, *, cons = 2.0, dur = 1.0, freqLand = 100, freqPlot = 
                 )
             ),
             +1.0,
-            tol = tol,
+            debug = debug,
+              tol = tol,
         )
     else:
         maxShip = pyguymer3.geo.buffer(
             ship,
             maxDist,
-            fill = +1.0,
-            nang = 361,
-            simp = -1.0,
-             tol = tol,
+            debug = debug,
+             fill = +1.0,
+             nang = 361,
+             simp = -1.0,
+              tol = tol,
         )
 
     # Check if the user is being far too coarse ...
@@ -368,10 +372,11 @@ def sail(lon, lat, spd, /, *, cons = 2.0, dur = 1.0, freqLand = 100, freqPlot = 
                     ship,
                     cons * freqLand * prec,
                     allLands,
-                    fill = +1.0,
-                    nang = 361,
-                    simp = -1.0,
-                     tol = tol,
+                    debug = debug,
+                     fill = +1.0,
+                     nang = 361,
+                     simp = -1.0,
+                      tol = tol,
                 )
 
                 # Print timer ...
@@ -465,10 +470,11 @@ def sail(lon, lat, spd, /, *, cons = 2.0, dur = 1.0, freqLand = 100, freqPlot = 
                 limit = pyguymer3.geo.buffer(
                     limit,
                     prec,
-                    fill = fill,
-                    nang = nang,
-                    simp = simp,
-                     tol = tol,
+                    debug = debug,
+                     fill = fill,
+                     nang = nang,
+                     simp = simp,
+                      tol = tol,
                 )
                 ship = shapely.ops.unary_union([limit, ship])
                 ship = removeLands(
@@ -494,10 +500,11 @@ def sail(lon, lat, spd, /, *, cons = 2.0, dur = 1.0, freqLand = 100, freqPlot = 
                 limit = pyguymer3.geo.buffer(
                     limit,
                     prec,
-                    fill = fill,
-                    nang = nang,
-                    simp = -1.0,
-                     tol = tol,
+                    debug = debug,
+                     fill = fill,
+                     nang = nang,
+                     simp = -1.0,
+                      tol = tol,
                 )
                 ship = shapely.ops.unary_union([limit, ship])
                 ship = removeLands(

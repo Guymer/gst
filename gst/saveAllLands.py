@@ -145,10 +145,11 @@ def saveAllLands(fname, dname, /, *, allCanals = None, debug = False, dist = -1.
                     pyguymer3.geo.buffer(
                         line,
                         dist,
-                        fill = fill,
-                        nang = nang,
-                        simp = simp,
-                         tol = tol,
+                        debug = debug,
+                         fill = fill,
+                         nang = nang,
+                         simp = simp,
+                          tol = tol,
                     )
                 )
         else:
@@ -197,6 +198,7 @@ def saveAllLands(fname, dname, /, *, allCanals = None, debug = False, dist = -1.
                     poly = pyguymer3.geo.buffer(
                         poly,
                         dist,
+                                debug = debug,
                                  fill = fill,
                         keepInteriors = False,
                                  nang = nang,

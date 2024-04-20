@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # Define function ...
-def saveRelevantLands(fname, ship, dist, allLands, /, *, fill = 1.0, nang = 9, simp = 0.1, tol = 1.0e-10):
+def saveRelevantLands(fname, ship, dist, allLands, /, *, debug = False, fill = 1.0, nang = 9, simp = 0.1, tol = 1.0e-10):
     """Save relevant land to a compressed WKB file.
 
     Parameters
@@ -14,6 +14,8 @@ def saveRelevantLands(fname, ship, dist, allLands, /, *, fill = 1.0, nang = 9, s
         the distance to sail the ship by
     allLands : list of shapely.geometry.polygon.Polygon
         a list of Polygons of land to sail the ship around
+    debug : bool, optional
+        print debug messages
     fill : float, optional
         how many intermediary points are added to fill in the straight lines
         which connect the points; negative values disable filling
@@ -57,10 +59,11 @@ def saveRelevantLands(fname, ship, dist, allLands, /, *, fill = 1.0, nang = 9, s
     maxShip = pyguymer3.geo.buffer(
         ship,
         dist,
-        fill = fill,
-        nang = nang,
-        simp = simp,
-         tol = tol,
+        debug = debug,
+         fill = fill,
+         nang = nang,
+         simp = simp,
+          tol = tol,
     )
 
     # **************************************************************************

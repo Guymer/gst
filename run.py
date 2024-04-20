@@ -41,6 +41,11 @@ if __name__ == "__main__":
            type = float,
     )
     parser.add_argument(
+        "--debug",
+        action = "store_true",
+          help = "print debug messages",
+    )
+    parser.add_argument(
         "--duration",
         default = 1.0,
            dest = "dur",
@@ -110,6 +115,7 @@ if __name__ == "__main__":
         args.lat,
         args.spd,
             cons = args.cons,
+           debug = args.debug,
              dur = args.dur,
         freqLand = args.freqLand,
         freqPlot = args.freqPlot,
