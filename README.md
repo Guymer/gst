@@ -57,7 +57,7 @@ python3.11 run.py -1.0 +50.5 20.0 --duration 0.01 --nang 33 --precision 1250.0
 
 ## Maximum Sailing Distance
 
-To very quickly find out how far a vessel can sail, try running something like:
+To very quickly find out how far a vessel can sail from Portsmouth Harbour at 20 knots, try running something like:
 
 ```sh
 python3.11 run.py      \
