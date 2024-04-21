@@ -107,9 +107,9 @@ Alternatively, if you just want to marvel at the ferries weaving around the isla
 ```sh
 python3.11 run.py           \
     +18.079 +59.324 20.0    \   # depart Slussen Ferry Terminal at 20 knots
-    --duration 0.1          \   # sail for 2.4 hours (20 knots * 0.1 days = 88.90 kilometres)
-    --freqLand 10000        \   # re-evaluate land every 100 kilometres (i.e., never)
-    --freqPlot 100          \   # plot every 1 kilometre
+    --duration 0.03         \   # sail for ~¾ hour (20 knots * 0.03 days = 26.67 kilometres)
+    --freqLand 3000         \   # re-evaluate land every 30 kilometres (i.e., never)
+    --freqPlot 10           \   # plot every 100 metres
     --local                 \   # only plot the local area
     --nang 33               \   # turn corners smoothly
     --plot                  \   # make a plot
