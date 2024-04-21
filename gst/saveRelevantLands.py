@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
 
 # Define function ...
-def saveRelevantLands(fname, ship, dist, allLands, /, *, debug = False, fill = 1.0, nang = 9, simp = 0.1, tol = 1.0e-10):
+def saveRelevantLands(wName, ship, dist, allLands, /, *, debug = False, fill = 1.0, nang = 9, simp = 0.1, tol = 1.0e-10):
     """Save relevant land to a compressed WKB file.
+
+    Given a ship and a sailing distance, save a compressed WKB file of all of
+    the possible land (surveyed from a list of Polygons) that the ship may
+    encounter whilst sailing.
 
     Parameters
     ----------
-    fname : string
+    wName : string
         the file name of the compressed WKB file
     ship : shapely.geometry.polygon.Polygon, shapely.geometry.multipolygon.MultiPolygon
         the ship to sail
@@ -55,6 +59,9 @@ def saveRelevantLands(fname, ship, dist, allLands, /, *, debug = False, fill = 1
 
     # **************************************************************************
 
+    # Create short-hand ...
+    gName = f'{wName.removesuffix(".wkb.gz")}.geojson'
+
     # Calculate the maximum possible sailing distance (ignoring all land) ...
     maxShip = pyguymer3.geo.buffer(
         ship,
@@ -90,11 +97,11 @@ def saveRelevantLands(fname, ship, dist, allLands, /, *, debug = False, fill = 1
     polys = shapely.ops.unary_union(polys).simplify(tol)
 
     # Save MultiPolygon ...
-    with gzip.open(fname, mode = "wb", compresslevel = 9) as gzObj:
+    with gzip.open(wName, mode = "wb", compresslevel = 9) as gzObj:
         gzObj.write(shapely.wkb.dumps(polys))
 
     # Save MultiPolygon ...
-    with open(f'{fname.removesuffix(".wkb.gz")}.geojson', "wt", encoding = "utf-8") as fObj:
+    with open(gName, "wt", encoding = "utf-8") as fObj:
         geojson.dump(
             polys,
             fObj,
