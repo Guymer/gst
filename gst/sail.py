@@ -191,14 +191,20 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
         os.mkdir(f"{output1}/allLands")
 
     # Determine second output folder name and make it if it is missing ...
-    output2 = f"{output1}/nang={nang:d}_prec={prec:.2e}"
+    if local:
+        output2 = f"{output1}/local={repr(local)[0]}_nang={nang:d}_prec={prec:.2e}_lon={lon:+011.6f}_lat={lat:+010.6f}_dur={dur:.2f}_spd={spd:.1f}"
+    else:
+        output2 = f"{output1}/local={repr(local)[0]}_nang={nang:d}_prec={prec:.2e}"
     if not os.path.exists(output2):
         os.mkdir(output2)
     if not os.path.exists(f"{output2}/allLands"):
         os.mkdir(f"{output2}/allLands")
 
     # Determine third output folder name and make it if it is missing ...
-    output3 = f"{output2}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}"
+    if local:
+        output3 = f"{output2}/freqLand={freqLand:d}_freqSimp={freqSimp:d}"
+    else:
+        output3 = f"{output2}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}"
     if not os.path.exists(output3):
         os.mkdir(output3)
     if not os.path.exists(f"{output3}/limit"):
@@ -225,6 +231,8 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
             f"{output1}/allLands",
              debug = debug,
             levels = (1, 5, 6),
+             local = False,
+           maxShip = None,
                res = res,
               simp = simp,
                tol = tol,
@@ -277,6 +285,16 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
                  dist = prec,
                  fill = fill,
                levels = (1, 5, 6),
+                local = local,
+              maxShip = pyguymer3.geo.buffer(
+                maxShip,
+                prec,
+                debug = debug,
+                 fill = +1.0,
+                 nang = 361,
+                 simp = -1.0,
+                  tol = tol,
+            ),
                  nang = nang,
                   res = res,
                  simp = simp,
@@ -594,7 +612,10 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
     # Check if the user wants to make a plot ...
     if plot:
         # Determine output PNG file name ...
-        png = f"{output3}/dur={dur:.2f}_local={repr(local)[0]}_freqPlot={freqPlot:d}_spd={spd:.1f}.png"
+        if local:
+            png = f"{output3}/freqPlot={freqPlot:d}.png"
+        else:
+            png = f"{output3}/dur={dur:.2f}_freqPlot={freqPlot:d}_spd={spd:.1f}.png"
 
         print(f"Making \"{png}\" ...")
 

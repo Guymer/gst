@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 
 # Define function ...
-def saveAllLands(fname, dname, /, *, allCanals = None, debug = False, dist = -1.0, fill = 1.0, levels = (1, 5, 6), nang = 9, res = "c", simp = 0.1, tol = 1.0e-10):
-    """Save (optionally buffered and optionally simplified) land to a compressed WKB file.
+def saveAllLands(wName, dname, /, *, allCanals = None, debug = False, dist = -1.0, fill = 1.0, levels = (1, 5, 6), local = False, maxShip = None, nang = 9, res = "c", simp = 0.1, tol = 1.0e-10):
+    """Save (optionally buffered and optionally simplified) land (with canals
+    optionally subtracted) to a compressed WKB file.
 
     Parameters
     ----------
-    fname : string
+    wName : string
         the file name of the compressed WKB file
     dname : string
         the directory name where temporary compressed WKB files can be stored
@@ -24,6 +25,10 @@ def saveAllLands(fname, dname, /, *, allCanals = None, debug = False, dist = -1.
     levels : tuple of int, optional
         the GSHHG levels to include (you should probably use more than just
         level 1, as it does not contain any representation of Antarctica at all)
+    local : bool, optional
+        the plot has only local extent
+    maxShip : shapely.geometry.polygon.Polygon, shapely.geometry.multipolygon.MultiPolygon
+        the maximum possible sailing distance (ignoring all land)
     nang : int, optional
         the number of angles around each point that are calculated when
         buffering
@@ -77,6 +82,9 @@ def saveAllLands(fname, dname, /, *, allCanals = None, debug = False, dist = -1.
     from .removeInteriorRings import removeInteriorRings
 
     # **************************************************************************
+
+    # Create short-hand ...
+    gName = f'{wName.removesuffix(".wkb.gz")}.geojson'
 
     # Check if the user supplied canals ...
     if isinstance(allCanals, list):
@@ -177,18 +185,29 @@ def saveAllLands(fname, dname, /, *, allCanals = None, debug = False, dist = -1.
 
         # Loop over records ...
         for record in cartopy.io.shapereader.Reader(sfile).records():
-            # Deduce temporary file name and skip if it exists already ...
-            tname = f"{dname}/{record.geometry.centroid.x:+011.6f},{record.geometry.centroid.y:+010.6f},{record.geometry.area:012.7f}.wkb.gz"
-            if os.path.exists(tname):
+            # Deduce temporary file name and skip record if it exists already ...
+            tmpName = f"{dname}/{record.geometry.centroid.x:+011.6f},{record.geometry.centroid.y:+010.6f},{record.geometry.area:012.7f}.wkb.gz"
+            if os.path.exists(tmpName):
                 continue
 
-            print(f"   > Making \"{tname}\" ...")
+            print(f"   > Making \"{tmpName}\" ...")
 
             # Initialize list ...
             polys = []
 
             # Loop over Polygons ...
             for poly in pyguymer3.geo.extract_polys(record.geometry, onlyValid = True, repair = True):
+                # Check if only Polygons local to the ship should be saved ...
+                if local and maxShip is not None:
+                    # Skip Polygon if it is outside of the maximum possible
+                    # sailing distance of the ship ...
+                    if maxShip.disjoint(poly):
+                        continue
+
+                    # Throw away all parts of the Polygon that the ship will
+                    # never sail to ...
+                    poly = maxShip.intersection(poly)
+
                 # Check if the user wants to buffer the land ...
                 # NOTE: The land should probably be buffered to prohibit ships
                 #       jumping over narrow stretches that are narrower than the
@@ -216,13 +235,18 @@ def saveAllLands(fname, dname, /, *, allCanals = None, debug = False, dist = -1.
                 #       invalid Polygons, so don't bother checking for them.
                 polys += pyguymer3.geo.extract_polys(poly, onlyValid = False, repair = False)
 
+            # Skip record if it does not have any Polygons ...
+            if not polys:
+                print("     > Skipped (no Polygons).")
+                continue
+
             # Convert list of Polygons to a (unified) [Multi]Polygon ...
             polys = shapely.ops.unary_union(polys).simplify(tol)
             if debug:
                 pyguymer3.geo.check(polys)
 
             # Save [Multi]Polygon ...
-            with gzip.open(tname, mode = "wb", compresslevel = 9) as gzObj:
+            with gzip.open(tmpName, mode = "wb", compresslevel = 9) as gzObj:
                 gzObj.write(shapely.wkb.dumps(polys))
 
     # **************************************************************************
@@ -231,17 +255,17 @@ def saveAllLands(fname, dname, /, *, allCanals = None, debug = False, dist = -1.
     polys = []
 
     # Loop over temporary compressed WKB files ...
-    for tname in sorted(glob.glob(f"{dname}/????.??????,???.??????,????.???????.wkb.gz")):
-        print(f" > Loading \"{tname}\" ...")
+    for tmpName in sorted(glob.glob(f"{dname}/????.??????,???.??????,????.???????.wkb.gz")):
+        print(f" > Loading \"{tmpName}\" ...")
 
         # Add the individual Polygons to the list ...
         # NOTE: Given how "polys" was made, we know that there aren't any
         #       invalid Polygons, so don't bother checking for them.
-        with gzip.open(tname, mode = "rb") as gzObj:
+        with gzip.open(tmpName, mode = "rb") as gzObj:
             polys += pyguymer3.geo.extract_polys(shapely.wkb.loads(gzObj.read()), onlyValid = False, repair = False)
 
     # Return if there isn't any land at this resolution ...
-    if len(polys) == 0:
+    if not polys:
         return False
 
     # Convert list of Polygons to a (unified) MultiPolygon ...
@@ -263,11 +287,11 @@ def saveAllLands(fname, dname, /, *, allCanals = None, debug = False, dist = -1.
             pyguymer3.geo.check(polys)
 
     # Save MultiPolygon ...
-    with gzip.open(fname, mode = "wb", compresslevel = 9) as gzObj:
+    with gzip.open(wName, mode = "wb", compresslevel = 9) as gzObj:
         gzObj.write(shapely.wkb.dumps(polys))
 
     # Save MultiPolygon ...
-    with open(f'{fname.removesuffix(".wkb.gz")}.geojson', "wt", encoding = "utf-8") as fObj:
+    with open(gName, "wt", encoding = "utf-8") as fObj:
         geojson.dump(
             polys,
             fObj,
