@@ -63,9 +63,11 @@ if __name__ == "__main__":
             f"{lon:+.1f}", f"{lat:+.1f}", "20.0",
             "--duration", "0.09",       # some sailing (20 knots * 0.09 days = 80.01 kilometres)
             "--freqLand", "768",        # ~daily land re-evaluation
+            "--freqPlot", "1",          # plot every 1.25 kilometres
             "--freqSimp", "768",        # ~daily simplification
             "--local",                  # save time by only considering local land
             "--nang", f"{nang:d}",      # LOOP VARIABLE
+            "--plot",                   # make maps and animations
             "--precision", "1250.0",    # converged precision (from "compareBufferRadialResolutions.py")
             "--resolution", "i",        # intermediate coastline resolution
         ]

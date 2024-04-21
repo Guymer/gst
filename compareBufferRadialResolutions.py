@@ -57,9 +57,10 @@ if __name__ == "__main__":
 
     # Loop over precisions ...
     for prec in [625, 1250, 2500, 5000, 10000]:
-        # Create short-hand ...
+        # Create short-hands ...
         # NOTE: Say that 40,000 metres takes 1 hour at 20 knots.
         freq = 24 * 40000 // prec                                               # [#]
+        freqPlot = 10000 // prec                                                # [#]
 
         # Populate GST command ...
         cmd = [
@@ -67,9 +68,11 @@ if __name__ == "__main__":
             f"{lon:+.1f}", f"{lat:+.1f}", "20.0",
             "--duration", "0.09",           # some sailing (20 knots * 0.09 days = 80.01 kilometres)
             "--freqLand", f"{freq:d}",      # ~daily land re-evaluation
+            "--freqPlot", f"{freqPlot:d}",  # plot every 10.0 kilometres
             "--freqSimp", f"{freq:d}",      # ~daily simplification
             "--local",                      # save time by only considering local land
             "--nang", "257",                # converged number of angles (from "compareBufferAngularResolutions.py")
+            "--plot",                       # make maps and animations
             "--precision", f"{prec:.1f}",   # LOOP VARIABLE
             "--resolution", "i",            # intermediate coastline resolution
         ]
