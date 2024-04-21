@@ -48,6 +48,7 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
     import datetime
     import gzip
     import os
+    import shutil
     import time
 
     # Import special modules ...
@@ -86,6 +87,7 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
         import pyguymer3
         import pyguymer3.geo
         import pyguymer3.image
+        import pyguymer3.media
     except:
         raise Exception("\"pyguymer3\" is not installed; you need to have the Python module from https://github.com/Guymer/PyGuymer3 located somewhere in your $PYTHONPATH") from None
 
@@ -324,48 +326,70 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
 
     # Check if the user wants to make a plot ...
     if plot:
-        # Check if the user wants a local plot (for local people) ...
+        # Initialize list of animation frames ...
+        pngOnes = []
+
+        # Determine PNG "all map" file name as well as the MP4/WEBP animation
+        # file names ...
         if local:
-            # Create figure ...
-            fg = matplotlib.pyplot.figure(figsize = (7.2, 7.2))
-
-            # Create axis ...
-            ax = pyguymer3.geo.add_axis(
-                fg,
-                add_coastlines = False,
-                          dist = maxDist,
-                           lat = lat,
-                           lon = lon,
-            )
+            pngAll = f"{output3}/freqPlot={freqPlot:d}.png"
+            mp4Ones = f"{output3}/freqPlot={freqPlot:d}.mp4"
+            webpOnes = f"{output3}/freqPlot={freqPlot:d}.webp"
         else:
-            # Create figure ...
-            fg = matplotlib.pyplot.figure(figsize = (12.8, 7.2))
+            pngAll = f"{output3}/dur={dur:.2f}_freqPlot={freqPlot:d}_spd={spd:.1f}.png"
+            mp4Ones = f"{output3}/dur={dur:.2f}_freqPlot={freqPlot:d}_spd={spd:.1f}.mp4"
+            webpOnes = f"{output3}/dur={dur:.2f}_freqPlot={freqPlot:d}_spd={spd:.1f}.webp"
 
-            # Create axis ...
-            ax = pyguymer3.geo.add_axis(fg, add_coastlines = False)
+        # Check if the PNG "all map" needs making as well as the MP4/WEBP
+        # animations ...
+        pngAllExists = os.path.exists(pngAll)
+        mp4OnesExists = os.path.exists(mp4Ones)
+        webpOnesExists = os.path.exists(webpOnes)
 
-        # Configure axis ...
-        pyguymer3.geo.add_map_background(ax, resolution = "large8192px")
+        # Check if the PNG "all map" needs making ...
+        if not pngAllExists:
+            # Check if the user wants a local plot (for local people) ...
+            if local:
+                # Create figure ...
+                fgAll = matplotlib.pyplot.figure(figsize = (7.2, 7.2))
 
-        # Plot Polygons ...
-        ax.add_geometries(
-            allLands,
-            cartopy.crs.PlateCarree(),
-            edgecolor = (1.0, 0.0, 0.0, 0.2),
-            facecolor = (1.0, 0.0, 0.0, 0.2),
-            linewidth = 1.0,
-        )
+                # Create axis ...
+                axAll = pyguymer3.geo.add_axis(
+                    fgAll,
+                    add_coastlines = False,
+                              dist = maxDist,
+                               lat = lat,
+                               lon = lon,
+                )
+            else:
+                # Create figure ...
+                fgAll = matplotlib.pyplot.figure(figsize = (12.8, 7.2))
 
-        # Plot Polygons ...
-        # NOTE: Given how "maxShip" was made, we know that there aren't any
-        #       invalid Polygons, so don't bother checking for them.
-        ax.add_geometries(
-            pyguymer3.geo.extract_polys(maxShip, onlyValid = False, repair = False),
-            cartopy.crs.PlateCarree(),
-            edgecolor = (0.0, 0.0, 0.0, 0.2),
-            facecolor = (0.0, 0.0, 0.0, 0.2),
-            linewidth = 1.0,
-        )
+                # Create axis ...
+                axAll = pyguymer3.geo.add_axis(fgAll, add_coastlines = False)
+
+            # Configure axis ...
+            pyguymer3.geo.add_map_background(axAll, resolution = "large8192px")
+
+            # Plot Polygons ...
+            axAll.add_geometries(
+                allLands,
+                cartopy.crs.PlateCarree(),
+                edgecolor = (1.0, 0.0, 0.0, 0.2),
+                facecolor = (1.0, 0.0, 0.0, 0.2),
+                linewidth = 1.0,
+            )
+
+            # Plot Polygons ...
+            # NOTE: Given how "maxShip" was made, we know that there aren't any
+            #       invalid Polygons, so don't bother checking for them.
+            axAll.add_geometries(
+                pyguymer3.geo.extract_polys(maxShip, onlyValid = False, repair = False),
+                cartopy.crs.PlateCarree(),
+                edgecolor = (0.0, 0.0, 0.0, 0.2),
+                facecolor = (0.0, 0.0, 0.0, 0.2),
+                linewidth = 1.0,
+            )
 
     # **************************************************************************
 
@@ -375,6 +399,13 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
     # Loop over iterations ...
     for istep in range(nstep):
         print(f"Iteration {istep + 1:,d}/{nstep:,d} ({0.001 * (istep + 1) * prec:,.2f} kilometres/{(istep + 1) * prec / (24.0 * 1852.0 * spd):,.4f} days of sailing) ...")
+
+        # Determine PNG "one map" file name and append to list ...
+        pngOne = f"{output3}/ship/istep={istep:06d}.png"
+        pngOnes.append(pngOne)
+
+        # Check if the PNG "one map" needs making ...
+        pngOneExists = os.path.exists(pngOne)
 
         # **********************************************************************
 
@@ -580,16 +611,86 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
         if plot and (istep + 1) % freqPlot == 0:
             print(" > Plotting ...")
 
-            # Plot Polygons ...
-            # NOTE: Given how "ship" was made, we know that there aren't any
-            #       invalid Polygons, so don't bother checking for them.
-            ax.add_geometries(
-                pyguymer3.geo.extract_polys(ship, onlyValid = False, repair = False),
-                cartopy.crs.PlateCarree(),
-                edgecolor = f"C{((istep + 1) // freqPlot) - 1:d}",
-                facecolor = "none",
-                linewidth = 1.0,
-            )
+            # Check if the PNG "all map" needs making ...
+            if not pngAllExists:
+                # Plot Polygons ...
+                # NOTE: Given how "ship" was made, we know that there aren't any
+                #       invalid Polygons, so don't bother checking for them.
+                axAll.add_geometries(
+                    pyguymer3.geo.extract_polys(ship, onlyValid = False, repair = False),
+                    cartopy.crs.PlateCarree(),
+                    edgecolor = f"C{((istep + 1) // freqPlot) - 1:d}",
+                    facecolor = "none",
+                    linewidth = 1.0,
+                )
+
+            # Check if the PNG "one map" needs making ...
+            if not pngOneExists:
+                # Check if the user wants a local plot (for local people) ...
+                if local:
+                    # Create figure ...
+                    fgOne = matplotlib.pyplot.figure(figsize = (7.2, 7.2))
+
+                    # Create axis ...
+                    axOne = pyguymer3.geo.add_axis(
+                        fgOne,
+                        add_coastlines = False,
+                                  dist = maxDist,
+                                   lat = lat,
+                                   lon = lon,
+                    )
+                else:
+                    # Create figure ...
+                    fgOne = matplotlib.pyplot.figure(figsize = (12.8, 7.2))
+
+                    # Create axis ...
+                    axOne = pyguymer3.geo.add_axis(fgOne, add_coastlines = False)
+
+                # Configure axis ...
+                pyguymer3.geo.add_map_background(axOne, resolution = "large8192px")
+
+                # Plot Polygons ...
+                axOne.add_geometries(
+                    allLands,
+                    cartopy.crs.PlateCarree(),
+                    edgecolor = (1.0, 0.0, 0.0, 0.2),
+                    facecolor = (1.0, 0.0, 0.0, 0.2),
+                    linewidth = 1.0,
+                )
+
+                # Plot Polygons ...
+                # NOTE: Given how "maxShip" was made, we know that there aren't
+                #       any invalid Polygons, so don't bother checking for them.
+                axOne.add_geometries(
+                    pyguymer3.geo.extract_polys(maxShip, onlyValid = False, repair = False),
+                    cartopy.crs.PlateCarree(),
+                    edgecolor = (0.0, 0.0, 0.0, 0.2),
+                    facecolor = (0.0, 0.0, 0.0, 0.2),
+                    linewidth = 1.0,
+                )
+
+                # Plot Polygons ...
+                # NOTE: Given how "ship" was made, we know that there aren't any
+                #       invalid Polygons, so don't bother checking for them.
+                axOne.add_geometries(
+                    pyguymer3.geo.extract_polys(ship, onlyValid = False, repair = False),
+                    cartopy.crs.PlateCarree(),
+                    edgecolor = "C0",
+                    facecolor = "none",
+                    linewidth = 1.0,
+                )
+
+                print(f"Making \"{pngOne}\" ...")
+
+                # Configure figure ...
+                fgOne.tight_layout()
+
+                # Save figure ...
+                fgOne.savefig(pngOne)
+                matplotlib.pyplot.close(fgOne)
+
+                # Optimize PNG ...
+                pyguymer3.image.optimize_image(pngOne, strip = True)
 
         # **********************************************************************
 
@@ -611,20 +712,41 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
 
     # Check if the user wants to make a plot ...
     if plot:
-        # Determine output PNG file name ...
-        if local:
-            png = f"{output3}/freqPlot={freqPlot:d}.png"
-        else:
-            png = f"{output3}/dur={dur:.2f}_freqPlot={freqPlot:d}_spd={spd:.1f}.png"
+        # Check if the PNG "all map" needs making ...
+        if not pngAllExists:
+            print(f"Making \"{pngAll}\" ...")
 
-        print(f"Making \"{png}\" ...")
+            # Configure figure ...
+            fgAll.tight_layout()
 
-        # Configure figure ...
-        fg.tight_layout()
+            # Save figure ...
+            fgAll.savefig(pngAll)
+            matplotlib.pyplot.close(fgAll)
 
-        # Save figure ...
-        fg.savefig(png)
-        matplotlib.pyplot.close(fg)
+            # Optimize PNG ...
+            pyguymer3.image.optimize_image(pngAll, strip = True)
 
-        # Optimize PNG ...
-        pyguymer3.image.optimize_image(png, strip = True)
+        # **********************************************************************
+
+        # Check if the MP4 animation needs making ...
+        if not mp4OnesExists:
+            print(f"Making \"{mp4Ones}\" ...")
+
+            # Save 25fps MP4 ...
+            tmpName = pyguymer3.media.images2mp4(
+                pngOnes,
+            )
+            shutil.move(tmpName, mp4Ones)
+
+        # **********************************************************************
+
+        # Check if the WEBP animation needs making ...
+        if not webpOnesExists:
+            print(f"Making \"{webpOnes}\" ...")
+
+            # Save 25fps WEBP ...
+            pyguymer3.media.images2webp(
+                pngOnes,
+                webpOnes,
+                strip = True,
+            )
