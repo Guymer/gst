@@ -400,12 +400,15 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
     for istep in range(nstep):
         print(f"Iteration {istep + 1:,d}/{nstep:,d} ({0.001 * (istep + 1) * prec:,.2f} kilometres/{(istep + 1) * prec / (24.0 * 1852.0 * spd):,.4f} days of sailing) ...")
 
-        # Determine PNG "one map" file name and append to list ...
-        pngOne = f"{output3}/ship/istep={istep:06d}.png"
-        pngOnes.append(pngOne)
+        # Check if the user wants to make a plot and that this iteration is one
+        # of the ones to be plotted ...
+        if plot and (istep + 1) % freqPlot == 0:
+            # Determine PNG "one map" file name and append to list ...
+            pngOne = f"{output3}/ship/istep={istep:06d}.png"
+            pngOnes.append(pngOne)
 
-        # Check if the PNG "one map" needs making ...
-        pngOneExists = os.path.exists(pngOne)
+            # Check if the PNG "one map" needs making ...
+            pngOneExists = os.path.exists(pngOne)
 
         # **********************************************************************
 
