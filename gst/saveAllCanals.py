@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 
 # Define function ...
-def saveAllCanals(fname, /, *, debug = False, simp = 0.1, tol = 1.0e-10):
+def saveAllCanals(wName, /, *, debug = False, simp = 0.1, tol = 1.0e-10):
     """Save (optionally simplified) canals to a compressed WKB file.
 
     Parameters
     ----------
-    fname : string
+    wName : string
         the file name of the compressed WKB file
     debug : bool, optional
         print debug messages
@@ -52,6 +52,9 @@ def saveAllCanals(fname, /, *, debug = False, simp = 0.1, tol = 1.0e-10):
         raise Exception("\"pyguymer3\" is not installed; you need to have the Python module from https://github.com/Guymer/PyGuymer3 located somewhere in your $PYTHONPATH") from None
 
     # **************************************************************************
+
+    # Create short-hand ...
+    gName = f'{wName.removesuffix(".wkb.gz")}.geojson'
 
     # Initialize dictionary ...
     db = {
@@ -139,11 +142,11 @@ def saveAllCanals(fname, /, *, debug = False, simp = 0.1, tol = 1.0e-10):
             pyguymer3.geo.check(lines)
 
     # Save MultiLineString ...
-    with gzip.open(fname, mode = "wb", compresslevel = 9) as gzObj:
+    with gzip.open(wName, mode = "wb", compresslevel = 9) as gzObj:
         gzObj.write(shapely.wkb.dumps(lines))
 
     # Save MultiLineString ...
-    with open(f'{fname.removesuffix(".wkb.gz")}.geojson', "wt", encoding = "utf-8") as fObj:
+    with open(gName, "wt", encoding = "utf-8") as fObj:
         geojson.dump(
             lines,
             fObj,
