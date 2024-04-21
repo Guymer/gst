@@ -60,46 +60,61 @@ python3.11 run.py -1.0 +50.5 20.0 --duration 0.01 --nang 33 --precision 1250.0
 To very quickly find out how far a vessel can sail from Portsmouth Harbour at 20 knots, try running something like:
 
 ```sh
-python3.11 run.py      \
-    -1.0 +50.5 20.0    \   # depart Portsmouth Harbour at 20 knots
-    --duration 11.2    \   # ~maximum distance (20 knots * 11.2 days = 9,956.35 kilometres)
-    --freqLand 192     \   # ~daily land re-evaluation (192 * 7.5 minutes = 1 day)
-    --freqPlot 8       \   # ~hourly plotting (8 * 7.5 minutes = 1 hour)
-    --freqSimp 8       \   # ~hourly simplification (8 * 7.5 minutes = 1 hour)
-    --nang 9           \   # minimum number of angles
-    --plot             \   # make a plot
-    --precision 5000.0 \   # ~⅛ hour distance steps (20 knots * 7.5 minutes = 4.63 kilometres)
-    --resolution c         # crude coastline resolution
+python3.11 run.py       \
+    -1.0 +50.5 20.0     \   # depart Portsmouth Harbour at 20 knots
+    --duration 11.2     \   # ~maximum distance (20 knots * 11.2 days = 9,956.35 kilometres)
+    --freqLand 192      \   # ~daily land re-evaluation (192 * 7.5 minutes = 1 day)
+    --freqPlot 8        \   # ~hourly plotting (8 * 7.5 minutes = 1 hour)
+    --freqSimp 8        \   # ~hourly simplification (8 * 7.5 minutes = 1 hour)
+    --nang 9            \   # minimum number of angles
+    --plot              \   # make a plot
+    --precision 5000.0  \   # ~⅛ hour distance steps (20 knots * 7.5 minutes = 4.63 kilometres)
+    --resolution c          # crude coastline resolution
 ```
 
 ... to repeat the above study at x2 angular resolution and x2 radial resolution then try running something like:
 
 ```sh
-python3.11 run.py      \
-    -1.0 +50.5 20.0    \
-    --duration 11.2    \
-    --freqLand 384     \
-    --freqPlot 16      \
-    --freqSimp 16      \
-    --nang 17          \   # x2 angular resolution
-    --plot             \
-    --precision 2500.0 \   # x2 radial resolution
+python3.11 run.py       \
+    -1.0 +50.5 20.0     \
+    --duration 11.2     \
+    --freqLand 384      \
+    --freqPlot 16       \
+    --freqSimp 16       \
+    --nang 17           \   # x2 angular resolution
+    --plot              \
+    --precision 2500.0  \   # x2 radial resolution
     --resolution c
 ```
 
 ... to repeat the above study at x4 angular resolution and x4 radial resolution then try running something like:
 
 ```sh
-python3.11 run.py      \
-    -1.0 +50.5 20.0    \
-    --duration 11.2    \
-    --freqLand 768     \
-    --freqPlot 32      \
-    --freqSimp 32      \
-    --nang 33          \   # x4 angular resolution
-    --plot             \
-    --precision 1250.0 \   # x4 radial resolution
+python3.11 run.py       \
+    -1.0 +50.5 20.0     \
+    --duration 11.2     \
+    --freqLand 768      \
+    --freqPlot 32       \
+    --freqSimp 32       \
+    --nang 33           \   # x4 angular resolution
+    --plot              \
+    --precision 1250.0  \   # x4 radial resolution
     --resolution c
+```
+
+Alternatively, if you just want to marvel at the ferries weaving around the islands in Stockholm Archipelago, then try running something like:
+
+```sh
+python3.11 run.py           \
+    +18.079 +59.324 20.0    \   # depart Slussen Ferry Terminal at 20 knots
+    --duration 0.1          \   # sail for 2.4 hours (20 knots * 0.1 days = 88.90 kilometres)
+    --freqLand 10000        \   # re-evaluate land every 100 kilometres (i.e., never)
+    --freqPlot 100          \   # plot every 1 kilometre
+    --local                 \   # only plot the local area
+    --nang 33               \   # turn corners smoothly
+    --plot                  \   # make a plot
+    --precision 10.0        \   # 10 metre distance steps
+    --resolution f              # full coastline resolution
 ```
 
 ## Dependencies
