@@ -68,6 +68,7 @@ if __name__ == "__main__":
             "--duration", "0.09",           # some sailing (20 knots * 0.09 days = 80.01 kilometres)
             "--freqLand", f"{freq:d}",      # ~daily land re-evaluation
             "--freqSimp", f"{freq:d}",      # ~daily simplification
+            "--local",                      # save time by only considering local land
             "--nang", "257",                # converged number of angles (from "compareBufferAngularResolutions.py")
             "--precision", f"{prec:.1f}",   # LOOP VARIABLE
             "--resolution", "i",            # intermediate coastline resolution
@@ -142,7 +143,7 @@ if __name__ == "__main__":
             istep = ((1000 * dist) // prec) - 1                                 # [#]
 
             # Deduce directory name ...
-            dname = f"res=i_cons=2.00e+00_tol=1.00e-10/nang=257_prec={prec:.2e}/freqLand={freq:d}_freqSimp={freq:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/ship"
+            dname = f"res=i_cons=2.00e+00_tol=1.00e-10/local=T_nang=257_prec={prec:.2e}_lon={lon:+011.6f}_lat={lat:+010.6f}_dur=0.09_spd=20.0/freqLand={freq:d}_freqSimp={freq:d}/ship"
 
             # Deduce file name and skip if it is missing ...
             fname = f"{dname}/istep={istep:06d}.wkb.gz"
