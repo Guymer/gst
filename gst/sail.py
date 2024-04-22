@@ -686,7 +686,7 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
                 axOne.add_geometries(
                     pyguymer3.geo.extract_polys(ship, onlyValid = False, repair = False),
                     cartopy.crs.PlateCarree(),
-                    edgecolor = "orange",
+                    edgecolor = "blue",
                     facecolor = "none",
                     linewidth = 1.0,
                        zorder = 2.2,
