@@ -12,6 +12,8 @@ if __name__ == "__main__":
     except:
         raise Exception("\"gst\" is not installed; you need to have the Python module from https://github.com/Guymer/gst located somewhere in your $PYTHONPATH") from None
 
+    # **************************************************************************
+
     # Create argument parser and parse the arguments ...
     parser = argparse.ArgumentParser(
            allow_abbrev = False,
@@ -84,7 +86,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--plot",
         action = "store_true",
-          help = "make a plot",
+          help = "make maps and animation",
     )
     parser.add_argument(
         "--precision",
@@ -108,6 +110,8 @@ if __name__ == "__main__":
            type = float,
     )
     args = parser.parse_args()
+
+    # **************************************************************************
 
     # Sail the vessel ...
     gst.sail(
