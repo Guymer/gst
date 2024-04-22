@@ -378,6 +378,7 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
                 edgecolor = (1.0, 0.0, 0.0, 0.2),
                 facecolor = (1.0, 0.0, 0.0, 0.2),
                 linewidth = 1.0,
+                   zorder = 2.0,
             )
 
             # Plot Polygons ...
@@ -389,6 +390,7 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
                 edgecolor = (0.0, 0.0, 0.0, 0.2),
                 facecolor = (0.0, 0.0, 0.0, 0.2),
                 linewidth = 1.0,
+                   zorder = 2.1,
             )
 
     # **************************************************************************
@@ -625,6 +627,7 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
                     edgecolor = f"C{((istep + 1) // freqPlot) - 1:d}",
                     facecolor = "none",
                     linewidth = 1.0,
+                       zorder = 2.2,
                 )
 
             # Check if the PNG "one map" needs making ...
@@ -642,6 +645,9 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
                                    lat = lat,
                                    lon = lon,
                     )
+
+                    # Configure axis ...
+                    pyguymer3.geo.add_GSHHG_map_underlay(axOne, linewidth = 1.0)
                 else:
                     # Create figure ...
                     fgOne = matplotlib.pyplot.figure(figsize = (12.8, 7.2))
@@ -649,16 +655,17 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
                     # Create axis ...
                     axOne = pyguymer3.geo.add_axis(fgOne, add_coastlines = False)
 
-                # Configure axis ...
-                pyguymer3.geo.add_map_background(axOne, resolution = "large8192px")
+                    # Configure axis ...
+                    pyguymer3.geo.add_map_background(axOne, resolution = "large8192px")
 
                 # Plot Polygons ...
                 axOne.add_geometries(
                     allLands,
                     cartopy.crs.PlateCarree(),
-                    edgecolor = (1.0, 0.0, 0.0, 0.2),
+                    edgecolor = (1.0, 0.0, 0.0, 1.0),
                     facecolor = (1.0, 0.0, 0.0, 0.2),
                     linewidth = 1.0,
+                       zorder = 2.0,
                 )
 
                 # Plot Polygons ...
@@ -667,9 +674,10 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
                 axOne.add_geometries(
                     pyguymer3.geo.extract_polys(maxShip, onlyValid = False, repair = False),
                     cartopy.crs.PlateCarree(),
-                    edgecolor = (0.0, 0.0, 0.0, 0.2),
+                    edgecolor = (0.0, 0.0, 0.0, 1.0),
                     facecolor = (0.0, 0.0, 0.0, 0.2),
                     linewidth = 1.0,
+                       zorder = 2.1,
                 )
 
                 # Plot Polygons ...
@@ -678,9 +686,10 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
                 axOne.add_geometries(
                     pyguymer3.geo.extract_polys(ship, onlyValid = False, repair = False),
                     cartopy.crs.PlateCarree(),
-                    edgecolor = "C0",
+                    edgecolor = "orange",
                     facecolor = "none",
                     linewidth = 1.0,
+                       zorder = 2.2,
                 )
 
                 print(f"Making \"{pngOne}\" ...")
