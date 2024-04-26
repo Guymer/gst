@@ -30,6 +30,25 @@ python3.11 run.py 0.0 0.0 20.0 --conservatism 2.0 --duration 0.01 --freqLand 192
 python3.11 run.py 0.0 0.0 20.0 --conservatism 2.0 --duration 0.01 --freqLand 384 --freqSimp 16 --nang 17 --precision 2500.0 --resolution i
 python3.11 run.py 0.0 0.0 20.0 --conservatism 2.0 --duration 0.01 --freqLand 768 --freqSimp 32 --nang 33 --precision 1250.0 --resolution i
 
+# Run GST (for showNarrowPassages.py) ...
+python3.11 run.py 0.0 0.0 20.0 --duration 0.01 --freqLand 192 --freqSimp 8 --nang 9 --precision 5000.0 --resolution c
+python3.11 run.py 0.0 0.0 20.0 --duration 0.01 --freqLand 384 --freqSimp 16 --nang 17 --precision 2500.0 --resolution c
+python3.11 run.py 0.0 0.0 20.0 --duration 0.01 --freqLand 768 --freqSimp 32 --nang 33 --precision 1250.0 --resolution c
+python3.11 run.py 0.0 0.0 20.0 --duration 0.01 --freqLand 192 --freqSimp 8 --nang 9 --precision 5000.0 --resolution l
+python3.11 run.py 0.0 0.0 20.0 --duration 0.01 --freqLand 384 --freqSimp 16 --nang 17 --precision 2500.0 --resolution l
+python3.11 run.py 0.0 0.0 20.0 --duration 0.01 --freqLand 768 --freqSimp 32 --nang 33 --precision 1250.0 --resolution l
+python3.11 run.py 0.0 0.0 20.0 --duration 0.01 --freqLand 192 --freqSimp 8 --nang 9 --precision 5000.0 --resolution i
+python3.11 run.py 0.0 0.0 20.0 --duration 0.01 --freqLand 384 --freqSimp 16 --nang 17 --precision 2500.0 --resolution i
+python3.11 run.py 0.0 0.0 20.0 --duration 0.01 --freqLand 768 --freqSimp 32 --nang 33 --precision 1250.0 --resolution i
+python3.11 run.py 0.0 0.0 20.0 --duration 0.01 --freqLand 192 --freqSimp 8 --nang 9 --precision 5000.0 --resolution h
+python3.11 run.py 0.0 0.0 20.0 --duration 0.01 --freqLand 384 --freqSimp 16 --nang 17 --precision 2500.0 --resolution h
+python3.11 run.py 0.0 0.0 20.0 --duration 0.01 --freqLand 768 --freqSimp 32 --nang 33 --precision 1250.0 --resolution h
+python3.11 run.py 0.0 0.0 20.0 --duration 0.01 --freqLand 192 --freqSimp 8 --nang 9 --precision 5000.0 --resolution f
+python3.11 run.py 0.0 0.0 20.0 --duration 0.01 --freqLand 384 --freqSimp 16 --nang 17 --precision 2500.0 --resolution f
+python3.11 run.py 0.0 0.0 20.0 --duration 0.01 --freqLand 768 --freqSimp 32 --nang 33 --precision 1250.0 --resolution f
+
+# ******************************************************************************
+
 # Run GST (for ripples.py) ...
 python3.11 run.py -1.0 +50.5 20.0 --conservatism 2.0 --duration 1.0 --freqLand 192 --freqPlot 8 --freqSimp 8 --nang 9 --plot --precision 5000.0 --resolution i
 python3.11 run.py -1.0 +50.5 20.0 --conservatism 2.0 --duration 1.0 --freqLand 384 --freqPlot 16 --freqSimp 16 --nang 17 --plot --precision 2500.0 --resolution i
@@ -103,20 +122,3 @@ python3.11 run.py -1.0 +50.5 20.0 --conservatism 2.0 --duration 23.0 --freqLand 
 python3.11 run.py -1.0 +50.5 20.0 --conservatism 2.0 --duration 24.0 --freqLand 192 --freqPlot 8 --freqSimp 8 --nang 9 --plot --precision 5000.0 --resolution i
 python3.11 run.py -1.0 +50.5 20.0 --conservatism 2.0 --duration 24.0 --freqLand 384 --freqPlot 16 --freqSimp 16 --nang 17 --plot --precision 2500.0 --resolution i
 python3.11 run.py -1.0 +50.5 20.0 --conservatism 2.0 --duration 24.0 --freqLand 768 --freqPlot 32 --freqSimp 32 --nang 33 --plot --precision 1250.0 --resolution i
-
-# Run GST (for showNarrowPassages.py) ...
-python3.11 run.py 0.0 0.0 20.0 --duration 0.01 --freqLand 192 --freqSimp 8 --nang 9 --precision 5000.0 --resolution c
-python3.11 run.py 0.0 0.0 20.0 --duration 0.01 --freqLand 384 --freqSimp 16 --nang 17 --precision 2500.0 --resolution c
-python3.11 run.py 0.0 0.0 20.0 --duration 0.01 --freqLand 768 --freqSimp 32 --nang 33 --precision 1250.0 --resolution c
-python3.11 run.py 0.0 0.0 20.0 --duration 0.01 --freqLand 192 --freqSimp 8 --nang 9 --precision 5000.0 --resolution l
-python3.11 run.py 0.0 0.0 20.0 --duration 0.01 --freqLand 384 --freqSimp 16 --nang 17 --precision 2500.0 --resolution l
-python3.11 run.py 0.0 0.0 20.0 --duration 0.01 --freqLand 768 --freqSimp 32 --nang 33 --precision 1250.0 --resolution l
-python3.11 run.py 0.0 0.0 20.0 --duration 0.01 --freqLand 192 --freqSimp 8 --nang 9 --precision 5000.0 --resolution i
-python3.11 run.py 0.0 0.0 20.0 --duration 0.01 --freqLand 384 --freqSimp 16 --nang 17 --precision 2500.0 --resolution i
-python3.11 run.py 0.0 0.0 20.0 --duration 0.01 --freqLand 768 --freqSimp 32 --nang 33 --precision 1250.0 --resolution i
-python3.11 run.py 0.0 0.0 20.0 --duration 0.01 --freqLand 192 --freqSimp 8 --nang 9 --precision 5000.0 --resolution h
-python3.11 run.py 0.0 0.0 20.0 --duration 0.01 --freqLand 384 --freqSimp 16 --nang 17 --precision 2500.0 --resolution h
-python3.11 run.py 0.0 0.0 20.0 --duration 0.01 --freqLand 768 --freqSimp 32 --nang 33 --precision 1250.0 --resolution h
-python3.11 run.py 0.0 0.0 20.0 --duration 0.01 --freqLand 192 --freqSimp 8 --nang 9 --precision 5000.0 --resolution f
-python3.11 run.py 0.0 0.0 20.0 --duration 0.01 --freqLand 384 --freqSimp 16 --nang 17 --precision 2500.0 --resolution f
-python3.11 run.py 0.0 0.0 20.0 --duration 0.01 --freqLand 768 --freqSimp 32 --nang 33 --precision 1250.0 --resolution f
