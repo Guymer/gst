@@ -90,7 +90,7 @@ if __name__ == "__main__":
         freqSimp = 40000 // prec                                                # [#]
 
         # Deduce directory name and find all relevant land files ...
-        dname = f"res={res}_cons={cons:.2e}_tol=1.00e-10/nang={nang:d}_prec={prec:.2e}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/relevantLands"
+        dname = f"res={res}_cons={cons:.2e}_tol=1.00e-10/local=F_nang={nang:d}_prec={prec:.2e}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/relevantLands"
         fnames = sorted(glob.glob(f"{dname}/istep=??????.wkb.gz"))
 
         # Initialize lists ...
