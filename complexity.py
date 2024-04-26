@@ -4,6 +4,7 @@
 # NOTE: See https://docs.python.org/3.11/library/multiprocessing.html#the-spawn-and-forkserver-start-methods
 if __name__ == "__main__":
     # Import standard modules ...
+    import argparse
     import gzip
     import json
     import math
@@ -38,12 +39,30 @@ if __name__ == "__main__":
 
     # **************************************************************************
 
+    # Create argument parser and parse the arguments ...
+    parser = argparse.ArgumentParser(
+           allow_abbrev = False,
+            description = "Show the complexity of coastline boundaries for different sailing configurations.",
+        formatter_class = argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser.add_argument(
+        "--debug",
+        action = "store_true",
+          dest = "debug",
+          help = "print debug messages",
+    )
+    parser.add_argument(
+        "--dry-run",
+        action = "store_true",
+          dest = "dryRun",
+          help = "don't run \"run.py\"",
+    )
+    args = parser.parse_args()
+
+    # **************************************************************************
+
     # Define resolution ...
     res = "i"
-
-    # Define starting location ...
-    lon = -1.0                                                                  # [°]
-    lat = 50.5                                                                  # [°]
 
     # Define combinations ...
     combs = [
@@ -51,6 +70,19 @@ if __name__ == "__main__":
         (2,  9, 5000,),
         (2, 17, 2500,),
         (2, 33, 1250,),
+
+        # Study convergence (changing "cons", "nang" and "prec") ...
+        # (2,  9, 5000,),
+        # (4, 17, 2500,),
+        # (8, 33, 1250,),
+
+        # With "nang=17" and "prec=2500", is "cons=2" good enough?
+        # (2, 17, 2500,),
+        # (4, 17, 2500,),
+
+        # With "nang=33" and "prec=1250", is "cons=2" good enough?
+        # (2, 33, 1250,),
+        # (8, 33, 1250,),
     ]
 
     # Load colour tables ...
@@ -69,27 +101,30 @@ if __name__ == "__main__":
         # Populate GST command ...
         cmd = [
             "python3.11", "run.py",
-            f"{lon:+.1f}", f"{lat:+.1f}", "20.0",
+            "0.0", "0.0", "20.0",               # dummy values
             "--conservatism", f"{cons:.1f}",    # LOOP VARIABLE
-            "--duration", "0.09",               # some sailing (20 knots * 0.09 days = 80.01 kilometres)
+            "--duration", "0.01",               # dummy value
             "--freqLand", f"{freqLand:d}",      # ~daily land re-evaluation
             "--freqSimp", f"{freqSimp:d}",      # ~hourly simplification
             "--nang", f"{nang:d}",              # LOOP VARIABLE
             "--precision", f"{prec:.1f}",       # LOOP VARIABLE
             "--resolution", res,
         ]
+        if args.debug:
+            cmd.append("--debug")
 
         print(f'Running "{" ".join(cmd)}" ...')
 
         # Run GST ...
-        subprocess.run(
-            cmd,
-               check = False,
-            encoding = "utf-8",
-              stderr = subprocess.DEVNULL,
-              stdout = subprocess.DEVNULL,
-             timeout = None,
-        )
+        if not args.dryRun:
+            subprocess.run(
+                cmd,
+                   check = False,
+                encoding = "utf-8",
+                  stderr = subprocess.DEVNULL,
+                  stdout = subprocess.DEVNULL,
+                 timeout = None,
+            )
 
     # **************************************************************************
 
@@ -105,7 +140,7 @@ if __name__ == "__main__":
     # Loop over combinations ...
     for cons, nang, prec in combs:
         # Deduce directory name ...
-        dname = f"res={res}_cons={cons:.2e}_tol=1.00e-10/nang={nang:d}_prec={prec:.2e}"
+        dname = f"res={res}_cons={cons:.2e}_tol=1.00e-10/local=F_nang={nang:d}_prec={prec:.2e}"
 
         # Deduce file name and skip if it is missing ...
         fname = f"{dname}/allLands.wkb.gz"

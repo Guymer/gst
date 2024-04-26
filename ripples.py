@@ -4,6 +4,7 @@
 # NOTE: See https://docs.python.org/3.11/library/multiprocessing.html#the-spawn-and-forkserver-start-methods
 if __name__ == "__main__":
     # Import standard modules ...
+    import argparse
     import glob
     import gzip
     import os
@@ -48,6 +49,33 @@ if __name__ == "__main__":
         import pyguymer3.media
     except:
         raise Exception("\"pyguymer3\" is not installed; you need to have the Python module from https://github.com/Guymer/PyGuymer3 located somewhere in your $PYTHONPATH") from None
+
+    # **************************************************************************
+
+    # Create argument parser and parse the arguments ...
+    parser = argparse.ArgumentParser(
+           allow_abbrev = False,
+            description = "Show the ripples spreading.",
+        formatter_class = argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser.add_argument(
+        "--debug",
+        action = "store_true",
+          dest = "debug",
+          help = "print debug messages",
+    )
+    parser.add_argument(
+        "--dry-run",
+        action = "store_true",
+          dest = "dryRun",
+          help = "don't run \"run.py\"",
+    )
+    parser.add_argument(
+        "--plot",
+        action = "store_true",
+          help = "make maps and animation",
+    )
+    args = parser.parse_args()
 
     # **************************************************************************
 
@@ -119,22 +147,26 @@ if __name__ == "__main__":
                 "--freqPlot", f"{freqPlot:d}",      # ~hourly plotting
                 "--freqSimp", f"{freqSimp:d}",      # ~hourly simplification
                 "--nang", f"{nang:d}",              # LOOP VARIABLE
-                "--plot",
                 "--precision", f"{prec:.1f}",       # LOOP VARIABLE
                 "--resolution", res,
             ]
+            if args.debug:
+                cmd.append("--debug")
+            if args.plot:
+                cmd.append("--plot")
 
             print(f'Running "{" ".join(cmd)}" ...')
 
             # Run GST ...
-            subprocess.run(
-                cmd,
-                   check = False,
-                encoding = "utf-8",
-                  stderr = subprocess.DEVNULL,
-                  stdout = subprocess.DEVNULL,
-                 timeout = None,
-            )
+            if not args.dryRun:
+                subprocess.run(
+                    cmd,
+                       check = False,
+                    encoding = "utf-8",
+                      stderr = subprocess.DEVNULL,
+                      stdout = subprocess.DEVNULL,
+                     timeout = None,
+                )
 
     # **************************************************************************
 
@@ -146,7 +178,7 @@ if __name__ == "__main__":
         freqSimp = 40000 // prec                                                # [#]
 
         # Deduce directory name ...
-        dname = f"res={res}_cons={cons:.2e}_tol=1.00e-10/nang={nang:d}_prec={prec:.2e}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/limit"
+        dname = f"res={res}_cons={cons:.2e}_tol=1.00e-10/local=F_nang={nang:d}_prec={prec:.2e}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/limit"
 
         # Find the maximum distance that has been calculated so far ...
         fname = sorted(glob.glob(f"{dname}/istep=??????.wkb.gz"))[-1]
@@ -190,7 +222,7 @@ if __name__ == "__main__":
             freqSimp = 40000 // prec                                            # [#]
 
             # Deduce directory name ...
-            dname = f"res={res}_cons={cons:.2e}_tol=1.00e-10/nang={nang:d}_prec={prec:.2e}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/limit"
+            dname = f"res={res}_cons={cons:.2e}_tol=1.00e-10/local=F_nang={nang:d}_prec={prec:.2e}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/limit"
 
             # Deduce file name and skip if it is missing ...
             fname = f"{dname}/istep={istep + 1:06d}.wkb.gz"
@@ -376,7 +408,7 @@ if __name__ == "__main__":
             freqSimp = 40000 // prec                                            # [#]
 
             # Deduce directory name ...
-            dname = f"res={res}_cons={cons:.2e}_tol=1.00e-10/nang={nang:d}_prec={prec:.2e}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/limit"
+            dname = f"res={res}_cons={cons:.2e}_tol=1.00e-10/local=F_nang={nang:d}_prec={prec:.2e}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/limit"
 
             # Deduce file name and skip if it is missing ...
             fname = f"{dname}/istep={istep + 1:06d}.wkb.gz"
@@ -552,7 +584,7 @@ if __name__ == "__main__":
             freqSimp = 40000 // prec                                            # [#]
 
             # Deduce directory name ...
-            dname = f"res={res}_cons={cons:.2e}_tol=1.00e-10/nang={nang:d}_prec={prec:.2e}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/limit"
+            dname = f"res={res}_cons={cons:.2e}_tol=1.00e-10/local=F_nang={nang:d}_prec={prec:.2e}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/limit"
 
             # Deduce file name and skip if it is missing ...
             fname = f"{dname}/istep={istep + 1:06d}.wkb.gz"

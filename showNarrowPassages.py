@@ -4,6 +4,7 @@
 # NOTE: See https://docs.python.org/3.11/library/multiprocessing.html#the-spawn-and-forkserver-start-methods
 if __name__ == "__main__":
     # Import standard modules ...
+    import argparse
     import gzip
     import os
     import subprocess
@@ -45,6 +46,28 @@ if __name__ == "__main__":
         import pyguymer3.media
     except:
         raise Exception("\"pyguymer3\" is not installed; you need to have the Python module from https://github.com/Guymer/PyGuymer3 located somewhere in your $PYTHONPATH") from None
+
+    # **************************************************************************
+
+    # Create argument parser and parse the arguments ...
+    parser = argparse.ArgumentParser(
+           allow_abbrev = False,
+            description = "Show how narrow passages may be blocked.",
+        formatter_class = argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser.add_argument(
+        "--debug",
+        action = "store_true",
+          dest = "debug",
+          help = "print debug messages",
+    )
+    parser.add_argument(
+        "--dry-run",
+        action = "store_true",
+          dest = "dryRun",
+          help = "don't run \"run.py\"",
+    )
+    args = parser.parse_args()
 
     # **************************************************************************
 
@@ -94,26 +117,29 @@ if __name__ == "__main__":
             # Populate GST command ...
             cmd = [
                 "python3.11", "run.py",
-                "-1.0", "+50.5", "20.0",        # depart Portsmouth Harbour at 20 knots
-                "--duration", "0.01",           # some sailing (20 knots * 0.01 days = 8.89 kilometres)
+                "0.0", "0.0", "20.0",           # dummy values
+                "--duration", "0.01",           # dummy value
                 "--freqLand", f"{freqLand:d}",  # ~daily land re-evaluation
                 "--freqSimp", f"{freqSimp:d}",  # ~hourly simplification
                 "--nang", f"{nang:d}",          # LOOP VARIABLE
                 "--precision", f"{prec:.1f}",   # LOOP VARIABLE
                 "--resolution", res,            # LOOP VARIABLE
             ]
+            if args.debug:
+                cmd.append("--debug")
 
             print(f'Running "{" ".join(cmd)}" ...')
 
             # Run GST ...
-            subprocess.run(
-                cmd,
-                   check = False,
-                encoding = "utf-8",
-                  stderr = subprocess.DEVNULL,
-                  stdout = subprocess.DEVNULL,
-                 timeout = None,
-            )
+            if not args.dryRun:
+                subprocess.run(
+                    cmd,
+                       check = False,
+                    encoding = "utf-8",
+                      stderr = subprocess.DEVNULL,
+                      stdout = subprocess.DEVNULL,
+                     timeout = None,
+                )
 
         # **********************************************************************
 
@@ -161,7 +187,7 @@ if __name__ == "__main__":
             # Loop over combinations ...
             for nang, prec, color in combs:
                 # Deduce file name and skip if it is missing ...
-                dname = f"res={res}_cons=2.00e+00_tol=1.00e-10/nang={nang:d}_prec={prec:.2e}"
+                dname = f"res={res}_cons=2.00e+00_tol=1.00e-10/local=F_nang={nang:d}_prec={prec:.2e}"
                 fname = f"{dname}/allLands.wkb.gz"
                 if not os.path.exists(fname):
                     continue

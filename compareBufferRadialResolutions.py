@@ -4,6 +4,7 @@
 # NOTE: See https://docs.python.org/3.11/library/multiprocessing.html#the-spawn-and-forkserver-start-methods
 if __name__ == "__main__":
     # Import standard modules ...
+    import argparse
     import gzip
     import os
     import subprocess
@@ -49,6 +50,38 @@ if __name__ == "__main__":
     except:
         raise Exception("\"pyguymer3\" is not installed; you need to have the Python module from https://github.com/Guymer/PyGuymer3 located somewhere in your $PYTHONPATH") from None
 
+    # **************************************************************************
+
+    # Create argument parser and parse the arguments ...
+    parser = argparse.ArgumentParser(
+           allow_abbrev = False,
+            description = "Compare pyguymer3.geo.buffer() radial resolutions.",
+        formatter_class = argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser.add_argument(
+        "--debug",
+        action = "store_true",
+          dest = "debug",
+          help = "print debug messages",
+    )
+    parser.add_argument(
+        "--dry-run",
+        action = "store_true",
+          dest = "dryRun",
+          help = "don't run \"run.py\"",
+    )
+    parser.add_argument(
+        "--plot",
+        action = "store_true",
+          help = "make maps and animation",
+    )
+    args = parser.parse_args()
+
+    # **************************************************************************
+
+    # Define resolution ...
+    res = "i"
+
     # Define starting location ...
     lon = -1.0                                                                  # [°]
     lat = 50.5                                                                  # [°]
@@ -72,22 +105,26 @@ if __name__ == "__main__":
             "--freqSimp", f"{freq:d}",      # ~daily simplification
             "--local",                      # save time by only considering local land
             "--nang", "257",                # converged number of angles (from "compareBufferAngularResolutions.py")
-            "--plot",                       # make maps and animations
             "--precision", f"{prec:.1f}",   # LOOP VARIABLE
-            "--resolution", "i",            # intermediate coastline resolution
+            "--resolution", res,
         ]
+        if args.debug:
+            cmd.append("--debug")
+        if args.plot:
+            cmd.append("--plot")
 
         print(f'Running "{" ".join(cmd)}" ...')
 
         # Run GST ...
-        subprocess.run(
-            cmd,
-               check = False,
-            encoding = "utf-8",
-              stderr = subprocess.DEVNULL,
-              stdout = subprocess.DEVNULL,
-             timeout = None,
-        )
+        if not args.dryRun:
+            subprocess.run(
+                cmd,
+                   check = False,
+                encoding = "utf-8",
+                  stderr = subprocess.DEVNULL,
+                  stdout = subprocess.DEVNULL,
+                 timeout = None,
+            )
 
     # **************************************************************************
 
@@ -104,7 +141,7 @@ if __name__ == "__main__":
          coastlines_edgecolor = (1.0, 0.0, 0.0, 1.0),
          coastlines_facecolor = (1.0, 0.0, 0.0, 0.5),
          coastlines_linewidth = 1.0,
-        coastlines_resolution = "i",
+        coastlines_resolution = res,
                          dist = 100.0e3,
                         index = 1,
                           lat = lat,
@@ -146,7 +183,7 @@ if __name__ == "__main__":
             istep = ((1000 * dist) // prec) - 1                                 # [#]
 
             # Deduce directory name ...
-            dname = f"res=i_cons=2.00e+00_tol=1.00e-10/local=T_nang=257_prec={prec:.2e}_lon={lon:+011.6f}_lat={lat:+010.6f}_dur=0.09_spd=20.0/freqLand={freq:d}_freqSimp={freq:d}/ship"
+            dname = f"res={res}_cons=2.00e+00_tol=1.00e-10/local=T_nang=257_prec={prec:.2e}_lon={lon:+011.6f}_lat={lat:+010.6f}_dur=0.09_spd=20.0/freqLand={freq:d}_freqSimp={freq:d}/ship"
 
             # Deduce file name and skip if it is missing ...
             fname = f"{dname}/istep={istep:06d}.wkb.gz"
