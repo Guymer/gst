@@ -144,8 +144,7 @@ if __name__ == "__main__":
     pyguymer3.media.images2webp(
         frames,
         "compareNeMapResolutions.webp",
-          fps = 1.0,
-        strip = True,
+        fps = 1.0,
     )
 
     # Set maximum sizes ...
@@ -163,5 +162,4 @@ if __name__ == "__main__":
                      fps = 1.0,
             screenHeight = maxSize,
              screenWidth = maxSize,
-                   strip = True,
         )
