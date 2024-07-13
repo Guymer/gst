@@ -407,7 +407,7 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
         if plot and (istep + 1) % freqPlot == 0:
             # Determine PNG "one map" file name and append to list ...
             pngOne = f"{output3}/ship/istep={istep:06d}.png"
-            pngOnes.append(pngOne)
+            pngOnes.append(pngOne)                                              # pylint: disable=E0606
 
             # Check if the PNG "one map" needs making ...
             pngOneExists = os.path.exists(pngOne)
@@ -482,7 +482,7 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
                     limit += pyguymer3.geo.extract_lines(
                         removeLands(
                             poly.exterior,
-                            relevantLands,
+                            relevantLands,                                      # pylint: disable=E0606
                             debug = debug,
                              simp = -1.0,
                         ),
@@ -760,5 +760,4 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
             pyguymer3.media.images2webp(
                 pngOnes,
                 webpOnes,
-                strip = True,
             )
