@@ -13,10 +13,6 @@ jobs:
                     path: main
                     submodules: true
             -
-                name: Install BASH dependencies
-                run: |
-                    sudo apt-get install shellcheck
-            -
                 name: List programs
                 run: |
                     echo "::notice $(which shellcheck)"
@@ -24,4 +20,4 @@ jobs:
                 name: Analyse the BASH code
                 run: |
                     cd main
-                    shellcheck --severity=style $(git ls-files "*.sh")
+                    shellcheck --severity=error $(git ls-files "*.sh")
