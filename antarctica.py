@@ -108,7 +108,7 @@ if __name__ == "__main__":
                       name = "shaded-relief",
                 resolution = "large8192px",
             )
-            pyguymer3.geo._add_coastlines(
+            pyguymer3.geo._add_coastlines(                                      # pylint: disable=W0212
                 ax[i],
                  edgecolor = "red",
                     levels = [1],
@@ -119,7 +119,7 @@ if __name__ == "__main__":
             # Check if it is top, middle or bottom ...
             if i // 2 == 0:
                 # Draw Antarctica ...
-                pyguymer3.geo._add_coastlines(
+                pyguymer3.geo._add_coastlines(                                  # pylint: disable=W0212
                     ax[i],
                      edgecolor = "green",
                         levels = [5],
@@ -128,7 +128,7 @@ if __name__ == "__main__":
                 )
             elif i // 2 == 1:
                 # Draw Antarctica ...
-                pyguymer3.geo._add_coastlines(
+                pyguymer3.geo._add_coastlines(                                  # pylint: disable=W0212
                     ax[i],
                      edgecolor = "blue",
                         levels = [6],
