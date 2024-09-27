@@ -5,5 +5,6 @@ pillow
 cartopy
 geojson
 matplotlib
+meson
 numpy
 shapely
