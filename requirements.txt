@@ -5,6 +5,9 @@ pillow
 cartopy
 geojson
 matplotlib
-meson
+meson # Required so that NumPy can use an up-to-date version (not the old
+      # version that came with your system) when running "f2py".
+ninja # Required so that NumPy can use an up-to-date version (not the old
+      # version that came with your system) when running "f2py".
 numpy
 shapely
