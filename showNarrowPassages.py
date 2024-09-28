@@ -116,7 +116,7 @@ if __name__ == "__main__":
 
             # Populate GST command ...
             cmd = [
-                "python3.11", "run.py",
+                "python3.12", "run.py",
                 "0.0", "0.0", "20.0",           # dummy values
                 "--duration", "0.01",           # dummy value
                 "--freqLand", f"{freqLand:d}",  # ~daily land re-evaluation
