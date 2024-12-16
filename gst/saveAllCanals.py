@@ -1,7 +1,14 @@
 #!/usr/bin/env python3
 
 # Define function ...
-def saveAllCanals(wName, /, *, debug = False, simp = 0.1, tol = 1.0e-10):
+def saveAllCanals(
+    wName,
+    /,
+    *,
+    debug = __debug__,
+     simp = 0.1,
+      tol = 1.0e-10,
+):
     """Save (optionally simplified) canals to a compressed WKB file.
 
     Parameters
@@ -87,7 +94,10 @@ def saveAllCanals(wName, /, *, debug = False, simp = 0.1, tol = 1.0e-10):
             continue
 
         # Loop over LineStrings ...
-        for line in pyguymer3.geo.extract_lines(record.geometry, onlyValid = True):
+        for line in pyguymer3.geo.extract_lines(
+            record.geometry,
+            onlyValid = True,
+        ):
             # Append LineString (and its top) to lists ...
             db[neName]["raw"].append(line)
             db[neName]["top"].append(line.bounds[3])                            # [°]

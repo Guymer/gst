@@ -1,7 +1,21 @@
 #!/usr/bin/env python3
 
 # Define function ...
-def saveRelevantLands(wName, ship, dist, allLands, /, *, debug = False, fill = 1.0, nang = 9, simp = 0.1, tol = 1.0e-10):
+def saveRelevantLands(
+    wName,
+    ship,
+    dist,
+    allLands,
+    /,
+    *,
+        debug = __debug__,
+         fill = 1.0,
+    fillSpace = "EuclideanSpace",
+         nang = 9,
+        nIter = 100,
+         simp = 0.1,
+          tol = 1.0e-10,
+):
     """Save relevant land to a compressed WKB file.
 
     Given a ship and a sailing distance, save a compressed WKB file of all of
@@ -23,6 +37,9 @@ def saveRelevantLands(wName, ship, dist, allLands, /, *, debug = False, fill = 1
     fill : float, optional
         how many intermediary points are added to fill in the straight lines
         which connect the points; negative values disable filling
+    fillSpace : str, optional
+        the geometric space to perform the filling in (either "EuclideanSpace"
+        or "GeodesicSpace")
     nang : int, optional
         the number of angles around each point that are calculated when
         buffering
@@ -66,11 +83,14 @@ def saveRelevantLands(wName, ship, dist, allLands, /, *, debug = False, fill = 1
     maxShip = pyguymer3.geo.buffer(
         ship,
         dist,
-        debug = debug,
-         fill = fill,
-         nang = nang,
-         simp = simp,
-          tol = tol,
+                debug = debug,
+                 fill = fill,
+            fillSpace = fillSpace,
+        keepInteriors = True,
+                 nang = nang,
+                nIter = nIter,
+                 simp = simp,
+                  tol = tol,
     )
 
     # **************************************************************************

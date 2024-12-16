@@ -5,6 +5,8 @@
 if __name__ == "__main__":
     # Import standard modules ...
     import argparse
+    import platform
+    import shutil
 
     # Import my modules ...
     try:
@@ -55,6 +57,20 @@ if __name__ == "__main__":
            type = float,
     )
     parser.add_argument(
+        "--ffmpeg-path",
+        default = shutil.which("ffmpeg7") if platform.system() == "Darwin" else shutil.which("ffmpeg"),
+           dest = "ffmpegPath",
+           help = "the path to the \"ffmpeg\" binary",
+           type = str,
+    )
+    parser.add_argument(
+        "--ffprobe-path",
+        default = shutil.which("ffprobe7") if platform.system() == "Darwin" else shutil.which("ffprobe"),
+           dest = "ffprobePath",
+           help = "the path to the \"ffprobe\" binary",
+           type = str,
+    )
+    parser.add_argument(
         "--freqLand",
         default = 100,
            help = "re-evaluate the relevant land every freqLand iteration",
@@ -84,6 +100,13 @@ if __name__ == "__main__":
            type = int,
     )
     parser.add_argument(
+        "--nIter",
+        default = 1000000,
+           dest = "nIter",
+           help = "the maximum number of iterations (particularly the Vincenty formula)",
+           type = int,
+    )
+    parser.add_argument(
         "--plot",
         action = "store_true",
           help = "make maps and animation",
@@ -103,6 +126,12 @@ if __name__ == "__main__":
            type = str,
     )
     parser.add_argument(
+        "--timeout",
+        default = 60.0,
+           help = "the timeout for any requests/subprocess calls (in seconds)",
+           type = float,
+    )
+    parser.add_argument(
         "--tolerance",
         default = 1.0e-10,
            dest = "tol",
@@ -118,16 +147,20 @@ if __name__ == "__main__":
         args.lon,
         args.lat,
         args.spd,
-            cons = args.cons,
-           debug = args.debug,
-             dur = args.dur,
-        freqLand = args.freqLand,
-        freqPlot = args.freqPlot,
-        freqSimp = args.freqSimp,
-           local = args.local,
-            nang = args.nang,
-            plot = args.plot,
-            prec = args.prec,
-             res = args.res,
-             tol = args.tol,
+               cons = args.cons,
+              debug = args.debug,
+                dur = args.dur,
+         ffmpegPath = args.ffmpegPath,
+        ffprobePath = args.ffprobePath,
+           freqLand = args.freqLand,
+           freqPlot = args.freqPlot,
+           freqSimp = args.freqSimp,
+              local = args.local,
+               nang = args.nang,
+              nIter = args.nIter,
+               plot = args.plot,
+               prec = args.prec,
+                res = args.res,
+            timeout = args.timeout,
+                tol = args.tol,
     )

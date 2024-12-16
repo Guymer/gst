@@ -1,7 +1,29 @@
 #!/usr/bin/env python3
 
 # Define function ...
-def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 100, freqPlot = 25, freqSimp = 25, local = False, nang = 9, plot = False, prec = 10000.0, res = "c", tol = 1.0e-10):
+def sail(
+    lon,
+    lat,
+    spd,
+    /,
+    *,
+           cons = 2.0,
+          debug = __debug__,
+            dur = 1.0,
+     ffmpegPath = None,
+    ffprobePath = None,
+       freqLand = 100,
+       freqPlot = 25,
+       freqSimp = 25,
+          local = False,
+           nang = 9,
+          nIter = 100,
+           plot = False,
+           prec = 10000.0,
+            res = "c",
+        timeout = 60.0,
+            tol = 1.0e-10,
+):
     """Sail from a point
 
     This function reads in a starting coordinate (in degrees) and a sailing
@@ -22,6 +44,12 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
         print debug messages
     dur : float, optional
         the duration of the voyage (in days)
+    ffmpegPath : str, optional
+        the path to the "ffmpeg" binary (if not provided then Python will
+        attempt to find the binary itself)
+    ffprobePath : str, optional
+        the path to the "ffprobe" binary (if not provided then Python will
+        attempt to find the binary itself)
     freqLand : int, optional
         re-evaluate the relevant land every freqLand iteration
     freqPlot : int, optional
@@ -32,6 +60,8 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
         the plot has only local extent
     nang : int, optional
         the number of directions from each point that the vessel could sail in
+    nIter : int, optional
+        the maximum number of iterations (particularly the Vincenty formula)
     plot : bool, optional
         make a plot
     prec : float, optional
@@ -39,6 +69,8 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
     res : string, optional
         the resolution of the Global Self-Consistent Hierarchical
         High-Resolution Geography datasets
+    timeout : float, optional
+        the timeout for any requests/subprocess calls
     tol : float, optional
         the Euclidean distance that defines two points as being the same (in
         degrees)
@@ -118,12 +150,14 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
         lat,
         lon,
         +90.0,
+        nIter = nIter,
     )                                                                           # [m], [°], [°]
     toSouthPole, _, _ = pyguymer3.geo.calc_dist_between_two_locs(
         lon,
         lat,
         lon,
         -90.0,
+        nIter = nIter,
     )                                                                           # [m], [°], [°]
 
     print(f"The North Pole is {0.001 * toNorthPole:,.2f} kilometres up (ignoring all land).")
@@ -151,18 +185,23 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
                 )
             ),
             +1.0,
-            debug = debug,
-              tol = tol,
+                debug = debug,
+            fillSpace = "EuclideanSpace",
+                nIter = nIter,
+                  tol = tol,
         )
     else:
         maxShip = pyguymer3.geo.buffer(
             ship,
             maxDist,
-            debug = debug,
-             fill = +1.0,
-             nang = 361,
-             simp = -1.0,
-              tol = tol,
+                    debug = debug,
+                     fill = +1.0,
+                fillSpace = "EuclideanSpace",
+            keepInteriors = False,
+                     nang = 361,
+                    nIter = nIter,
+                     simp = -1.0,
+                      tol = tol,
         )
 
     # Check if the user is being far too coarse ...
@@ -231,13 +270,19 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
         savedAllLands = saveAllLands(
             allLandsName,
             f"{output1}/allLands",
-             debug = debug,
-            levels = (1, 5, 6),
-             local = False,
-           maxShip = None,
-               res = res,
-              simp = simp,
-               tol = tol,
+            allCanals = None,
+                debug = debug,
+                 dist = -1.0,
+                 fill = 1.0,
+            fillSpace = "EuclideanSpace",
+               levels = (1, 5, 6),
+                local = False,
+              maxShip = None,
+                 nang = nang,
+                nIter = nIter,
+                  res = res,
+                 simp = simp,
+                  tol = tol,
         )
 
     # **************************************************************************
@@ -265,7 +310,10 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
     #       invalid LineStrings, so don't bother checking for them.
     if savedAllCanals:
         with gzip.open(allCanalsName, mode = "rb") as gzObj:
-            allCanals = pyguymer3.geo.extract_lines(shapely.wkb.loads(gzObj.read()), onlyValid = False)
+            allCanals = pyguymer3.geo.extract_lines(
+                shapely.wkb.loads(gzObj.read()),
+                onlyValid = False,
+            )
     else:
         allCanals = None
 
@@ -286,18 +334,23 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
                 debug = debug,
                  dist = prec,
                  fill = fill,
+            fillSpace = "EuclideanSpace",
                levels = (1, 5, 6),
                 local = local,
               maxShip = pyguymer3.geo.buffer(
                 maxShip,
                 prec,
-                debug = debug,
-                 fill = +1.0,
-                 nang = 361,
-                 simp = -1.0,
-                  tol = tol,
+                        debug = debug,
+                         fill = +1.0,
+                    fillSpace = "EuclideanSpace",
+                keepInteriors = True,
+                         nang = 361,
+                        nIter = nIter,
+                         simp = -1.0,
+                          tol = tol,
             ),
                  nang = nang,
+                nIter = nIter,
                   res = res,
                  simp = simp,
                   tol = tol,
@@ -311,7 +364,11 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
     #       Polygons, so don't bother checking for them.
     if savedAllLands:
         with gzip.open(allLandsName, mode = "rb") as gzObj:
-            allLands = pyguymer3.geo.extract_polys(shapely.wkb.loads(gzObj.read()), onlyValid = False, repair = False)
+            allLands = pyguymer3.geo.extract_polys(
+                shapely.wkb.loads(gzObj.read()),
+                onlyValid = False,
+                   repair = False,
+            )
     else:
         allLands = None
 
@@ -357,19 +414,36 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
                 axAll = pyguymer3.geo.add_axis(
                     fgAll,
                     add_coastlines = False,
+                     add_gridlines = True,
+                             debug = debug,
                               dist = maxDist,
                                lat = lat,
                                lon = lon,
+                             nIter = nIter,
+                         onlyValid = False,
+                            repair = False,
                 )
             else:
                 # Create figure ...
                 fgAll = matplotlib.pyplot.figure(figsize = (12.8, 7.2))
 
                 # Create axis ...
-                axAll = pyguymer3.geo.add_axis(fgAll, add_coastlines = False)
+                axAll = pyguymer3.geo.add_axis(
+                    fgAll,
+                    add_coastlines = False,
+                     add_gridlines = True,
+                             debug = debug,
+                             nIter = nIter,
+                         onlyValid = False,
+                            repair = False,
+                )
 
             # Configure axis ...
-            pyguymer3.geo.add_map_background(axAll, resolution = "large8192px")
+            pyguymer3.geo.add_map_background(
+                axAll,
+                     debug = debug,
+                resolution = "large8192px",
+            )
 
             # Plot Polygons ...
             axAll.add_geometries(
@@ -385,7 +459,11 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
             # NOTE: Given how "maxShip" was made, we know that there aren't any
             #       invalid Polygons, so don't bother checking for them.
             axAll.add_geometries(
-                pyguymer3.geo.extract_polys(maxShip, onlyValid = False, repair = False),
+                pyguymer3.geo.extract_polys(
+                    maxShip,
+                    onlyValid = False,
+                       repair = False,
+                ),
                 cartopy.crs.PlateCarree(),
                 edgecolor = (0.0, 0.0, 0.0, 0.2),
                 facecolor = (0.0, 0.0, 0.0, 0.2),
@@ -434,11 +512,13 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
                     ship,
                     cons * freqLand * prec,
                     allLands,
-                    debug = debug,
-                     fill = +1.0,
-                     nang = 361,
-                     simp = -1.0,
-                      tol = tol,
+                        debug = debug,
+                         fill = +1.0,
+                    fillSpace = "EuclideanSpace",
+                         nang = 361,
+                        nIter = nIter,
+                         simp = -1.0,
+                          tol = tol,
                 )
 
                 # Print timer ...
@@ -453,7 +533,11 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
             #       them.
             if savedRelevantLands:
                 with gzip.open(relevantLandsName, mode = "rb") as gzObj:
-                    relevantLands = pyguymer3.geo.extract_polys(shapely.wkb.loads(gzObj.read()), onlyValid = False, repair = False)
+                    relevantLands = pyguymer3.geo.extract_polys(
+                        shapely.wkb.loads(gzObj.read()),
+                        onlyValid = False,
+                           repair = False,
+                    )
             else:
                 relevantLands = None
 
@@ -478,7 +562,11 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
                 # NOTE: Given how "ship" was made, we know that there aren't any
                 #       invalid Polygons, so don't bother checking for them.
                 limit = []
-                for poly in pyguymer3.geo.extract_polys(ship, onlyValid = False, repair = False):
+                for poly in pyguymer3.geo.extract_polys(
+                    ship,
+                    onlyValid = False,
+                       repair = False,
+                ):
                     limit += pyguymer3.geo.extract_lines(
                         removeLands(
                             poly.exterior,
@@ -513,7 +601,10 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
             #       invalid LineStrings, so don't bother checking for them.
             nline = 0                                                           # [#]
             npoint = 0                                                          # [#]
-            for line in pyguymer3.geo.extract_lines(limit, onlyValid = False):
+            for line in pyguymer3.geo.extract_lines(
+                limit,
+                onlyValid = False,
+            ):
                 nline += 1                                                      # [#]
                 npoint += len(line.coords)                                      # [#]
 
@@ -532,11 +623,14 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
                 limit = pyguymer3.geo.buffer(
                     limit,
                     prec,
-                    debug = debug,
-                     fill = fill,
-                     nang = nang,
-                     simp = simp,
-                      tol = tol,
+                            debug = debug,
+                             fill = fill,
+                        fillSpace = "EuclideanSpace",
+                    keepInteriors = True,
+                             nang = nang,
+                            nIter = nIter,
+                             simp = simp,
+                              tol = tol,
                 )
                 ship = shapely.ops.unary_union([limit, ship])
                 ship = removeLands(
@@ -549,6 +643,7 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
                     ship,
                     relevantLands,
                     onlyValid = False,
+                        nIter = nIter,
                          prec = prec / cons,
                        repair = False,
                 )
@@ -562,11 +657,14 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
                 limit = pyguymer3.geo.buffer(
                     limit,
                     prec,
-                    debug = debug,
-                     fill = fill,
-                     nang = nang,
-                     simp = -1.0,
-                      tol = tol,
+                            debug = debug,
+                             fill = fill,
+                        fillSpace = "EuclideanSpace",
+                    keepInteriors = False,
+                             nang = nang,
+                            nIter = nIter,
+                             simp = -1.0,
+                              tol = tol,
                 )
                 ship = shapely.ops.unary_union([limit, ship])
                 ship = removeLands(
@@ -579,6 +677,7 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
                     ship,
                     relevantLands,
                     onlyValid = False,
+                        nIter = nIter,
                          prec = prec / cons,
                        repair = False,
                 )
@@ -599,7 +698,11 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
         #       Polygons, so don't bother checking for them.
         npoint = 0                                                              # [#]
         npoly = 0                                                               # [#]
-        for poly in pyguymer3.geo.extract_polys(ship, onlyValid = False, repair = False):
+        for poly in pyguymer3.geo.extract_polys(
+            ship,
+            onlyValid = False,
+               repair = False,
+        ):
             npoint += len(poly.exterior.coords)                                 # [#]
             npoly += 1                                                          # [#]
             for interior in poly.interiors:
@@ -622,7 +725,11 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
                 # NOTE: Given how "ship" was made, we know that there aren't any
                 #       invalid Polygons, so don't bother checking for them.
                 axAll.add_geometries(
-                    pyguymer3.geo.extract_polys(ship, onlyValid = False, repair = False),
+                    pyguymer3.geo.extract_polys(
+                        ship,
+                        onlyValid = False,
+                           repair = False,
+                    ),
                     cartopy.crs.PlateCarree(),
                     edgecolor = f"C{((istep + 1) // freqPlot) - 1:d}",
                     facecolor = "none",
@@ -641,22 +748,46 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
                     axOne = pyguymer3.geo.add_axis(
                         fgOne,
                         add_coastlines = False,
+                         add_gridlines = True,
+                                 debug = debug,
                                   dist = maxDist,
                                    lat = lat,
                                    lon = lon,
+                                 nIter = nIter,
+                             onlyValid = False,
+                                repair = False,
                     )
 
                     # Configure axis ...
-                    pyguymer3.geo.add_GSHHG_map_underlay(axOne, linewidth = 1.0)
+                    pyguymer3.geo.add_GSHHG_map_underlay(
+                        axOne,
+                             debug = debug,
+                         linewidth = 1.0,
+                         onlyValid = False,
+                            repair = False,
+                        resolution = res,
+                    )
                 else:
                     # Create figure ...
                     fgOne = matplotlib.pyplot.figure(figsize = (12.8, 7.2))
 
                     # Create axis ...
-                    axOne = pyguymer3.geo.add_axis(fgOne, add_coastlines = False)
+                    axOne = pyguymer3.geo.add_axis(
+                        fgOne,
+                        add_coastlines = False,
+                         add_gridlines = True,
+                                 debug = debug,
+                                 nIter = nIter,
+                             onlyValid = False,
+                                repair = False,
+                    )
 
                     # Configure axis ...
-                    pyguymer3.geo.add_map_background(axOne, resolution = "large8192px")
+                    pyguymer3.geo.add_map_background(
+                        axOne,
+                             debug = debug,
+                        resolution = "large8192px",
+                    )
 
                 # Plot Polygons ...
                 axOne.add_geometries(
@@ -672,7 +803,11 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
                 # NOTE: Given how "maxShip" was made, we know that there aren't
                 #       any invalid Polygons, so don't bother checking for them.
                 axOne.add_geometries(
-                    pyguymer3.geo.extract_polys(maxShip, onlyValid = False, repair = False),
+                    pyguymer3.geo.extract_polys(
+                        maxShip,
+                        onlyValid = False,
+                           repair = False,
+                    ),
                     cartopy.crs.PlateCarree(),
                     edgecolor = (0.0, 0.0, 0.0, 1.0),
                     facecolor = (0.0, 0.0, 0.0, 0.2),
@@ -684,7 +819,11 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
                 # NOTE: Given how "ship" was made, we know that there aren't any
                 #       invalid Polygons, so don't bother checking for them.
                 axOne.add_geometries(
-                    pyguymer3.geo.extract_polys(ship, onlyValid = False, repair = False),
+                    pyguymer3.geo.extract_polys(
+                        ship,
+                        onlyValid = False,
+                           repair = False,
+                    ),
                     cartopy.crs.PlateCarree(),
                     edgecolor = "blue",
                     facecolor = "none",
@@ -702,7 +841,12 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
                 matplotlib.pyplot.close(fgOne)
 
                 # Optimize PNG ...
-                pyguymer3.image.optimize_image(pngOne, strip = True)
+                pyguymer3.image.optimize_image(
+                    pngOne,
+                      debug = debug,
+                      strip = True,
+                    timeout = timeout,
+                )
 
         # **********************************************************************
 
@@ -736,7 +880,12 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
             matplotlib.pyplot.close(fgAll)
 
             # Optimize PNG ...
-            pyguymer3.image.optimize_image(pngAll, strip = True)
+            pyguymer3.image.optimize_image(
+                pngAll,
+                  debug = debug,
+                  strip = True,
+                timeout = timeout,
+            )
 
         # **********************************************************************
 
@@ -747,6 +896,10 @@ def sail(lon, lat, spd, /, *, cons = 2.0, debug = False, dur = 1.0, freqLand = 1
             # Save 25fps MP4 ...
             tmpName = pyguymer3.media.images2mp4(
                 pngOnes,
+                      debug = debug,
+                 ffmpegPath = ffmpegPath,
+                ffprobePath = ffprobePath,
+                    timeout = None,
             )
             shutil.move(tmpName, mp4Ones)
 

@@ -1,7 +1,25 @@
 #!/usr/bin/env python3
 
 # Define function ...
-def saveAllLands(wName, dname, /, *, allCanals = None, debug = False, dist = -1.0, fill = 1.0, levels = (1, 5, 6), local = False, maxShip = None, nang = 9, res = "c", simp = 0.1, tol = 1.0e-10):
+def saveAllLands(
+    wName,
+    dname,
+    /,
+    *,
+    allCanals = None,
+        debug = __debug__,
+         dist = -1.0,
+         fill = 1.0,
+    fillSpace = "EuclideanSpace",
+       levels = (1, 5, 6),
+        local = False,
+      maxShip = None,
+         nang = 9,
+        nIter = 100,
+          res = "c",
+         simp = 0.1,
+          tol = 1.0e-10,
+):
     """Save (optionally buffered and optionally simplified) land (with canals
     optionally subtracted) to a compressed WKB file.
 
@@ -22,6 +40,9 @@ def saveAllLands(wName, dname, /, *, allCanals = None, debug = False, dist = -1.
     fill : float, optional
         how many intermediary points are added to fill in the straight lines
         which connect the points; negative values disable filling
+    fillSpace : str, optional
+        the geometric space to perform the filling in (either "EuclideanSpace"
+        or "GeodesicSpace")
     levels : tuple of int, optional
         the GSHHG levels to include (you should probably use more than just
         level 1, as it does not contain any representation of Antarctica at all)
@@ -32,6 +53,8 @@ def saveAllLands(wName, dname, /, *, allCanals = None, debug = False, dist = -1.
     nang : int, optional
         the number of angles around each point that are calculated when
         buffering
+    nIter : int, optional
+        the maximum number of iterations (particularly the Vincenty formula)
     res : string, optional
         the resolution of the Global Self-Consistent Hierarchical
         High-Resolution Geography datasets
@@ -107,12 +130,14 @@ def saveAllLands(wName, dname, /, *, allCanals = None, debug = False, dist = -1.
                     coords[1][1],
                     coords[0][0],
                     coords[0][1],
+                    nIter = nIter,
                 )                                                               # [°]
                 newLon, newLat, _ = pyguymer3.geo.calc_loc_from_loc_and_bearing_and_dist(
                     coords[0][0],
                     coords[0][1],
                     bear,
                     30000.0,            # NOTE: Chosen by trial and error.
+                    nIter = nIter,
                 )                                                               # [°], [°]
                 coords = [(newLon, newLat)] + coords                            # [°]
 
@@ -125,12 +150,14 @@ def saveAllLands(wName, dname, /, *, allCanals = None, debug = False, dist = -1.
                     coords[-2][1],
                     coords[-1][0],
                     coords[-1][1],
+                    nIter = nIter,
                 )                                                               # [°]
                 newLon, newLat, _ = pyguymer3.geo.calc_loc_from_loc_and_bearing_and_dist(
                     coords[-1][0],
                     coords[-1][1],
                     bear,
                     30000.0,            # NOTE: Chosen by trial and error.
+                    nIter = nIter,
                 )                                                               # [°], [°]
                 coords = coords + [(newLon, newLat)]                            # [°]
 
@@ -140,6 +167,7 @@ def saveAllLands(wName, dname, /, *, allCanals = None, debug = False, dist = -1.
                     coords[-1][1],
                     180.0,
                     30000.0,            # NOTE: Chosen by trial and error.
+                    nIter = nIter,
                 )                                                               # [°], [°]
                 coords = coords + [(newLon, newLat)]                            # [°]
 
@@ -153,11 +181,14 @@ def saveAllLands(wName, dname, /, *, allCanals = None, debug = False, dist = -1.
                     pyguymer3.geo.buffer(
                         line,
                         dist,
-                        debug = debug,
-                         fill = fill,
-                         nang = nang,
-                         simp = simp,
-                          tol = tol,
+                                debug = debug,
+                                 fill = fill,
+                            fillSpace = fillSpace,
+                        keepInteriors = True,
+                                 nang = nang,
+                                nIter = nIter,
+                                 simp = simp,
+                                  tol = tol,
                     )
                 )
         else:
@@ -196,7 +227,11 @@ def saveAllLands(wName, dname, /, *, allCanals = None, debug = False, dist = -1.
             polys = []
 
             # Loop over Polygons ...
-            for poly in pyguymer3.geo.extract_polys(record.geometry, onlyValid = True, repair = True):
+            for poly in pyguymer3.geo.extract_polys(
+                record.geometry,
+                onlyValid = True,
+                   repair = True,
+            ):
                 # Check if only Polygons local to the ship should be saved ...
                 if local and maxShip is not None:
                     # Skip Polygon if it is outside of the maximum possible
@@ -219,8 +254,10 @@ def saveAllLands(wName, dname, /, *, allCanals = None, debug = False, dist = -1.
                         dist,
                                 debug = debug,
                                  fill = fill,
+                            fillSpace = fillSpace,
                         keepInteriors = False,
                                  nang = nang,
+                                nIter = nIter,
                                  simp = simp,
                                   tol = tol,
                     )
@@ -233,7 +270,11 @@ def saveAllLands(wName, dname, /, *, allCanals = None, debug = False, dist = -1.
                 # Add the Polygons to the list ...
                 # NOTE: Given how "poly" was made, we know that there aren't any
                 #       invalid Polygons, so don't bother checking for them.
-                polys += pyguymer3.geo.extract_polys(poly, onlyValid = False, repair = False)
+                polys += pyguymer3.geo.extract_polys(
+                    poly,
+                    onlyValid = False,
+                       repair = False,
+                )
 
             # Skip record if it does not have any Polygons ...
             if not polys:
@@ -262,7 +303,11 @@ def saveAllLands(wName, dname, /, *, allCanals = None, debug = False, dist = -1.
         # NOTE: Given how "polys" was made, we know that there aren't any
         #       invalid Polygons, so don't bother checking for them.
         with gzip.open(tmpName, mode = "rb") as gzObj:
-            polys += pyguymer3.geo.extract_polys(shapely.wkb.loads(gzObj.read()), onlyValid = False, repair = False)
+            polys += pyguymer3.geo.extract_polys(
+                shapely.wkb.loads(gzObj.read()),
+                onlyValid = False,
+                   repair = False,
+            )
 
     # Return if there isn't any land at this resolution ...
     if not polys:
@@ -272,7 +317,11 @@ def saveAllLands(wName, dname, /, *, allCanals = None, debug = False, dist = -1.
     # NOTE: Given how "polys" was made, we know that there aren't any invalid
     #       Polygons, so don't bother checking for them.
     polys = shapely.ops.unary_union(polys).simplify(tol)
-    polys = removeInteriorRings(polys, onlyValid = False, repair = False)
+    polys = removeInteriorRings(
+        polys,
+        onlyValid = False,
+           repair = False,
+    )
     if debug:
         pyguymer3.geo.check(polys)
 
@@ -282,7 +331,11 @@ def saveAllLands(wName, dname, /, *, allCanals = None, debug = False, dist = -1.
         # NOTE: Given how "polys" was made, we know that there aren't any
         #       invalid Polygons, so don't bother checking for them.
         polys = polys.simplify(simp)
-        polys = removeInteriorRings(polys, onlyValid = False, repair = False)
+        polys = removeInteriorRings(
+            polys,
+            onlyValid = False,
+               repair = False,
+        )
         if debug:
             pyguymer3.geo.check(polys)
 

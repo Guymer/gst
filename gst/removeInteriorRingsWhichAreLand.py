@@ -1,7 +1,16 @@
 #!/usr/bin/env python3
 
 # Define function ...
-def removeInteriorRingsWhichAreLand(shape, lands, /, *, onlyValid = False, prec = 10000.0, repair = False):
+def removeInteriorRingsWhichAreLand(
+    shape,
+    lands,
+    /,
+    *,
+        nIter = 100,
+    onlyValid = False,
+         prec = 10000.0,
+       repair = False,
+):
     """Remove the holes in a shape which match land
 
     This function reads in a shape and a list of Polygons of land masses. Each
@@ -14,6 +23,8 @@ def removeInteriorRingsWhichAreLand(shape, lands, /, *, onlyValid = False, prec 
         the input shape
     lands : list of shapely.geometry.polygon.Polygon
         the list of land masses
+    nIter : int, optional
+        the maximum number of iterations (particularly the Vincenty formula)
     onlyValid : bool, optional
         only return valid Polygons (checks for validity can take a while, if
         being called often)
@@ -68,6 +79,7 @@ def removeInteriorRingsWhichAreLand(shape, lands, /, *, onlyValid = False, prec 
                     land.centroid.y,
                     possibleLand.centroid.x,
                     possibleLand.centroid.y,
+                    nIter = nIter,
                 )                                                               # [m], [°], [°]
                 if dist < prec:
                     skip = True
@@ -88,10 +100,23 @@ def removeInteriorRingsWhichAreLand(shape, lands, /, *, onlyValid = False, prec 
         polys = []
 
         # Loop over Polygons ...
-        for poly in pyguymer3.geo.extract_polys(shape, onlyValid = onlyValid, repair = repair):
+        for poly in pyguymer3.geo.extract_polys(
+            shape,
+            onlyValid = onlyValid,
+               repair = repair,
+        ):
             # Append a correctly oriented Polygon made up of the exterior
             # LinearRing and the interior LinearRings which are not land ...
-            polys.append(removeInteriorRingsWhichAreLand(poly, lands, onlyValid = onlyValid, prec = prec, repair = repair))
+            polys.append(
+                removeInteriorRingsWhichAreLand(
+                    poly,
+                    lands,
+                        nIter = nIter,
+                    onlyValid = onlyValid,
+                         prec = prec,
+                       repair = repair,
+                )
+            )
 
         # Return a [Multi]Polygon made of Polygons made of the exterior
         # LinearRing and the interior LinearRings which are not land ...

@@ -1,7 +1,13 @@
 #!/usr/bin/env python3
 
 # Define function ...
-def removeInteriorRings(shape, /, *, onlyValid = False, repair = False):
+def removeInteriorRings(
+    shape,
+    /,
+    *,
+    onlyValid = False,
+       repair = False,
+):
     """Remove all interior rings from a [Multi]Polygon
 
     This function reads in a [Multi]Polygon and returns a [Multi]Polygon which
@@ -52,10 +58,20 @@ def removeInteriorRings(shape, /, *, onlyValid = False, repair = False):
         polys = []
 
         # Loop over Polygons ...
-        for poly in pyguymer3.geo.extract_polys(shape, onlyValid = onlyValid, repair = repair):
+        for poly in pyguymer3.geo.extract_polys(
+            shape,
+            onlyValid = onlyValid,
+               repair = repair,
+        ):
             # Append a correctly oriented Polygon made up of just the exterior
             # LinearRing ...
-            polys.append(removeInteriorRings(poly, onlyValid = onlyValid, repair = repair))
+            polys.append(
+                removeInteriorRings(
+                    poly,
+                    onlyValid = onlyValid,
+                       repair = repair,
+                )
+            )
 
         # Return a [Multi]Polygon made of Polygons made of just the exterior
         # LinearRings ...
