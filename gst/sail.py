@@ -413,15 +413,26 @@ def sail(
                 # Create axis ...
                 axAll = pyguymer3.geo.add_axis(
                     fgAll,
-                    add_coastlines = False,
-                     add_gridlines = True,
-                             debug = debug,
-                              dist = maxDist,
-                               lat = lat,
-                               lon = lon,
-                             nIter = nIter,
-                         onlyValid = False,
-                            repair = False,
+                      add_coastlines = False,
+                       add_gridlines = True,
+                               debug = debug,
+                                dist = maxDist,
+                                 lat = lat,
+                                 lon = lon,
+                               nIter = nIter,
+                           onlyValid = False,
+                              repair = False,
+                    satellite_height = False,
+                )
+
+                # Configure axis ...
+                pyguymer3.geo.add_GSHHG_map_underlay(
+                    axAll,
+                         debug = debug,
+                     linewidth = 1.0,
+                     onlyValid = False,
+                        repair = False,
+                    resolution = res,
                 )
             else:
                 # Create figure ...
@@ -438,12 +449,12 @@ def sail(
                             repair = False,
                 )
 
-            # Configure axis ...
-            pyguymer3.geo.add_map_background(
-                axAll,
-                     debug = debug,
-                resolution = "large8192px",
-            )
+                # Configure axis ...
+                pyguymer3.geo.add_map_background(
+                    axAll,
+                         debug = debug,
+                    resolution = "large8192px",
+                )
 
             # Plot Polygons ...
             axAll.add_geometries(
@@ -747,15 +758,16 @@ def sail(
                     # Create axis ...
                     axOne = pyguymer3.geo.add_axis(
                         fgOne,
-                        add_coastlines = False,
-                         add_gridlines = True,
-                                 debug = debug,
-                                  dist = maxDist,
-                                   lat = lat,
-                                   lon = lon,
-                                 nIter = nIter,
-                             onlyValid = False,
-                                repair = False,
+                          add_coastlines = False,
+                           add_gridlines = True,
+                                   debug = debug,
+                                    dist = maxDist,
+                                     lat = lat,
+                                     lon = lon,
+                                   nIter = nIter,
+                               onlyValid = False,
+                                  repair = False,
+                        satellite_height = False,
                     )
 
                     # Configure axis ...
