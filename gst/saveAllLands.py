@@ -14,7 +14,7 @@ def saveAllLands(
        levels = (1, 5, 6),
         local = False,
       maxShip = None,
-         nang = 9,
+         nAng = 9,
         nIter = 100,
           res = "c",
          simp = 0.1,
@@ -50,7 +50,7 @@ def saveAllLands(
         the plot has only local extent
     maxShip : shapely.geometry.polygon.Polygon, shapely.geometry.multipolygon.MultiPolygon
         the maximum possible sailing distance (ignoring all land)
-    nang : int, optional
+    nAng : int, optional
         the number of angles around each point that are calculated when
         buffering
     nIter : int, optional
@@ -185,7 +185,7 @@ def saveAllLands(
                                  fill = fill,
                             fillSpace = fillSpace,
                         keepInteriors = True,
-                                 nang = nang,
+                                 nAng = nAng,
                                 nIter = nIter,
                                  simp = simp,
                                   tol = tol,
@@ -256,7 +256,7 @@ def saveAllLands(
                                  fill = fill,
                             fillSpace = fillSpace,
                         keepInteriors = False,
-                                 nang = nang,
+                                 nAng = nAng,
                                 nIter = nIter,
                                  simp = simp,
                                   tol = tol,

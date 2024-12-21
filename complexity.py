@@ -66,21 +66,21 @@ if __name__ == "__main__":
 
     # Define combinations ...
     combs = [
-        # Study convergence (changing just "nang" and "prec") ...
+        # Study convergence (changing just "nAng" and "prec") ...
         (2,  9, 5000,),
         (2, 17, 2500,),
         (2, 33, 1250,),
 
-        # Study convergence (changing "cons", "nang" and "prec") ...
+        # Study convergence (changing "cons", "nAng" and "prec") ...
         # (2,  9, 5000,),
         # (4, 17, 2500,),
         # (8, 33, 1250,),
 
-        # With "nang=17" and "prec=2500", is "cons=2" good enough?
+        # With "nAng=17" and "prec=2500", is "cons=2" good enough?
         # (2, 17, 2500,),
         # (4, 17, 2500,),
 
-        # With "nang=33" and "prec=1250", is "cons=2" good enough?
+        # With "nAng=33" and "prec=1250", is "cons=2" good enough?
         # (2, 33, 1250,),
         # (8, 33, 1250,),
     ]
@@ -92,7 +92,7 @@ if __name__ == "__main__":
     # **************************************************************************
 
     # Loop over combinations ...
-    for cons, nang, prec in combs:
+    for cons, nAng, prec in combs:
         # Create short-hands ...
         # NOTE: Say that 40,000 metres takes 1 hour at 20 knots.
         freqLand = 24 * 40000 // prec                                           # [#]
@@ -106,7 +106,7 @@ if __name__ == "__main__":
             "--duration", "0.01",               # dummy value
             "--freqLand", f"{freqLand:d}",      # ~daily land re-evaluation
             "--freqSimp", f"{freqSimp:d}",      # ~hourly simplification
-            "--nang", f"{nang:d}",              # LOOP VARIABLE
+            "--nAng", f"{nAng:d}",              # LOOP VARIABLE
             "--precision", f"{prec:.1f}",       # LOOP VARIABLE
             "--resolution", res,
         ]
@@ -138,9 +138,9 @@ if __name__ == "__main__":
     scale = 100
 
     # Loop over combinations ...
-    for cons, nang, prec in combs:
+    for cons, nAng, prec in combs:
         # Deduce directory name ...
-        dname = f"res={res}_cons={cons:.2e}_tol=1.00e-10/local=F_nang={nang:d}_prec={prec:.2e}"
+        dname = f"res={res}_cons={cons:.2e}_tol=1.00e-10/local=F_nAng={nAng:d}_prec={prec:.2e}"
 
         # Deduce file name and skip if it is missing ...
         fname = f"{dname}/allLands.wkb.gz"
@@ -233,8 +233,8 @@ if __name__ == "__main__":
 
         # **********************************************************************
 
-        print(f"Saving \"complexity_res={res}_cons={cons:.2e}_nang={nang:d}_prec={prec:.2e}.png\" ...")
+        print(f"Saving \"complexity_res={res}_cons={cons:.2e}_nAng={nAng:d}_prec={prec:.2e}.png\" ...")
 
         # Save PNG ...
-        histImg.save(f"complexity_res={res}_cons={cons:.2e}_nang={nang:d}_prec={prec:.2e}.png")
-        pyguymer3.image.optimize_image(f"complexity_res={res}_cons={cons:.2e}_nang={nang:d}_prec={prec:.2e}.png", strip = True)
+        histImg.save(f"complexity_res={res}_cons={cons:.2e}_nAng={nAng:d}_prec={prec:.2e}.png")
+        pyguymer3.image.optimize_image(f"complexity_res={res}_cons={cons:.2e}_nAng={nAng:d}_prec={prec:.2e}.png", strip = True)

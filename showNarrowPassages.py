@@ -108,7 +108,7 @@ if __name__ == "__main__":
     # Loop over resolutions ...
     for res in ress:
         # Loop over combinations ...
-        for nang, prec, color in combs:
+        for nAng, prec, color in combs:
             # Create short-hands ...
             # NOTE: Say that 40,000 metres takes 1 hour at 20 knots.
             freqLand = 24 * 40000 // prec                                       # [#]
@@ -121,7 +121,7 @@ if __name__ == "__main__":
                 "--duration", "0.01",           # dummy value
                 "--freqLand", f"{freqLand:d}",  # ~daily land re-evaluation
                 "--freqSimp", f"{freqSimp:d}",  # ~hourly simplification
-                "--nang", f"{nang:d}",          # LOOP VARIABLE
+                "--nAng", f"{nAng:d}",          # LOOP VARIABLE
                 "--precision", f"{prec:.1f}",   # LOOP VARIABLE
                 "--resolution", res,            # LOOP VARIABLE
             ]
@@ -185,9 +185,9 @@ if __name__ == "__main__":
             )
 
             # Loop over combinations ...
-            for nang, prec, color in combs:
+            for nAng, prec, color in combs:
                 # Deduce file name and skip if it is missing ...
-                dname = f"res={res}_cons=2.00e+00_tol=1.00e-10/local=F_nang={nang:d}_prec={prec:.2e}"
+                dname = f"res={res}_cons=2.00e+00_tol=1.00e-10/local=F_nAng={nAng:d}_prec={prec:.2e}"
                 fname = f"{dname}/allLands.wkb.gz"
                 if not os.path.exists(fname):
                     continue

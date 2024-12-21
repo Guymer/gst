@@ -89,7 +89,7 @@ if __name__ == "__main__":
     # **************************************************************************
 
     # Loop over number of angles ...
-    for nang in [9, 17, 33, 65, 129, 257]:
+    for nAng in [9, 17, 33, 65, 129, 257]:
         # Populate GST command ...
         cmd = [
             "python3.12", "run.py",
@@ -99,7 +99,7 @@ if __name__ == "__main__":
             "--freqPlot", "1",          # plot every 1.25 kilometres
             "--freqSimp", "768",        # ~daily simplification
             "--local",                  # save time by only considering local land
-            "--nang", f"{nang:d}",      # LOOP VARIABLE
+            "--nAng", f"{nAng:d}",      # LOOP VARIABLE
             "--precision", "1250.0",    # converged precision (from "compareBufferRadialResolutions.py")
             "--resolution", res,
         ]
@@ -163,7 +163,7 @@ if __name__ == "__main__":
     lines = []
 
     # Loop over number of angles ...
-    for iang, nang in enumerate([9, 17, 33, 65, 129, 257]):
+    for iang, nAng in enumerate([9, 17, 33, 65, 129, 257]):
         # Create short-hand ...
         color = f"C{iang:d}"
 
@@ -173,7 +173,7 @@ if __name__ == "__main__":
             istep = ((1000 * dist) // 1250) - 1                                 # [#]
 
             # Deduce directory name ...
-            dname = f"res={res}_cons=2.00e+00_tol=1.00e-10/local=T_nang={nang:d}_prec=1.25e+03_lon={lon:+011.6f}_lat={lat:+010.6f}_dur=0.09_spd=20.0/freqLand=768_freqSimp=768/ship"
+            dname = f"res={res}_cons=2.00e+00_tol=1.00e-10/local=T_nAng={nAng:d}_prec=1.25e+03_lon={lon:+011.6f}_lat={lat:+010.6f}_dur=0.09_spd=20.0/freqLand=768_freqSimp=768/ship"
 
             # Deduce file name and skip if it is missing ...
             fname = f"{dname}/istep={istep:06d}.wkb.gz"
@@ -190,10 +190,10 @@ if __name__ == "__main__":
             key = f"{dist:,d}"
             if key not in data:
                 data[key] = {
-                    "nang" : [],                                                # [#]
+                    "nAng" : [],                                                # [#]
                     "area" : [],                                                # [°2]
                 }
-            data[key]["nang"].append(nang)                                      # [#]
+            data[key]["nAng"].append(nAng)                                      # [#]
             data[key]["area"].append(ship.area)                                 # [°2]
 
             # Plot Polygon ...
@@ -206,7 +206,7 @@ if __name__ == "__main__":
             )
 
             # Check if it is the first distance for this number of angles ...
-            label = f"{nang:,d}"
+            label = f"{nAng:,d}"
             if label not in labels:
                 # Add an entry to the legend ...
                 labels.append(label)
@@ -230,7 +230,7 @@ if __name__ == "__main__":
     # Loop over distances ...
     for key in sorted(list(data.keys())):
         # Create short-hands ...
-        nang = numpy.array(data[key]["nang"])                                   # [#]
+        nAng = numpy.array(data[key]["nAng"])                                   # [#]
         area = numpy.array(data[key]["area"])                                   # [°2]
 
         # Convert to ratio ...
@@ -241,7 +241,7 @@ if __name__ == "__main__":
 
         # Plot data ...
         ax2.plot(
-            nang,
+            nAng,
             area,
              label = key,
             marker = "d",

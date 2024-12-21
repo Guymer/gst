@@ -94,7 +94,7 @@ if __name__ == "__main__":
           help = "the plot has only local extent",
     )
     parser.add_argument(
-        "--nang",
+        "--nAng",
         default = 9,
            help = "the number of directions from each point that the vessel could sail in",
            type = int,
@@ -156,7 +156,7 @@ if __name__ == "__main__":
            freqPlot = args.freqPlot,
            freqSimp = args.freqSimp,
               local = args.local,
-               nang = args.nang,
+               nAng = args.nAng,
               nIter = args.nIter,
                plot = args.plot,
                prec = args.prec,

@@ -11,7 +11,7 @@ def saveRelevantLands(
         debug = __debug__,
          fill = 1.0,
     fillSpace = "EuclideanSpace",
-         nang = 9,
+         nAng = 9,
         nIter = 100,
          simp = 0.1,
           tol = 1.0e-10,
@@ -40,7 +40,7 @@ def saveRelevantLands(
     fillSpace : str, optional
         the geometric space to perform the filling in (either "EuclideanSpace"
         or "GeodesicSpace")
-    nang : int, optional
+    nAng : int, optional
         the number of angles around each point that are calculated when
         buffering
     simp : float, optional
@@ -87,7 +87,7 @@ def saveRelevantLands(
                  fill = fill,
             fillSpace = fillSpace,
         keepInteriors = True,
-                 nang = nang,
+                 nAng = nAng,
                 nIter = nIter,
                  simp = simp,
                   tol = tol,

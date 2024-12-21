@@ -23,7 +23,7 @@ if __name__ == "__main__":
     # **************************************************************************
 
     # Deduce temporary file name ...
-    tname = "res=i_cons=2.00e+00_tol=1.00e-10/local=F_nang=33_prec=1.25e+03/freqLand=768_freqSimp=32_lon=-001.000000_lat=+50.500000/ship/istep=012287.wkb.gz"
+    tname = "res=i_cons=2.00e+00_tol=1.00e-10/local=F_nAng=33_prec=1.25e+03/freqLand=768_freqSimp=32_lon=-001.000000_lat=+50.500000/ship/istep=012287.wkb.gz"
 
     # Load [Multi]Polygon ...
     with gzip.open(tname, mode = "rb") as gzObj:
@@ -34,7 +34,7 @@ if __name__ == "__main__":
         ship,
         1920000.0,
         fill = 1.0,
-        nang = 361,
+        nAng = 361,
         simp = -1.0,
          tol = 1.0e-10,
     )

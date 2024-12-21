@@ -54,7 +54,7 @@ if __name__ == "__main__":
 
     # Define combinations ...
     combs = [
-        # Study convergence (changing just "nang" and "prec") ...
+        # Study convergence (changing just "nAng" and "prec") ...
         (2,  9, 5000,),
         (2, 17, 2500,),
         (2, 33, 1250,),
@@ -71,16 +71,16 @@ if __name__ == "__main__":
     # **************************************************************************
 
     # Loop over combinations ...
-    for colour, (cons, nang, prec) in enumerate(combs):
-        print(f"Processing \"cons={cons:.2e}, nang={nang:d}, prec={prec:.2e}\" ...")
+    for colour, (cons, nAng, prec) in enumerate(combs):
+        print(f"Processing \"cons={cons:.2e}, nAng={nAng:d}, prec={prec:.2e}\" ...")
 
         # Deduce expected run time increase ...
         # NOTE: The logic here is:
-        #         * there will be "nang" more points due to more angles around
+        #         * there will be "nAng" more points due to more angles around
         #           each corner; and
         #         * there will be "prec" more points due to more points along
         #           each line.
-        scaleFactor = (float(nang) / float(combs[0][1])) * (float(combs[0][2]) / float(prec))
+        scaleFactor = (float(nAng) / float(combs[0][1])) * (float(combs[0][2]) / float(prec))
 
         # **********************************************************************
 
@@ -90,7 +90,7 @@ if __name__ == "__main__":
         freqSimp = 40000 // prec                                                # [#]
 
         # Deduce directory name and find all limit files ...
-        dname = f"res={res}_cons={cons:.2e}_tol=1.00e-10/local=F_nang={nang:d}_prec={prec:.2e}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/limit"
+        dname = f"res={res}_cons={cons:.2e}_tol=1.00e-10/local=F_nAng={nAng:d}_prec={prec:.2e}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/limit"
         fnames = sorted(glob.glob(f"{dname}/istep=??????.wkb.gz"))
 
         # Initialize lists ...
@@ -148,7 +148,7 @@ if __name__ == "__main__":
             sailingDur,
             calcLength / scaleFactor,
             color = f"C{colour:d}",
-            label = f"(cons={cons:d}, nang={nang:d}, prec={prec:d}) ÷ {scaleFactor:.2f}",
+            label = f"(cons={cons:d}, nAng={nAng:d}, prec={prec:d}) ÷ {scaleFactor:.2f}",
         )
 
     # **************************************************************************

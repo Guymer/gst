@@ -16,7 +16,7 @@ def sail(
        freqPlot = 25,
        freqSimp = 25,
           local = False,
-           nang = 9,
+           nAng = 9,
           nIter = 100,
            plot = False,
            prec = 10000.0,
@@ -58,7 +58,7 @@ def sail(
         simplify the sailing contour every freqSimp iteration
     local : bool, optional
         the plot has only local extent
-    nang : int, optional
+    nAng : int, optional
         the number of directions from each point that the vessel could sail in
     nIter : int, optional
         the maximum number of iterations (particularly the Vincenty formula)
@@ -198,7 +198,7 @@ def sail(
                      fill = +1.0,
                 fillSpace = "EuclideanSpace",
             keepInteriors = False,
-                     nang = 361,
+                     nAng = 361,
                     nIter = nIter,
                      simp = -1.0,
                       tol = tol,
@@ -233,9 +233,9 @@ def sail(
 
     # Determine second output folder name and make it if it is missing ...
     if local:
-        output2 = f"{output1}/local={repr(local)[0]}_nang={nang:d}_prec={prec:.2e}_lon={lon:+011.6f}_lat={lat:+010.6f}_dur={dur:.2f}_spd={spd:.1f}"
+        output2 = f"{output1}/local={repr(local)[0]}_nAng={nAng:d}_prec={prec:.2e}_lon={lon:+011.6f}_lat={lat:+010.6f}_dur={dur:.2f}_spd={spd:.1f}"
     else:
-        output2 = f"{output1}/local={repr(local)[0]}_nang={nang:d}_prec={prec:.2e}"
+        output2 = f"{output1}/local={repr(local)[0]}_nAng={nAng:d}_prec={prec:.2e}"
     if not os.path.exists(output2):
         os.mkdir(output2)
     if not os.path.exists(f"{output2}/allLands"):
@@ -278,7 +278,7 @@ def sail(
                levels = (1, 5, 6),
                 local = False,
               maxShip = None,
-                 nang = nang,
+                 nAng = nAng,
                 nIter = nIter,
                   res = res,
                  simp = simp,
@@ -344,12 +344,12 @@ def sail(
                          fill = +1.0,
                     fillSpace = "EuclideanSpace",
                 keepInteriors = True,
-                         nang = 361,
+                         nAng = 361,
                         nIter = nIter,
                          simp = -1.0,
                           tol = tol,
             ),
-                 nang = nang,
+                 nAng = nAng,
                 nIter = nIter,
                   res = res,
                  simp = simp,
@@ -526,7 +526,7 @@ def sail(
                         debug = debug,
                          fill = +1.0,
                     fillSpace = "EuclideanSpace",
-                         nang = 361,
+                         nAng = 361,
                         nIter = nIter,
                          simp = -1.0,
                           tol = tol,
@@ -638,7 +638,7 @@ def sail(
                              fill = fill,
                         fillSpace = "EuclideanSpace",
                     keepInteriors = True,
-                             nang = nang,
+                             nAng = nAng,
                             nIter = nIter,
                              simp = simp,
                               tol = tol,
@@ -672,7 +672,7 @@ def sail(
                              fill = fill,
                         fillSpace = "EuclideanSpace",
                     keepInteriors = False,
-                             nang = nang,
+                             nAng = nAng,
                             nIter = nIter,
                              simp = -1.0,
                               tol = tol,

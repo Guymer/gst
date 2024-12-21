@@ -88,21 +88,21 @@ if __name__ == "__main__":
 
     # Define combinations ...
     combs = [
-        # Study convergence (changing just "nang" and "prec") ...
+        # Study convergence (changing just "nAng" and "prec") ...
         (2,  9, 5000, (1.0, 0.0, 0.0, 1.0),),
         (2, 17, 2500, (0.0, 1.0, 0.0, 1.0),),
         (2, 33, 1250, (0.0, 0.0, 1.0, 1.0),),
 
-        # Study convergence (changing "cons", "nang" and "prec") ...
+        # Study convergence (changing "cons", "nAng" and "prec") ...
         # (2,  9, 5000, (1.0, 0.0, 0.0, 1.0),),
         # (4, 17, 2500, (0.0, 1.0, 0.0, 1.0),),
         # (8, 33, 1250, (0.0, 0.0, 1.0, 1.0),),
 
-        # With "nang=17" and "prec=2500", is "cons=2" good enough?
+        # With "nAng=17" and "prec=2500", is "cons=2" good enough?
         # (2, 17, 2500, (1.0, 0.0, 0.0, 1.0),),
         # (4, 17, 2500, (0.0, 1.0, 0.0, 1.0),),
 
-        # With "nang=33" and "prec=1250", is "cons=2" good enough?
+        # With "nAng=33" and "prec=1250", is "cons=2" good enough?
         # (2, 33, 1250, (1.0, 0.0, 0.0, 1.0),),
         # (8, 33, 1250, (0.0, 1.0, 0.0, 1.0),),
     ]
@@ -110,9 +110,9 @@ if __name__ == "__main__":
     # Determine output directory and make it if it is missing ...
     outDir = "_".join(
         [
-            "cons=" + ",".join([f"{cons:.2e}" for cons, nang, prec, color in combs]),
-            "nang=" + ",".join([f"{nang:d}" for cons, nang, prec, color in combs]),
-            "prec=" + ",".join([f"{prec:.2e}" for cons, nang, prec, color in combs]),
+            "cons=" + ",".join([f"{cons:.2e}" for cons, nAng, prec, color in combs]),
+            "nAng=" + ",".join([f"{nAng:d}" for cons, nAng, prec, color in combs]),
+            "prec=" + ",".join([f"{prec:.2e}" for cons, nAng, prec, color in combs]),
         ]
     )
     if not os.path.exists(outDir):
@@ -130,7 +130,7 @@ if __name__ == "__main__":
     # Loop over days ...
     for dur in range(1, 25):
         # Loop over combinations ...
-        for cons, nang, prec, color in combs:
+        for cons, nAng, prec, color in combs:
             # Create short-hands ...
             # NOTE: Say that 40,000 metres takes 1 hour at 20 knots.
             freqLand = 24 * 40000 // prec                                       # [#]
@@ -146,7 +146,7 @@ if __name__ == "__main__":
                 "--freqLand", f"{freqLand:d}",      # ~daily land re-evaluation
                 "--freqPlot", f"{freqPlot:d}",      # ~hourly plotting
                 "--freqSimp", f"{freqSimp:d}",      # ~hourly simplification
-                "--nang", f"{nang:d}",              # LOOP VARIABLE
+                "--nAng", f"{nAng:d}",              # LOOP VARIABLE
                 "--precision", f"{prec:.1f}",       # LOOP VARIABLE
                 "--resolution", res,
             ]
@@ -171,14 +171,14 @@ if __name__ == "__main__":
     # **************************************************************************
 
     # Loop over combinations ...
-    for cons, nang, prec, color in combs:
+    for cons, nAng, prec, color in combs:
         # Create short-hands ...
         # NOTE: Say that 40,000 metres takes 1 hour at 20 knots.
         freqLand = 24 * 40000 // prec                                           # [#]
         freqSimp = 40000 // prec                                                # [#]
 
         # Deduce directory name ...
-        dname = f"res={res}_cons={cons:.2e}_tol=1.00e-10/local=F_nang={nang:d}_prec={prec:.2e}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/limit"
+        dname = f"res={res}_cons={cons:.2e}_tol=1.00e-10/local=F_nAng={nAng:d}_prec={prec:.2e}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/limit"
 
         # Find the maximum distance that has been calculated so far ...
         fname = sorted(glob.glob(f"{dname}/istep=??????.wkb.gz"))[-1]
@@ -209,7 +209,7 @@ if __name__ == "__main__":
         fnames = []
 
         # Loop over combinations ...
-        for cons, nang, prec, color in combs:
+        for cons, nAng, prec, color in combs:
             # Skip if this distance cannot exist (because the precision is too
             # coarse) and determine the step count ...
             if (1000 * dist) % prec != 0:
@@ -222,7 +222,7 @@ if __name__ == "__main__":
             freqSimp = 40000 // prec                                            # [#]
 
             # Deduce directory name ...
-            dname = f"res={res}_cons={cons:.2e}_tol=1.00e-10/local=F_nang={nang:d}_prec={prec:.2e}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/limit"
+            dname = f"res={res}_cons={cons:.2e}_tol=1.00e-10/local=F_nAng={nAng:d}_prec={prec:.2e}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/limit"
 
             # Deduce file name and skip if it is missing ...
             fname = f"{dname}/istep={istep + 1:06d}.wkb.gz"
@@ -265,7 +265,7 @@ if __name__ == "__main__":
         lines = []
 
         # Loop over combinations/files ...
-        for (cons, nang, prec, color), fname in zip(combs, fnames, strict = True):
+        for (cons, nAng, prec, color), fname in zip(combs, fnames, strict = True):
             print(f" > Loading \"{fname}\" ...")
 
             # Load [Multi]LineString ...
@@ -284,7 +284,7 @@ if __name__ == "__main__":
             )
 
             # Add an entry to the legend ...
-            labels.append(f"cons={cons:d}, nang={nang:d}, prec={prec:d}")
+            labels.append(f"cons={cons:d}, nAng={nAng:d}, prec={prec:d}")
             lines.append(matplotlib.lines.Line2D([], [], color = color))
 
         # Check that the distance isn't too large ...
@@ -294,7 +294,7 @@ if __name__ == "__main__":
                 ship,
                 1000.0 * float(dist),
                 fill = +1.0,
-                nang = 361,
+                nAng = 361,
                 simp = -1.0,
             )
 
@@ -395,7 +395,7 @@ if __name__ == "__main__":
         fnames = []
 
         # Loop over combinations ...
-        for cons, nang, prec, color in combs:
+        for cons, nAng, prec, color in combs:
             # Skip if this distance cannot exist (because the precision is too
             # coarse) and determine the step count ...
             if (1000 * dist) % prec != 0:
@@ -408,7 +408,7 @@ if __name__ == "__main__":
             freqSimp = 40000 // prec                                            # [#]
 
             # Deduce directory name ...
-            dname = f"res={res}_cons={cons:.2e}_tol=1.00e-10/local=F_nang={nang:d}_prec={prec:.2e}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/limit"
+            dname = f"res={res}_cons={cons:.2e}_tol=1.00e-10/local=F_nAng={nAng:d}_prec={prec:.2e}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/limit"
 
             # Deduce file name and skip if it is missing ...
             fname = f"{dname}/istep={istep + 1:06d}.wkb.gz"
@@ -454,7 +454,7 @@ if __name__ == "__main__":
         lines = []
 
         # Loop over combinations/files ...
-        for (cons, nang, prec, color), fname in zip(combs, fnames, strict = True):
+        for (cons, nAng, prec, color), fname in zip(combs, fnames, strict = True):
             print(f" > Loading \"{fname}\" ...")
 
             # Load [Multi]LineString ...
@@ -473,7 +473,7 @@ if __name__ == "__main__":
             )
 
             # Add an entry to the legend ...
-            labels.append(f"cons={cons:d}, nang={nang:d}, prec={prec:d}")
+            labels.append(f"cons={cons:d}, nAng={nAng:d}, prec={prec:d}")
             lines.append(matplotlib.lines.Line2D([], [], color = color))
 
         # Check that the distance isn't too large ...
@@ -483,7 +483,7 @@ if __name__ == "__main__":
                 ship,
                 1000.0 * float(dist),
                 fill = +1.0,
-                nang = 361,
+                nAng = 361,
                 simp = -1.0,
             )
 
@@ -571,7 +571,7 @@ if __name__ == "__main__":
         fnames = []
 
         # Loop over combinations ...
-        for cons, nang, prec, color in combs:
+        for cons, nAng, prec, color in combs:
             # Skip if this distance cannot exist (because the precision is too
             # coarse) and determine the step count ...
             if (1000 * dist) % prec != 0:
@@ -584,7 +584,7 @@ if __name__ == "__main__":
             freqSimp = 40000 // prec                                            # [#]
 
             # Deduce directory name ...
-            dname = f"res={res}_cons={cons:.2e}_tol=1.00e-10/local=F_nang={nang:d}_prec={prec:.2e}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/limit"
+            dname = f"res={res}_cons={cons:.2e}_tol=1.00e-10/local=F_nAng={nAng:d}_prec={prec:.2e}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/limit"
 
             # Deduce file name and skip if it is missing ...
             fname = f"{dname}/istep={istep + 1:06d}.wkb.gz"
@@ -630,7 +630,7 @@ if __name__ == "__main__":
         lines = []
 
         # Loop over combinations/files ...
-        for (cons, nang, prec, color), fname in zip(combs, fnames, strict = True):
+        for (cons, nAng, prec, color), fname in zip(combs, fnames, strict = True):
             print(f" > Loading \"{fname}\" ...")
 
             # Load [Multi]LineString ...
@@ -649,7 +649,7 @@ if __name__ == "__main__":
             )
 
             # Add an entry to the legend ...
-            labels.append(f"cons={cons:d}, nang={nang:d}, prec={prec:d}")
+            labels.append(f"cons={cons:d}, nAng={nAng:d}, prec={prec:d}")
             lines.append(matplotlib.lines.Line2D([], [], color = color))
 
         # Check that the distance isn't too large ...
@@ -659,7 +659,7 @@ if __name__ == "__main__":
                 ship,
                 1000.0 * float(dist),
                 fill = +1.0,
-                nang = 361,
+                nAng = 361,
                 simp = -1.0,
             )
 

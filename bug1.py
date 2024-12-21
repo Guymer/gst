@@ -38,7 +38,7 @@ if __name__ == "__main__":
     # **************************************************************************
 
     # Configure functions ...
-    nang = 361                                                                  # [#]
+    nAng = 361                                                                  # [#]
     simp = 0.001                                                                # [°]
 
     # Define starting location and the four buffering distances ...
@@ -83,7 +83,7 @@ if __name__ == "__main__":
         maxShip1 = pyguymer3.geo.buffer(
             ship,
             float(maxDist) * 1000.0,
-            nang = nang,
+            nAng = nAng,
             simp = simp,
         )
 
@@ -103,19 +103,19 @@ if __name__ == "__main__":
                     pyguymer3.geo.buffer(
                         ship,
                         0.25 * float(maxDist) * 1000.0,
-                        nang = nang,
+                        nAng = nAng,
                         simp = simp,
                     ),
                     0.25 * float(maxDist) * 1000.0,
-                    nang = nang,
+                    nAng = nAng,
                     simp = simp,
                 ),
                 0.25 * float(maxDist) * 1000.0,
-                nang = nang,
+                nAng = nAng,
                 simp = simp,
             ),
             0.25 * float(maxDist) * 1000.0,
-            nang = nang,
+            nAng = nAng,
             simp = simp,
         )
 

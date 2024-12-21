@@ -9,11 +9,11 @@ if __name__ == "__main__":
     # **************************************************************************
 
     # Loop over all generated "allLands.wkb.gz" files ...
-    for allLand in sorted(glob.glob("res=?_cons=?.??e???_tol=?.??e???/local=F_nang=*_prec=?.??e???/allLands.wkb.gz")):
+    for allLand in sorted(glob.glob("res=?_cons=?.??e???_tol=?.??e???/local=F_nAng=*_prec=?.??e???/allLands.wkb.gz")):
         # Create short-hands ...
         partOne, partTwo, _ = allLand.split("/")
         res, cons, tol = partOne.split("_")
-        local, nang, prec = partTwo.split("_")
+        local, nAng, prec = partTwo.split("_")
 
         # Print combination ...
-        print(f"{res}    {cons}    {tol}    {nang:8s}    {prec}")
+        print(f"{res}    {cons}    {tol}    {nAng:8s}    {prec}")
