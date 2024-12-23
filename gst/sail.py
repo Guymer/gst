@@ -132,6 +132,16 @@ def sail(
 
     # **************************************************************************
 
+    # Try to find the paths if the user did not provide them ...
+    if ffmpegPath is None:
+        ffmpegPath = shutil.which("ffmpeg")
+    if ffprobePath is None:
+        ffprobePath = shutil.which("ffprobe")
+    assert ffmpegPath is not None, "\"ffmpeg\" is not installed"
+    assert ffprobePath is not None, "\"ffprobe\" is not installed"
+
+    # **************************************************************************
+
     print(f"{spd:,.1f} knots is {0.001 * 1852.0 * spd:,.2f} kilometres/hour.")
     print(f"{spd:,.1f} knots is {0.001 * 24.0 * 1852.0 * spd:,.2f} kilometres/day.")
 

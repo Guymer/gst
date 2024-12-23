@@ -140,6 +140,10 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
+    # Check that "ffmpeg" and "ffprobe" are installed ...
+    assert args.ffmpegPath is not None, "\"ffmpeg\" is not installed"
+    assert args.ffprobePath is not None, "\"ffprobe\" is not installed"
+
     # **************************************************************************
 
     # Sail the vessel ...
