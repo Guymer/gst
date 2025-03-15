@@ -272,12 +272,10 @@ if __name__ == "__main__":
     )
     ax2.semilogx()
     ax2.set_xlabel("Number Of Angles")
-    # ax2.set_xticks(                                                             # MatPlotLib ≥ 3.5.0
-    #     [8, 16, 32, 64, 128, 256],                                              # MatPlotLib ≥ 3.5.0
-    #     labels = [8, 16, 32, 64, 128, 256],                                     # MatPlotLib ≥ 3.5.0
-    # )                                                                           # MatPlotLib ≥ 3.5.0
-    ax2.set_xticks([8, 16, 32, 64, 128, 256])                                   # MatPlotLib < 3.5.0
-    ax2.set_xticklabels([8, 16, 32, 64, 128, 256])                              # MatPlotLib < 3.5.0
+    ax2.set_xticks(
+        [8, 16, 32, 64, 128, 256],
+        labels = ["8", "16", "32", "64", "128", "256"],
+    )
     ax2.set_ylabel("Euclidean Area [%]")
     ax2.set_ylim(90, 102)
     ax2.set_yticks(range(90, 103))

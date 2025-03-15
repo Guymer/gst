@@ -282,12 +282,10 @@ if __name__ == "__main__":
     )
     ax2.semilogx()
     ax2.set_xlabel("Precision [m]")
-    # ax2.set_xticks(                                                             # MatPlotLib ≥ 3.5.0
-    #     [625, 1250, 2500, 5000, 10000],                                         # MatPlotLib ≥ 3.5.0
-    #     labels = [625, 1250, 2500, 5000, 10000],                                # MatPlotLib ≥ 3.5.0
-    # )                                                                           # MatPlotLib ≥ 3.5.0
-    ax2.set_xticks([625, 1250, 2500, 5000, 10000])                              # MatPlotLib < 3.5.0
-    ax2.set_xticklabels([625, 1250, 2500, 5000, 10000])                         # MatPlotLib < 3.5.0
+    ax2.set_xticks(
+        [625, 1250, 2500, 5000, 10000],
+        labels = ["625", "1250", "2500", "5000", "10000"],
+    )
     ax2.set_ylabel("Euclidean Area [%]")
     ax2.set_ylim(75, 102)
     ax2.set_yticks(range(75, 103))
