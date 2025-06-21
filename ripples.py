@@ -10,6 +10,7 @@ if __name__ == "__main__":
     import os
     import shutil
     import subprocess
+    import sysconfig
 
     # Import special modules ...
     try:
@@ -139,7 +140,7 @@ if __name__ == "__main__":
 
             # Populate GST command ...
             cmd = [
-                "python3.12", "run.py",
+                f"python{sysconfig.get_python_version()}", "run.py",
                 f"{lon:+.1f}", f"{lat:+.1f}", "20.0",
                 "--conservatism", f"{cons:.1f}",    # LOOP VARIABLE
                 "--duration", f"{dur:.1f}",         # LOOP VARIABLE

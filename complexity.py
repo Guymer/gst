@@ -10,6 +10,7 @@ if __name__ == "__main__":
     import math
     import os
     import subprocess
+    import sysconfig
 
     # Import special modules ...
     try:
@@ -100,7 +101,7 @@ if __name__ == "__main__":
 
         # Populate GST command ...
         cmd = [
-            "python3.12", "run.py",
+            f"python{sysconfig.get_python_version()}", "run.py",
             "0.0", "0.0", "20.0",               # dummy values
             "--conservatism", f"{cons:.1f}",    # LOOP VARIABLE
             "--duration", "0.01",               # dummy value
@@ -204,7 +205,7 @@ if __name__ == "__main__":
                                     255.0 * hist[iLat0, iLon0].astype(numpy.float64) / 5860.0,
                                 )
                             )
-                            histImg[iLat, iLon, :] = cts["rainbow"][color][:]
+                            histImg[iLat, iLon, :] = cts["turbo"][color][:]
                         else:
                             histImg[iLat, iLon, :] = 255
 
