@@ -238,4 +238,4 @@ if __name__ == "__main__":
 
         # Save PNG ...
         histImg.save(f"complexity_res={res}_cons={cons:.2e}_nAng={nAng:d}_prec={prec:.2e}.png")
-        pyguymer3.image.optimize_image(f"complexity_res={res}_cons={cons:.2e}_nAng={nAng:d}_prec={prec:.2e}.png", strip = True)
+        pyguymer3.image.optimise_image(f"complexity_res={res}_cons={cons:.2e}_nAng={nAng:d}_prec={prec:.2e}.png", strip = True)

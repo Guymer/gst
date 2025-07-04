@@ -863,7 +863,7 @@ def sail(
                 matplotlib.pyplot.close(fgOne)
 
                 # Optimize PNG ...
-                pyguymer3.image.optimize_image(
+                pyguymer3.image.optimise_image(
                     pngOne,
                       debug = debug,
                       strip = True,
@@ -902,7 +902,7 @@ def sail(
             matplotlib.pyplot.close(fgAll)
 
             # Optimize PNG ...
-            pyguymer3.image.optimize_image(
+            pyguymer3.image.optimise_image(
                 pngAll,
                   debug = debug,
                   strip = True,
