@@ -147,13 +147,9 @@ if __name__ == "__main__":
 
             # Check if this was a simplification step ...
             if (istep + 1) % freqSimp == 0:
-                # Convert lists to arrays ...
-                tmpCalcDur = numpy.array(tmpCalcDur)                            # [s/step]
-                tmpSailingDur = numpy.array(tmpSailingDur)                      # [day]
-
                 # Append values to lists ...
-                calcDur.append(meanWithoutOutlier(tmpCalcDur))                  # [s/step]
-                sailingDur.append(pyguymer3.mean(tmpSailingDur))                # [day]
+                calcDur.append(meanWithoutOutlier(numpy.array(tmpCalcDur)))     # [s/step]
+                sailingDur.append(pyguymer3.mean(numpy.array(tmpSailingDur)))   # [day]
 
                 # Re-initialize lists ...
                 tmpCalcDur = []                                                 # [s/step]
