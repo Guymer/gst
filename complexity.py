@@ -153,7 +153,7 @@ if __name__ == "__main__":
         # **********************************************************************
 
         # Initialize array ...
-        hist = numpy.zeros((nLat, nLon), dtype = numpy.uint64)                  # [#]
+        histArr = numpy.zeros((nLat, nLon), dtype = numpy.uint64)               # [#]
 
         # Load [Multi]Polygon ...
         with gzip.open(fname, mode = "rb") as gzObj:
@@ -168,9 +168,9 @@ if __name__ == "__main__":
                 iLat = max(0, min(nLat - 1, math.floor(( 90.0 - coord[1]) / dLat))) # [px]
 
                 # Increment array ...
-                hist[iLat, iLon] += 1                                           # [#]
+                histArr[iLat, iLon] += 1                                        # [#]
 
-        print(f" > Maximum value = {hist.max():,d}.")
+        print(f" > Maximum value = {histArr.max():,d}.")
 
         # **********************************************************************
 
@@ -181,7 +181,7 @@ if __name__ == "__main__":
         # **********************************************************************
 
         # Initialize array ...
-        histImg = numpy.zeros((nLat * scale, nLon * scale, 3), dtype = numpy.uint8)
+        histImgArr = numpy.zeros((nLat * scale, nLon * scale, 3), dtype = numpy.uint8)
 
         # Loop over initial longitudes ...
         for iLon0 in range(nLon):
@@ -198,24 +198,24 @@ if __name__ == "__main__":
                 # Populate array ...
                 for iLon in range(iLon1, iLon2):
                     for iLat in range(iLat1, iLat2):
-                        if hist[iLat0, iLon0] > 0:
+                        if histArr[iLat0, iLon0] > 0:
                             color = round(
                                 min(
                                     255.0,
-                                    255.0 * hist[iLat0, iLon0].astype(numpy.float64) / 5860.0,
+                                    255.0 * histArr[iLat0, iLon0].astype(numpy.float64) / 5860.0,
                                 )
                             )
-                            histImg[iLat, iLon, :] = cts["turbo"][color][:]
+                            histImgArr[iLat, iLon, :] = cts["turbo"][color][:]
                         else:
-                            histImg[iLat, iLon, :] = 255
+                            histImgArr[iLat, iLon, :] = 255
 
         # Convert array to image ...
-        histImg = PIL.Image.fromarray(histImg)
+        histImgObj = PIL.Image.fromarray(histImgArr)
 
         # **********************************************************************
 
         # Create drawing object ...
-        histDraw = PIL.ImageDraw.Draw(histImg)
+        histDraw = PIL.ImageDraw.Draw(histImgObj)
 
         # Loop over Polygons ...
         for allLand in pyguymer3.geo.extract_polys(allLands, onlyValid = False, repair = False):
@@ -237,5 +237,5 @@ if __name__ == "__main__":
         print(f"Saving \"complexity_res={res}_cons={cons:.2e}_nAng={nAng:d}_prec={prec:.2e}.png\" ...")
 
         # Save PNG ...
-        histImg.save(f"complexity_res={res}_cons={cons:.2e}_nAng={nAng:d}_prec={prec:.2e}.png")
+        histImgObj.save(f"complexity_res={res}_cons={cons:.2e}_nAng={nAng:d}_prec={prec:.2e}.png")
         pyguymer3.image.optimise_image(f"complexity_res={res}_cons={cons:.2e}_nAng={nAng:d}_prec={prec:.2e}.png", strip = True)
