@@ -39,9 +39,9 @@ if __name__ == "__main__":
     # Define function ...
     def meanWithoutOutlier(oldArr, /):
         """
-        In this scenario, the user may have cancelled "run.py" mid-calculation
-        and then restarted it at a later date. Therefore, if purely looking at
-        the filesystem times, then one of the step durations will be much longer
+        In this scenario, the user may have cancelled GST mid-calculation and
+        then restarted it at a later date. Therefore, if purely looking at the
+        filesystem times, then one of the step durations will be much longer
         than the rest. Let's try and recover "the true" average step duration
         (assuming only one cancellation/restart per array).
         """

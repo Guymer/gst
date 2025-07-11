@@ -66,7 +66,7 @@ if __name__ == "__main__":
         "--dry-run",
         action = "store_true",
           dest = "dryRun",
-          help = "don't run \"run.py\"",
+          help = "don't run GST - just assume that all the required GST output is there already",
     )
     args = parser.parse_args()
 
@@ -117,7 +117,7 @@ if __name__ == "__main__":
 
             # Populate GST command ...
             cmd = [
-                f"python{sysconfig.get_python_version()}", "run.py",
+                f"python{sysconfig.get_python_version()}", "-m", "gst",
                 "0.0", "0.0", "20.0",           # dummy values
                 "--duration", "0.01",           # dummy value
                 "--freqLand", f"{freqLand:d}",  # ~daily land re-evaluation

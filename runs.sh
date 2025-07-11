@@ -10,32 +10,32 @@
 # Loop over resolutions ...
 for res in "c" "l" "i" "h" "f"; do
     # Run GST (for README.md) ...
-    python3.12 run.py +18.079 +59.324 20.0 --duration 0.03 --freqLand 3000 --freqPlot 10 --local --nAng 33 --plot --precision 10.0 --resolution "${res}"
+    python3.12 -m gst +18.079 +59.324 20.0 --duration 0.03 --freqLand 3000 --freqPlot 10 --local --nAng 33 --plot --precision 10.0 --resolution "${res}"
 
     # Run GST (for compareBufferAngularResolutions.py) ...
-    python3.12 run.py -1.0 +50.5 20.0 --duration 0.09 --freqLand 768 --freqPlot 1 --freqSimp 768 --local --nAng 9 --plot --precision 1250.0 --resolution "${res}"
-    python3.12 run.py -1.0 +50.5 20.0 --duration 0.09 --freqLand 768 --freqPlot 1 --freqSimp 768 --local --nAng 17 --plot --precision 1250.0 --resolution "${res}"
-    python3.12 run.py -1.0 +50.5 20.0 --duration 0.09 --freqLand 768 --freqPlot 1 --freqSimp 768 --local --nAng 33 --plot --precision 1250.0 --resolution "${res}"
-    python3.12 run.py -1.0 +50.5 20.0 --duration 0.09 --freqLand 768 --freqPlot 1 --freqSimp 768 --local --nAng 65 --plot --precision 1250.0 --resolution "${res}"
-    python3.12 run.py -1.0 +50.5 20.0 --duration 0.09 --freqLand 768 --freqPlot 1 --freqSimp 768 --local --nAng 129 --plot --precision 1250.0 --resolution "${res}"
-    python3.12 run.py -1.0 +50.5 20.0 --duration 0.09 --freqLand 768 --freqPlot 1 --freqSimp 768 --local --nAng 257 --plot --precision 1250.0 --resolution "${res}"
+    python3.12 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 768 --freqPlot 1 --freqSimp 768 --local --nAng 9 --plot --precision 1250.0 --resolution "${res}"
+    python3.12 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 768 --freqPlot 1 --freqSimp 768 --local --nAng 17 --plot --precision 1250.0 --resolution "${res}"
+    python3.12 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 768 --freqPlot 1 --freqSimp 768 --local --nAng 33 --plot --precision 1250.0 --resolution "${res}"
+    python3.12 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 768 --freqPlot 1 --freqSimp 768 --local --nAng 65 --plot --precision 1250.0 --resolution "${res}"
+    python3.12 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 768 --freqPlot 1 --freqSimp 768 --local --nAng 129 --plot --precision 1250.0 --resolution "${res}"
+    python3.12 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 768 --freqPlot 1 --freqSimp 768 --local --nAng 257 --plot --precision 1250.0 --resolution "${res}"
 
     # Run GST (for compareBufferRadialResolutions.py) ...
-    python3.12 run.py -1.0 +50.5 20.0 --duration 0.09 --freqLand 1536 --freqPlot 16 --freqSimp 1536 --local --nAng 257 --plot --precision 625.0 --resolution "${res}"
-    python3.12 run.py -1.0 +50.5 20.0 --duration 0.09 --freqLand 768 --freqPlot 8 --freqSimp 768 --local --nAng 257 --plot --precision 1250.0 --resolution "${res}"
-    python3.12 run.py -1.0 +50.5 20.0 --duration 0.09 --freqLand 384 --freqPlot 4 --freqSimp 384 --local --nAng 257 --plot --precision 2500.0 --resolution "${res}"
-    python3.12 run.py -1.0 +50.5 20.0 --duration 0.09 --freqLand 192 --freqPlot 2 --freqSimp 192 --local --nAng 257 --plot --precision 5000.0 --resolution "${res}"
-    python3.12 run.py -1.0 +50.5 20.0 --duration 0.09 --freqLand 96 --freqPlot 1 --freqSimp 96 --local --nAng 257 --plot --precision 10000.0 --resolution "${res}"
+    python3.12 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 1536 --freqPlot 16 --freqSimp 1536 --local --nAng 257 --plot --precision 625.0 --resolution "${res}"
+    python3.12 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 768 --freqPlot 8 --freqSimp 768 --local --nAng 257 --plot --precision 1250.0 --resolution "${res}"
+    python3.12 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 384 --freqPlot 4 --freqSimp 384 --local --nAng 257 --plot --precision 2500.0 --resolution "${res}"
+    python3.12 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 192 --freqPlot 2 --freqSimp 192 --local --nAng 257 --plot --precision 5000.0 --resolution "${res}"
+    python3.12 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 96 --freqPlot 1 --freqSimp 96 --local --nAng 257 --plot --precision 10000.0 --resolution "${res}"
 
     # Run GST (for complexity.py) ...
-    python3.12 run.py 0.0 0.0 20.0 --conservatism 2.0 --duration 0.01 --freqLand 192 --freqSimp 8 --nAng 9 --precision 5000.0 --resolution "${res}"
-    python3.12 run.py 0.0 0.0 20.0 --conservatism 2.0 --duration 0.01 --freqLand 384 --freqSimp 16 --nAng 17 --precision 2500.0 --resolution "${res}"
-    python3.12 run.py 0.0 0.0 20.0 --conservatism 2.0 --duration 0.01 --freqLand 768 --freqSimp 32 --nAng 33 --precision 1250.0 --resolution "${res}"
+    python3.12 -m gst 0.0 0.0 20.0 --conservatism 2.0 --duration 0.01 --freqLand 192 --freqSimp 8 --nAng 9 --precision 5000.0 --resolution "${res}"
+    python3.12 -m gst 0.0 0.0 20.0 --conservatism 2.0 --duration 0.01 --freqLand 384 --freqSimp 16 --nAng 17 --precision 2500.0 --resolution "${res}"
+    python3.12 -m gst 0.0 0.0 20.0 --conservatism 2.0 --duration 0.01 --freqLand 768 --freqSimp 32 --nAng 33 --precision 1250.0 --resolution "${res}"
 
     # Run GST (for showNarrowPassages.py) ...
-    python3.12 run.py 0.0 0.0 20.0 --duration 0.01 --freqLand 192 --freqSimp 8 --nAng 9 --precision 5000.0 --resolution "${res}"
-    python3.12 run.py 0.0 0.0 20.0 --duration 0.01 --freqLand 384 --freqSimp 16 --nAng 17 --precision 2500.0 --resolution "${res}"
-    python3.12 run.py 0.0 0.0 20.0 --duration 0.01 --freqLand 768 --freqSimp 32 --nAng 33 --precision 1250.0 --resolution "${res}"
+    python3.12 -m gst 0.0 0.0 20.0 --duration 0.01 --freqLand 192 --freqSimp 8 --nAng 9 --precision 5000.0 --resolution "${res}"
+    python3.12 -m gst 0.0 0.0 20.0 --duration 0.01 --freqLand 384 --freqSimp 16 --nAng 17 --precision 2500.0 --resolution "${res}"
+    python3.12 -m gst 0.0 0.0 20.0 --duration 0.01 --freqLand 768 --freqSimp 32 --nAng 33 --precision 1250.0 --resolution "${res}"
 done
 
 # ******************************************************************************
@@ -43,7 +43,7 @@ done
 # Loop over days ...
 for dur in {1..24}; do
     # Run GST (for ripples.py) ...
-    python3.12 run.py -1.0 +50.5 20.0 --conservatism 2.0 --duration ${dur}.0 --freqLand 192 --freqPlot 8 --freqSimp 8 --nAng 9 --plot --precision 5000.0 --resolution i
-    python3.12 run.py -1.0 +50.5 20.0 --conservatism 2.0 --duration ${dur}.0 --freqLand 384 --freqPlot 16 --freqSimp 16 --nAng 17 --plot --precision 2500.0 --resolution i
-    python3.12 run.py -1.0 +50.5 20.0 --conservatism 2.0 --duration ${dur}.0 --freqLand 768 --freqPlot 32 --freqSimp 32 --nAng 33 --plot --precision 1250.0 --resolution i
+    python3.12 -m gst -1.0 +50.5 20.0 --conservatism 2.0 --duration ${dur}.0 --freqLand 192 --freqPlot 8 --freqSimp 8 --nAng 9 --plot --precision 5000.0 --resolution i
+    python3.12 -m gst -1.0 +50.5 20.0 --conservatism 2.0 --duration ${dur}.0 --freqLand 384 --freqPlot 16 --freqSimp 16 --nAng 17 --plot --precision 2500.0 --resolution i
+    python3.12 -m gst -1.0 +50.5 20.0 --conservatism 2.0 --duration ${dur}.0 --freqLand 768 --freqPlot 32 --freqSimp 32 --nAng 33 --plot --precision 1250.0 --resolution i
 done
