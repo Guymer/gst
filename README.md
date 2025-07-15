@@ -25,10 +25,12 @@ python3.12 -c 'import pstats; p = pstats.Stats("second.log"); p.sort_stats(pstat
 To generate the data needed, [compareBufferAngularResolutions.py](compareBufferAngularResolutions.py) will run commands like:
 
 ```sh
-python3.12 -m gst -1.0 +50.5 20.0 --duration 0.09 --nAng  9 --precision 1250.0 --resolution i
-python3.12 -m gst -1.0 +50.5 20.0 --duration 0.09 --nAng 17 --precision 1250.0 --resolution i
-python3.12 -m gst -1.0 +50.5 20.0 --duration 0.09 --nAng 33 --precision 1250.0 --resolution i
-...
+python3.12 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 768 --freqPlot 1 --freqSimp 768 --local --nAng   9 --precision 1250.0 --resolution i
+python3.12 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 768 --freqPlot 1 --freqSimp 768 --local --nAng  17 --precision 1250.0 --resolution i
+python3.12 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 768 --freqPlot 1 --freqSimp 768 --local --nAng  33 --precision 1250.0 --resolution i
+python3.12 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 768 --freqPlot 1 --freqSimp 768 --local --nAng  65 --precision 1250.0 --resolution i
+python3.12 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 768 --freqPlot 1 --freqSimp 768 --local --nAng 129 --precision 1250.0 --resolution i
+python3.12 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 768 --freqPlot 1 --freqSimp 768 --local --nAng 257 --precision 1250.0 --resolution i
 ```
 
 After sailing for 0.09 days at 20.0 knots a vessel will have gone 80,006.4 metres, which I'll round to 80 kilometres.
@@ -38,10 +40,11 @@ After sailing for 0.09 days at 20.0 knots a vessel will have gone 80,006.4 metre
 To generate the data needed, [compareBufferRadialResolutions.py](compareBufferRadialResolutions.py) will run commands like:
 
 ```sh
-python3.12 -m gst -1.0 +50.5 20.0 --duration 0.09 --nAng 257 --precision 1250.0 --resolution i
-python3.12 -m gst -1.0 +50.5 20.0 --duration 0.09 --nAng 257 --precision 2500.0 --resolution i
-python3.12 -m gst -1.0 +50.5 20.0 --duration 0.09 --nAng 257 --precision 5000.0 --resolution i
-...
+python3.13 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 1536 --freqPlot 16 --freqSimp 1536 --local --nAng 257 --precision 625.0 --resolution i
+python3.13 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 768 --freqPlot 8 --freqSimp 768 --local --nAng 257 --precision 1250.0 --resolution i
+python3.13 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 384 --freqPlot 4 --freqSimp 384 --local --nAng 257 --precision 2500.0 --resolution i
+python3.13 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 192 --freqPlot 2 --freqSimp 192 --local --nAng 257 --precision 5000.0 --resolution i
+python3.13 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 96 --freqPlot 1 --freqSimp 96 --local --nAng 257 --precision 10000.0 --resolution i
 ```
 
 After sailing for 0.09 days at 20.0 knots a vessel will have gone 80,006.4 metres, which I'll round to 80 kilometres.
