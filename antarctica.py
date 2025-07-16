@@ -4,6 +4,7 @@
 # NOTE: See https://docs.python.org/3.12/library/multiprocessing.html#the-spawn-and-forkserver-start-methods
 if __name__ == "__main__":
     # Import standard modules ...
+    import argparse
     import os
 
     # Import special modules ...
@@ -44,6 +45,30 @@ if __name__ == "__main__":
     except:
         raise Exception("\"pyguymer3\" is not installed; run \"pip install --user PyGuymer3\"") from None
 
+    # **************************************************************************
+
+    # Create argument parser and parse the arguments ...
+    parser = argparse.ArgumentParser(
+           allow_abbrev = False,
+            description = "Demonstrate a problem with Antarctica.",
+        formatter_class = argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser.add_argument(
+        "--debug",
+        action = "store_true",
+          dest = "debug",
+          help = "print debug messages",
+    )
+    parser.add_argument(
+        "--timeout",
+        default = 60.0,
+           help = "the timeout for any requests/subprocess calls (in seconds)",
+           type = float,
+    )
+    args = parser.parse_args()
+
+    # **************************************************************************
+
     # Define resolutions ...
     ress = [
         "c",                                # crude
@@ -83,6 +108,7 @@ if __name__ == "__main__":
                     pyguymer3.geo.add_axis(
                         fg,
                         add_coastlines = False,
+                                 debug = args.debug,
                                  index = i + 1,
                                  ncols = 2,
                                  nrows = 3,
@@ -94,6 +120,7 @@ if __name__ == "__main__":
                     pyguymer3.geo.add_axis(
                         fg,
                         add_coastlines = False,
+                                 debug = args.debug,
                                  index = i + 1,
                                    lat = -90.0,
                                    lon =   0.0,
@@ -105,11 +132,13 @@ if __name__ == "__main__":
             # Configure axis ...
             pyguymer3.geo.add_map_background(
                 ax[i],
+                     debug = args.debug,
                       name = "shaded-relief",
                 resolution = "large8192px",
             )
             pyguymer3.geo._add_coastlines(                                      # pylint: disable=W0212
                 ax[i],
+                     debug = args.debug,
                  edgecolor = "red",
                     levels = [1],
                  linewidth = 1.0,
@@ -121,6 +150,7 @@ if __name__ == "__main__":
                 # Draw Antarctica ...
                 pyguymer3.geo._add_coastlines(                                  # pylint: disable=W0212
                     ax[i],
+                         debug = args.debug,
                      edgecolor = "green",
                         levels = [5],
                      linewidth = 1.0,
@@ -130,6 +160,7 @@ if __name__ == "__main__":
                 # Draw Antarctica ...
                 pyguymer3.geo._add_coastlines(                                  # pylint: disable=W0212
                     ax[i],
+                         debug = args.debug,
                      edgecolor = "blue",
                         levels = [6],
                      linewidth = 1.0,
@@ -178,7 +209,12 @@ if __name__ == "__main__":
         matplotlib.pyplot.close(fg)
 
         # Optimize PNG ...
-        pyguymer3.image.optimise_image(frame, strip = True)
+        pyguymer3.image.optimise_image(
+            frame,
+              debug = args.debug,
+              strip = True,
+            timeout = args.timeout,
+        )
 
     # **************************************************************************
 

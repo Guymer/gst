@@ -4,6 +4,7 @@
 # NOTE: See https://docs.python.org/3.12/library/multiprocessing.html#the-spawn-and-forkserver-start-methods
 if __name__ == "__main__":
     # Import standard modules ...
+    import argparse
     import os
 
     # Import special modules ...
@@ -37,6 +38,28 @@ if __name__ == "__main__":
         import pyguymer3.image
     except:
         raise Exception("\"pyguymer3\" is not installed; run \"pip install --user PyGuymer3\"") from None
+
+    # **************************************************************************
+
+    # Create argument parser and parse the arguments ...
+    parser = argparse.ArgumentParser(
+           allow_abbrev = False,
+            description = "Compare the GSHHG and NE datasets.",
+        formatter_class = argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser.add_argument(
+        "--debug",
+        action = "store_true",
+          dest = "debug",
+          help = "print debug messages",
+    )
+    parser.add_argument(
+        "--timeout",
+        default = 60.0,
+           help = "the timeout for any requests/subprocess calls (in seconds)",
+           type = float,
+    )
+    args = parser.parse_args()
 
     # **************************************************************************
 
@@ -81,6 +104,7 @@ if __name__ == "__main__":
     ax = pyguymer3.geo.add_axis(
         fg,
         add_coastlines = False,
+                 debug = args.debug,
                   dist = 100.0e3,
                    lat = lat,
                    lon = lon,
@@ -89,6 +113,7 @@ if __name__ == "__main__":
     # Configure axis ...
     pyguymer3.geo.add_map_background(
         ax,
+             debug = args.debug,
               name = "shaded-relief",
         resolution = "large8192px",
     )
@@ -163,4 +188,9 @@ if __name__ == "__main__":
     matplotlib.pyplot.close(fg)
 
     # Optimize PNG ...
-    pyguymer3.image.optimise_image("compareDatasets.png", strip = True)
+    pyguymer3.image.optimise_image(
+        "compareDatasets.png",
+          debug = args.debug,
+          strip = True,
+        timeout = args.timeout,
+    )

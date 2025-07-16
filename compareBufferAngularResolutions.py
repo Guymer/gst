@@ -76,6 +76,12 @@ if __name__ == "__main__":
         action = "store_true",
           help = "make maps and animation",
     )
+    parser.add_argument(
+        "--timeout",
+        default = 60.0,
+           help = "the timeout for any requests/subprocess calls (in seconds)",
+           type = float,
+    )
     args = parser.parse_args()
 
     # **************************************************************************
@@ -138,6 +144,7 @@ if __name__ == "__main__":
          coastlines_facecolor = (1.0, 0.0, 0.0, 0.5),
          coastlines_linewidth = 1.0,
         coastlines_resolution = res,
+                        debug = args.debug,
                          dist = 100.0e3,
                         index = 1,
                           lat = lat,
@@ -154,7 +161,11 @@ if __name__ == "__main__":
     )
 
     # Configure axis ...
-    pyguymer3.geo.add_map_background(ax1, resolution = "large8192px")
+    pyguymer3.geo.add_map_background(
+        ax1,
+             debug = args.debug,
+        resolution = "large8192px",
+    )
 
     # **************************************************************************
 
@@ -289,4 +300,9 @@ if __name__ == "__main__":
     matplotlib.pyplot.close(fg)
 
     # Optimize PNG ...
-    pyguymer3.image.optimise_image("compareBufferAngularResolutions.png", strip = True)
+    pyguymer3.image.optimise_image(
+        "compareBufferAngularResolutions.png",
+          debug = args.debug,
+          strip = True,
+        timeout = args.timeout,
+    )

@@ -4,6 +4,7 @@
 # NOTE: See https://docs.python.org/3.12/library/multiprocessing.html#the-spawn-and-forkserver-start-methods
 if __name__ == "__main__":
     # Import standard modules ...
+    import argparse
     import os
 
     # Import special modules ...
@@ -49,6 +50,28 @@ if __name__ == "__main__":
 
     # **************************************************************************
 
+    # Create argument parser and parse the arguments ...
+    parser = argparse.ArgumentParser(
+           allow_abbrev = False,
+            description = "Demonstrate some Shapely operations on some shapes.",
+        formatter_class = argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser.add_argument(
+        "--debug",
+        action = "store_true",
+          dest = "debug",
+          help = "print debug messages",
+    )
+    parser.add_argument(
+        "--timeout",
+        default = 60.0,
+           help = "the timeout for any requests/subprocess calls (in seconds)",
+           type = float,
+    )
+    args = parser.parse_args()
+
+    # **************************************************************************
+
     # Define central location ...
     lon = -1.0                                                                  # [°]
     lat = 50.5                                                                  # [°]
@@ -61,14 +84,16 @@ if __name__ == "__main__":
     # Create axis ...
     ax = pyguymer3.geo.add_axis(
         fg,
-        dist = 500.0e3,
-         lat = lat,
-         lon = lon,
+        debug = args.debug,
+         dist = 500.0e3,
+          lat = lat,
+          lon = lon,
     )
 
     # Configure axis ...
     pyguymer3.geo.add_map_background(
         ax,
+             debug = args.debug,
               name = "shaded-relief",
         resolution = "large8192px",
     )
@@ -188,4 +213,9 @@ if __name__ == "__main__":
     matplotlib.pyplot.close(fg)
 
     # Optimize PNG ...
-    pyguymer3.image.optimise_image("shapelyOperations.png", strip = True)
+    pyguymer3.image.optimise_image(
+        "shapelyOperations.png",
+          debug = args.debug,
+          strip = True,
+        timeout = args.timeout,
+    )

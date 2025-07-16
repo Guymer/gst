@@ -8,6 +8,7 @@ if __name__ == "__main__":
     import glob
     import gzip
     import os
+    import platform
     import shutil
     import subprocess
     import sysconfig
@@ -72,9 +73,29 @@ if __name__ == "__main__":
           help = "don't run GST - just assume that all the required GST output is there already",
     )
     parser.add_argument(
+        "--ffmpeg-path",
+        default = shutil.which("ffmpeg7") if platform.system() == "Darwin" else shutil.which("ffmpeg"),
+           dest = "ffmpegPath",
+           help = "the path to the \"ffmpeg\" binary",
+           type = str,
+    )
+    parser.add_argument(
+        "--ffprobe-path",
+        default = shutil.which("ffprobe7") if platform.system() == "Darwin" else shutil.which("ffprobe"),
+           dest = "ffprobePath",
+           help = "the path to the \"ffprobe\" binary",
+           type = str,
+    )
+    parser.add_argument(
         "--plot",
         action = "store_true",
           help = "make maps and animation",
+    )
+    parser.add_argument(
+        "--timeout",
+        default = 60.0,
+           help = "the timeout for any requests/subprocess calls (in seconds)",
+           type = float,
     )
     args = parser.parse_args()
 
@@ -252,11 +273,13 @@ if __name__ == "__main__":
         ax = pyguymer3.geo.add_axis(
             fg,
             coastlines_resolution = res,
+                            debug = args.debug,
         )
 
         # Configure axis ...
         pyguymer3.geo.add_map_background(
             ax,
+                 debug = args.debug,
                   name = "shaded-relief",
             resolution = "large8192px",
         )
@@ -294,9 +317,10 @@ if __name__ == "__main__":
             maxShip = pyguymer3.geo.buffer(
                 ship,
                 1000.0 * float(dist),
-                fill = +1.0,
-                nAng = 361,
-                simp = -1.0,
+                debug = args.debug,
+                 fill = +1.0,
+                 nAng = 361,
+                 simp = -1.0,
             )
 
             # Plot [Multi]Polygon ...
@@ -344,7 +368,12 @@ if __name__ == "__main__":
         matplotlib.pyplot.close(fg)
 
         # Optimize PNG ...
-        pyguymer3.image.optimise_image(frame, strip = True)
+        pyguymer3.image.optimise_image(
+            frame,
+              debug = args.debug,
+              strip = True,
+            timeout = args.timeout,
+        )
 
         # Append frame to list ...
         frames.append(frame)
@@ -356,7 +385,11 @@ if __name__ == "__main__":
     # Save 60fps MP4 ...
     vname = pyguymer3.media.images2mp4(
         frames,
-        fps = 60.0,
+              debug = args.debug,
+        ffprobePath = args.ffprobePath,
+         ffmpegPath = args.ffmpegPath,
+                fps = 60.0,
+            timeout = args.timeout,
     )
     shutil.move(vname, f"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}.mp4")
 
@@ -371,9 +404,13 @@ if __name__ == "__main__":
         # Save 60fps MP4 ...
         vname = pyguymer3.media.images2mp4(
             frames,
+                   debug = args.debug,
+             ffprobePath = args.ffprobePath,
+              ffmpegPath = args.ffmpegPath,
                      fps = 60.0,
             screenHeight = maxSize,
              screenWidth = maxSize,
+                 timeout = args.timeout,
         )
         shutil.move(vname, f"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}{maxSize:04d}px.mp4")
 
@@ -438,6 +475,7 @@ if __name__ == "__main__":
         ax = pyguymer3.geo.add_axis(
             fg,
             coastlines_resolution = res,
+                            debug = args.debug,
                              dist = 400.0e3,
                               lat = 73.5,
                               lon = 60.0,
@@ -446,6 +484,7 @@ if __name__ == "__main__":
         # Configure axis ...
         pyguymer3.geo.add_map_background(
             ax,
+                 debug = args.debug,
                   name = "shaded-relief",
             resolution = "large8192px",
         )
@@ -483,9 +522,10 @@ if __name__ == "__main__":
             maxShip = pyguymer3.geo.buffer(
                 ship,
                 1000.0 * float(dist),
-                fill = +1.0,
-                nAng = 361,
-                simp = -1.0,
+                debug = args.debug,
+                 fill = +1.0,
+                 nAng = 361,
+                 simp = -1.0,
             )
 
             # Plot [Multi]Polygon ...
@@ -520,7 +560,12 @@ if __name__ == "__main__":
         matplotlib.pyplot.close(fg)
 
         # Optimize PNG ...
-        pyguymer3.image.optimise_image(frame, strip = True)
+        pyguymer3.image.optimise_image(
+            frame,
+              debug = args.debug,
+              strip = True,
+            timeout = args.timeout,
+        )
 
         # Append frame to list ...
         frames.append(frame)
@@ -532,7 +577,11 @@ if __name__ == "__main__":
     # Save 60fps MP4 ...
     vname = pyguymer3.media.images2mp4(
         frames,
-        fps = 60.0,
+              debug = args.debug,
+        ffprobePath = args.ffprobePath,
+         ffmpegPath = args.ffmpegPath,
+                fps = 60.0,
+            timeout = args.timeout,
     )
     shutil.move(vname, f"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}_NovayaZemlya.mp4")
 
@@ -547,9 +596,13 @@ if __name__ == "__main__":
         # Save 60fps MP4 ...
         vname = pyguymer3.media.images2mp4(
             frames,
+                   debug = args.debug,
+             ffprobePath = args.ffprobePath,
+              ffmpegPath = args.ffmpegPath,
                      fps = 60.0,
             screenHeight = maxSize,
              screenWidth = maxSize,
+                 timeout = args.timeout,
         )
         shutil.move(vname, f"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}_NovayaZemlya{maxSize:04d}px.mp4")
 
@@ -614,6 +667,7 @@ if __name__ == "__main__":
         ax = pyguymer3.geo.add_axis(
             fg,
             coastlines_resolution = res,
+                            debug = args.debug,
                              dist = 300.0e3,
                               lat = -44.0,
                               lon = -74.0,
@@ -622,6 +676,7 @@ if __name__ == "__main__":
         # Configure axis ...
         pyguymer3.geo.add_map_background(
             ax,
+                 debug = args.debug,
                   name = "shaded-relief",
             resolution = "large8192px",
         )
@@ -659,9 +714,10 @@ if __name__ == "__main__":
             maxShip = pyguymer3.geo.buffer(
                 ship,
                 1000.0 * float(dist),
-                fill = +1.0,
-                nAng = 361,
-                simp = -1.0,
+                debug = args.debug,
+                 fill = +1.0,
+                 nAng = 361,
+                 simp = -1.0,
             )
 
             # Plot [Multi]Polygon ...
@@ -696,7 +752,12 @@ if __name__ == "__main__":
         matplotlib.pyplot.close(fg)
 
         # Optimize PNG ...
-        pyguymer3.image.optimise_image(frame, strip = True)
+        pyguymer3.image.optimise_image(
+            frame,
+              debug = args.debug,
+              strip = True,
+            timeout = args.timeout,
+        )
 
         # Append frame to list ...
         frames.append(frame)
@@ -708,7 +769,11 @@ if __name__ == "__main__":
     # Save 60fps MP4 ...
     vname = pyguymer3.media.images2mp4(
         frames,
-        fps = 60.0,
+              debug = args.debug,
+        ffprobePath = args.ffprobePath,
+         ffmpegPath = args.ffmpegPath,
+                fps = 60.0,
+            timeout = args.timeout,
     )
     shutil.move(vname, f"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}_BocaDelGuafo.mp4")
 
@@ -723,8 +788,12 @@ if __name__ == "__main__":
         # Save 60fps MP4 ...
         vname = pyguymer3.media.images2mp4(
             frames,
+                   debug = args.debug,
+             ffprobePath = args.ffprobePath,
+              ffmpegPath = args.ffmpegPath,
                      fps = 60.0,
             screenHeight = maxSize,
              screenWidth = maxSize,
+                 timeout = args.timeout,
         )
         shutil.move(vname, f"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}_BocaDelGuafo{maxSize:04d}px.mp4")

@@ -58,6 +58,12 @@ if __name__ == "__main__":
           dest = "dryRun",
           help = "don't run GST - just assume that all the required GST output is there already",
     )
+    parser.add_argument(
+        "--timeout",
+        default = 60.0,
+           help = "the timeout for any requests/subprocess calls (in seconds)",
+           type = float,
+    )
     args = parser.parse_args()
 
     # **************************************************************************
@@ -238,4 +244,9 @@ if __name__ == "__main__":
 
         # Save PNG ...
         histImgObj.save(f"complexity_res={res}_cons={cons:.2e}_nAng={nAng:d}_prec={prec:.2e}.png")
-        pyguymer3.image.optimise_image(f"complexity_res={res}_cons={cons:.2e}_nAng={nAng:d}_prec={prec:.2e}.png", strip = True)
+        pyguymer3.image.optimise_image(
+            f"complexity_res={res}_cons={cons:.2e}_nAng={nAng:d}_prec={prec:.2e}.png",
+              debug = args.debug,
+              strip = True,
+            timeout = args.timeout,
+        )

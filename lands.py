@@ -4,6 +4,7 @@
 # NOTE: See https://docs.python.org/3.12/library/multiprocessing.html#the-spawn-and-forkserver-start-methods
 if __name__ == "__main__":
     # Import standard modules ...
+    import argparse
     import glob
     import gzip
 
@@ -39,6 +40,28 @@ if __name__ == "__main__":
         import pyguymer3.image
     except:
         raise Exception("\"pyguymer3\" is not installed; run \"pip install --user PyGuymer3\"") from None
+
+    # **************************************************************************
+
+    # Create argument parser and parse the arguments ...
+    parser = argparse.ArgumentParser(
+           allow_abbrev = False,
+            description = "Plot the number of points in the coastline lines.",
+        formatter_class = argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser.add_argument(
+        "--debug",
+        action = "store_true",
+          dest = "debug",
+          help = "print debug messages",
+    )
+    parser.add_argument(
+        "--timeout",
+        default = 60.0,
+           help = "the timeout for any requests/subprocess calls (in seconds)",
+           type = float,
+    )
+    args = parser.parse_args()
 
     # **************************************************************************
 
@@ -110,7 +133,10 @@ if __name__ == "__main__":
                 relevantLands = shapely.wkb.loads(gzObj.read())
 
             # Loop over Polygons ...
-            for poly in pyguymer3.geo.extract_polys(relevantLands, onlyValid = False):
+            for poly in pyguymer3.geo.extract_polys(
+                relevantLands,
+                onlyValid = False,
+            ):
                 # Increment length ...
                 length += len(poly.exterior.coords)                             # [#]
 
@@ -154,4 +180,9 @@ if __name__ == "__main__":
     matplotlib.pyplot.close(fg)
 
     # Optimize PNG ...
-    pyguymer3.image.optimise_image("lands.png", strip = True)
+    pyguymer3.image.optimise_image(
+        "lands.png",
+          debug = args.debug,
+          strip = True,
+        timeout = args.timeout,
+    )

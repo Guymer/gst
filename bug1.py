@@ -3,6 +3,9 @@
 # Use the proper idiom in the main module ...
 # NOTE: See https://docs.python.org/3.12/library/multiprocessing.html#the-spawn-and-forkserver-start-methods
 if __name__ == "__main__":
+    # Import standard modules ...
+    import argparse
+
     # Import special modules ...
     try:
         import matplotlib
@@ -34,6 +37,28 @@ if __name__ == "__main__":
         import pyguymer3.image
     except:
         raise Exception("\"pyguymer3\" is not installed; run \"pip install --user PyGuymer3\"") from None
+
+    # **************************************************************************
+
+    # Create argument parser and parse the arguments ...
+    parser = argparse.ArgumentParser(
+           allow_abbrev = False,
+            description = "Demonstrate a bug.",
+        formatter_class = argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser.add_argument(
+        "--debug",
+        action = "store_true",
+          dest = "debug",
+          help = "print debug messages",
+    )
+    parser.add_argument(
+        "--timeout",
+        default = 60.0,
+           help = "the timeout for any requests/subprocess calls (in seconds)",
+           type = float,
+    )
+    args = parser.parse_args()
 
     # **************************************************************************
 
@@ -83,8 +108,9 @@ if __name__ == "__main__":
         maxShip1 = pyguymer3.geo.buffer(
             ship,
             float(maxDist) * 1000.0,
-            nAng = nAng,
-            simp = simp,
+            debug = args.debug,
+             nAng = nAng,
+             simp = simp,
         )
 
         # Manually plot the exterior rings of all of the Polygons ...
@@ -103,20 +129,24 @@ if __name__ == "__main__":
                     pyguymer3.geo.buffer(
                         ship,
                         0.25 * float(maxDist) * 1000.0,
-                        nAng = nAng,
-                        simp = simp,
+                        debug = args.debug,
+                         nAng = nAng,
+                         simp = simp,
                     ),
                     0.25 * float(maxDist) * 1000.0,
-                    nAng = nAng,
-                    simp = simp,
+                    debug = args.debug,
+                     nAng = nAng,
+                     simp = simp,
                 ),
                 0.25 * float(maxDist) * 1000.0,
-                nAng = nAng,
-                simp = simp,
+                debug = args.debug,
+                 nAng = nAng,
+                 simp = simp,
             ),
             0.25 * float(maxDist) * 1000.0,
-            nAng = nAng,
-            simp = simp,
+            debug = args.debug,
+             nAng = nAng,
+             simp = simp,
         )
 
         # Manually plot the exterior rings of all of the Polygons ...
@@ -155,4 +185,9 @@ if __name__ == "__main__":
     matplotlib.pyplot.close(fg)
 
     # Optimize PNG ...
-    pyguymer3.image.optimise_image("bug1.png", strip = True)
+    pyguymer3.image.optimise_image(
+        "bug1.png",
+          debug = args.debug,
+          strip = True,
+        timeout = args.timeout,
+    )
