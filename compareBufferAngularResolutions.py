@@ -7,6 +7,7 @@ if __name__ == "__main__":
     import argparse
     import gzip
     import os
+    import pathlib
     import subprocess
     import sysconfig
 
@@ -15,7 +16,7 @@ if __name__ == "__main__":
         import cartopy
         cartopy.config.update(
             {
-                "cache_dir" : os.path.expanduser("~/.local/share/cartopy_cache"),
+                "cache_dir" : pathlib.PosixPath("~/.local/share/cartopy_cache").expanduser(),
             }
         )
     except:
