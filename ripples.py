@@ -315,7 +315,7 @@ if __name__ == "__main__":
         # Check that the distance isn't too large ...
         # NOTE: Add 25 km of padding as the algorithm is not robust near the
         #       antipode.
-        if 1000.0 * float(dist) <= 0.5 * pyguymer3.CIRCUMFERENCE_OF_EARTH - 25.0e3:
+        if 1000.0 * float(dist) <= pyguymer3.MAXIMUM_VINCENTY:
             # Calculate the maximum distance the ship could have got to ...
             maxShip = pyguymer3.geo.buffer(
                 ship,
@@ -522,7 +522,7 @@ if __name__ == "__main__":
         # Check that the distance isn't too large ...
         # NOTE: Add 25 km of padding as the algorithm is not robust near the
         #       antipode.
-        if 1000.0 * float(dist) <= 0.5 * pyguymer3.CIRCUMFERENCE_OF_EARTH - 25.0e3:
+        if 1000.0 * float(dist) <= pyguymer3.MAXIMUM_VINCENTY:
             # Calculate the maximum distance the ship could have got to ...
             maxShip = pyguymer3.geo.buffer(
                 ship,
@@ -716,7 +716,7 @@ if __name__ == "__main__":
         # Check that the distance isn't too large ...
         # NOTE: Add 25 km of padding as the algorithm is not robust near the
         #       antipode.
-        if 1000.0 * float(dist) <= 0.5 * pyguymer3.CIRCUMFERENCE_OF_EARTH - 25.0e3:
+        if 1000.0 * float(dist) <= pyguymer3.MAXIMUM_VINCENTY:
             # Calculate the maximum distance the ship could have got to ...
             maxShip = pyguymer3.geo.buffer(
                 ship,

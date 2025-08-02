@@ -180,7 +180,7 @@ def sail(
     # Calculate the maximum possible sailing distance (ignoring all land) ...
     # NOTE: If the distance is very large then the ship can sail anywhere.
     maxDist = (1852.0 * spd) * (24.0 * dur)                                     # [m]
-    if maxDist > 0.5 * pyguymer3.CIRCUMFERENCE_OF_EARTH:
+    if maxDist > pyguymer3.MAXIMUM_VINCENTY:
         maxShip = pyguymer3.geo.fillin(
             shapely.geometry.polygon.orient(
                 shapely.geometry.polygon.Polygon(
