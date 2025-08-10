@@ -8,11 +8,8 @@ if __name__ == "__main__":
     import platform
     import shutil
 
-    # Import my modules ...
-    try:
-        import gst
-    except:
-        raise Exception("\"gst\" is not installed; you need to have the Python module from https://github.com/Guymer/gst located somewhere in your $PYTHONPATH") from None
+    # Import sub-functions ...
+    from .sail import sail
 
     # **************************************************************************
 
@@ -147,7 +144,7 @@ if __name__ == "__main__":
     # **************************************************************************
 
     # Sail the vessel ...
-    gst.sail(
+    sail(
         args.lon,
         args.lat,
         args.spd,
