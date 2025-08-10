@@ -313,8 +313,6 @@ if __name__ == "__main__":
             lines.append(matplotlib.lines.Line2D([], [], color = color))
 
         # Check that the distance isn't too large ...
-        # NOTE: Add 25 km of padding as the algorithm is not robust near the
-        #       antipode.
         if 1000.0 * float(dist) <= pyguymer3.MAXIMUM_VINCENTY:
             # Calculate the maximum distance the ship could have got to ...
             maxShip = pyguymer3.geo.buffer(
@@ -520,8 +518,6 @@ if __name__ == "__main__":
             lines.append(matplotlib.lines.Line2D([], [], color = color))
 
         # Check that the distance isn't too large ...
-        # NOTE: Add 25 km of padding as the algorithm is not robust near the
-        #       antipode.
         if 1000.0 * float(dist) <= pyguymer3.MAXIMUM_VINCENTY:
             # Calculate the maximum distance the ship could have got to ...
             maxShip = pyguymer3.geo.buffer(
@@ -714,8 +710,6 @@ if __name__ == "__main__":
             lines.append(matplotlib.lines.Line2D([], [], color = color))
 
         # Check that the distance isn't too large ...
-        # NOTE: Add 25 km of padding as the algorithm is not robust near the
-        #       antipode.
         if 1000.0 * float(dist) <= pyguymer3.MAXIMUM_VINCENTY:
             # Calculate the maximum distance the ship could have got to ...
             maxShip = pyguymer3.geo.buffer(
