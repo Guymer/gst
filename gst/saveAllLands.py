@@ -11,7 +11,7 @@ def saveAllLands(
          dist = -1.0,
          fill = 1.0,
     fillSpace = "EuclideanSpace",
-       levels = (1, 5, 6),
+       levels = (1, 5, 6,),
         local = False,
       maxShip = None,
          nAng = 9,

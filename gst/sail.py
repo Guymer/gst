@@ -286,7 +286,7 @@ def sail(
                  dist = -1.0,
                  fill = 1.0,
             fillSpace = "EuclideanSpace",
-               levels = (1, 5, 6),
+               levels = (1, 5, 6,),
                 local = False,
               maxShip = None,
                  nAng = nAng,
@@ -346,7 +346,7 @@ def sail(
                  dist = prec,
                  fill = fill,
             fillSpace = "EuclideanSpace",
-               levels = (1, 5, 6),
+               levels = (1, 5, 6,),
                 local = local,
               maxShip = pyguymer3.geo.buffer(
                 maxShip,

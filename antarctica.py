@@ -141,7 +141,7 @@ if __name__ == "__main__":
                 ax[i],
                      debug = args.debug,
                  edgecolor = "red",
-                    levels = [1],
+                    levels = (1,),
                  linewidth = 1.0,
                 resolution = res,
             )
@@ -153,7 +153,7 @@ if __name__ == "__main__":
                     ax[i],
                          debug = args.debug,
                      edgecolor = "green",
-                        levels = [5],
+                        levels = (5,),
                      linewidth = 1.0,
                     resolution = res,
                 )
@@ -163,7 +163,7 @@ if __name__ == "__main__":
                     ax[i],
                          debug = args.debug,
                      edgecolor = "blue",
-                        levels = [6],
+                        levels = (6,),
                      linewidth = 1.0,
                     resolution = res,
                 )
