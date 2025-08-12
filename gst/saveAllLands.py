@@ -35,8 +35,8 @@ def saveAllLands(
     debug : bool, optional
         print debug messages
     dist : float, optional
-        the distance to buffer the canals by; negative values disable buffering
-        (in metres)
+        the distance to buffer the canals and the land by; negative values
+        disable buffering (in metres)
     fill : float, optional
         how many intermediary points are added to fill in the straight lines
         which connect the points; negative values disable filling
