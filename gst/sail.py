@@ -28,7 +28,7 @@ def sail(
 
     This function reads in a starting coordinate (in degrees) and a sailing
     speed (in knots) and then calculates the maximum possible sailing distance
-    on the surface of the Earth that the vessel can reach in the specified time.
+    on the surface of the Earth that the ship can reach in the specified time.
 
     Parameters
     ----------
@@ -37,7 +37,7 @@ def sail(
     lat : float
         the latitude of the starting point (in degrees)
     spd : float
-        the speed of the vessel (in knots)
+        the speed of the ship (in knots)
     cons : float, optional
         the amount of conservatism to add to the calculation
     debug : bool, optional
@@ -59,7 +59,7 @@ def sail(
     local : bool, optional
         the plot has only local extent
     nAng : int, optional
-        the number of directions from each point that the vessel could sail in
+        the number of directions from each point that the ship could sail in
     nIter : int, optional
         the maximum number of iterations (particularly the Vincenty formula)
     plot : bool, optional
@@ -231,7 +231,7 @@ def sail(
     sailDur = 3600.0 * sailDur                                                  # [s]
     sailDur = datetime.timedelta(seconds = round(sailDur))
 
-    print(f"Each sailing iteration is {str(sailDur)} for the vessel.")
+    print(f"Each sailing iteration is {str(sailDur)} for the ship.")
 
     # **************************************************************************
 

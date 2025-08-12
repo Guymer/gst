@@ -16,7 +16,7 @@ if __name__ == "__main__":
     # Create argument parser and parse the arguments ...
     parser = argparse.ArgumentParser(
            allow_abbrev = False,
-            description = "This wrapper reads in a starting coordinate and a sailing speed and then calculates the maximum possible sailing distance on the surface of the Earth that the vessel can reach in the specified time.",
+            description = "This wrapper reads in a starting coordinate and a sailing speed and then calculates the maximum possible sailing distance on the surface of the Earth that the ship can reach in the specified time.",
         formatter_class = argparse.ArgumentDefaultsHelpFormatter,
     )
     parser.add_argument(
@@ -31,7 +31,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "spd",
-        help = "the speed of the vessel (in knots)",
+        help = "the speed of the ship (in knots)",
         type = float,
     )
     parser.add_argument(
@@ -93,7 +93,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--nAng",
         default = 9,
-           help = "the number of directions from each point that the vessel could sail in",
+           help = "the number of directions from each point that the ship could sail in",
            type = int,
     )
     parser.add_argument(
@@ -143,7 +143,7 @@ if __name__ == "__main__":
 
     # **************************************************************************
 
-    # Sail the vessel ...
+    # Sail the ship ...
     sail(
         args.lon,
         args.lat,
