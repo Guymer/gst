@@ -219,7 +219,7 @@ if __name__ == "__main__":
     frames = []
 
     # Loop over distances ...
-    for dist in range(1, 30001, 1):
+    for dist in range(1, 30000 + 1, 1):
         # Deduce PNG name, if it exists then append it to the list and skip ...
         frame = f"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}/dist={dist:05d}.png"
         if os.path.exists(frame):
@@ -421,7 +421,7 @@ if __name__ == "__main__":
     frames = []
 
     # Loop over distances ...
-    for dist in range(3290, 5181, 1):
+    for dist in range(3290, 5180 + 1, 1):
         # Deduce PNG name, if it exists then append it to the list and skip ...
         frame = f"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}/dist={dist:05d}_NovayaZemlya.png"
         if os.path.exists(frame):
@@ -613,7 +613,7 @@ if __name__ == "__main__":
     frames = []
 
     # Loop over distances ...
-    for dist in range(14150, 15181, 1):
+    for dist in range(14150, 15180 + 1, 1):
         # Deduce PNG name, if it exists then append it to the list and skip ...
         frame = f"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}/dist={dist:05d}_BocaDelGuafo.png"
         if os.path.exists(frame):
