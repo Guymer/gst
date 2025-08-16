@@ -20,6 +20,12 @@ shellcheck.log
 *.gcda
 *.gcno
 
+# Ignore compiler generated files ...
+*.so
+*.so.dSYM
+dist
+GST.egg-info
+
 # Hide output of cProfile examples ...
 first.err
 first.log
