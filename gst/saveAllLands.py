@@ -25,9 +25,9 @@ def saveAllLands(
 
     Parameters
     ----------
-    wName : string
+    wName : str
         the file name of the compressed WKB file
-    dname : string
+    dname : str
         the directory name where temporary compressed WKB files can be stored
     allCanals : list of shapely.geometry.linestring.LineString, optional
         a MultiLineString of canals to use to cut up pieces of land to allow
@@ -55,7 +55,7 @@ def saveAllLands(
         buffering
     nIter : int, optional
         the maximum number of iterations (particularly the Vincenty formula)
-    res : string, optional
+    res : str, optional
         the resolution of the Global Self-Consistent Hierarchical
         High-Resolution Geography datasets
     simp : float, optional

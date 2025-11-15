@@ -24,7 +24,7 @@ def saveRelevantLands(
 
     Parameters
     ----------
-    wName : string
+    wName : str
         the file name of the compressed WKB file
     ship : shapely.geometry.polygon.Polygon, shapely.geometry.multipolygon.MultiPolygon
         the ship to sail

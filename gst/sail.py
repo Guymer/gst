@@ -66,7 +66,7 @@ def sail(
         make a plot
     prec : float, optional
         the precision of the calculation (in metres)
-    res : string, optional
+    res : str, optional
         the resolution of the Global Self-Consistent Hierarchical
         High-Resolution Geography datasets
     timeout : float, optional

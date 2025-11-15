@@ -13,7 +13,7 @@ def saveAllCanals(
 
     Parameters
     ----------
-    wName : string
+    wName : str
         the file name of the compressed WKB file
     debug : bool, optional
         print debug messages
