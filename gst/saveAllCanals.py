@@ -27,7 +27,6 @@ def saveAllCanals(
 
     # Import standard modules ...
     import gzip
-    import os
     import pathlib
 
     # Import special modules ...
