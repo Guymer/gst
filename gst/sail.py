@@ -44,10 +44,10 @@ def sail(
         print debug messages
     dur : float, optional
         the duration of the voyage (in days)
-    ffmpegPath : str, optional
+    ffmpegPath : None or str, optional
         the path to the "ffmpeg" binary (if not provided then Python will
         attempt to find the binary itself)
-    ffprobePath : str, optional
+    ffprobePath : None or str, optional
         the path to the "ffprobe" binary (if not provided then Python will
         attempt to find the binary itself)
     freqLand : int, optional
