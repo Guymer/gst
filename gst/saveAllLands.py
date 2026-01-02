@@ -201,6 +201,11 @@ def saveAllLands(
 
     # Loop over levels ...
     for level in levels:
+        # Skip known missing datasets ...
+        if res == "c" and level == 4:
+            print(f" > Skipping level=\"{level:d}\" and res=\"{res}\" (known missing dataset).")
+            continue
+
         # Deduce Shapefile name (catching missing datasets) ...
         sfile = cartopy.io.shapereader.gshhs(
             level = level,
