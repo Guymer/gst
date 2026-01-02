@@ -439,7 +439,7 @@ def sail(
                 )
 
                 # Configure axis ...
-                pyguymer3.geo.add_GSHHG_map_underlay(
+                pyguymer3.geo.add_GSHHG_map(
                     axAll,
                          debug = debug,
                      linewidth = 1.0,
@@ -784,7 +784,7 @@ def sail(
                     )
 
                     # Configure axis ...
-                    pyguymer3.geo.add_GSHHG_map_underlay(
+                    pyguymer3.geo.add_GSHHG_map(
                         axOne,
                              debug = debug,
                          linewidth = 1.0,
