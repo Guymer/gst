@@ -202,7 +202,7 @@ def saveAllLands(
     # Loop over levels ...
     for level in levels:
         # Skip known missing datasets ...
-        if res == "c" and level == 4:
+        if level == 4 and res == "c":
             print(f" > Skipping level=\"{level:d}\" and res=\"{res}\" (known missing dataset).")
             continue
 
