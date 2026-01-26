@@ -86,6 +86,20 @@ if __name__ == "__main__":
            type = int,
     )
     parser.add_argument(
+        "--GSHHG-resolution",
+        choices = [
+            "c",                        # crude
+            "l",                        # low
+            "i",                        # intermediate
+            "h",                        # high
+            "f",                        # full
+        ],
+        default = "c",                  # crude
+           dest = "gshhgRes",
+           help = "the resolution of the GSHHG datasets",
+           type = str,
+    )
+    parser.add_argument(
         "--local",
         action = "store_true",
           help = "the plot has only local extent",
@@ -114,13 +128,6 @@ if __name__ == "__main__":
            dest = "prec",
            help = "the precision of the calculation (in metres)",
            type = float,
-    )
-    parser.add_argument(
-        "--resolution",
-        default = "c",
-           dest = "res",
-           help = "the resolution of the Global Self-Consistent Hierarchical High-Resolution Geography datasets",
-           type = str,
     )
     parser.add_argument(
         "--timeout",
@@ -156,12 +163,12 @@ if __name__ == "__main__":
            freqLand = args.freqLand,
            freqPlot = args.freqPlot,
            freqSimp = args.freqSimp,
+           gshhgRes = args.gshhgRes,
               local = args.local,
                nAng = args.nAng,
               nIter = args.nIter,
                plot = args.plot,
                prec = args.prec,
-                res = args.res,
             timeout = args.timeout,
                 tol = args.tol,
     )

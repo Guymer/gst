@@ -11,12 +11,12 @@ def saveAllLands(
          dist = -1.0,
          fill = 1.0,
     fillSpace = "EuclideanSpace",
+     gshhgRes = "c",
        levels = (1, 5, 6,),
         local = False,
       maxShip = None,
          nAng = 9,
         nIter = 100,
-          res = "c",
          simp = 0.1,
           tol = 1.0e-10,
 ):
@@ -43,6 +43,9 @@ def saveAllLands(
     fillSpace : str, optional
         the geometric space to perform the filling in (either "EuclideanSpace"
         or "GeodesicSpace")
+    gshhgRes : str, optional
+        the resolution of the Global Self-Consistent Hierarchical
+        High-Resolution Geography datasets
     levels : tuple of int, optional
         the GSHHG levels to include (you should probably use more than just
         level 1, as it does not contain any representation of Antarctica at all)
@@ -55,9 +58,6 @@ def saveAllLands(
         buffering
     nIter : int, optional
         the maximum number of iterations (particularly the Vincenty formula)
-    res : str, optional
-        the resolution of the Global Self-Consistent Hierarchical
-        High-Resolution Geography datasets
     simp : float, optional
         how much intermediary [Multi]Polygons are simplified by; negative values
         disable simplification (in degrees)
@@ -202,16 +202,16 @@ def saveAllLands(
     # Loop over levels ...
     for level in levels:
         # Skip known missing datasets ...
-        if level == 4 and res == "c":
-            print(f" > Skipping level=\"{level:d}\" and res=\"{res}\" (known missing dataset).")
+        if level == 4 and gshhgRes == "c":
+            print(f" > Skipping level=\"{level:d}\" and scale=\"{gshhgRes}\" (known missing dataset).")
             continue
 
         # Deduce Shapefile name (catching missing datasets) ...
         sfile = cartopy.io.shapereader.gshhs(
             level = level,
-            scale = res,
+            scale = gshhgRes,
         )
-        if os.path.basename(sfile) != f"GSHHS_{res}_L{level:d}.shp":
+        if os.path.basename(sfile) != f"GSHHS_{gshhgRes}_L{level:d}.shp":
             print(f" > Skipping \"{sfile}\" (filename does not match request).")
             continue
 

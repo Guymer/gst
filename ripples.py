@@ -105,7 +105,7 @@ if __name__ == "__main__":
     # **************************************************************************
 
     # Define resolution ...
-    res = "i"
+    gshhgRes = "i"
 
     # Define starting location ...
     lon = -1.0                                                                  # [°]
@@ -142,8 +142,8 @@ if __name__ == "__main__":
     )
     if not os.path.exists(outDir):
         os.mkdir(outDir)
-    if not os.path.exists(f"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}"):
-        os.mkdir(f"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}")
+    if not os.path.exists(f"{outDir}/res={gshhgRes}_lon={lon:+011.6f}_lat={lat:+010.6f}"):
+        os.mkdir(f"{outDir}/res={gshhgRes}_lon={lon:+011.6f}_lat={lat:+010.6f}")
 
     # **************************************************************************
 
@@ -173,7 +173,7 @@ if __name__ == "__main__":
                 "--freqSimp", f"{freqSimp:d}",      # ~hourly simplification
                 "--nAng", f"{nAng:d}",              # LOOP VARIABLE
                 "--precision", f"{prec:.1f}",       # LOOP VARIABLE
-                "--resolution", res,
+                "--GSHHG-resolution", gshhgRes,
             ]
             if args.debug:
                 cmd.append("--debug")
@@ -203,7 +203,7 @@ if __name__ == "__main__":
         freqSimp = 40000 // prec                                                # [#]
 
         # Deduce directory name ...
-        dname = f"res={res}_cons={cons:.2e}_tol=1.00e-10/local=F_nAng={nAng:d}_prec={prec:.2e}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/limit"
+        dname = f"res={gshhgRes}_cons={cons:.2e}_tol=1.00e-10/local=F_nAng={nAng:d}_prec={prec:.2e}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/limit"
 
         # Find the maximum distance that has been calculated so far ...
         fname = sorted(glob.glob(f"{dname}/istep=??????.wkb.gz"))[-1]
@@ -223,7 +223,7 @@ if __name__ == "__main__":
     # Loop over distances ...
     for dist in range(1, 30000 + 1, 1):
         # Deduce PNG name, if it exists then append it to the list and skip ...
-        frame = f"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}/dist={dist:05d}.png"
+        frame = f"{outDir}/res={gshhgRes}_lon={lon:+011.6f}_lat={lat:+010.6f}/dist={dist:05d}.png"
         if os.path.exists(frame):
             frames.append(frame)
             continue
@@ -247,7 +247,7 @@ if __name__ == "__main__":
             freqSimp = 40000 // prec                                            # [#]
 
             # Deduce directory name ...
-            dname = f"res={res}_cons={cons:.2e}_tol=1.00e-10/local=F_nAng={nAng:d}_prec={prec:.2e}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/limit"
+            dname = f"res={gshhgRes}_cons={cons:.2e}_tol=1.00e-10/local=F_nAng={nAng:d}_prec={prec:.2e}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/limit"
 
             # Deduce file name and skip if it is missing ...
             fname = f"{dname}/istep={istep + 1:06d}.wkb.gz"
@@ -275,16 +275,16 @@ if __name__ == "__main__":
         #       dataset instead.
         ax = pyguymer3.geo.add_axis(
             fg,
-            coastlines_resolution = res,
+            coastlines_resolution = gshhgRes,
                             debug = args.debug,
         )
 
         # Configure axis ...
         pyguymer3.geo.add_map_background(
             ax,
-                 debug = args.debug,
-                  name = "shaded-relief",
-            resolution = "large8192px",
+              debug = args.debug,
+               name = "shaded-relief",
+            subName = "large8192px",
         )
 
         # Initialize lists ...
@@ -383,7 +383,7 @@ if __name__ == "__main__":
 
     # **************************************************************************
 
-    print(f"Making \"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}.mp4\" ...")
+    print(f"Making \"{outDir}/res={gshhgRes}_lon={lon:+011.6f}_lat={lat:+010.6f}.mp4\" ...")
 
     # Save 60fps MP4 ...
     vname = pyguymer3.media.images2mp4(
@@ -394,7 +394,7 @@ if __name__ == "__main__":
                 fps = 60.0,
             timeout = args.timeout,
     )
-    shutil.move(vname, f"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}.mp4")
+    shutil.move(vname, f"{outDir}/res={gshhgRes}_lon={lon:+011.6f}_lat={lat:+010.6f}.mp4")
 
     # Set maximum sizes ...
     # NOTE: By inspection, the PNG frames are 3,840 px wide.
@@ -402,7 +402,7 @@ if __name__ == "__main__":
 
     # Loop over maximum sizes ...
     for maxSize in maxSizes:
-        print(f"Making \"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}{maxSize:04d}px.mp4\" ...")
+        print(f"Making \"{outDir}/res={gshhgRes}_lon={lon:+011.6f}_lat={lat:+010.6f}{maxSize:04d}px.mp4\" ...")
 
         # Save 60fps MP4 ...
         vname = pyguymer3.media.images2mp4(
@@ -415,7 +415,7 @@ if __name__ == "__main__":
              screenWidth = maxSize,
                  timeout = args.timeout,
         )
-        shutil.move(vname, f"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}{maxSize:04d}px.mp4")
+        shutil.move(vname, f"{outDir}/res={gshhgRes}_lon={lon:+011.6f}_lat={lat:+010.6f}{maxSize:04d}px.mp4")
 
     # **************************************************************************
 
@@ -425,7 +425,7 @@ if __name__ == "__main__":
     # Loop over distances ...
     for dist in range(3290, 5180 + 1, 1):
         # Deduce PNG name, if it exists then append it to the list and skip ...
-        frame = f"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}/dist={dist:05d}_NovayaZemlya.png"
+        frame = f"{outDir}/res={gshhgRes}_lon={lon:+011.6f}_lat={lat:+010.6f}/dist={dist:05d}_NovayaZemlya.png"
         if os.path.exists(frame):
             frames.append(frame)
             continue
@@ -449,7 +449,7 @@ if __name__ == "__main__":
             freqSimp = 40000 // prec                                            # [#]
 
             # Deduce directory name ...
-            dname = f"res={res}_cons={cons:.2e}_tol=1.00e-10/local=F_nAng={nAng:d}_prec={prec:.2e}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/limit"
+            dname = f"res={gshhgRes}_cons={cons:.2e}_tol=1.00e-10/local=F_nAng={nAng:d}_prec={prec:.2e}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/limit"
 
             # Deduce file name and skip if it is missing ...
             fname = f"{dname}/istep={istep + 1:06d}.wkb.gz"
@@ -477,7 +477,7 @@ if __name__ == "__main__":
         #       dataset instead.
         ax = pyguymer3.geo.add_axis(
             fg,
-            coastlines_resolution = res,
+            coastlines_resolution = gshhgRes,
                             debug = args.debug,
                              dist = 400.0e3,
                               lat = 73.5,
@@ -487,9 +487,9 @@ if __name__ == "__main__":
         # Configure axis ...
         pyguymer3.geo.add_map_background(
             ax,
-                 debug = args.debug,
-                  name = "shaded-relief",
-            resolution = "large8192px",
+              debug = args.debug,
+               name = "shaded-relief",
+            subName = "large8192px",
         )
 
         # Initialize lists ...
@@ -575,7 +575,7 @@ if __name__ == "__main__":
 
     # **************************************************************************
 
-    print(f"Making \"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}_NovayaZemlya.mp4\" ...")
+    print(f"Making \"{outDir}/res={gshhgRes}_lon={lon:+011.6f}_lat={lat:+010.6f}_NovayaZemlya.mp4\" ...")
 
     # Save 60fps MP4 ...
     vname = pyguymer3.media.images2mp4(
@@ -586,7 +586,7 @@ if __name__ == "__main__":
                 fps = 60.0,
             timeout = args.timeout,
     )
-    shutil.move(vname, f"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}_NovayaZemlya.mp4")
+    shutil.move(vname, f"{outDir}/res={gshhgRes}_lon={lon:+011.6f}_lat={lat:+010.6f}_NovayaZemlya.mp4")
 
     # Set maximum sizes ...
     # NOTE: By inspection, the PNG frames are 2,160 px tall/wide.
@@ -594,7 +594,7 @@ if __name__ == "__main__":
 
     # Loop over maximum sizes ...
     for maxSize in maxSizes:
-        print(f"Making \"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}_NovayaZemlya{maxSize:04d}px.mp4\" ...")
+        print(f"Making \"{outDir}/res={gshhgRes}_lon={lon:+011.6f}_lat={lat:+010.6f}_NovayaZemlya{maxSize:04d}px.mp4\" ...")
 
         # Save 60fps MP4 ...
         vname = pyguymer3.media.images2mp4(
@@ -607,7 +607,7 @@ if __name__ == "__main__":
              screenWidth = maxSize,
                  timeout = args.timeout,
         )
-        shutil.move(vname, f"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}_NovayaZemlya{maxSize:04d}px.mp4")
+        shutil.move(vname, f"{outDir}/res={gshhgRes}_lon={lon:+011.6f}_lat={lat:+010.6f}_NovayaZemlya{maxSize:04d}px.mp4")
 
     # **************************************************************************
 
@@ -617,7 +617,7 @@ if __name__ == "__main__":
     # Loop over distances ...
     for dist in range(14150, 15180 + 1, 1):
         # Deduce PNG name, if it exists then append it to the list and skip ...
-        frame = f"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}/dist={dist:05d}_BocaDelGuafo.png"
+        frame = f"{outDir}/res={gshhgRes}_lon={lon:+011.6f}_lat={lat:+010.6f}/dist={dist:05d}_BocaDelGuafo.png"
         if os.path.exists(frame):
             frames.append(frame)
             continue
@@ -641,7 +641,7 @@ if __name__ == "__main__":
             freqSimp = 40000 // prec                                            # [#]
 
             # Deduce directory name ...
-            dname = f"res={res}_cons={cons:.2e}_tol=1.00e-10/local=F_nAng={nAng:d}_prec={prec:.2e}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/limit"
+            dname = f"res={gshhgRes}_cons={cons:.2e}_tol=1.00e-10/local=F_nAng={nAng:d}_prec={prec:.2e}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/limit"
 
             # Deduce file name and skip if it is missing ...
             fname = f"{dname}/istep={istep + 1:06d}.wkb.gz"
@@ -669,7 +669,7 @@ if __name__ == "__main__":
         #       dataset instead.
         ax = pyguymer3.geo.add_axis(
             fg,
-            coastlines_resolution = res,
+            coastlines_resolution = gshhgRes,
                             debug = args.debug,
                              dist = 300.0e3,
                               lat = -44.0,
@@ -679,9 +679,9 @@ if __name__ == "__main__":
         # Configure axis ...
         pyguymer3.geo.add_map_background(
             ax,
-                 debug = args.debug,
-                  name = "shaded-relief",
-            resolution = "large8192px",
+              debug = args.debug,
+               name = "shaded-relief",
+            subName = "large8192px",
         )
 
         # Initialize lists ...
@@ -767,7 +767,7 @@ if __name__ == "__main__":
 
     # **************************************************************************
 
-    print(f"Making \"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}_BocaDelGuafo.mp4\" ...")
+    print(f"Making \"{outDir}/res={gshhgRes}_lon={lon:+011.6f}_lat={lat:+010.6f}_BocaDelGuafo.mp4\" ...")
 
     # Save 60fps MP4 ...
     vname = pyguymer3.media.images2mp4(
@@ -778,7 +778,7 @@ if __name__ == "__main__":
                 fps = 60.0,
             timeout = args.timeout,
     )
-    shutil.move(vname, f"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}_BocaDelGuafo.mp4")
+    shutil.move(vname, f"{outDir}/res={gshhgRes}_lon={lon:+011.6f}_lat={lat:+010.6f}_BocaDelGuafo.mp4")
 
     # Set maximum sizes ...
     # NOTE: By inspection, the PNG frames are 2,160 px tall/wide.
@@ -786,7 +786,7 @@ if __name__ == "__main__":
 
     # Loop over maximum sizes ...
     for maxSize in maxSizes:
-        print(f"Making \"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}_BocaDelGuafo{maxSize:04d}px.mp4\" ...")
+        print(f"Making \"{outDir}/res={gshhgRes}_lon={lon:+011.6f}_lat={lat:+010.6f}_BocaDelGuafo{maxSize:04d}px.mp4\" ...")
 
         # Save 60fps MP4 ...
         vname = pyguymer3.media.images2mp4(
@@ -799,4 +799,4 @@ if __name__ == "__main__":
              screenWidth = maxSize,
                  timeout = args.timeout,
         )
-        shutil.move(vname, f"{outDir}/res={res}_lon={lon:+011.6f}_lat={lat:+010.6f}_BocaDelGuafo{maxSize:04d}px.mp4")
+        shutil.move(vname, f"{outDir}/res={gshhgRes}_lon={lon:+011.6f}_lat={lat:+010.6f}_BocaDelGuafo{maxSize:04d}px.mp4")

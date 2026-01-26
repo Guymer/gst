@@ -89,7 +89,7 @@ if __name__ == "__main__":
     # **************************************************************************
 
     # Define resolution ...
-    res = "i"
+    gshhgRes = "i"
 
     # Define speed ...
     speed = 20.0                                                                # [NM/hr]
@@ -137,7 +137,7 @@ if __name__ == "__main__":
         freqSimp = 40000 // prec                                                # [#]
 
         # Deduce directory name and find all limit files ...
-        dname = f"res={res}_cons={cons:.2e}_tol=1.00e-10/local=F_nAng={nAng:d}_prec={prec:.2e}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/limit"
+        dname = f"res={gshhgRes}_cons={cons:.2e}_tol=1.00e-10/local=F_nAng={nAng:d}_prec={prec:.2e}/freqLand={freqLand:d}_freqSimp={freqSimp:d}_lon={lon:+011.6f}_lat={lat:+010.6f}/limit"
         fnames = sorted(glob.glob(f"{dname}/istep=??????.wkb.gz"))
 
         # Create a list of the creation times of the limit files ...

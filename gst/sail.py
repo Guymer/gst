@@ -15,12 +15,12 @@ def sail(
        freqLand = 100,
        freqPlot = 25,
        freqSimp = 25,
+       gshhgRes = "c",
           local = False,
            nAng = 9,
           nIter = 100,
            plot = False,
            prec = 10000.0,
-            res = "c",
         timeout = 60.0,
             tol = 1.0e-10,
 ):
@@ -56,6 +56,9 @@ def sail(
         plot sailing contours every freqPlot iteration
     freqSimp : int, optional
         simplify the sailing contour every freqSimp iteration
+    gshhgRes : str, optional
+        the resolution of the Global Self-Consistent Hierarchical
+        High-Resolution Geography datasets
     local : bool, optional
         the plot has only local extent
     nAng : int, optional
@@ -66,9 +69,6 @@ def sail(
         make a plot
     prec : float, optional
         the precision of the calculation (in metres)
-    res : str, optional
-        the resolution of the Global Self-Consistent Hierarchical
-        High-Resolution Geography datasets
     timeout : float, optional
         the timeout for any requests/subprocess calls
     tol : float, optional
@@ -238,7 +238,7 @@ def sail(
     # **************************************************************************
 
     # Determine first output folder name and make it if it is missing ...
-    output1 = f"res={res}_cons={cons:.2e}_tol={tol:.2e}"
+    output1 = f"res={gshhgRes}_cons={cons:.2e}_tol={tol:.2e}"
     if not os.path.exists(output1):
         os.mkdir(output1)
     if not os.path.exists(f"{output1}/allLands"):
@@ -288,12 +288,12 @@ def sail(
                  dist = -1.0,
                  fill = 1.0,
             fillSpace = "EuclideanSpace",
+             gshhgRes = gshhgRes,
                levels = (1, 5, 6,),
                 local = False,
               maxShip = None,
                  nAng = nAng,
                 nIter = nIter,
-                  res = res,
                  simp = simp,
                   tol = tol,
         )
@@ -348,6 +348,7 @@ def sail(
                  dist = prec,
                  fill = fill,
             fillSpace = "EuclideanSpace",
+             gshhgRes = gshhgRes,
                levels = (1, 5, 6,),
                 local = local,
               maxShip = pyguymer3.geo.buffer(
@@ -364,7 +365,6 @@ def sail(
             ),
                  nAng = nAng,
                 nIter = nIter,
-                  res = res,
                  simp = simp,
                   tol = tol,
         )
@@ -430,6 +430,7 @@ def sail(
                        add_gridlines = True,
                                debug = debug,
                                 dist = maxDist,
+                                 fov = maxShip,
                                  lat = lat,
                                  lon = lon,
                                nIter = nIter,
@@ -441,11 +442,12 @@ def sail(
                 # Configure axis ...
                 pyguymer3.geo.add_GSHHG_map(
                     axAll,
-                         debug = debug,
-                     linewidth = 1.0,
-                     onlyValid = False,
-                        repair = False,
-                    resolution = res,
+                        debug = debug,
+                          fov = maxShip,
+                     gshhgRes = gshhgRes,
+                    linewidth = 1.0,
+                    onlyValid = False,
+                       repair = False,
                 )
             else:
                 # Create figure ...
@@ -465,8 +467,8 @@ def sail(
                 # Configure axis ...
                 pyguymer3.geo.add_map_background(
                     axAll,
-                         debug = debug,
-                    resolution = "large8192px",
+                      debug = debug,
+                    subName = "large8192px",
                 )
 
             # Plot Polygons ...
@@ -775,6 +777,7 @@ def sail(
                            add_gridlines = True,
                                    debug = debug,
                                     dist = maxDist,
+                                     fov = maxShip,
                                      lat = lat,
                                      lon = lon,
                                    nIter = nIter,
@@ -786,11 +789,12 @@ def sail(
                     # Configure axis ...
                     pyguymer3.geo.add_GSHHG_map(
                         axOne,
-                             debug = debug,
-                         linewidth = 1.0,
-                         onlyValid = False,
-                            repair = False,
-                        resolution = res,
+                            debug = debug,
+                              fov = maxShip,
+                         gshhgRes = gshhgRes,
+                        linewidth = 1.0,
+                        onlyValid = False,
+                           repair = False,
                     )
                 else:
                     # Create figure ...
@@ -810,8 +814,8 @@ def sail(
                     # Configure axis ...
                     pyguymer3.geo.add_map_background(
                         axOne,
-                             debug = debug,
-                        resolution = "large8192px",
+                          debug = debug,
+                        subName = "large8192px",
                     )
 
                 # Plot Polygons ...

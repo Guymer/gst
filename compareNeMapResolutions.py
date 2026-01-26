@@ -72,7 +72,7 @@ if __name__ == "__main__":
     lat = 50.5                                                                  # [°]
 
     # Define resolutions ...
-    ress = [
+    neRess = [
         "110m",
          "50m",
          "10m",
@@ -84,9 +84,9 @@ if __name__ == "__main__":
     frames = []
 
     # Loop over resolutions ...
-    for res in ress:
+    for neRes in neRess:
         # Deduce PNG name, append it to the list and skip if it already exists ...
-        frame = f"compareNeMapResolutions_res={res}.png"
+        frame = f"compareNeMapResolutions_res={neRes}.png"
         frames.append(frame)
         if os.path.exists(frame):
             continue
@@ -109,16 +109,16 @@ if __name__ == "__main__":
         # Configure axis ...
         pyguymer3.geo.add_map_background(
             ax,
-                 debug = args.debug,
-                  name = "shaded-relief",
-            resolution = "large8192px",
+              debug = args.debug,
+               name = "shaded-relief",
+            subName = "large8192px",
         )
 
         # Deduce Shapefile name ...
         sfile = cartopy.io.shapereader.natural_earth(
               category = "physical",
                   name = "land",
-            resolution = res,
+            resolution = neRes,
         )
 
         print(f" > Loading \"{sfile}\" ...")
@@ -154,7 +154,7 @@ if __name__ == "__main__":
         )
 
         # Configure figure ...
-        fg.suptitle(f"res={res}")
+        fg.suptitle(f"res={neRes}")
         fg.tight_layout()
 
         # Save figure ...

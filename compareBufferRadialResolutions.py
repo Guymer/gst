@@ -90,7 +90,7 @@ if __name__ == "__main__":
     # **************************************************************************
 
     # Define resolution ...
-    res = "i"
+    gshhgRes = "i"
 
     # Define starting location ...
     lon = -1.0                                                                  # [°]
@@ -116,7 +116,7 @@ if __name__ == "__main__":
             "--local",                      # save time by only considering local land
             "--nAng", "257",                # converged number of angles (from "compareBufferAngularResolutions.py")
             "--precision", f"{prec:.1f}",   # LOOP VARIABLE
-            "--resolution", res,
+            "--GSHHG-resolution", gshhgRes,
         ]
         if args.debug:
             cmd.append("--debug")
@@ -151,7 +151,7 @@ if __name__ == "__main__":
          coastlines_edgecolor = (1.0, 0.0, 0.0, 1.0),
          coastlines_facecolor = (1.0, 0.0, 0.0, 0.5),
          coastlines_linewidth = 1.0,
-        coastlines_resolution = res,
+        coastlines_resolution = gshhgRes,
                         debug = args.debug,
                          dist = 100.0e3,
                         index = 1,
@@ -171,8 +171,8 @@ if __name__ == "__main__":
     # Configure axis ...
     pyguymer3.geo.add_map_background(
         ax1,
-             debug = args.debug,
-        resolution = "large8192px",
+          debug = args.debug,
+        subName = "large8192px",
     )
 
     # **************************************************************************
@@ -198,7 +198,7 @@ if __name__ == "__main__":
             istep = ((1000 * dist) // prec) - 1                                 # [#]
 
             # Deduce directory name ...
-            dname = f"res={res}_cons=2.00e+00_tol=1.00e-10/local=T_nAng=257_prec={prec:.2e}_lon={lon:+011.6f}_lat={lat:+010.6f}_dur=0.09_spd=20.0/freqLand={freq:d}_freqSimp={freq:d}/ship"
+            dname = f"res={gshhgRes}_cons=2.00e+00_tol=1.00e-10/local=T_nAng=257_prec={prec:.2e}_lon={lon:+011.6f}_lat={lat:+010.6f}_dur=0.09_spd=20.0/freqLand={freq:d}_freqSimp={freq:d}/ship"
 
             # Deduce file name and skip if it is missing ...
             fname = f"{dname}/istep={istep:06d}.wkb.gz"

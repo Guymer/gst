@@ -73,7 +73,7 @@ if __name__ == "__main__":
     # **************************************************************************
 
     # Define resolutions ...
-    ress = [
+    gshhgRess = [
         "c",                                # crude
         "l",                                # low
         "i",                                # intermediate
@@ -87,9 +87,9 @@ if __name__ == "__main__":
     frames = []
 
     # Loop over resolutions ...
-    for res in ress:
+    for gshhgRes in gshhgRess:
         # Deduce PNG name, append it to the list and skip if it already exists ...
-        frame = f"antarctica_res={res}.png"
+        frame = f"antarctica_res={gshhgRes}.png"
         frames.append(frame)
         if os.path.exists(frame):
             continue
@@ -135,17 +135,17 @@ if __name__ == "__main__":
             # Configure axis ...
             pyguymer3.geo.add_map_background(
                 ax[i],
-                     debug = args.debug,
-                      name = "shaded-relief",
-                resolution = "large8192px",
+                  debug = args.debug,
+                   name = "shaded-relief",
+                subName = "large8192px",
             )
             pyguymer3.geo._add_coastlines(                                      # pylint: disable=W0212
                 ax[i],
-                     debug = args.debug,
-                 edgecolor = "red",
-                    levels = (1,),
-                 linewidth = 1.0,
-                resolution = res,
+                      debug = args.debug,
+                  edgecolor = "red",
+                gshhgLevels = (1,),
+                   gshhgRes = gshhgRes,
+                  linewidth = 1.0,
             )
 
             # Check if it is top, middle or bottom ...
@@ -153,21 +153,21 @@ if __name__ == "__main__":
                 # Draw Antarctica ...
                 pyguymer3.geo._add_coastlines(                                  # pylint: disable=W0212
                     ax[i],
-                         debug = args.debug,
-                     edgecolor = "green",
-                        levels = (5,),
-                     linewidth = 1.0,
-                    resolution = res,
+                          debug = args.debug,
+                      edgecolor = "green",
+                    gshhgLevels = (5,),
+                       gshhgRes = gshhgRes,
+                      linewidth = 1.0,
                 )
             elif i // 2 == 1:
                 # Draw Antarctica ...
                 pyguymer3.geo._add_coastlines(                                  # pylint: disable=W0212
                     ax[i],
-                         debug = args.debug,
-                     edgecolor = "blue",
-                        levels = (6,),
-                     linewidth = 1.0,
-                    resolution = res,
+                          debug = args.debug,
+                      edgecolor = "blue",
+                    gshhgLevels = (6,),
+                       gshhgRes = gshhgRes,
+                      linewidth = 1.0,
                 )
             else:
                 # Initialize list ...
@@ -178,9 +178,9 @@ if __name__ == "__main__":
                     # Deduce Shapefile name (catching missing datasets) ...
                     sfile = cartopy.io.shapereader.gshhs(
                         level = level,
-                        scale = res,
+                        scale = gshhgRes,
                     )
-                    if os.path.basename(sfile) != f"GSHHS_{res}_L{level:d}.shp":
+                    if os.path.basename(sfile) != f"GSHHS_{gshhgRes}_L{level:d}.shp":
                         print(f" > Skipping \"{sfile}\" (filename does not match request).")
                         continue
 
@@ -204,7 +204,7 @@ if __name__ == "__main__":
                 )
 
         # Configure figure ...
-        fg.suptitle(f"res={res}")
+        fg.suptitle(f"res={gshhgRes}")
         fg.tight_layout()
 
         # Save figure ...

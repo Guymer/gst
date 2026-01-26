@@ -69,7 +69,7 @@ if __name__ == "__main__":
     # **************************************************************************
 
     # Define resolution ...
-    res = "i"
+    gshhgRes = "i"
 
     # Define combinations ...
     combs = [
@@ -115,7 +115,7 @@ if __name__ == "__main__":
             "--freqSimp", f"{freqSimp:d}",      # ~hourly simplification
             "--nAng", f"{nAng:d}",              # LOOP VARIABLE
             "--precision", f"{prec:.1f}",       # LOOP VARIABLE
-            "--resolution", res,
+            "--GSHHG-resolution", gshhgRes,
         ]
         if args.debug:
             cmd.append("--debug")
@@ -147,7 +147,7 @@ if __name__ == "__main__":
     # Loop over combinations ...
     for cons, nAng, prec in combs:
         # Deduce directory name ...
-        dname = f"res={res}_cons={cons:.2e}_tol=1.00e-10/local=F_nAng={nAng:d}_prec={prec:.2e}"
+        dname = f"res={gshhgRes}_cons={cons:.2e}_tol=1.00e-10/local=F_nAng={nAng:d}_prec={prec:.2e}"
 
         # Deduce file name and skip if it is missing ...
         fname = f"{dname}/allLands.wkb.gz"
@@ -240,12 +240,12 @@ if __name__ == "__main__":
 
         # **********************************************************************
 
-        print(f"Saving \"complexity_res={res}_cons={cons:.2e}_nAng={nAng:d}_prec={prec:.2e}.png\" ...")
+        print(f"Saving \"complexity_res={gshhgRes}_cons={cons:.2e}_nAng={nAng:d}_prec={prec:.2e}.png\" ...")
 
         # Save PNG ...
-        histImgObj.save(f"complexity_res={res}_cons={cons:.2e}_nAng={nAng:d}_prec={prec:.2e}.png")
+        histImgObj.save(f"complexity_res={gshhgRes}_cons={cons:.2e}_nAng={nAng:d}_prec={prec:.2e}.png")
         pyguymer3.image.optimise_image(
-            f"complexity_res={res}_cons={cons:.2e}_nAng={nAng:d}_prec={prec:.2e}.png",
+            f"complexity_res={gshhgRes}_cons={cons:.2e}_nAng={nAng:d}_prec={prec:.2e}.png",
               debug = args.debug,
               strip = True,
             timeout = args.timeout,

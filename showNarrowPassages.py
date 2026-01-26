@@ -102,7 +102,7 @@ if __name__ == "__main__":
     ]                                                                           # [°]
 
     # Define resolutions ...
-    ress = [
+    gshhgRess = [
         "c",                            # crude
         "l",                            # low
         "i",                            # intermediate
@@ -116,7 +116,7 @@ if __name__ == "__main__":
     frames = []
 
     # Loop over resolutions ...
-    for res in ress:
+    for gshhgRes in gshhgRess:
         # Loop over combinations ...
         for nAng, prec, color in combs:
             # Create short-hands ...
@@ -133,7 +133,7 @@ if __name__ == "__main__":
                 "--freqSimp", f"{freqSimp:d}",  # ~hourly simplification
                 "--nAng", f"{nAng:d}",          # LOOP VARIABLE
                 "--precision", f"{prec:.1f}",   # LOOP VARIABLE
-                "--resolution", res,            # LOOP VARIABLE
+                "--GSHHG-resolution", gshhgRes, # LOOP VARIABLE
             ]
             if args.debug:
                 cmd.append("--debug")
@@ -154,7 +154,7 @@ if __name__ == "__main__":
         # **********************************************************************
 
         # Deduce PNG name, append it to the list and skip if it already exists ...
-        frame = f"showNarrowPassages_res={res}.png"
+        frame = f"showNarrowPassages_res={gshhgRes}.png"
         frames.append(frame)
         if os.path.exists(frame):
             continue
@@ -191,15 +191,15 @@ if __name__ == "__main__":
             # Configure axis ...
             pyguymer3.geo.add_map_background(
                 ax[iloc],
-                     debug = args.debug,
-                      name = "shaded-relief",
-                resolution = "large8192px",
+                  debug = args.debug,
+                   name = "shaded-relief",
+                subName = "large8192px",
             )
 
             # Loop over combinations ...
             for nAng, prec, color in combs:
                 # Deduce file name and skip if it is missing ...
-                dname = f"res={res}_cons=2.00e+00_tol=1.00e-10/local=F_nAng={nAng:d}_prec={prec:.2e}"
+                dname = f"res={gshhgRes}_cons=2.00e+00_tol=1.00e-10/local=F_nAng={nAng:d}_prec={prec:.2e}"
                 fname = f"{dname}/allLands.wkb.gz"
                 if not os.path.exists(fname):
                     continue
@@ -238,7 +238,7 @@ if __name__ == "__main__":
             ax[iloc].set_title(f"lon={loc[0]:+.2f}°, lat={loc[1]:+.2f}°")
 
         # Configure figure ...
-        fg.suptitle(f"res={res}")
+        fg.suptitle(f"res={gshhgRes}")
         fg.tight_layout()
 
         # Save figure ...
