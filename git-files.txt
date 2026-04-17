@@ -20,6 +20,7 @@ complexity.py
 feature.py
 findExtentOfGshhgCoastlines.py
 findExtentOfNeCoastlines.py
+git-files.txt
 gst/__init__.py
 gst/__main__.py
 gst/removeInteriorRings.py
