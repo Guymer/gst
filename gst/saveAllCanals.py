@@ -155,7 +155,7 @@ def saveAllCanals(
         gzObj.write(shapely.wkb.dumps(lines))
 
     # Save MultiLineString ...
-    with open(gName, "wt", encoding = "utf-8") as fObj:
+    with open(gName, mode = "wt", encoding = "utf-8") as fObj:
         geojson.dump(
             lines,
             fObj,
