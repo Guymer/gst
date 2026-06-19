@@ -14,12 +14,12 @@ If you want to run GST using a profiler and print out the top 10 most time-consu
 
 ```sh
 # for the first time a command is run ...
-python3.12 -m cProfile -o first.log -m gst -1.0 +50.5 20.0 --duration 5.0 > first.out 2> first.err
-python3.12 -c 'import pstats; p = pstats.Stats("first.log"); p.sort_stats(pstats.SortKey.CUMULATIVE).print_stats(10)'
+python3.13 -m cProfile -o first.log -m gst -1.0 +50.5 20.0 --duration 5.0 > first.out 2> first.err
+python3.13 -c 'import pstats; p = pstats.Stats("first.log"); p.sort_stats(pstats.SortKey.CUMULATIVE).print_stats(10)'
 
 # for the second time a command is run ...
-python3.12 -m cProfile -o second.log -m gst -1.0 +50.5 20.0 --duration 5.0 > second.out 2> second.err
-python3.12 -c 'import pstats; p = pstats.Stats("second.log"); p.sort_stats(pstats.SortKey.CUMULATIVE).print_stats(10)'
+python3.13 -m cProfile -o second.log -m gst -1.0 +50.5 20.0 --duration 5.0 > second.out 2> second.err
+python3.13 -c 'import pstats; p = pstats.Stats("second.log"); p.sort_stats(pstats.SortKey.CUMULATIVE).print_stats(10)'
 ```
 
 ## Running `compareBufferAngularResolutions.py`
@@ -27,12 +27,12 @@ python3.12 -c 'import pstats; p = pstats.Stats("second.log"); p.sort_stats(pstat
 To generate the data needed, [compareBufferAngularResolutions.py](compareBufferAngularResolutions.py) will run commands like:
 
 ```sh
-python3.12 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 768 --freqPlot 1 --freqSimp 768 --local --nAng 9 --precision 1250.0 --GSHHG-resolution i
-python3.12 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 768 --freqPlot 1 --freqSimp 768 --local --nAng 17 --precision 1250.0 --GSHHG-resolution i
-python3.12 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 768 --freqPlot 1 --freqSimp 768 --local --nAng 33 --precision 1250.0 --GSHHG-resolution i
-python3.12 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 768 --freqPlot 1 --freqSimp 768 --local --nAng 65 --precision 1250.0 --GSHHG-resolution i
-python3.12 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 768 --freqPlot 1 --freqSimp 768 --local --nAng 129 --precision 1250.0 --GSHHG-resolution i
-python3.12 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 768 --freqPlot 1 --freqSimp 768 --local --nAng 257 --precision 1250.0 --GSHHG-resolution i
+python3.13 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 768 --freqPlot 1 --freqSimp 768 --local --nAng 9 --precision 1250.0 --GSHHG-resolution i
+python3.13 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 768 --freqPlot 1 --freqSimp 768 --local --nAng 17 --precision 1250.0 --GSHHG-resolution i
+python3.13 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 768 --freqPlot 1 --freqSimp 768 --local --nAng 33 --precision 1250.0 --GSHHG-resolution i
+python3.13 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 768 --freqPlot 1 --freqSimp 768 --local --nAng 65 --precision 1250.0 --GSHHG-resolution i
+python3.13 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 768 --freqPlot 1 --freqSimp 768 --local --nAng 129 --precision 1250.0 --GSHHG-resolution i
+python3.13 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 768 --freqPlot 1 --freqSimp 768 --local --nAng 257 --precision 1250.0 --GSHHG-resolution i
 ```
 
 After sailing for 0.09 days at 20.0 knots a vessel will have gone 80,006.4 metres, which I'll round to 80 kilometres.
@@ -42,11 +42,11 @@ After sailing for 0.09 days at 20.0 knots a vessel will have gone 80,006.4 metre
 To generate the data needed, [compareBufferRadialResolutions.py](compareBufferRadialResolutions.py) will run commands like:
 
 ```sh
-python3.12 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 1536 --freqPlot 16 --freqSimp 1536 --local --nAng 257 --precision 625.0 --GSHHG-resolution i
-python3.12 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 768 --freqPlot 8 --freqSimp 768 --local --nAng 257 --precision 1250.0 --GSHHG-resolution i
-python3.12 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 384 --freqPlot 4 --freqSimp 384 --local --nAng 257 --precision 2500.0 --GSHHG-resolution i
-python3.12 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 192 --freqPlot 2 --freqSimp 192 --local --nAng 257 --precision 5000.0 --GSHHG-resolution i
-python3.12 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 96 --freqPlot 1 --freqSimp 96 --local --nAng 257 --precision 10000.0 --GSHHG-resolution i
+python3.13 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 1536 --freqPlot 16 --freqSimp 1536 --local --nAng 257 --precision 625.0 --GSHHG-resolution i
+python3.13 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 768 --freqPlot 8 --freqSimp 768 --local --nAng 257 --precision 1250.0 --GSHHG-resolution i
+python3.13 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 384 --freqPlot 4 --freqSimp 384 --local --nAng 257 --precision 2500.0 --GSHHG-resolution i
+python3.13 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 192 --freqPlot 2 --freqSimp 192 --local --nAng 257 --precision 5000.0 --GSHHG-resolution i
+python3.13 -m gst -1.0 +50.5 20.0 --duration 0.09 --freqLand 96 --freqPlot 1 --freqSimp 96 --local --nAng 257 --precision 10000.0 --GSHHG-resolution i
 ```
 
 After sailing for 0.09 days at 20.0 knots a vessel will have gone 80,006.4 metres, which I'll round to 80 kilometres.
@@ -56,9 +56,9 @@ After sailing for 0.09 days at 20.0 knots a vessel will have gone 80,006.4 metre
 To generate the data needed, [complexity.py](complexity.py) will run commands like:
 
 ```sh
-python3.12 -m gst 0.0 0.0 20.0 --conservatism 2.0 --duration 0.01 --freqLand 192 --freqSimp 8 --nAng 9 --precision 5000.0 --GSHHG-resolution i
-python3.12 -m gst 0.0 0.0 20.0 --conservatism 2.0 --duration 0.01 --freqLand 384 --freqSimp 16 --nAng 17 --precision 2500.0 --GSHHG-resolution i
-python3.12 -m gst 0.0 0.0 20.0 --conservatism 2.0 --duration 0.01 --freqLand 768 --freqSimp 32 --nAng 33 --precision 1250.0 --GSHHG-resolution i
+python3.13 -m gst 0.0 0.0 20.0 --conservatism 2.0 --duration 0.01 --freqLand 192 --freqSimp 8 --nAng 9 --precision 5000.0 --GSHHG-resolution i
+python3.13 -m gst 0.0 0.0 20.0 --conservatism 2.0 --duration 0.01 --freqLand 384 --freqSimp 16 --nAng 17 --precision 2500.0 --GSHHG-resolution i
+python3.13 -m gst 0.0 0.0 20.0 --conservatism 2.0 --duration 0.01 --freqLand 768 --freqSimp 32 --nAng 33 --precision 1250.0 --GSHHG-resolution i
 ```
 
 ## Running `showNarrowPassages.py`
@@ -66,21 +66,21 @@ python3.12 -m gst 0.0 0.0 20.0 --conservatism 2.0 --duration 0.01 --freqLand 768
 To generate the data needed, [showNarrowPassages.py](showNarrowPassages.py) will run commands like:
 
 ```sh
-python3.12 -m gst 0.0 0.0 20.0 --duration 0.01 --freqLand 192 --freqSimp 8 --nAng 9 --precision 5000.0 --GSHHG-resolution c
-python3.12 -m gst 0.0 0.0 20.0 --duration 0.01 --freqLand 384 --freqSimp 16 --nAng 17 --precision 2500.0 --GSHHG-resolution c
-python3.12 -m gst 0.0 0.0 20.0 --duration 0.01 --freqLand 768 --freqSimp 32 --nAng 33 --precision 1250.0 --GSHHG-resolution c
-python3.12 -m gst 0.0 0.0 20.0 --duration 0.01 --freqLand 192 --freqSimp 8 --nAng 9 --precision 5000.0 --GSHHG-resolution l
-python3.12 -m gst 0.0 0.0 20.0 --duration 0.01 --freqLand 384 --freqSimp 16 --nAng 17 --precision 2500.0 --GSHHG-resolution l
-python3.12 -m gst 0.0 0.0 20.0 --duration 0.01 --freqLand 768 --freqSimp 32 --nAng 33 --precision 1250.0 --GSHHG-resolution l
-python3.12 -m gst 0.0 0.0 20.0 --duration 0.01 --freqLand 192 --freqSimp 8 --nAng 9 --precision 5000.0 --GSHHG-resolution i
-python3.12 -m gst 0.0 0.0 20.0 --duration 0.01 --freqLand 384 --freqSimp 16 --nAng 17 --precision 2500.0 --GSHHG-resolution i
-python3.12 -m gst 0.0 0.0 20.0 --duration 0.01 --freqLand 768 --freqSimp 32 --nAng 33 --precision 1250.0 --GSHHG-resolution i
-python3.12 -m gst 0.0 0.0 20.0 --duration 0.01 --freqLand 192 --freqSimp 8 --nAng 9 --precision 5000.0 --GSHHG-resolution h
-python3.12 -m gst 0.0 0.0 20.0 --duration 0.01 --freqLand 384 --freqSimp 16 --nAng 17 --precision 2500.0 --GSHHG-resolution h
-python3.12 -m gst 0.0 0.0 20.0 --duration 0.01 --freqLand 768 --freqSimp 32 --nAng 33 --precision 1250.0 --GSHHG-resolution h
-python3.12 -m gst 0.0 0.0 20.0 --duration 0.01 --freqLand 192 --freqSimp 8 --nAng 9 --precision 5000.0 --GSHHG-resolution f
-python3.12 -m gst 0.0 0.0 20.0 --duration 0.01 --freqLand 384 --freqSimp 16 --nAng 17 --precision 2500.0 --GSHHG-resolution f
-python3.12 -m gst 0.0 0.0 20.0 --duration 0.01 --freqLand 768 --freqSimp 32 --nAng 33 --precision 1250.0 --GSHHG-resolution f
+python3.13 -m gst 0.0 0.0 20.0 --duration 0.01 --freqLand 192 --freqSimp 8 --nAng 9 --precision 5000.0 --GSHHG-resolution c
+python3.13 -m gst 0.0 0.0 20.0 --duration 0.01 --freqLand 384 --freqSimp 16 --nAng 17 --precision 2500.0 --GSHHG-resolution c
+python3.13 -m gst 0.0 0.0 20.0 --duration 0.01 --freqLand 768 --freqSimp 32 --nAng 33 --precision 1250.0 --GSHHG-resolution c
+python3.13 -m gst 0.0 0.0 20.0 --duration 0.01 --freqLand 192 --freqSimp 8 --nAng 9 --precision 5000.0 --GSHHG-resolution l
+python3.13 -m gst 0.0 0.0 20.0 --duration 0.01 --freqLand 384 --freqSimp 16 --nAng 17 --precision 2500.0 --GSHHG-resolution l
+python3.13 -m gst 0.0 0.0 20.0 --duration 0.01 --freqLand 768 --freqSimp 32 --nAng 33 --precision 1250.0 --GSHHG-resolution l
+python3.13 -m gst 0.0 0.0 20.0 --duration 0.01 --freqLand 192 --freqSimp 8 --nAng 9 --precision 5000.0 --GSHHG-resolution i
+python3.13 -m gst 0.0 0.0 20.0 --duration 0.01 --freqLand 384 --freqSimp 16 --nAng 17 --precision 2500.0 --GSHHG-resolution i
+python3.13 -m gst 0.0 0.0 20.0 --duration 0.01 --freqLand 768 --freqSimp 32 --nAng 33 --precision 1250.0 --GSHHG-resolution i
+python3.13 -m gst 0.0 0.0 20.0 --duration 0.01 --freqLand 192 --freqSimp 8 --nAng 9 --precision 5000.0 --GSHHG-resolution h
+python3.13 -m gst 0.0 0.0 20.0 --duration 0.01 --freqLand 384 --freqSimp 16 --nAng 17 --precision 2500.0 --GSHHG-resolution h
+python3.13 -m gst 0.0 0.0 20.0 --duration 0.01 --freqLand 768 --freqSimp 32 --nAng 33 --precision 1250.0 --GSHHG-resolution h
+python3.13 -m gst 0.0 0.0 20.0 --duration 0.01 --freqLand 192 --freqSimp 8 --nAng 9 --precision 5000.0 --GSHHG-resolution f
+python3.13 -m gst 0.0 0.0 20.0 --duration 0.01 --freqLand 384 --freqSimp 16 --nAng 17 --precision 2500.0 --GSHHG-resolution f
+python3.13 -m gst 0.0 0.0 20.0 --duration 0.01 --freqLand 768 --freqSimp 32 --nAng 33 --precision 1250.0 --GSHHG-resolution f
 ```
 
 ## Maximum Sailing Distance
@@ -88,7 +88,7 @@ python3.12 -m gst 0.0 0.0 20.0 --duration 0.01 --freqLand 768 --freqSimp 32 --nA
 To very quickly find out how far a vessel can sail from Portsmouth Harbour at 20 knots, try running something like:
 
 ```sh
-python3.12 -m gst       \
+python3.13 -m gst       \
     -1.0 +50.5 20.0     \   # depart Portsmouth Harbour at 20 knots
     --duration 11.2     \   # ~maximum distance (20 knots * 11.2 days = 9,956.35 kilometres)
     --freqLand 192      \   # ~daily land re-evaluation (192 * 7.5 minutes = 1 day)
@@ -103,7 +103,7 @@ python3.12 -m gst       \
 ... to repeat the above study at x2 angular resolution and x2 radial resolution then try running something like:
 
 ```sh
-python3.12 -m gst       \
+python3.13 -m gst       \
     -1.0 +50.5 20.0     \
     --duration 11.2     \
     --freqLand 384      \
@@ -118,7 +118,7 @@ python3.12 -m gst       \
 ... to repeat the above study at x4 angular resolution and x4 radial resolution then try running something like:
 
 ```sh
-python3.12 -m gst       \
+python3.13 -m gst       \
     -1.0 +50.5 20.0     \
     --duration 11.2     \
     --freqLand 768      \
@@ -133,7 +133,7 @@ python3.12 -m gst       \
 Alternatively, if you just want to marvel at the ferries weaving around the islands in Stockholm Archipelago, then try running something like:
 
 ```sh
-python3.12 -m gst           \
+python3.13 -m gst           \
     +18.079 +59.324 20.0    \   # depart Slussen Ferry Terminal at 20 knots
     --duration 0.03         \   # sail for ~¾ hour (20 knots * 0.03 days = 26.67 kilometres)
     --freqLand 3000         \   # re-evaluate land every 30 kilometres (i.e., never)
