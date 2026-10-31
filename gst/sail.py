@@ -426,7 +426,6 @@ def sail(
                                nIter = nIter,
                            onlyValid = False,
                               repair = False,
-                    satellite_height = False,
                 )
 
                 # Configure axis ...
@@ -773,7 +772,6 @@ def sail(
                                    nIter = nIter,
                                onlyValid = False,
                                   repair = False,
-                        satellite_height = False,
                     )
 
                     # Configure axis ...
