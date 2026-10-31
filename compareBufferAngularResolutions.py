@@ -245,7 +245,7 @@ if __name__ == "__main__":
     # **************************************************************************
 
     # Loop over distances ...
-    for key in sorted(list(data.keys())):
+    for key in sorted(list(data)):
         # Create short-hands ...
         nAng = numpy.array(data[key]["nAng"])                                   # [#]
         area = numpy.array(data[key]["area"])                                   # [°2]
