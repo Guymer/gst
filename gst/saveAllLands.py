@@ -246,7 +246,7 @@ def saveAllLands(
 
                     # Throw away all parts of the Polygon that the ship will
                     # never sail to ...
-                    poly = maxShip.intersection(poly)
+                    poly = shapely.geometry.polygon.orient(maxShip.intersection(poly))
 
                 # Check if the user wants to buffer the land ...
                 # NOTE: The land should probably be buffered to prohibit ships
